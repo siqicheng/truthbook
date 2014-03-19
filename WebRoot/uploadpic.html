@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  		<meta charset="utf-8">
+		<title>上传照片 | Truthbook</title>
+
+    	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
+		<link href="./CSS/addpicBtn.css" rel="stylesheet">
+
+	</head>
+<body>  
+ 	<div class="white-popup">
+		<div class="ui tabular menu" >
+			<a class="active item">创建好友词条</a>
+		  	<a class="item">已有好友</a>
+		</div>
+		<form class="ui form" id="uploadform">
+  			<div class="ui three fields">
+    			<div class="field">
+      				<label>姓名</label>
+      				<input type="text" placeholder="姓名">
+    			</div>
+    			<div class="field">
+      				<label>年级</label>
+      				<input type="text" placeholder="年级">
+    			</div>
+    			<div class="field">
+      				<label>学校</label>
+      				<input type="text" placeholder="学校">
+    			</div>
+  			</div>
+  			<div class="ui field"><label>照片描述</label><textarea></textarea></div>
+  			<img id="img_prev" src="" alt="your image" ><br>
+  			<div class="addpicbuttons"><a href="javascript:;" class="addpic">
+  				<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+  			<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
+  			
+  			<button class="ui green disabled button" id="submitBtn"> 确定上传</button></div>
+			<a class='open-popup-link' id='uploadFriend' href="./uploadpic.html">已经是好友？</a>
+  		</form>
+ 
+		
+
+   	</div>
+  		
+		<script src="./assets/jquery/jquery-1.7.2.js"></script>
+		<script src="./assets/semantic/javascript/semantic.js"></script>
+		<script src="./js/fileupload.js"></script>
+  		
+</body>
