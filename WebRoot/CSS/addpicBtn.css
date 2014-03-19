@@ -1,0 +1,77 @@
+/*addpic  upload */
+.addpic {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  min-height: 1em;
+  outline: none;
+  border: none;
+  background-color: #FAFAFA;
+  color: #808080;
+  margin: 0em;
+  padding: 0.8em 1.5em;
+  font-size: 1rem;
+  text-transform: uppercase;
+  line-height: 1;
+  font-weight: bold;
+  font-style: normal;
+  text-align: center;
+  text-decoration: none;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.05)));
+  background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
+  border-radius: 0.25em;
+  -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08) inset;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08) inset;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, -webkit-box-shadow 0.25s ease;
+  transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+} 
+ 
+ 
+.addpic input {
+	position: absolute;
+	font-size: 100px;
+	right: 0;
+	top: 0;
+	opacity: 0;
+	filter: alpha(opacity=0);
+	cursor: pointer;
+	text-decoration:none;
+}
+ 
+.addpic:hover {
+	color: #444;
+	background: #eee;
+	border-color: #ccc;
+	text-decoration: none;
+	text-decoration:none;
+}
+
+#img_prev {
+	display: none;
+}
+
+
+/* 2 group buttons */
+.addpicbuttons {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.addpicbuttons:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
