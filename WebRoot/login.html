@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    	<meta charset="utf-8">
+    	<title>登陆 | Truthbook</title>
+
+    	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
+    	<!-- location CSS -->
+    	<link href="./CSS/position.css" rel="stylesheet">
+    	<link rel="shortcut icon" href="img/logo.ico" /> 
+
+	</head>
+
+	<body class="body_bg">
+		<!-- form -->
+        <div class="absolute-center" style="width:380px; height:400px">
+        	<img src="img/Truthbook_capital.png" width="380" >
+			<form class="ui form" style="width:300px; margin-left: 40px;">	    		<!--username field-->
+	  			<div class="field">
+	    			<div class="ui left labeled icon input">
+	      				<input type="text" id="email" name="email" placeholder="邮箱">
+	      				<i class="user icon"></i>
+	    			</div>
+	    		</div>
+	    		<!--password field-->
+	    		<div class="field">
+	    			<div class="ui left icon input">
+	      				<input type="password" id="password" name="password" placeholder="密码">
+	      				<i class="lock icon"></i>
+	    			</div>
+	  			</div>
+	  			<input class="ui fluid blue button" type ="submit" id="loginBtn" value = "登录">
+	  			<div id="resText"></div>
+	  			<div class="ui error message" id="errormessage" style="display: none">用户名或密码不正确</div>
+			</form>
+		</div>
+		<!-- register button -->
+        <div class="bottom-left">
+            <a class="ui basic animated button" href="./register.html"> 
+                <div class="visible content"> 注册 </div>
+                <div class="hidden content">
+                    <i class="pencil icon"></i>
+                </div>
+            </a>
+        </div>
+		<script src="./assets/jquery/jquery-1.7.2.js"></script>
+		<script src="./assets/semantic/javascript/semantic.js"></script>
+		<script type="text/javascript">
+			function Redirect (url) {
+				var ua        = navigator.userAgent.toLowerCase(),
+					isIE      = ua.indexOf('msie') !== -1,
+					version   = parseInt(ua.substr(4, 2), 10);
+
+				// IE8 and lower
+				if (isIE && version < 9) {
+					var link = document.createElement('a');
+					link.href = url;
+					document.body.appendChild(link);
+					link.click();
+				}
+
+				// All other browsers
+				else { window.location.href = url; }
+			}
+		function getAjaxObj(url,type,dataType,onSuccess,onError,onComplete){
+			var ajax_obj = new Object();
+			ajax_obj.url = url;
+			ajax_obj.type = type;
+			ajax_obj.dataType = dataType;
+			ajax_obj.onSuccess = onSuccess;
+			ajax_obj.onError = onError;
+			ajax_obj.onComplete = onComplete;
+			return ajax_obj;
+		}
+		
+		
+		
+		function ajax_call(ajax_obj){
+			$.ajax({
+				url: ajax_obj.url,
+				type: ajax_obj.type,
+				data: ajax_obj.data,
+				dataType: ajax_obj.dataType,
+				success: ajax_obj.onSuccess,
+				error: ajax_obj.onError,
+				complete: ajax_obj.onComplete
+			});
+		}
+		</script>
+		<script type="text/javascript">
+		    $(function() {				
+				//form validation
+				$( '.ui.form' )
+					.form({
+					    username: {
+					      identifier : 'username',
+					      rules: [
+					        {
+					          type   : 'empty',
+					          prompt : '请输入注册邮箱'
+					        }
+					      ]
+					    },
+					    password: {
+					      identifier : 'password',
+					      rules: [
+					        {
+					          type   : 'empty',
+					          prompt : '请输入密码'
+					        },
+					        {
+					          type   : 'length[6]',
+					          prompt : '密码至少要6位'
+					        }
+					      ]
+					    }
+					},{//form settings(semantics)
+						on: 'blur',
+	    				inline: 'true',
+	    				onFailure : function() {
+							return true;
+							//alert("d");
+							},
+						onSuccess : function () {
+							return true;							
+							//alert(flag);
+
+							
+							
+						}
+					});
+					
+					$('.ui.form')
+					.submit(function(){
+						var url="http://localhost:8080/truthbook/services/loginService/v1/login";
+						var data= $('.ui.form').serialize();
+						var onSuccess = function(data,textStatus){
+							if (data == "true"){
+								alert(data);
+								window.location.href = "http://localhost:8080/truthbook/profile_test.html";
+								return true;
+							}
+							else{
+								$("#errormessage").show();
+								$("#errormessage").text("Login failed. Please validate your username/password.");
+								console.log("Login failed. Please validate your username/password.");
+								return false;
+							}
+						};
+						
+						var ajax_obj = getAjaxObj(url,"POST","text",onSuccess);
+						ajax_obj.data = data;
+						ajax_call(ajax_obj);
+						return false;					
+					});				
+					
+					
+							$(document).ajaxStart(function(email, password) {
+								$("#loginBtn").addClass("loading");
+							});			
+							$(document).ajaxStop(function() {
+								$("#loginBtn").removeClass("loading");
+							});
+							$(document).ajaxError(function() {
+								$("#errormessage").show();
+							});
+			});
+
+		</script>		
+
+	</body>
+</html>

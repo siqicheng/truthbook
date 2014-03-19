@@ -1,0 +1,32 @@
+.logo-center{
+	
+	cursor: default;
+    
+    top: 25%;
+    transition-delay: 0.25s;
+	}
+
+.absolute-center {
+   	margin: auto;  
+  	position: absolute;  
+ 	top: 0; left: 0; bottom: 0; right: 0;  
+ 	}
+
+.bottom-left {
+  	position: absolute;
+  	bottom: 40px;
+    left: 20px;
+    }
+    
+.body_bg {
+	background-image: url(../img/bg.jpg);
+	background-attachment:fixed;
+	background-size:100% 100%;
+	}
+
+#container,
+#topbar {
+	margin:0 auto;
+	width: 1000px;
+}
+
