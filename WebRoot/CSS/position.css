@@ -24,9 +24,28 @@
 	background-size:100% 100%;
 	}
 
-#container,
-#topbar {
+#container-main {
 	margin:0 auto;
-	width: 1000px;
+	width: 1018px;
+}
+
+.white-popup {
+	background: #FFF;
+	padding: 20px 30px;
+	text-align: left;
+	width: 650px;
+	margin: 40px auto;
+	position: relative;
+}
+
+.ui.four.column.grid .column {
+	padding-left: 0.5px;
+	padding-right: 0.5px;
+}
+
+#profile-segment {
+	width:1000px;
+	margin:0 auto;
+	padding-top:70px;
 }
 
