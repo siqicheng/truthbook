@@ -7,14 +7,14 @@
  *	getAjaxObj
  *	Generate an object for AJAX call
  */
-function getAjaxObj(url,type,dataType,onSuccess,onError,onComplete){
+function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete){
 	var ajax_obj = new Object();
 	ajax_obj.url = url;
 	ajax_obj.type = type;
 	ajax_obj.dataType = dataType;
-	ajax_obj.onSuccess = onSuccess;
-	ajax_obj.onError = onError;
-	ajax_obj.onComplete = onComplete;
+	ajax_obj.onSuccess = onAjaxSuccess;
+	ajax_obj.onError = onAjaxError;
+	ajax_obj.onComplete = onAjaxComplete;
 	return ajax_obj;
 }
 /*
@@ -33,4 +33,19 @@ function ajax_call(ajax_obj){
 	});
 }
 
+function Redirect (url) {
+	var ua        = navigator.userAgent.toLowerCase(),
+		isIE      = ua.indexOf('msie') !== -1,
+		version   = parseInt(ua.substr(4, 2), 10);
 
+	// IE8 and lower
+	if (isIE && version < 9) {
+		var link = document.createElement('a');
+		link.href = url;
+		document.body.appendChild(link);
+		link.click();
+	}
+
+	// All other browsers
+	else { window.location.href = url; }
+}

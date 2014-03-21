@@ -87,23 +87,6 @@
         <script src="./js/general/utility.js"></script>
         <script type="text/javascript">
 
-		function checklogin(email, password)
-		{
-			var url = "http://localhost:8080/truthbook/services/loginService/v1/login/" + email +"/"+ password;
-			var onAjaxSuccess= function(data,textStatus){
-				if(data == "true"){
-					$("#errormessage").hide();
-					window.location.href = "http://localhost:8080/truthbook/profile_test.html";				 
-				}
-				else{
-					$("#errormessage").show();
-				}
-				
-			};
-			var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess);
-			ajax_call(ajax_obj);
-			
-		}
 		function  showlabel() {
 			$("#cornerlabel").show();
 			$("#correctmessage").show();
@@ -115,52 +98,40 @@
 							
 							
 							
-			function checkEmail(email){
-				if (email.length==0)
-				{ 
-					$("#cornerlabel").hide();
-					$("#errormessage").hide();
-					$("#correctmessage").hide();
-					return;
-				}
-				var url = "http://localhost:8080/truthbook/services/loginService/v1/email/"+email;
-				var onAjaxSuccess = function (data,textStatus){
-					if(data == "true"){
-						$("#errormessage").show();
-						hidelabel();						 
-					}
-					else{
-						$("#errormessage").hide();
-						showlabel();
-// 						$('.ui.form')
-// 							.form({
-// 								email: {
-// 			                        identifier: 'email',
-// 			                        rules:[
-// 			                        {
-// 			                            type   : 'email',
-// 			                            prompt : '请输入正确的邮箱'
-// 			                        }
-// 			                        ]
-// 			                    }				
-// 							},{
-// 		                    on: 'blur',
-// 		                    inline: 'true',
-// 		    				onFailure : hidelabel(),
-// 							onSuccess : showlabel(),
-// 		                });
-					}
-					console.log("status:"+textStatus+" data:"+data);
-				};
-				
-				var onAjaxError = function(xhr,status,error){
-						$("#errormessage").show();
-						$("#errormessage").text("status:"+status+" error:"+error);
-						console.log("status:"+status+" error:"+error);
-					};
-				var ajax_obj = getAjaxObj(url,"GET","text",onAjaxSuccess,onAjaxError);
-				ajax_call(ajax_obj);
+		function checkEmail(email){
+			if (email.length==0)
+			{ 
+				$("#cornerlabel").hide();
+				$("#errormessage").hide();
+				$("#correctmessage").hide();
+				return;
 			}
+			var url = "http://localhost:8080/truthbook/services/loginService/v1/email/"+email;
+			var onAjaxSuccess = function (data,textStatus){
+				if(data == "true"){
+					$("#errormessage").show();
+					hidelabel();						 
+				}
+				else{
+					$("#errormessage").hide();
+					var isValidEmail = document.getElementById("emailtest").className;
+					if(isValidEmail == "field") {
+						showlabel();
+					}	else {
+						hidelabel();
+					}	
+				}
+				console.log("status:"+textStatus+" data:"+data);
+			};
+			
+			var onAjaxError = function(xhr,status,error){
+					$("#errormessage").show();
+					$("#errormessage").text("status:"+status+" error:"+error);
+					console.log("status:"+status+" error:"+error);
+				};
+			var ajax_obj = getAjaxObj(url,"GET","text",onAjaxSuccess,onAjaxError);
+			ajax_call(ajax_obj);
+		}
 			
 		
 		
@@ -231,21 +202,15 @@
                         ]
                     }
                 },{
-                    on: 'submit',
+                    on: 'blur',
                     inline: 'true',
-    				onFailure : function() {
-    					hidelabel();
-						return false;
-					},
-					onSuccess :  submitForm(), 
+					onSuccess :  submitForm, 
                 });
-			
-			
-        }); 
-        
-        function submitForm() {
-			$('.ui.form')
-				.submit(function(){
+		   
+		   function submitForm() {
+        	
+// 				$('.ui.form')
+// 				.submit(function(){
 				var url="http://localhost:8080/truthbook/services/loginService/v1/register";
 				var data= $('.ui.form').serialize();
 				var onAjaxSuccess = function(data,textStatus){
@@ -266,8 +231,24 @@
 				ajax_obj.data = data;
 				ajax_call(ajax_obj);
 				return false;					
-			});	
-		}
+// 			});	
+		}	
+			
+        }); 
+        
+        function validEmail() {
+        	isValidEmail = 1;
+        	alert(isValidEmail);
+        }
+        
+        function invalidEmail() {
+        	isValidEmail = 0;
+        	alert(isValidEmail);
+        	hidelabel();
+        }
+        
+        
+
                 
         	$('.ui.selection.dropdown')
             	.dropdown()

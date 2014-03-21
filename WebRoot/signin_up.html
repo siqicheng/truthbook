@@ -14,9 +14,10 @@
 <body class="body_bg">
 	<div class="absolute-center" style="width:380px; height:400px">
 		<img src="img/Truthbook_capital.png" width="380" >
+		
 		<!-- login form -->
 		<form class="ui form login-form" style="width:300px; margin-left: 40px;">	    		
-			<!--username field-->
+			<!--email field-->
   			<div class="field">
     			<div class="ui left labeled icon input">
       				<input type="text" id="email" name="email" placeholder="用户名">
@@ -32,39 +33,39 @@
   			</div>
   			<input class="ui fluid blue button" type ="submit" id="loginBtn" value = "登录">
   			<div id="resText"></div>
-  			<div class="ui error message" id="errormessage" style="display: none">用户名或密码不正确</div>
+  			<div class="ui error message" id="errorMessageLogin" style="display: none">用户名或密码不正确</div>
 		</form>
 		
 		<!-- register form, display none in default -->
 		<form class="ui form register-form" style="width:300px; margin-left: 40px; display: none;">	                
                 <!-- fullName field -->
-                <div class="field">
+                <div class="field" id="fullNameTest">
                     <div class="ui left labeled icon input">
-                        <input type="text" id="fullName" placeholder="姓名" name="fullName">
+                        <input type="text" id="fullName" placeholder="姓名" name="fullName" onblur="checkButtonValid()">
                         <i class="user icon"></i>
                     </div>
                 </div>	                
                 <!-- school field -->
-                <div class="field">
+                <div class="field" id="schoolTest">
                     <div class="ui left labeled icon input">
-                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
+                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" onblur="checkButtonValid()">
                         <i class="book icon"></i>
                     </div>
                 </div>	                
                 <!-- entryTime field -->
-				<div class="field">
+				<div class="field" id="entryTimeTest">
                     <div class="ui left labeled icon input">
-                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012" name="entryTime">
+                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012" name="entryTime" onblur="checkButtonValid()">
                         <i class="align justify icon"></i>
                     </div>
                 </div>	
                 <!-- email field -->
-                <div class="field">
+                <div class="field" id="emailTest">
                     <div class="ui left labeled icon input">
                     
-                        <input type="text" id="email" name="email" placeholder="邮箱" onchange="checkEmail(this.value)" >
-                       	<div class="ui corner label" id = "cornerlabel" style="display: none"> 
-	  	            		<i class="checkmark small icon" id="correctmessage" style="display: none"></i>
+                        <input type="text" id="email" name="email" placeholder="邮箱" onblur="checkEmail(this.value)" >
+                       	<div class="ui corner label green" id = "cornerlabel" style="display: none"> 
+	  	            		<i class="checkmark small icon" id="correctCheckmark" style="display: none"></i>
 	                	</div> 
                         
                         <span id="txtHint" ></span>
@@ -72,12 +73,12 @@
               		</div>                    
                 </div>
                 <div class="field">
-                	<div class="ui red pointing prompt label transition" id="errormessage" style="display: none;">邮箱已存在，换个小号吧</div>
+                	<div class="ui red pointing prompt label transition" id="errorMessageMail" style="display: none;">邮箱已存在，换个小号吧</div>
 				</div>
                 <!--password field-->
-                <div class="field">
+                <div class="field" id="pwTest">
                     <div class="ui left icon input">
-                        <input type="password" id="password" name="password" placeholder="密码">
+                        <input type="password" id="password" name="password" placeholder="密码" onblur="checkButtonValidPW()">
                         <i class="lock icon"></i>
                     </div>
                 </div>
@@ -103,34 +104,16 @@
      	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
-	<script src="./js/form_toggle.js"></script>
-	<script src="./js/general/utility.js"></script> 	
-	<script type="text/javascript">
-		function Redirect (url) {
-			var ua        = navigator.userAgent.toLowerCase(),
-				isIE      = ua.indexOf('msie') !== -1,
-				version   = parseInt(ua.substr(4, 2), 10);
-
-			// IE8 and lower
-			if (isIE && version < 9) {
-				var link = document.createElement('a');
-				link.href = url;
-				document.body.appendChild(link);
-				link.click();
-			}
-
-			// All other browsers
-			else { window.location.href = url; }
-		}
-	</script>
+	<script src="./js/general/utility.js"></script>
+	<script src="./js/form_toggle.js"></script>	
 	<script type="text/javascript">
 	//login form functions
 		$(function() {				
 			//form validation
 			$( '.ui.form.login-form' )
 				.form({
-				    username: {
-				      identifier : 'username',
+				    email: {
+				      identifier : 'email',
 				      rules: [
 				        {
 				          type   : 'empty',
@@ -154,38 +137,38 @@
 				},{//form settings(semantics)
 					on: 'blur',
     				inline: 'true',
-    				onFailure : function() {
-
-						},
-					onSuccess : function () {
-						
-					}
+    				onInvalid : hideErrorMessageLogin,
 				});
-				
-				$('.ui.form.login-form')
-				.submit(function(){
+				function hideErrorMessageLogin(){
+					$("#errorMessageLogin").hide();
+                }
+			});
+		
+		$('.ui.form.login-form')
+			.submit(function(){			
+				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
+				if(isValidLoginForm == true){	
 					var url="http://localhost:8080/truthbook/services/loginService/v1/login";
-					var data= $('.ui.form').serialize();
-					var onSuccess = function(data,textStatus){
+					var data= $('.ui.form.login-form').serialize();
+					var onAjaxSuccess = function(data,textStatus){
 						if (data == "true"){
 							window.location.href = "http://localhost:8080/truthbook/profile_test.html";
 							return true;
 						}
 						else{
-							$("#errormessage").show();
-							$("#errormessage").text("Login failed. Please validate your username/password.");
-							console.log("Login failed. Please validate your username/password.");
+							$("#errorMessageLogin").show();
+// 							$("#errorMessageLogin").text("Login failed. Please validate your username/password.");
+// 							console.log("Login failed. Please validate your username/password.");
 							return false;
 						}
 					};
-					
-					var ajax_obj = getAjaxObj(url,"POST","text",onSuccess);
+					var ajax_obj = getAjaxObj(url,"POST","text",onAjaxSuccess);
 					ajax_obj.data = data;
 					ajax_call(ajax_obj);
-					return false;					
-				});				
-				
-				
+					return false;	
+				}
+			return false;
+		});	
 				$(document).ajaxStart(function(email, password) {
 					$("#loginBtn").addClass("loading");
 				});			
@@ -193,45 +176,19 @@
 					$("#loginBtn").removeClass("loading");
 				});
 				$(document).ajaxError(function() {
-					$("#errormessage").show();
+					$("#errorMessageLogin").show();
 				});
-		});
 	</script>
-	
 	<script type="text/javascript">
-	// register form functions
-		function checkEmail(email){
-			if (email.length==0)
-			{ 
-				$("#cornerlabel").hide();
-				$("#errormessage").hide();
-				$("#correctmessage").hide();
-				return;
-			}
-			var url = "http://localhost:8080/truthbook/services/loginService/v1/email/"+email;
-			var onSuccess = function (data,textStatus){
-				if(data == "true"){
-					$("#errormessage").show();
-					$("#register_button").addClass("disabled")						 
-				}
-				else{
-					$("#errormessage").hide();
-					$("#cornerlabel").show();
-					$("#correctmessage").show();
-					$("#register_button").removeClass("disabled")
-				}
-				console.log("status:"+textStatus+" data:"+data);
-			};
-			var onError = function(xhr,status,error){
-				$("#errormessage").show();
-				$("#errormessage").text("status:"+status+" error:"+error);
-				console.log("status:"+status+" error:"+error);
-				
-			}
-			var ajax_obj = getAjaxObj(url,"GET","text",onSuccess);
-			ajax_call(ajax_obj);
-		}
-		        
+		
+		window.isValidEmailGlb = 0;
+		window.touchedPassword = 0;
+		
+		/*
+		 *  Combine two form pre-check
+		 *	1. Semantic form validation
+		 *  2. Email existance
+		 */	        
         $(function() {        	
             $('.ui.form.register-form')
                 .form({
@@ -274,6 +231,15 @@
                         },
                         ]
                     },
+                    email: {
+                        identifier: 'email',
+                        rules:[
+                        {
+                            type   : 'email',
+                            prompt : '请输入正确的邮箱'
+                        }
+                        ]
+                    },
                     password: {
                         identifier : 'password',
                         rules: [
@@ -287,46 +253,129 @@
                         }
                         ]
                     },
-                    email: {
-                        identifier: 'email',
-                        rules:[
-                        {
-                            type   : 'email',
-                            prompt : '请输入正确的邮箱'
-                        }
-                        ]
-                    }
+
                 },{
                     on: 'blur',
                     inline: 'true',
-    				onFailure : function() {
-						
-					},
-					onSuccess : function () {
-						
-					}
+                    onFailure :  disableRegisterButton,
+					onInvalid : disableRegisterButton,
                 });
-			$('.ui.form.register-form')
-				.submit(function(){
+                
+                function disableRegisterButton(){
+                	document.getElementById("register_button").className = "ui disabled fluid blue button";
+                	return false;
+                }
+        }); 
+        
+        /*
+         *	Form submit
+         *  Be enabled only when form pass semantic form validation and email check
+         */
+        $('.ui.form')
+			.submit(function(){
+				var isValidForm = $('.ui.form.register-form').form('validate form');
+				if(isValidForm == true && isValidEmailGlb == 1){
 					var url="http://localhost:8080/truthbook/services/loginService/v1/register";
-					var data= $('.ui.form').serialize();
-					var onSuccess = function(data,textStatus){
-						if (data == "success"){
-							console.log("success");
+					var data= $('.ui.form.register-form').serialize();
+					var onAjaxSuccess = function(data,textStatus){
+						if (data == "true"){
+// 							console.log("success");
 							window.location.href = "http://localhost:8080/truthbook/profile_test.html";
 							return true;
 						}
 					};
-					var onError = function(xhr,status,error){
-						$("#errormessage").show();
-						$("#errormessage").text("Register failed with error:" + error);
-						console.log("Register failed with error:" + error);
-						return false;
-					}
-					var ajax_obj = getAjaxObj(url,"POST","text",onSuccess,onError);
+					var onAjaxError = function(xhr,status,error){
+											$("#errorMessageMail").show();
+											$("#errorMessageMail").text("Register failed with error:" + error);
+											console.log("Register failed with error:" + error);
+											return false;
+										};
+					var ajax_obj = getAjaxObj(url,"POST","text",onAjaxSuccess,onAjaxError);
 					ajax_obj.data = data;
 					ajax_call(ajax_obj);
-					return false;					
-				});				
-        }); 
+					return false;
+				}
+				return false;
+			});	
+        
+        /*	Helper function
+         */
+		function  showCheckmarklabel() {
+			$("#cornerlabel").show();
+			$("#correctCheckmark").show();
+			isValidEmailGlb = 1;
+		}
+		function  hideCheckmarklabel() {
+			$("#cornerlabel").hide();
+			$("#correctCheckmark").hide();
+			isValidEmailGlb = 0;
+		}
+		function disableButton(buttonID){
+			document.getElementById(buttonID).className = "ui disabled fluid blue button";
+		}
+		
+        /*	
+         *	checkEmail() is used for email input.
+         *	Email validation need an AJAX check with the back-end.
+         */
+		function checkEmail(email){
+			if (email.length==0) { 
+				$("#errorMessageMail").hide();
+				hideCheckmarklabel();
+				return;
+			}
+			var url = "http://localhost:8080/truthbook/services/loginService/v1/email/"+email;
+			var onAjaxSuccess = function (data,textStatus){
+				if(data == "true"){
+					$("#errorMessageMail").show();
+					hideCheckmarklabel();
+					disableButton("register_button");
+				}
+				else{
+					$("#errorMessageMail").hide();
+					if(document.getElementById("emailTest").className == "field") {
+						showCheckmarklabel();
+						checkButtonValid();
+					}	else {
+						hideCheckmarklabel();
+					}	
+				}
+				console.log("status:"+textStatus+" data:"+data);
+			};
+			
+			var onAjaxError = function(xhr,status,error){
+					$("#errorMessageMail").show();
+					$("#errorMessageMail").text("status:"+status+" error:"+error);
+					console.log("status:"+status+" error:"+error);
+				};
+			var ajax_obj = getAjaxObj(url,"GET","text",onAjaxSuccess,onAjaxError);
+			ajax_call(ajax_obj);
+		}
+        
+        /*	
+         *	checkButtonValid() is used for fullName, school, entryTime and email input.
+         *	If the user touched the password input, former inputs can be allowed to do the button valid check.
+         */
+        function checkButtonValid(){
+			if (touchedPassword == 1){
+				var isValidForm = $('.ui.form.register-form').form('validate form');
+				if(isValidForm == true && isValidEmailGlb == 1){
+					document.getElementById("register_button").className = "ui fluid blue button";
+				}
+			}
+		}
+		        
+        /*	
+         *	checkButtonValidPW() is only used for password input.
+         *	After user touched the password input, former inputs can be allowed to do the button valid check.	
+         *	Or, the isValidForm check will force the entire form to do the validation and show errors everywhere.
+         */
+		function checkButtonValidPW(){
+			touchedPassword = 1;
+			var isValidForm = $('.ui.form.register-form').form('validate form');
+			if(isValidForm == true && isValidEmailGlb == 1){
+				document.getElementById("register_button").className = "ui fluid blue button";
+			}
+		}		
+
 	</script>	
