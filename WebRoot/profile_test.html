@@ -12,7 +12,18 @@
 	
 <body style="background-color:#DEDCDE;margin:0px;">
 
-	<div class="ui fixed small menu" id="topbar" >		
+	<div class="ui fixed small menu" id="topbar" >
+		<div class="left menu">
+			<div class="ui dropdown item" id="upload_menu">
+				<i class="add icon"></i> 上传照片（sidebar）
+				<div class="menu">
+					<a class="item" id="upload_for_new_btn">新建好友档案</a>
+					<a class="item" id="upload_for_fri_btn">为已有好友上传</a>
+ 				</div>
+			</div>
+			<a class="item" id="close_sidebar_btn" style="display:none">
+				<i class="remove icon"></i> 关闭 </a>
+		</div>		
 		<div class="title item">
 	        <img src="img/Truthbook_capital_title.png" width="100px" >
 	    </div>		      
@@ -25,7 +36,7 @@
 		<a class="orange item">
 	    	<i class="setting icon"></i>
 		</a>
-		<a class="item" id="uploadPic">上传照片</a>
+		<a class="item" id="uploadPic">上传照片（PopUp）</a>
 		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a>
 		<div class="right menu"  >
 				<div class="item">
@@ -48,19 +59,30 @@
 			<div class="column">
 				<div class="ui red inverted fluid menu" >
 					<div class="ui dropdown fluid item" >
-						<div class="ui small label">1</div> 极·友
-						<div class="menu">
-     						<a class="item">张三</a>
+						<i class="star small icon"></i> 极·友
+						<div class="ui small label" style="float:right">1</div>
+						<!-- <div class="menu"> -->
+							<div class="ui list menu">
+     						<div class="item">
+     							<div class="right floated" style="padding-top:5px;width:60px;margin:0;display:none;">
+     								<a href="./test.html"><i class="cloud upload large icon"></i></a>
+     								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
+     							</div>
+     							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
+     							<a class="content" style="padding-top: 7px;font-size:16px;width:120px" href="./test.html">张三</a>
+     						</div>
      						<a class="item">李四</a>
      						<a class="item">王五</a>
-   						</div>
+     						</div>
+   						<!-- </div> -->
    					</div>
 				</div>
  			</div>
 			<div class="column">
 				<div class="ui red inverted fluid menu">
 					<div class="ui dropdown fluid item">
-						<div class="ui small label">12</div> 真·友
+						<i class="half empty star small icon"></i> 真·友
+						<div class="ui small label" style="float:right">12</div>
 						<div class="menu">
      						<a class="item">张三</a>
      						<a class="item">李四</a>
@@ -72,7 +94,8 @@
 			<div class="column">
 				<div class="ui red inverted fluid menu">
 					<div class="ui dropdown fluid item">
-						<div class="ui small label">3</div> 最近来访
+						<i class="users small icon"></i> 最近来访
+						<div class="ui small label" style="float:right">3</div>
 						<div class="menu">
      						<a class="item">张三</a>
      						<a class="item">李四</a>
@@ -83,7 +106,8 @@
 			</div>
 			<div class="column">
 				<div class="ui red inverted fluid menu"> 						
-					<div class="ui dropdown fluid item">消息通知
+					<div class="ui dropdown fluid item">
+						<i class="mail small icon"></i> 消息通知
 						<div class="floating ui circular green label">05</div>
 						<div class="menu">
      						<a class="item">您有一条新的好友请求</a>
@@ -97,107 +121,132 @@
 	</div>
 	
 	<div id="container-main" class="ui three items" >
-	  <div class="item">
-	  	<div class="image" id="testimg">
-		  	<img src="./img/profile_test/247142.jpg"  id="testmfp">
-		  	<a style="position:absolute;left:10px;top:10px;z-index:1;display:none" class="ui button"><i class="circular like icon "></i></a>
+		<div class="item">
+			<div class="image" id="testimg">
+		 		<img src="./img/profile_test/247142.jpg"  id="testmfp">
+		 		<a style="position:absolute;left:10px;top:10px;z-index:1;display:none" class="ui button"><i class="circular like icon "></i></a>
+			</div>
+			<div class="content">
+				<div class="meta">2 days ago</div>
+				<div class="name">Cute Dog</div>
+				<p class="description">This dog has some things going for it. Its pretty cute and looks like it'd be fun to cuddle up with.</p>
+			</div>
+		   	<div class="extra">
+		   		199 votes
+		   	</div>
 		</div>
-	    <div class="content">
-	      <div class="meta">2 days ago</div>
-	      <div class="name">Cute Dog</div>
-	      <p class="description">This dog has some things going for it. Its pretty cute and looks like it'd be fun to cuddle up with.</p>
+		 
+		<div class="item">
+			<div class="image" id="testimg2">
+		  		<img src="./img/profile_test/long_img.jpg" >
+			</div>
+		    <div class="content">
+		    	<div class="meta">5 days ago</div>
+		      	<div class="name">Faithful Dog</div>
+		      	<p class="description">Sometimes its more important to have a dog you know you can trust. But not every dog is trustworthy, you can tell by looking at its smile.</p>
+		    </div>
+	    	<div class="extra">
+	        	311 votes
+	    	</div>
 	    </div>
-	    <div class="extra">
-	        199 votes
-	    </div>
-	  </div>
 	  
-	  <div class="item">
-	  	<div class="image" id="testimg2">
-		  	<img src="./img/profile_test/long_img.jpg" >
-
-		</div>
-	    <div class="content">
-	      <div class="meta">5 days ago</div>
-	      <div class="name">Faithful Dog</div>
-	      <p class="description">Sometimes its more important to have a dog you know you can trust. But not every dog is trustworthy, you can tell by looking at its smile.</p>
-	    </div>
-	    <div class="extra">
-	        311 votes
-	    </div>
-	  </div>
+	  	<div class="item">
+	  		<div class="image">
+		  		<img src="./img/profile_test/247137.jpg">
+			</div>
+	    	<div class="content">
+	      		<div class="meta">1 week ago</div>
+	      		<div class="name">Silly Dog</div>
+	      		<p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
+	    	</div>
+	    	<div class="extra">
+	        	522 votes
+	    	</div>
+	  	</div>
 	  
-	  <div class="item">
-	  	<div class="image">
-		  	<img src="./img/profile_test/247137.jpg">
-		  	<div class="ui inverted dimmer">
-		  		<a><i class="circular like icon "></i></a></div>
-		</div>
-	    <div class="content">
-	      <div class="meta">1 week ago</div>
-	      <div class="name">Silly Dog</div>
-	      <p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-	    </div>
-	    <div class="extra">
-	        522 votes
-	    </div>
-	  </div>
+	  	<div class="item">
+	  		<div class="image">
+		  		<img src="./img/profile_test/247140.jpg">
+		  	</div>
+	    	<div class="content">
+	      		<div class="meta">1 week ago</div>
+	      		<div class="name">Silly Dog</div>
+	      		<p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
+	    	</div>
+	    	<div class="extra">
+	        	522 votes
+	    	</div>
+	  	</div>
 	  
-	  <div class="item">
-	  	<div class="image">
-		  	<img src="./img/profile_test/247140.jpg">
-		  	<div class="ui inverted dimmer">
-		  		<a><i class="circular like icon "></i></a></div>
-		</div>
-	    <div class="content">
-	      <div class="meta">1 week ago</div>
-	      <div class="name">Silly Dog</div>
-	      <p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-	    </div>
-	    <div class="extra">
-	        522 votes
-	    </div>
-	  </div>
+	  	<div class="item">
+	  		<div class="image">
+		  		<img src="./img/profile_test/247141.jpg">
+		  	</div>
+	    	<div class="content">
+			    <div class="meta">1 week ago</div>
+			    <div class="name">Silly Dog</div>
+			    <p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
+			</div>
+	    	<div class="extra">
+	        	522 votes
+	    	</div>
+	  	</div>
 	  
-	  <div class="item">
-	  	<div class="image">
-		  	<img src="./img/profile_test/247141.jpg">
-		  	<div class="ui inverted dimmer">
-		  		<a><i class="circular like icon "></i></a></div>
-		</div>
-	    <div class="content">
-	      <div class="meta">1 week ago</div>
-	      <div class="name">Silly Dog</div>
-	      <p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-	    </div>
-	    <div class="extra">
-	        522 votes
-	    </div>
-	  </div>
-	  
-	  <div class="item">
-	  	<div class="image">
-		  	<img src="./img/profile_test/247136.jpg">
-		  	<div class="ui inverted dimmer">
-		  		<a><i class="circular like icon "></i></a></div>
-		</div>
-	    <div class="content">
-	      <div class="meta">1 week ago</div>
-	      <div class="name">Silly Dog</div>
-	      <p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-	    </div>
-	    <div class="extra">
-	        522 votes
-	    </div>
-	  </div>
-	  
-	</div>	
+	  	<div class="item">
+	  		<div class="image">
+		  		<img src="./img/profile_test/247136.jpg">
+			</div>
+	    	<div class="content">
+	      		<div class="meta">1 week ago</div>
+	      		<div class="name">Silly Dog</div>
+	      		<p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
+	    	</div>
+	   		<div class="extra">
+	        	522 votes
+	    	</div>
+	  	</div>  
+	</div>
+	
+	<div class="ui wide styled sidebar" id="upload_new_sidebar">
+		<form class="ui form" id="uploadform">
+  			
+   			<div class="ui field">
+     				<label>姓名</label>
+     				<input type="text" placeholder="姓名">
+   			</div>
+   			<div class="ui field">
+     				<label>年级</label>
+     				<input type="text" placeholder="年级">
+   			</div>
+   			<div class="ui field">
+     				<label>学校</label>
+     				<input type="text" placeholder="学校">
+   			</div>
+  			
+  			<div class="ui field"><label>照片描述</label><textarea></textarea></div>
+  			<img id="img_prev" src="" alt="your image" width="300px"><br>
+  			<div class="addpicbuttons">
+  				<a href="javascript:;" class="addpic">
+  					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>  			
+  				<button class="ui green disabled button" id="submitBtn"> 确定上传</button>
+  			</div>
+  		</form>
+	</div>
+	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
 	
 	<script src="./js/uploadpopup.js"></script>
+	<script src="./js/sidebar_toggle.js"></script>
+	<script type="text/javascript">
+		$(".ui.list.menu .item").hover(function(){
+			$(this).children(".right.floated").fadeIn();},
+			function(){
+			$(this).children(".right.floated").fadeOut();}
+		);
+	</script>	
 	
 	<script type="text/javascript">
 	$(document).ready(function() {
@@ -206,18 +255,18 @@
 			});
 		$('.ui.dropdown')
  				.dropdown(
- 					{on: 'hover'
+ 					{on: 'click'
  					}
  				);
- 			$("#testimg").hover(function(){
- 				    $(this).children("a").fadeIn("fast");
- 				    $(this).fadeTo("fast",0.7);
-   				},
-   				function(){
- 				    $(this).children("a").fadeOut("fast");
- 				    $(this).fadeTo("fast",1);
- 					}
- 				); 
+		$("#testimg").hover(function(){
+			    $(this).children("a").fadeIn("fast");
+			    $(this).fadeTo("fast",0.7);
+ 				},
+ 				function(){
+			    $(this).children("a").fadeOut("fast");
+			    $(this).fadeTo("fast",1);
+				}
+			); 
  				
  			//遍历所有图片元素后为它们加上magnificPopup插件的初始化选项
 		$num_items = $("#container-main").find("img");
