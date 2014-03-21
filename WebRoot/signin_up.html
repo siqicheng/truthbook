@@ -271,7 +271,7 @@
          *	Form submit
          *  Be enabled only when form pass semantic form validation and email check
          */
-        $('.ui.form')
+        $('.ui.form.register-form')
 			.submit(function(){
 				var isValidForm = $('.ui.form.register-form').form('validate form');
 				if(isValidForm == true && isValidEmailGlb == 1){
