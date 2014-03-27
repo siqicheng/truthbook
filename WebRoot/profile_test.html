@@ -8,6 +8,10 @@
    	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
    	<link href="./CSS/position.css" rel="stylesheet">
    	<link href="./CSS/addpicBtn.css" rel="stylesheet">
+   	<link href="./CSS/menuBar.css" rel="stylesheet">
+   	<link href="./CSS/eventSegment.css" rel="stylesheet">
+   	<link href="./CSS/profileSegment.css" rel="stylesheet">
+   	
 </head>
 	
 <body style="background-color:#DEDCDE;margin:0px;">
@@ -54,27 +58,25 @@
 		</div>
 	</div>
 	
-	<div class="ui basic segment" style="width:1000px;margin:0 auto;">
+	<div class="ui basic segment" id="menubar" >
 		<div class="ui four column grid" >
 			<div class="column">
 				<div class="ui red inverted fluid menu" >
 					<div class="ui dropdown fluid item" >
 						<i class="star small icon"></i> 极·友
-						<div class="ui small label" style="float:right">1</div>
-						<!-- <div class="menu"> -->
-							<div class="ui list menu">
+						<div class="ui small label">1</div>
+						<div class="ui list menu">
      						<div class="item">
-     							<div class="right floated" style="padding-top:5px;width:60px;margin:0;display:none;">
+     							<div class="right floated">
      								<a href="./test.html"><i class="cloud upload large icon"></i></a>
      								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
      							</div>
      							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
-     							<a class="content" style="padding-top: 7px;font-size:16px;width:120px" href="./test.html">张三</a>
+     							<a class="content" href="./test.html">张三</a>
      						</div>
      						<a class="item">李四</a>
      						<a class="item">王五</a>
-     						</div>
-   						<!-- </div> -->
+     					</div>
    					</div>
 				</div>
  			</div>
@@ -120,16 +122,54 @@
 		</div>
 	</div>
 	
-	<div id="container-main" class="ui three items" >
+	<div class="ui three items" id="eventsegment">
 		<div class="item">
 			<div class="image" id="testimg">
-		 		<img src="./img/profile_test/247142.jpg"  id="testmfp">
-		 		<a style="position:absolute;left:10px;top:10px;z-index:1;display:none" class="ui button"><i class="circular like icon "></i></a>
+		 		<img src="http://lorempixel.com/319/496/">
+		 		<a><i class="heart empty icon"></i></a>
 			</div>
-			<div class="content">
-				<div class="meta">2 days ago</div>
-				<div class="name">Cute Dog</div>
+			<div class="content" >				
 				<p class="description">This dog has some things going for it. Its pretty cute and looks like it'd be fun to cuddle up with.</p>
+				<div class="meta">2 days ago</div>
+			</div>
+			<div class="ui divider"></div>
+			<div class="ui minimal comments">
+	            <div class="comment">
+	                <a class="avatar">
+	                    <img src="./img/profile_test/247142.jpg">
+	                </a>
+	                <div class="content">
+	                    <a class="author">张三</a>
+	                    <div class="metadata">
+	                        <span class="date">2天前</span>
+	                    </div>
+	                    <div class="text">
+	                        最喜欢宫城良田了！！！
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="comment">
+	                <a class="avatar">
+	                    <img src="./img/profile_test/247144.jpg">
+	                </a>
+	                <div class="content">
+	                    <a class="author">李四</a>
+	                    <div class="metadata">
+	                        <span class="date">2天前</span>
+	                    </div>
+	                    <div class="text">
+	                        图片不错！
+	                    </div>
+	                </div>
+	            </div>
+				<form class="ui reply form" style="display:none;">
+					<div class="field">
+					    <textarea placeholder="添加评论..."></textarea>
+					</div>
+					<div class="ui small teal button">
+					    添加评论
+					</div>
+				</form>              				
 			</div>
 		   	<div class="extra">
 		   		199 votes
@@ -138,7 +178,7 @@
 		 
 		<div class="item">
 			<div class="image" id="testimg2">
-		  		<img src="./img/profile_test/long_img.jpg" >
+		  		<img src="http://lorempixel.com/319/596/">
 			</div>
 		    <div class="content">
 		    	<div class="meta">5 days ago</div>
@@ -152,7 +192,7 @@
 	  
 	  	<div class="item">
 	  		<div class="image">
-		  		<img src="./img/profile_test/247137.jpg">
+		  		<img src="http://lorempixel.com/319/396/">
 			</div>
 	    	<div class="content">
 	      		<div class="meta">1 week ago</div>
@@ -166,7 +206,7 @@
 	  
 	  	<div class="item">
 	  		<div class="image">
-		  		<img src="./img/profile_test/247140.jpg">
+		  		<img src="http://lorempixel.com/319/480/">
 		  	</div>
 	    	<div class="content">
 	      		<div class="meta">1 week ago</div>
@@ -180,7 +220,7 @@
 	  
 	  	<div class="item">
 	  		<div class="image">
-		  		<img src="./img/profile_test/247141.jpg">
+		  		<img src="http://lorempixel.com/319/196/">
 		  	</div>
 	    	<div class="content">
 			    <div class="meta">1 week ago</div>
@@ -194,7 +234,7 @@
 	  
 	  	<div class="item">
 	  		<div class="image">
-		  		<img src="./img/profile_test/247136.jpg">
+		  		<img src="http://lorempixel.com/319/296/">
 			</div>
 	    	<div class="content">
 	      		<div class="meta">1 week ago</div>
@@ -204,7 +244,7 @@
 	   		<div class="extra">
 	        	522 votes
 	    	</div>
-	  	</div>  
+	  	</div>	  	   
 	</div>
 	
 	<div class="ui wide styled sidebar" id="upload_new_sidebar">
@@ -236,51 +276,67 @@
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
+	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
 	
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
-	<script type="text/javascript">
-		$(".ui.list.menu .item").hover(function(){
-			$(this).children(".right.floated").fadeIn();},
-			function(){
-			$(this).children(".right.floated").fadeOut();}
-		);
-	</script>	
 	
 	<script type="text/javascript">
 	$(document).ready(function() {
-		$("#container-main").masonry({
+			//masonry initialization
+		var $container=$("#eventsegment").masonry({
 			itemSelector: '.item'
 			});
+		$container.imagesLoaded( function() {
+  			$container.masonry();
+			});
+			//semantic dropdown intialization
 		$('.ui.dropdown')
  				.dropdown(
  					{on: 'click'
  					}
  				);
+ 			//buttons on images show function test
 		$("#testimg").hover(function(){
 			    $(this).children("a").fadeIn("fast");
-			    $(this).fadeTo("fast",0.7);
+			    $(this).children("img").fadeTo("fast",0.9);
  				},
  				function(){
 			    $(this).children("a").fadeOut("fast");
-			    $(this).fadeTo("fast",1);
+			    $(this).children("img").fadeTo("fast",1);
 				}
-			); 
- 				
+			); 				
  			//遍历所有图片元素后为它们加上magnificPopup插件的初始化选项
-		$num_items = $("#container-main").find("img");
+		$num_items = $("#eventsegment").find(".image").children("img");
   			for(var i=0, len=$num_items.length;i< len;i++){
  	  			$($num_items[i]).magnificPopup({
    				items: {
-     					src: $($num_items[i]).attr("src")
+     					src:  $($num_items[i]).attr("src")
    				},
    				type: 'image'
 			}); 
- 			};
- 			
-		
+ 			};		
 	});
 	</script>
+	
+	<script type="text/javascript">
+	//buttons on friends' list
+		$(".ui.list.menu .item").hover(function(){
+			$(this).children(".right.floated").fadeIn();},
+			function(){
+			$(this).children(".right.floated").fadeOut();}
+		);
+	</script>
+	
+	<script type="text/javascript">
+ 		$(".ui.minimal.comments").click(function(){
+				$(this).children(".ui.reply.form").show();
+				$("#eventsegment").masonry();
+			}
+		);
+	</script>	
+	
+
 </body>
 </html>
