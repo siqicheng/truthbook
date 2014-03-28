@@ -2039,7 +2039,16 @@ $.fn.form.settings = {
         : false
       ;
     },
-    
+
+    //cym modified start
+    func: function(value, check) {
+      if(check==1)
+        return true;
+      else
+        return false;
+    },
+    //cym modified end
+
     //csq modified start
     isYear: function(value) {
       return (value !== undefined)

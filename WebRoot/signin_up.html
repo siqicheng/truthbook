@@ -63,7 +63,8 @@
                 <div class="field" id="emailTest">
                     <div class="ui left labeled icon input">
                     
-                        <input type="text" id="email" name="email" placeholder="邮箱" onblur="checkEmail(this.value)" >
+                  <!--      <input type="text" id="email" name="email" placeholder="邮箱"  onblur="checkEmail(this.value) " > -->
+                  <input type="text" id="email" name="email" placeholder="邮箱"  >
                        	<div class="ui corner label green" id = "cornerlabel" style="display: none"> 
 	  	            		<i class="checkmark small icon" id="correctCheckmark" style="display: none"></i>
 	                	</div> 
@@ -102,7 +103,9 @@
        </button>
 	</div>
      	
-	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<!-- script src="./assets/jquery/jquery-1.7.2.js"></script> -->
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/form_toggle.js"></script>	
@@ -183,6 +186,7 @@
 		
 		window.isValidEmailGlb = 0;
 		window.touchedPassword = 0;
+		//window.test = 1;
 		
 		/*
 		 *  Combine two form pre-check
@@ -234,9 +238,19 @@
                     email: {
                         identifier: 'email',
                         rules:[
-                        {
+                       /* {
                             type   : 'email',
-                            prompt : '请输入正确的邮箱'
+                           prompt : '请输入正确的邮箱'
+                        },*/
+                        {
+                        	//type   : 'not["checkEmail($(.email).value)",false]',
+                        	//type     : 'is["lse","false"]',
+                        	type      : 'not[test]',
+                        	prompt : 'test'
+                        },
+                        {
+                        	type		:'contains[test1]',
+                        	prompt :'test1'
                         }
                         ]
                     },
@@ -255,7 +269,7 @@
                     },
 
                 },{
-                    on: 'blur',
+                    on: 'change',
                     inline: 'true',
                     onFailure :  disableRegisterButton,
 					onInvalid : disableRegisterButton,
@@ -266,6 +280,12 @@
                 	return false;
                 }
         }); 
+        
+        function test()
+        {
+    //    	if(val==1){ return true;}
+        	return 1;
+        }
         
         /*
          *	Form submit
@@ -320,27 +340,33 @@
          */
 		function checkEmail(email){
 			if (email.length==0) { 
-				$("#errorMessageMail").hide();
-				hideCheckmarklabel();
-				return;
+//				$("#errorMessageMail").hide();
+//				hideCheckmarklabel();
+				console.log("length=0");
+				return false;
 			}
 			var url = "http://localhost:8080/truthbook/services/loginService/v1/email/"+email;
 			var onAjaxSuccess = function (data,textStatus){
 				if(data == "true"){
-					$("#errorMessageMail").show();
-					hideCheckmarklabel();
+//					$("#errorMessageMail").show();
+//					hideCheckmarklabel();
 					disableButton("register_button");
+					console.log("data=ture");
+					return false;
 				}
 				else{
-					$("#errorMessageMail").hide();
+//					$("#errorMessageMail").hide();
 					if(document.getElementById("emailTest").className == "field") {
 						showCheckmarklabel();
 						checkButtonValid();
+						return true;
 					}	else {
-						hideCheckmarklabel();
+//						hideCheckmarklabel();
+						return false;
 					}	
 				}
 				console.log("status:"+textStatus+" data:"+data);
+				return true;
 			};
 			
 			var onAjaxError = function(xhr,status,error){

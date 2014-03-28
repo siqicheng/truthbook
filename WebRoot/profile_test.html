@@ -36,8 +36,57 @@
 		<a class="orange item">
 	    	<i class="setting icon"></i>
 		</a>
-		<a class="item" id="uploadPic">上传照片（PopUp）</a>
-		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a>
+		<!-- a class="item" id="uploadPic">上传照片（PopUp）</a>
+		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a -->
+		<a class="open-popup-link item" href="#uploadpopup">上传照片（PopUp）</a>
+		<div id="uploadpopup" class="white-popup  mfp-hide">
+		
+				<div class="ui steps">
+    				<div class="ui active step" id="step1">
+    					选人
+    				</div>
+    				<div class="ui disabled step" id="step2">
+    					选照片
+    				</div>
+    				<div class="ui disabled step" id="step3">
+    					完成
+    				</div>
+    			</div>
+    			
+    			<form class="ui form" id="chooseppform">
+    				<div class="field">
+      					<label>姓名</label>
+      					<input type="text" placeholder="姓名">
+	    			</div>
+    				<div class="field">
+      					<label>年级</label>
+      					<input type="text" placeholder="年级">
+    				</div>
+    				<div class="field">
+    	  				<label>学校</label>
+    	  				<input type="text" placeholder="学校">
+    				</div>
+  					<button class="ui green disabled button nextstep" id="nextstep1">下一步</button>
+  				</form>
+  				
+  				<form class="ui form" id="choosepicform" style="display:none">
+	    			<div class="ui field"><label>照片描述</label><textarea></textarea></div>
+  					<img id="img_prev" src="" alt="your image" ><br>
+  					<div class="addpicbuttons"><a href="javascript:;" class="addpic">
+  					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+  					<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
+  					<button class="ui green disabled button nextstep" id="nextstep2">下一步</button> </div>
+  				</form>
+  				
+  				<form class="ui form" id="confirmform" style="display:none">
+  					<button class="ui green disabled button" id="submitBtn"> 确定上传</button>
+  				</form>
+  				
+  				<form class="ui form" id="checkform" style="display:none"> <!-- 重名选人 -->
+  					
+  				</form>
+		</div>
+		
 		<div class="right menu"  >
 				<div class="item">
      				<div class="ui icon input">
@@ -282,5 +331,51 @@
 		
 	});
 	</script>
+	
+	<script>
+		$(function(){
+			$(".open-popup-link").magnificPopup({
+				type:"inline",
+				midClick: true
+			});
+		});
+	</script>
+	
+	<script>
+    	$(function() {
+    		$("#step1").click(function() {
+    			$("#step1").attr("class","ui active step");
+    			$("#step2").attr("class","ui disabled step");
+    			$("#step3").attr("class","ui disabled step");
+    			$("#chooseppform").show();
+    			$("#choosepicform").hide();
+    			$("#confirmform").hide();
+    		});
+    		$("#step2").click(function() {
+    			if($("#step2").attr("class") != "ui disabled step") {
+    				$("#step1").attr("class","ui step");
+    				$("#step2").attr("class","ui active step");
+    				$("#step3").attr("class","ui disabled step");    				
+    				$("#chooseppform").hide();
+    				$("#choosepicform").show();
+    				$("#confirmform").hide();
+    			}
+    		});
+    		$("#nextstep1").click(function() {
+    			//ajax call
+    			
+    			$("#chooseppform").hide();
+    			$("#choosepicform").show();
+    			$("#step1").attr("class","ui step");
+    			$("#step2").attr("class","ui active step");
+    		});
+    		$("#nextstep2").click(function() {
+    			$("#choosepicform").hide();
+    			$("#confirmform").show();
+    			$("#step2").attr("class","ui step");
+    			$("#step3").attr("class","ui active step");
+    		});
+    	});
+    </script>
 </body>
 </html>
