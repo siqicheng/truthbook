@@ -22,6 +22,11 @@
 	cursor:zoom-in;
 }
 
+#eventsegment .item .content .meta a {
+	font-size: 13px;
+	font-style: italic;
+}
+
 #eventsegment .item .ui.minimal.comments {
 	padding: 0px 10px 10px;
 }
