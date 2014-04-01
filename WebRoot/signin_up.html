@@ -37,7 +37,7 @@
   			<div id="resText"></div>
   			<div class="ui error message" id="errorMessageLogin" style="display: none">用户名或密码不正确</div>
 		</form>
-		
+
 		<!-- register form, display none in default -->
 		<form class="ui form register-form" style="width:300px; margin-left: 40px; display: none;">	                
                 <!-- fullName field -->
@@ -65,8 +65,7 @@
                 <div class="field" id="emailTest">
                     <div class="ui left labeled icon input">
                     
-                  <!--      <input type="text" id="email" name="email" placeholder="邮箱"  onblur="checkEmail(this.value) " > -->
-                  <input type="text" id="email" name="email" placeholder="邮箱"  >
+                        <input type="text" id="email" name="email" placeholder="邮箱" onblur="checkEmail(this.value)" >
                        	<div class="ui corner label green" id = "cornerlabel" style="display: none"> 
 	  	            		<i class="checkmark small icon" id="correctCheckmark" style="display: none"></i>
 	                	</div> 
@@ -88,7 +87,7 @@
 	  			<input class="ui disabled fluid blue button" type ="submit" id="register_button" value = "注册">
         </form>
 	</div>
-	        	
+
     <!-- register&login toggle button -->
 	<div class="bottom-left">
 	    <button class="ui basic animated button" id="registerToggle"> 
@@ -105,9 +104,7 @@
        </button>
 	</div>
      	
-	<!-- script src="./assets/jquery/jquery-1.7.2.js"></script> -->
-	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/form_toggle.js"></script>	
@@ -148,7 +145,7 @@
 					$("#errorMessageLogin").hide();
                 }
 			});
-		
+
 		$('.ui.form.login-form')
 			.submit(function(){			
 				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
@@ -185,11 +182,10 @@
 				});
 	</script>
 	<script type="text/javascript">
-		
+
 		window.isValidEmailGlb = 0;
 		window.touchedPassword = 0;
-		//window.test = 1;
-		
+
 		/*
 		 *  Combine two form pre-check
 		 *	1. Semantic form validation
@@ -240,19 +236,10 @@
                     email: {
                         identifier: 'email',
                         rules:[
-                       /* {
+                        {
                             type   : 'email',
-                           prompt : '请输入正确的邮箱'
-                        },*/
-                        {
-                        	//type   : 'not["checkEmail($(.email).value)",false]',
-                        	//type     : 'is["lse","false"]',
-                        	type      : 'not[test]',
-                        	prompt : 'test'
-                        },
-                        {
-                        	type		:'contains[test1]',
-                        	prompt :'test1'
+                          // type		: 'func["onAjaxError"]',
+                            prompt : '请输入正确的邮箱'
                         }
                         ]
                     },
@@ -271,7 +258,7 @@
                     },
 
                 },{
-                    on: 'change',
+                    on: 'blur',
                     inline: 'true',
                     onFailure :  disableRegisterButton,
 					onInvalid : disableRegisterButton,
@@ -282,12 +269,6 @@
                 	return false;
                 }
         }); 
-        
-        function test()
-        {
-    //    	if(val==1){ return true;}
-        	return 1;
-        }
         
         /*
          *	Form submit
@@ -336,42 +317,36 @@
 		function disableButton(buttonID){
 			document.getElementById(buttonID).className = "ui disabled fluid blue button";
 		}
-		
+
         /*	
          *	checkEmail() is used for email input.
          *	Email validation need an AJAX check with the back-end.
          */
 		function checkEmail(email){
 			if (email.length==0) { 
-//				$("#errorMessageMail").hide();
-//				hideCheckmarklabel();
-				console.log("length=0");
-				return false;
+				$("#errorMessageMail").hide();
+				hideCheckmarklabel();
+				return;
 			}
 			var url = "http://localhost:8080/truthbook/services/loginService/v1/email/"+email;
 			var onAjaxSuccess = function (data,textStatus){
 				if(data == "true"){
-//					$("#errorMessageMail").show();
-//					hideCheckmarklabel();
+					$("#errorMessageMail").show();
+					hideCheckmarklabel();
 					disableButton("register_button");
-					console.log("data=ture");
-					return false;
 				}
 				else{
-//					$("#errorMessageMail").hide();
+					$("#errorMessageMail").hide();
 					if(document.getElementById("emailTest").className == "field") {
 						showCheckmarklabel();
 						checkButtonValid();
-						return true;
 					}	else {
-//						hideCheckmarklabel();
-						return false;
+						hideCheckmarklabel();
 					}	
 				}
 				console.log("status:"+textStatus+" data:"+data);
-				return true;
 			};
-			
+
 			var onAjaxError = function(xhr,status,error){
 					$("#errorMessageMail").show();
 					$("#errorMessageMail").text("status:"+status+" error:"+error);
@@ -393,7 +368,7 @@
 				}
 			}
 		}
-		        
+
         /*	
          *	checkButtonValidPW() is only used for password input.
          *	After user touched the password input, former inputs can be allowed to do the button valid check.	
