@@ -13,7 +13,7 @@
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
    	<link rel="shortcut icon" href="img/logo_red.ico" />
 </head>
-
+	
 <body style="background-color:#DEDCDE;margin:0px;">
 
 	<div class="ui fixed small menu" id="topbar" >
@@ -42,39 +42,40 @@
 		</a>
 		<!-- a class="item" id="uploadPic">上传照片（PopUp）</a>
 		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a -->
-		<a class="open-popup-link item" href="#uploadpopup">上传照片（PopUp）</a>
-		<div id="uploadpopup" class="white-popup  mfp-hide">
-
+		<a class="open-popup-link item" href="#upload">上传照片（PopUp）</a>
+<!-- 		<a class="open-popup-link item" id="open-popup-link">上传照片（PopUp）</a> -->
+<!-- 		<div id="uploadpopup" class="white-popup ui modal"> -->
+		<div id="upload" class="mfp-hide" >
 				<div class="ui steps">
-    				<div class="ui active step" id="step1">
+    				<div class="ui active step step1" >
     					选人
     				</div>
-    				<div class="ui disabled step" id="step2">
+    				<div class="ui disabled step step2">
     					选照片
     				</div>
-    				<div class="ui disabled step" id="step3">
+    				<div class="ui disabled step step3" >
     					完成
     				</div>
     			</div>
     			
     			<div class="ui divider"></div>
     			
-    			<form class="ui form chooseppform" id="chooseppform">
-    				<div class="field" id="fullNameTest">
+    			<div class="ui form" >
+    				<div class="ui field" id="fullNameTest">
 	                    <label>姓名</label>
 	                    <div class="ui left labeled icon input">
 	                        <input type="text" id="fullName" placeholder="姓名" name="fullName">
 	                        <i class="user icon"></i>
 	                    </div>
 	                </div>
-    				<div class="field" id="schoolTest">
+    				<div class="ui field" id="schoolTest">
     					<label>学校</label>
 	                    <div class="ui left labeled icon input">
 	                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
 	                        <i class="book icon"></i>
 	                    </div>
 	                </div>
-    				<div class="field" id="entryTimeTest">
+    				<div class="ui field" id="entryTimeTest">
     					<label>入学年份</label>
 	                    <div class="ui left labeled icon input">
 	                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
@@ -83,26 +84,24 @@
 	                </div>
 	                <div class="ui error message"></div>
     				<div class="ui divider"></div>
-  					<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
-  				</form>
+  					<input class="ui green button nextstep nextstep1"  value="下一步" readonly>
+  				</div>
   				
-  				<form class="ui form" id="choosepicform" style="display:none">
+  				<form class="ui form choosepicform" style="display:none">
 	    			<div class="ui field">
 	    				<label>照片描述</label>
 	    				<textarea></textarea>
 	    			</div>
-
+	    			
   					<div class="ui divider"></div>
   					
   					<img id="img_prev" src="" alt="your image" ><br>
   					<div class="addpicbuttons"><a href="javascript:;" class="addpic">
   					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
-  					<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
-  					<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
+  					<input class="ui green button nextstep nextstep2"  value="下一步" readonly> </div>
   				</form>
   				
-  				<form class="ui form" id="confirmform" style="display:none">
-  					<!-- 预览效果 -->
+  				<form class="ui form confirmform" style="display:none">
   					<div class="ui message">你将传给XXX的是下面这张图片：</div>
   					<div class="ui items">
 	  					<div class="item">
@@ -121,13 +120,12 @@
   					<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
   				</form>
   				
-  				<form class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
-				<!--  	<label>我们找到了好多xxx</label>	-->
-					<div class="ui attached message">
+  				<form class="ui form rechooseform" style="display:none">
+					<div class="ui message">
 						我们找到了好多XXX：
 					</div>
   					<div class="ui selection list">
-  						<div class="ui item segment" id="item0" onclick="clickppitem(0)">
+  						<div class="ui item segment item0" onclick="clickppitem(0)">
 	  						<a class="ui corner green label" style="display:none">
 	  							<i class="checkmark small icon"></i>
 	  						</a>
@@ -137,7 +135,7 @@
 	  								An excellent companion
 	  						</div>
   						</div>
-					  <div class="ui item segment" id="item1" onclick="clickppitem(1)">
+					  <div class="ui item segment item1" onclick="clickppitem(1)">
   						<a class="ui corner green label" style="display:none">
   							<i class="checkmark small icon"></i>
   						</a>
@@ -147,7 +145,7 @@
 					      A poodle, its pretty basic
 					    </div>
 					  </div>
-					  <div class="ui item segment" id="item2" onclick="clickppitem(2)">
+					  <div class="ui item segment item2" onclick="clickppitem(2)">
   						<a class="ui corner green label" style="display:none">
   							<i class="checkmark small icon"></i>
   						</a>
@@ -157,7 +155,7 @@
 					      He's also a dog
 					    </div>
 					  </div>
-					  <div class="ui item segment" id="item3" onclick="clickppitem(3)">
+					  <div class="ui item segment item3" onclick="clickppitem(3)">
   						<a class="ui corner green label"  style="display:none">
   							<i class="checkmark small icon"></i>
   						</a>
@@ -168,12 +166,12 @@
 					  	</div>
 					  </div>
 					</div>
-					<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+					<div class="ui red bottom attached message segment rechooseerror" style="display:none">请选择要发给的对象</div>
 					<div class="ui divider"></div>
-  					<input class="ui green button" id="nextstep3" value="下一步" readonly>
+  					<input class="ui green button nextstep3" value="下一步" readonly>
   				</form>
 		</div>
-
+		
 		<div class="right menu"  >
 				<div class="item">
      				<div class="ui icon input">
@@ -264,7 +262,7 @@
 				<p class="description">This dog has some things going for it. Its pretty cute and looks like it'd be fun to cuddle up with.</p>
 				<div class="meta">2 days ago</div>
 			</div>
-
+			
 			<div class="ui divider"></div>
 			<div class="ui minimal comments">
 	            <div class="comment">
@@ -380,32 +378,31 @@
 	  	</div>	  	   
 	</div>
 
-	<div class="ui wide styled sidebar" id="upload_new_sidebar">
-		<form class="ui form" id="uploadform">
+<!-- 	<div class="ui very wide styled sidebar" id="upload_new_sidebar"> -->
+<!-- 		<form class="ui form" id="uploadform"> -->
+<!--    			<div class="ui field"> -->
+<!--      				<label>姓名</label> -->
+<!--      				<input type="text" placeholder="姓名"> -->
+<!--    			</div> -->
+<!--    			<div class="ui field"> -->
+<!--      				<label>年级</label> -->
+<!--      				<input type="text" placeholder="年级"> -->
+<!--    			</div> -->
+<!--    			<div class="ui field"> -->
+<!--      				<label>学校</label> -->
+<!--      				<input type="text" placeholder="学校"> -->
+<!--    			</div> -->
   			
-   			<div class="ui field">
-     				<label>姓名</label>
-     				<input type="text" placeholder="姓名">
-   			</div>
-   			<div class="ui field">
-     				<label>年级</label>
-     				<input type="text" placeholder="年级">
-   			</div>
-   			<div class="ui field">
-     				<label>学校</label>
-     				<input type="text" placeholder="学校">
-   			</div>
-  			
-  			<div class="ui field"><label>照片描述</label><textarea></textarea></div>
-  			<img id="img_prev" src="" alt="your image" width="300px"><br>
-  			<div class="addpicbuttons">
-  				<a href="javascript:;" class="addpic">
-  					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>  			
-  				<button class="ui green disabled button" id="submitBtn"> 确定上传</button>
-  			</div>
-  		</form>
-	</div>
-
+<!--   			<div class="ui field"><label>照片描述</label><textarea></textarea></div> -->
+<!--   			<img id="img_prev" src="" alt="your image" width="300px"><br> -->
+<!--   			<div class="addpicbuttons"> -->
+<!--   				<a href="javascript:;" class="addpic"> -->
+<!--   					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>  			 -->
+<!--   				<button class="ui green disabled button" id="submitBtn"> 确定上传</button> -->
+<!--   			</div> -->
+<!--   		</form> -->
+<!-- 	</div> -->
+	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
@@ -457,24 +454,26 @@
 
 	<script>
     	$(function() {
-    		$("#step1").click(function() {
-    			$("#step1").attr("class","ui active step");
-    			$("#step2").attr("class","ui disabled step");
-    			$("#step3").attr("class","ui disabled step");
-    			$("#chooseppform").show();
-    			$("#choosepicform").hide();
-    			$("#confirmform").hide();
-    			$("#rechooseform").hide();
+    		$(".step1").click(function() {
+    			if(($(".rechooseform").css("display")=="none") && ($(".chooseppform").css("display")=="none") ){
+	    			$(".step1").attr("class","ui active step step1");
+	    			$(".step2").attr("class","ui disabled step step2");
+	    			$(".step3").attr("class","ui disabled step step3");
+	    			$(".chooseppform").show();
+	    			$(".choosepicform").hide();
+	    			$(".confirmform").hide();
+	    			$(".rechooseform").hide();
+    			}
     		});
-    		$("#step2").click(function() {
-    			if($("#step2").attr("class") != "ui disabled step") {
-    				$("#step1").attr("class","ui step");
-    				$("#step2").attr("class","ui active step");
-    				$("#step3").attr("class","ui disabled step");    				
-    				$("#chooseppform").hide();
-    				$("#choosepicform").show();
-    				$("#confirmform").hide();
-    				$("#rechooseform").hide();
+    		$(".step2").click(function() {
+    			if($(".step2").attr("class") != "ui disabled step step2") {
+    				$(".step1").attr("class","ui step step1");
+    				$(".step2").attr("class","ui active step step2");
+    				$(".step3").attr("class","ui disabled step step3");
+    				$(".chooseppform").hide();
+    				$(".choosepicform").show();
+    				$(".confirmform").hide();
+    				$(".rechooseform").hide();
     			}
     		});
     		$(".ui.form.chooseppform").form(
@@ -520,21 +519,21 @@
     		}
     		);
     		
-    		$("#nextstep1").click(function() {
-//     			var isValidForm = $("#chooseppform").form("validate form");
+    		$(".nextstep1").click(function() {
+//     			var isValidForm = $(".chooseppform").form("validate form");
 //     			if(isValidForm == true) {
 					var url = "http://localhost:8080/truthbook/dummy/false.html";
-		 			var data = $("#chooseppform").serialize();
+		 			var data = $(".chooseppform").serialize();
 					var onAjaxSuccess = function(data,textStatus) {
 						if(data == "true") {
-							$("#chooseppform").hide();
-		    				$("#choosepicform").show();
-		    				$("#step1").attr("class","ui step");
-		    				$("#step2").attr("class","ui active step");
+							$(".chooseppform").hide();
+		    				$(".choosepicform").show();
+		    				$(".step1").attr("class","ui step step1");
+		    				$(".step2").attr("class","ui active step step2");
 						} else if(data == "false") {
 							// 创建新人
-							$("#chooseppform").hide();
-							$("#rechooseform").show();
+							$(".chooseppform").hide();
+							$(".rechooseform").show();
 						} else if(data == 2) {
 							//重名选人
 						};
@@ -548,15 +547,15 @@
 					ajax_call(ajax_obj);
 // 				}
 			});
-    		$("#nextstep2").click(function() {
+    		$(".nextstep2").click(function() {
     			var url = "http://localhost:8080/truthbook/dummy/true.html";
-	 			var data = $("#choosepicform").serialize();
+	 			var data = $(".choosepicform").serialize();
 				var onAjaxSuccess = function(data,textStatus) {
 					if(data == "true") {
-						$("#choosepicform").hide();
-		    			$("#confirmform").show();
-		    			$("#step2").attr("class","ui step");
-		    			$("#step3").attr("class","ui active step");
+						$(".choosepicform").hide();
+		    			$(".confirmform").show();
+		    			$(".step2").attr("class","ui step step2");
+		    			$(".step3").attr("class","ui active step step3");
 					} else {
 						//图片不符合要求
 					}
@@ -569,14 +568,14 @@
 	 			ajax_obj.data = data;
 				ajax_call(ajax_obj);
     		});
-    		$("#nextstep3").click(function() {
+    		$(".nextstep3").click(function() {
     			if(typeof(selected_num)!="undefined") {
-	    			$("#rechooseform").hide();
-	    			$("#choosepicform").show();
-	    			$("#step1").attr("class","ui step");
-	    			$("#step2").attr("class","ui active step");
+	    			$(".rechooseform").hide();
+	    			$(".choosepicform").show();
+	    			$(".step1").attr("class","ui step step1");
+	    			$(".step2").attr("class","ui active step step2");
     			} else {
-    				$("#rechooseerror").show();
+    				$(".rechooseerror").show();
     			}
     		});
     	});
@@ -584,13 +583,13 @@
     	function clickppitem(num) {
     		if(typeof(selected_num)=="undefined") {
     			selected_num=num;
-    			$("#item"+selected_num+" .label").show();
+    			$(".item"+selected_num+" .label").show();
     		} else {
-    			$("#item"+selected_num+" .label").hide();
+    			$(".item"+selected_num+" .label").hide();
     			selected_num=num;
-    			$("#item"+selected_num+" .label").show();
+    			$(".item"+selected_num+" .label").show();
     		};
-    		$("#rechooseerror").hide();
+    		$(".rechooseerror").hide();
     	};
     </script>
 
@@ -610,15 +609,27 @@
 			}
 		);
 	</script>	
-
+		
 	<script>
 		$(function(){
+			$(".open-popup-link").click(function(){
+				$("#upload").removeClass("ui very wide styled sidebar");
+				$("#upload").addClass("white-popup");
+				$("#upload").show();
+			});
+			$("#upload_for_new_btn").click(function(){
+				$("#upload").removeClass("mfp-hide");
+				$("#upload").addClass("ui very wide styled sidebar");
+				$("#upload").sidebar("show");
+			});
 			$(".open-popup-link").magnificPopup({
-				type:"inline",
-				midClick: true
+// 				type:"inline",
+// 				midClick: true,
+// 				closeBtnInside: true
 			});
 		});
 	</script>
-
+	
+	
 </body>
 </html>

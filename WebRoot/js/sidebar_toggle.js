@@ -1,4 +1,5 @@
 $('#upload_new_sidebar')
+//$('#upload')
 	.sidebar({
 		onShow: function(){
 			$("#upload_menu").toggle();
