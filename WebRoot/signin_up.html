@@ -7,16 +7,14 @@
    	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
    	<!-- location CSS -->
    	<link href="./CSS/position.css" rel="stylesheet">
-   	<link rel="shortcut icon" href="img/logo_red.ico" /> 
+   	<link rel="shortcut icon" href="img/logo.ico" /> 
 
 </head>
 
 <body class="body_bg">
 	<div class="absolute-center" style="width:380px; height:400px">
 		<img src="img/Truthbook_capital.png" width="380" >
-<!-- 		<p style="color:papayawhip; text-align:center;margin-top: 0px;font-family:华文;">分享 	你眼中的TA，<br> -->
-<!-- 		   看见  	TA眼中的你。 -->
-<!-- 		</p> -->
+		
 		<!-- login form -->
 		<form class="ui form login-form" style="width:300px; margin-left: 40px;">	    		
 			<!--email field-->
@@ -282,7 +280,6 @@
 					var onAjaxSuccess = function(data,textStatus){
 						if (data == "true"){
 // 							console.log("success");
-// 							alert();
 							window.location.href = "http://localhost:8080/truthbook/profile_test.html";
 							return true;
 						}
