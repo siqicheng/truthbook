@@ -2057,7 +2057,7 @@ $.fn.form.settings = {
       ;
     },
     earlyYear: function(value, start) {
-        if((value<start))
+        if((value<start) && (value>0))
         	return false;
         else
         	return true;
