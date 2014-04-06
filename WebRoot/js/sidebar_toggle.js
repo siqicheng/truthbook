@@ -1,4 +1,3 @@
-//$('#upload_new_sidebar')
 $('#upload')
 	.sidebar({
 		onShow: function(){
@@ -10,10 +9,11 @@ $('#upload')
 			$("#close_sidebar_btn").toggle();
 			}
 		})
-	.sidebar('attach events', '#close_sidebar_btn', 'hide');
+	.sidebar('attach events', '#close_sidebar_btn', 'hide')
+	.sidebar('attach events', '.open_popup_link', 'hide');
 
 
-$(".open-popup-link").click(function(){
+$(".open_popup_link").click(function(){
 	$("#upload").removeClass("ui very wide styled sidebar");
 	$("#upload").addClass("white-popup");
 	$("#upload").show();

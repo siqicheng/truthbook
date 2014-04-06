@@ -25,7 +25,6 @@
 					<a class="item" id="upload_for_new_btn">新建好友档案</a>
 					<div class="ui dropdown item" id="upload_for_fri_btn">
 						为已有好友上传 <i class="dropdown icon"></i>
-<!-- 						dropdown问题 -->
 						<div class="menu">
 							<div class="ui dropdown item">
 								极·友<i class="dropdown icon"></i>
@@ -59,9 +58,7 @@
 		<a class="orange item">
 	    	<i class="setting icon"></i>
 		</a>
-		<!-- a class="item" id="uploadPic">上传照片（PopUp）</a>
-		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a -->
-		<a class="open-popup-link item" href="#upload">上传照片（PopUp）</a>
+		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
 		
 		<div class="right menu"  >
 				<div class="item">
@@ -310,7 +307,7 @@
 
 	<script>
 		$(function(){
-			$(".open-popup-link").magnificPopup({
+			$(".open_popup_link").magnificPopup({
 				type:"inline",
 				midClick: true
 			});
