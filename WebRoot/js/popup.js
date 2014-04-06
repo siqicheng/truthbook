@@ -75,7 +75,12 @@ $(function() {
 // 			Verify user quote: (fullName,school,entryTime) exist
 			var onAjaxSuccess = function(data,textStatus) {
 				console.log(data);
-				var len=Object.keys(data.user).length;
+				var len;
+				if(data.user.length!=undefined){
+					len=data.user.length;
+				} else if(data != null){
+					len=1;
+				};
 				if(len == 1) {
 					console.log("find only one candidate");
 					$("#chooseppform").hide();
@@ -136,6 +141,16 @@ $(function() {
 	$(".upload_for_fri").click(function(){
 		
 	});
+	
+	function jsonlength(json) {
+		var i=0;
+		for (var x in json) {
+//			if(json.hasOwnProperty(x)){
+				i++;
+//			}
+		}
+		return i;
+	}
 });
 
 function clickppitem(num) {
