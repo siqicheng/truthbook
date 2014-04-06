@@ -8,12 +8,13 @@
    	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
    	<link href="./CSS/position.css" rel="stylesheet">
    	<link href="./CSS/addpicBtn.css" rel="stylesheet">
+   	<link href="./CSS/topBar.css" rel="stylesheet">
    	<link href="./CSS/menuBar.css" rel="stylesheet">
    	<link href="./CSS/eventSegment.css" rel="stylesheet">
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
    	<link rel="shortcut icon" href="img/logo_red.ico"/>
 </head>
-	
+
 <body style="background-color:#DEDCDE;margin:0px;">
 
 	<div class="ui fixed small menu" id="topbar" >
@@ -22,7 +23,24 @@
 				<i class="add icon"></i> 上传照片（sidebar）
 				<div class="menu">
 					<a class="item" id="upload_for_new_btn">新建好友档案</a>
-					<a class="item" id="upload_for_fri_btn">为已有好友上传</a>
+					<div class="ui dropdown item" id="upload_for_fri_btn">
+						为已有好友上传 <i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="ui dropdown item">
+								极·友<i class="dropdown icon"></i>
+								<div class="menu">
+									<div class="item">张三</div>
+									<div class="item">王五</div>
+								</div>
+							</div>
+							<div class="ui dropdown item">
+								真·友<i class="dropdown icon"></i>
+								<div class="menu">
+									<div class="item">李四</div>
+								</div>
+							</div>
+						</div>
+					</div>
  				</div>
 			</div>
 			<a class="item" id="close_sidebar_btn" style="display:none">
@@ -40,8 +58,8 @@
 		<a class="orange item">
 	    	<i class="setting icon"></i>
 		</a>
-		<a class="item" id="uploadPic">上传照片（PopUp）</a>
-		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a>
+		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
+		
 		<div class="right menu"  >
 				<div class="item">
      				<div class="ui icon input">
@@ -50,6 +68,137 @@
      				</div>
    			</div>
  			</div>
+	</div>
+
+	<div id="upload" class="white-popup  mfp-hide">
+
+			<div class="ui steps">
+   				<div class="ui active step" id="step1">
+   					选人
+   				</div>
+   				<div class="ui disabled step" id="step2">
+   					选照片
+   				</div>
+   				<div class="ui disabled step" id="step3">
+   					完成
+   				</div>
+   			</div>
+   			
+   			<div class="ui divider"></div>
+   			
+   			<div class="ui form chooseppform" id="chooseppform">
+   				<div class="field" id="fullNameTest">
+                    <label>姓名</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="fullName" placeholder="姓名" name="fullName">
+                        <i class="user icon"></i>
+                    </div>
+                </div>
+   				<div class="field" id="schoolTest">
+   					<label>学校</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
+                        <i class="book icon"></i>
+                    </div>
+                </div>
+   				<div class="field" id="entryTimeTest">
+   					<label>入学年份</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
+                        <i class="align justify icon"></i>
+                    </div>
+                </div>
+                <div class="ui error message"></div>
+   				<div class="ui divider"></div>
+ 					<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
+ 				</div>
+ 				
+ 				<div class="ui form" id="choosepicform" style="display:none">
+    			<div class="ui field">
+    				<label>照片描述</label>
+    				<textarea></textarea>
+    			</div>
+
+ 					<div class="ui divider"></div>
+ 					
+ 					<img id="img_prev" src="" alt="your image" ><br>
+ 					<div class="addpicbuttons"><a href="javascript:;" class="addpic">
+ 					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+ 					<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
+ 					<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
+ 				</div>
+ 				
+ 				<div class="ui form" id="confirmform" style="display:none">
+ 					<!-- 预览效果 -->
+ 					<div class="ui message" id="previewmessage"></div>
+ 					<div class="ui items">
+  					<div class="item">
+  						<div class="image">
+  							<img src="./img/profile_test/247146.jpg">
+  						</div>
+  						<div class="content">
+  							<div class="name">
+  								图片预览
+  							</div>
+  							<p class="description">图片描述</p>
+  						</div>
+  					</div>
+ 					</div>
+ 					<div class="ui divider"></div>
+ 					<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
+ 				</div>
+ 				
+ 				<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
+			<!--  	<label>我们找到了好多xxx</label>	-->
+				<div class="ui attached message" id="rechoosemessage">
+					我们找到了好多
+				</div>
+ 					<div class="ui selection list">
+ 						<div class="ui item segment" id="item0" onclick="clickppitem(0)">
+  						<a class="ui corner green label" style="display:none">
+  							<i class="checkmark small icon"></i>
+  						</a>
+ 							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
+ 							<div class="content">
+  							<div class="header">Snickerdoodle</div>
+  								An excellent companion
+  						</div>
+ 						</div>
+				  <div class="ui item segment" id="item1" onclick="clickppitem(1)">
+ 						<a class="ui corner green label" style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
+				    <div class="content">
+				      <div class="header">Poodle</div>
+				      A poodle, its pretty basic
+				    </div>
+				  </div>
+				  <div class="ui item segment" id="item2" onclick="clickppitem(2)">
+ 						<a class="ui corner green label" style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
+				    <div class="content">
+				      <div class="header">Paulo</div>
+				      He's also a dog
+				    </div>
+				  </div>
+				  <div class="ui item segment" id="item3" onclick="clickppitem(3)">
+ 						<a class="ui corner green label"  style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				  	<img class="ui avatar image" src="./img/profile_test/247140.jpg">
+				  	<div class="content">
+				  		<div class="header">新建词条</div>
+				  		.........
+				  	</div>
+				  </div>
+				</div>
+				<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+				<div class="ui divider"></div>
+ 					<input class="ui green button" id="nextstep3" value="下一步"  readonly>
+ 				</div>
 	</div>
 
 	<div id="profile-segment">
@@ -69,7 +218,7 @@
 						<div class="ui list menu">
      						<div class="item">
      							<div class="right floated">
-     								<a href="./test.html"><i class="cloud upload large icon"></i></a>
+     								<a class="upload_friend"><i class="cloud upload large icon"></i></a>
      								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
      							</div>
      							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
@@ -122,158 +271,8 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="ui three items" id="eventsegment">
-		<div class="item">
-			<div class="image" id="testimg">
-		 		<img src="http://lorempixel.com/319/496/">
-		 		<a><i class="heart empty icon"></i></a>
-			</div>
-			<div class="content" >				
-				<p class="description">This dog has some things going for it. Its pretty cute and looks like it'd be fun to cuddle up with.</p>
-				<div class="meta">2 days ago</div>
-			</div>
-			
-			<div class="ui divider"></div>
-			<div class="ui minimal comments">
-	            <div class="comment">
-	                <a class="avatar">
-	                    <img src="./img/profile_test/247142.jpg">
-	                </a>
-	                <div class="content">
-	                    <a class="author">张三</a>
-	                    <div class="metadata">
-	                        <span class="date">2天前</span>
-	                    </div>
-	                    <div class="text">
-	                        最喜欢宫城良田了！！！
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="comment">
-	                <a class="avatar">
-	                    <img src="./img/profile_test/247144.jpg">
-	                </a>
-	                <div class="content">
-	                    <a class="author">李四</a>
-	                    <div class="metadata">
-	                        <span class="date">2天前</span>
-	                    </div>
-	                    <div class="text">
-	                        图片不错！
-	                    </div>
-	                </div>
-	            </div>
-				<form class="ui reply form" style="display:none;">
-					<div class="field">
-					    <textarea placeholder="添加评论..."></textarea>
-					</div>
-					<div class="ui small teal button">
-					    添加评论
-					</div>
-				</form>              				
-			</div>
-		   	<div class="extra">
-		   		199 votes
-		   	</div>
-		</div>
-
-		<div class="item">
-			<div class="image" id="testimg2">
-		  		<img src="http://lorempixel.com/319/596/">
-			</div>
-		    <div class="content">
-		    	<div class="meta">5 days ago</div>
-		      	<div class="name">Faithful Dog</div>
-		      	<p class="description">Sometimes its more important to have a dog you know you can trust. But not every dog is trustworthy, you can tell by looking at its smile.</p>
-		    </div>
-	    	<div class="extra">
-	        	311 votes
-	    	</div>
-	    </div>
-
-	  	<div class="item">
-	  		<div class="image">
-		  		<img src="http://lorempixel.com/319/396/">
-			</div>
-	    	<div class="content">
-	      		<div class="meta">1 week ago</div>
-	      		<div class="name">Silly Dog</div>
-	      		<p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-	    	</div>
-	    	<div class="extra">
-	        	522 votes
-	    	</div>
-	  	</div>
-
-	  	<div class="item">
-	  		<div class="image">
-		  		<img src="http://lorempixel.com/319/480/">
-		  	</div>
-	    	<div class="content">
-	      		<div class="meta">1 week ago</div>
-	      		<div class="name">Silly Dog</div>
-	      		<p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-	    	</div>
-	    	<div class="extra">
-	        	522 votes
-	    	</div>
-	  	</div>
-
-	  	<div class="item">
-	  		<div class="image">
-		  		<img src="http://lorempixel.com/319/196/">
-		  	</div>
-	    	<div class="content">
-			    <div class="meta">1 week ago</div>
-			    <div class="name">Silly Dog</div>
-			    <p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-			</div>
-	    	<div class="extra">
-	        	522 votes
-	    	</div>
-	  	</div>
-
-	  	<div class="item">
-	  		<div class="image">
-		  		<img src="http://lorempixel.com/319/296/">
-			</div>
-	    	<div class="content">
-	      		<div class="meta">1 week ago</div>
-	      		<div class="name">Silly Dog</div>
-	      		<p class="description">Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.</p>
-	    	</div>
-	   		<div class="extra">
-	        	522 votes
-	    	</div>
-	  	</div>	  	   
-	</div>
-
-	<div class="ui wide styled sidebar" id="upload_new_sidebar">
-		<form class="ui form" id="uploadform">
-  			
-   			<div class="ui field">
-     				<label>姓名</label>
-     				<input type="text" placeholder="姓名">
-   			</div>
-   			<div class="ui field">
-     				<label>年级</label>
-     				<input type="text" placeholder="年级">
-   			</div>
-   			<div class="ui field">
-     				<label>学校</label>
-     				<input type="text" placeholder="学校">
-   			</div>
-  			
-  			<div class="ui field"><label>照片描述</label><textarea></textarea></div>
-  			<img id="img_prev" src="" alt="your image" width="300px"><br>
-  			<div class="addpicbuttons">
-  				<a href="javascript:;" class="addpic">
-  					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>  			
-  				<button class="ui green disabled button" id="submitBtn"> 确定上传</button>
-  			</div>
-  		</form>
-	</div>
+	
+	<div class="ui three items" id="eventsegment"></div>
 
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>	
@@ -281,9 +280,12 @@
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
-
+	<script src="./js/general/utility.js"></script>
+	<script src="./js/popup.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
+	<script src="./js/eventsegment_layout.js"></script>
+
 	<script type="text/javascript">
 	$(function() {
 		$("#testCookie").html("Cookie test : OK!");
@@ -296,41 +298,16 @@
 		$("#testCookie").append("UserID:\t"+$.cookie("truthbook_userId"));$("#testCookie").append("<br>");
 	});
 	</script>
+	
 	<script type="text/javascript">
 	$(document).ready(function() {
-			//masonry initialization
-		var $container=$("#eventsegment").masonry({
-			itemSelector: '.item'
-			});
-		$container.imagesLoaded( function() {
-  			$container.masonry();
-			});
 			//semantic dropdown intialization
 		$('.ui.dropdown')
  				.dropdown(
  					{on: 'click'
  					}
  				);
- 			//buttons on images show function test
-		$("#testimg").hover(function(){
-			    $(this).children("a").fadeIn("fast");
-			    $(this).children("img").fadeTo("fast",0.9);
- 				},
- 				function(){
-			    $(this).children("a").fadeOut("fast");
-			    $(this).children("img").fadeTo("fast",1);
-				}
-			); 				
- 			//遍历所有图片元素后为它们加上magnificPopup插件的初始化选项
-		$num_items = $("#eventsegment").find(".image").children("img");
-  			for(var i=0, len=$num_items.length;i< len;i++){
- 	  			$($num_items[i]).magnificPopup({
-   				items: {
-     					src:  $($num_items[i]).attr("src")
-   				},
-   				type: 'image'
-			}); 
- 			};		
+	
 	});
 	</script>
 
@@ -343,14 +320,23 @@
 		);
 	</script>
 
-	<script type="text/javascript">
- 		$(".ui.minimal.comments").click(function(){
-				$(this).children(".ui.reply.form").show();
-				$("#eventsegment").masonry();
-			}
-		);
-	</script>	
+	<script>
+		$(function(){
+			$(".open_popup_link").magnificPopup({
+				type:"inline",
+				midClick: true
+			});
+		});
+	</script>
 
+	<script>
+		$(function() {
+			$("#upload_for_fri_btn").dropdown( {
+				on: "hover"
+				
+			});
+		});
+	</script>
 
 </body>
 </html>

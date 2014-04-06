@@ -34,7 +34,7 @@
   			<div id="resText"></div>
   			<div class="ui error message" id="errorMessageLogin" style="display: none">用户名或密码不正确</div>
 		</form>
-		
+
 		<!-- register form, display none in default -->
 		<form class="ui form register-form" style="width:300px; margin-left: 40px; display: none;">	                
                 <!-- fullName field -->
@@ -84,7 +84,7 @@
 	  			<input class="ui disabled fluid blue button" type ="submit" id="register_button" value = "注册">
         </form>
 	</div>
-	        	
+
     <!-- register&login toggle button -->
 	<div class="bottom-left">
 	    <button class="ui basic animated button" id="registerToggle"> 
@@ -144,11 +144,12 @@
 					$("#errorMessageLogin").hide();
                 }
 			});
+
 			$(function() {
 				//clean all truthbook cookie
 				cleanUserInfoCookie();
 			});
-		
+
 		$('.ui.form.login-form')
 			.submit(function(){			
 				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
@@ -195,10 +196,10 @@
 				});
 	</script>
 	<script type="text/javascript">
-		
+
 		window.isValidEmailGlb = 0;
 		window.touchedPassword = 0;
-		
+
 		/*
 		 *  Combine two form pre-check
 		 *	1. Semantic form validation
@@ -251,6 +252,7 @@
                         rules:[
                         {
                             type   : 'email',
+                          // type		: 'func["onAjaxError"]',
                             prompt : '请输入正确的邮箱'
                         }
                         ]
@@ -335,7 +337,7 @@
 		function disableButton(buttonID){
 			document.getElementById(buttonID).className = "ui disabled fluid blue button";
 		}
-		
+
         /*	
          *	checkEmail() is used for email input.
          *	Email validation need an AJAX check with the back-end.
@@ -365,7 +367,7 @@
 				}
 				console.log("status:"+textStatus+" data:"+data);
 			};
-			
+
 			var onAjaxError = function(xhr,status,error){
 					$("#errorMessageMail").show();
 					$("#errorMessageMail").text("status:"+status+" error:"+error);
@@ -387,7 +389,7 @@
 				}
 			}
 		}
-		        
+
         /*	
          *	checkButtonValidPW() is only used for password input.
          *	After user touched the password input, former inputs can be allowed to do the button valid check.	
