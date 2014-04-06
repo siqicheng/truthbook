@@ -49,3 +49,33 @@ function Redirect (url) {
 	// All other browsers
 	else { window.location.href = url; }
 }
+
+function cleanUserInfoCookie(){
+	$.cookie("truthbook_email", null); 
+	$.cookie("truthbook_entryTime", null); 
+	$.cookie("truthbook_fullName", null); 
+	$.cookie("truthbook_isActivated", null); 
+	$.cookie("truthbook_school", null); 
+	$.cookie("truthbook_userId", null);	
+}
+
+function setUserInfoCookie(data){
+	//alert(data.email+data.entryTime+data.fullName+data.isActivated+data.school+data.userId);
+	$.cookie("truthbook_email", data.email); 
+	$.cookie("truthbook_entryTime", data.entryTime); 
+	$.cookie("truthbook_fullName", data.fullName); 
+	$.cookie("truthbook_isActivated", data.isActivated); 
+	$.cookie("truthbook_school", data.school); 
+	$.cookie("truthbook_userId", data.userId);	
+}
+
+
+
+
+
+
+
+
+
+
+

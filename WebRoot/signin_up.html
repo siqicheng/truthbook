@@ -14,9 +14,6 @@
 <body class="body_bg">
 	<div class="absolute-center" style="width:380px; height:400px">
 		<img src="img/Truthbook_capital.png" width="380" >
-<!-- 		<p style="color:papayawhip; text-align:center;margin-top: 0px;font-family:华文;">分享 	你眼中的TA，<br> -->
-<!-- 		   看见  	TA眼中的你。 -->
-<!-- 		</p> -->
 		<!-- login form -->
 		<form class="ui form login-form" style="width:300px; margin-left: 40px;">	    		
 			<!--email field-->
@@ -105,12 +102,14 @@
 	</div>
      	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<script src="./assets/jquery/jquery.cookie.js"></script>	
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./js/general/utility.js"></script>
+	<script src="./js/general/globalValue.js"></script>	
 	<script src="./js/form_toggle.js"></script>	
 	<script type="text/javascript">
 	//login form functions
-		$(function() {				
+		$(function() {		
 			//form validation
 			$( '.ui.form.login-form' )
 				.form({
@@ -146,25 +145,36 @@
                 }
 			});
 
+			$(function() {
+				//clean all truthbook cookie
+				cleanUserInfoCookie();
+			});
+
 		$('.ui.form.login-form')
 			.submit(function(){			
 				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
-				if(isValidLoginForm == true){	
-					var url="http://localhost:8080/truthbook/services/loginService/v1/login";
+				if(isValidLoginForm == true){
+					var path = "v1/login";
+					var url=ServerRoot+ServiceType.LOGIN+path;
+// 					var url="http://localhost:8080/truthbook/services/loginService/v1/login";
 					var data= $('.ui.form.login-form').serialize();
 					var onAjaxSuccess = function(data,textStatus){
-						if (data == "true"){
-							window.location.href = "http://localhost:8080/truthbook/profile_test.html";
-							return true;
-						}
-						else{
+						if (data == false){
 							$("#errorMessageLogin").show();
 // 							$("#errorMessageLogin").text("Login failed. Please validate your username/password.");
 // 							console.log("Login failed. Please validate your username/password.");
 							return false;
+
+						}
+						else{		
+							$("#errorMessageLogin").hide();
+							setUserInfoCookie(data);
+// 							alert($.cookie("truthbook_email"));
+							window.location.href = HomePage;
+							return true;
 						}
 					};
-					var ajax_obj = getAjaxObj(url,"POST","text",onAjaxSuccess);
+					var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess);
 					ajax_obj.data = data;
 					ajax_call(ajax_obj);
 					return false;	

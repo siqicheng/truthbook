@@ -12,7 +12,7 @@
    	<link href="./CSS/menuBar.css" rel="stylesheet">
    	<link href="./CSS/eventSegment.css" rel="stylesheet">
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
-   	<link rel="shortcut icon" href="img/logo_red.ico" />
+   	<link rel="shortcut icon" href="img/logo_red.ico"/>
 </head>
 
 <body style="background-color:#DEDCDE;margin:0px;">
@@ -204,6 +204,7 @@
 	<div id="profile-segment">
 		<div class="ui stacked raised segment" style="height:300px;">
 			<div class="ui circular segment"></div>
+			<span id="testCookie"></span>
 		</div>
 	</div>
 
@@ -274,6 +275,7 @@
 	<div class="ui three items" id="eventsegment"></div>
 
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<script src="./assets/jquery/jquery.cookie.js"></script>	
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
@@ -282,8 +284,23 @@
 	<script src="./js/popup.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
+<<<<<<< HEAD
 	<script src="./js/eventsegment_layout.js"></script>
 
+=======
+	<script type="text/javascript">
+	$(function() {
+		$("#testCookie").html("test cookie");
+		$("#testCookie").append("<br>");$("#testCookie").append("<br>");
+		$("#testCookie").append("Email:\t"+$.cookie("truthbook_email"));$("#testCookie").append("<br>");
+		$("#testCookie").append("EntryTime:\t"+$.cookie("truthbook_entryTime"));$("#testCookie").append("<br>");
+		$("#testCookie").append("FullName:\t"+$.cookie("truthbook_fullName"));$("#testCookie").append("<br>");
+		$("#testCookie").append("IsActivated:\t"+$.cookie("truthbook_isActivated"));$("#testCookie").append("<br>");
+		$("#testCookie").append("School:\t"+$.cookie("truthbook_school"));$("#testCookie").append("<br>");
+		$("#testCookie").append("UserID:\t"+$.cookie("truthbook_userId"));$("#testCookie").append("<br>");
+	});
+	</script>
+>>>>>>> siqicheng
 	<script type="text/javascript">
 	$(document).ready(function() {
 			//semantic dropdown intialization
