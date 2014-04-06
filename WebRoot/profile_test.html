@@ -46,7 +46,7 @@
 			<a class="item" id="close_sidebar_btn" style="display:none">
 				<i class="remove icon"></i> 关闭 </a>
 		</div>		
-		<div class="title item">
+		<div class="title item" onclick = "goHomePage();" style="cursor:pointer;">
 	        <img src="img/Truthbook_red.png" width="140px" >
 	    </div>		      
 		<a class="active green item">
@@ -222,7 +222,7 @@
      								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
      							</div>
      							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
-     							<a class="content" href="./test.html">张三</a>
+     							<a class="content" onclick = "goZhangSan()">张三</a>
      						</div>
      						<a class="item">李四</a>
      						<a class="item">王五</a>
@@ -281,6 +281,7 @@
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
 	<script src="./js/general/utility.js"></script>
+	<script src="./js/general/globalValue.js"></script>	
 	<script src="./js/popup.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
@@ -296,6 +297,7 @@
 		$("#testCookie").append("IsActivated:\t"+$.cookie("truthbook_isActivated"));$("#testCookie").append("<br>");
 		$("#testCookie").append("School:\t"+$.cookie("truthbook_school"));$("#testCookie").append("<br>");
 		$("#testCookie").append("UserID:\t"+$.cookie("truthbook_userId"));$("#testCookie").append("<br>");
+		$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId"));$("#testCookie").append("<br>");
 	});
 	</script>
 	

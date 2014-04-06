@@ -146,10 +146,13 @@
 			});
 
 			$(function() {
+				
+				cookieAvailableCheck();
 				//clean all truthbook cookie
-				cleanUserInfoCookie();
+				cleanUserInfoCookie();				
 			});
 
+	
 		$('.ui.form.login-form')
 			.submit(function(){			
 				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
@@ -169,7 +172,7 @@
 						else{		
 							$("#errorMessageLogin").hide();
 							setUserInfoCookie(data);
-							window.location.href = HomePage;
+							goHomePage();
 							return true;
 						}
 					};
@@ -302,7 +305,7 @@
 
 						} else {
 							setUserInfoCookie(data);
-							window.location.href = HomePage;
+							goHomePage();
 							return true;
 						}
 					};
@@ -403,4 +406,6 @@
 			}
 		}		
 
-	</script>	
+	</script>
+</body>
+</html>
