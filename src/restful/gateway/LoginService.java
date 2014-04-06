@@ -65,7 +65,7 @@ public class LoginService {
 		this.user.setFullName(fullName);
 		this.user.setSchool(school);
 		this.user.setEntryTime(entryTime);
-		this.user.setIsActivated(false);
+//		this.user.setIsActivated(false);
 		List<User> users = this.userDAO.findByExample(this.user);
 		
 		return users;		
