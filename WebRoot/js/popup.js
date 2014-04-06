@@ -226,9 +226,19 @@ $(function() {
 		}
 	});
 	
-	$(".upload_friend").click(function(){
+	$(".upload_for_fri").click(function(){
 		
 	});
+	
+	function jsonlength(json) {
+		var i=0;
+		for (var x in json) {
+//			if(json.hasOwnProperty(x)){
+				i++;
+//			}
+		}
+		return i;
+	}
 });
 
 function clickppitem(num) {

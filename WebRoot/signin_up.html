@@ -144,7 +144,6 @@
 					$("#errorMessageLogin").hide();
                 }
 			});
-
 			$(function() {
 				
 				cookieAvailableCheck();
@@ -255,7 +254,6 @@
                         rules:[
                         {
                             type   : 'email',
-                          // type		: 'func["onAjaxError"]',
                             prompt : '请输入正确的邮箱'
                         }
                         ]
@@ -295,7 +293,6 @@
 			.submit(function(){
 				var isValidForm = $('.ui.form.register-form').form('validate form');
 				if(isValidForm == true && isValidEmailGlb == 1){
-					
 					var path = "v1/full/register";
 					var url=ServerRoot+ServiceType.LOGIN+path;		
 					//var url="http://localhost:8080/truthbook/services/loginService/v1/register";
@@ -322,8 +319,6 @@
 				}
 				return false;
 			});
-			
-		
         
         /*	Helper function
          */
@@ -408,4 +403,8 @@
 
 	</script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> yiming

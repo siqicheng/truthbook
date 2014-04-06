@@ -73,7 +73,7 @@
 	<div id="upload" class="white-popup  mfp-hide">
 
 			<div class="ui steps">
-   				<div class="ui active step" id="step1">
+   				<div class="ui active step" id="step1" style="cursor:pointer;">
    					选人
    				</div>
    				<div class="ui disabled step" id="step2">
@@ -86,7 +86,7 @@
    			
    			<div class="ui divider"></div>
    			
-   			<div class="ui form chooseppform" id="chooseppform">
+   			<form class="ui form chooseppform" id="chooseppform" onSubmit="return false;">
    				<div class="field" id="fullNameTest">
                     <label>姓名</label>
                     <div class="ui left labeled icon input">
@@ -111,7 +111,7 @@
                 <div class="ui error message"></div>
    				<div class="ui divider"></div>
  					<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
- 				</div>
+ 				</form>
  				
  				<div class="ui form" id="choosepicform" style="display:none">
     			<div class="ui field">
@@ -218,7 +218,7 @@
 						<div class="ui list menu">
      						<div class="item">
      							<div class="right floated">
-     								<a class="upload_friend"><i class="cloud upload large icon"></i></a>
+     								<a class="upload_for_fri"><i class="cloud upload large icon"></i></a>
      								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
      							</div>
      							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
@@ -275,7 +275,8 @@
 	<div class="ui three items" id="eventsegment"></div>
 
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
-	<script src="./assets/jquery/jquery.cookie.js"></script>	
+	<script src="./assets/jquery/jquery.cookie.js"></script>
+	<script src="./assets/jquery/jquery.json-2.4.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
@@ -286,6 +287,7 @@
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
+	<script src="./js/general/globalValue.js"></script>
 
 	<script type="text/javascript">
 	$(function() {
