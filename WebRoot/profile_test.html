@@ -61,138 +61,8 @@
 		</a>
 		<!-- a class="item" id="uploadPic">上传照片（PopUp）</a>
 		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a -->
-		<a class="open-popup-link item" href="#uploadpopup">上传照片（PopUp）</a>
-		<div id="uploadpopup" class="white-popup  mfp-hide">
-
-				<div class="ui steps">
-    				<div class="ui active step" id="step1">
-    					选人
-    				</div>
-    				<div class="ui disabled step" id="step2">
-    					选照片
-    				</div>
-    				<div class="ui disabled step" id="step3">
-    					完成
-    				</div>
-    			</div>
-    			
-    			<div class="ui divider"></div>
-    			
-    			<form class="ui form chooseppform" id="chooseppform">
-    				<div class="field" id="fullNameTest">
-	                    <label>姓名</label>
-	                    <div class="ui left labeled icon input">
-	                        <input type="text" id="fullName" placeholder="姓名" name="fullName">
-	                        <i class="user icon"></i>
-	                    </div>
-	                </div>
-    				<div class="field" id="schoolTest">
-    					<label>学校</label>
-	                    <div class="ui left labeled icon input">
-	                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
-	                        <i class="book icon"></i>
-	                    </div>
-	                </div>
-    				<div class="field" id="entryTimeTest">
-    					<label>入学年份</label>
-	                    <div class="ui left labeled icon input">
-	                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
-	                        <i class="align justify icon"></i>
-	                    </div>
-	                </div>
-	                <div class="ui error message"></div>
-    				<div class="ui divider"></div>
-  					<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
-  				</form>
-  				
-  				<form class="ui form" id="choosepicform" style="display:none">
-	    			<div class="ui field">
-	    				<label>照片描述</label>
-	    				<textarea></textarea>
-	    			</div>
-
-  					<div class="ui divider"></div>
-  					
-  					<img id="img_prev" src="" alt="your image" ><br>
-  					<div class="addpicbuttons"><a href="javascript:;" class="addpic">
-  					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
-  					<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
-  					<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
-  				</form>
-  				
-  				<form class="ui form" id="confirmform" style="display:none">
-  					<!-- 预览效果 -->
-  					<div class="ui message">你将传给XXX的是下面这张图片：</div>
-  					<div class="ui items">
-	  					<div class="item">
-	  						<div class="image">
-	  							<img src="./img/profile_test/247146.jpg">
-	  						</div>
-	  						<div class="content">
-	  							<div class="name">
-	  								图片预览
-	  							</div>
-	  							<p class="description">图片描述</p>
-	  						</div>
-	  					</div>
-  					</div>
-  					<div class="ui divider"></div>
-  					<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
-  				</form>
-  				
-  				<form class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
-				<!--  	<label>我们找到了好多xxx</label>	-->
-					<div class="ui attached message">
-						我们找到了好多XXX：
-					</div>
-  					<div class="ui selection list">
-  						<div class="ui item segment" id="item0" onclick="clickppitem(0)">
-	  						<a class="ui corner green label" style="display:none">
-	  							<i class="checkmark small icon"></i>
-	  						</a>
-  							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
-  							<div class="content">
-	  							<div class="header">Snickerdoodle</div>
-	  								An excellent companion
-	  						</div>
-  						</div>
-					  <div class="ui item segment" id="item1" onclick="clickppitem(1)">
-  						<a class="ui corner green label" style="display:none">
-  							<i class="checkmark small icon"></i>
-  						</a>
-					    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
-					    <div class="content">
-					      <div class="header">Poodle</div>
-					      A poodle, its pretty basic
-					    </div>
-					  </div>
-					  <div class="ui item segment" id="item2" onclick="clickppitem(2)">
-  						<a class="ui corner green label" style="display:none">
-  							<i class="checkmark small icon"></i>
-  						</a>
-					    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
-					    <div class="content">
-					      <div class="header">Paulo</div>
-					      He's also a dog
-					    </div>
-					  </div>
-					  <div class="ui item segment" id="item3" onclick="clickppitem(3)">
-  						<a class="ui corner green label"  style="display:none">
-  							<i class="checkmark small icon"></i>
-  						</a>
-					  	<img class="ui avatar image" src="./img/profile_test/247140.jpg">
-					  	<div class="content">
-					  		<div class="header">新建词条</div>
-					  		.........
-					  	</div>
-					  </div>
-					</div>
-					<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
-					<div class="ui divider"></div>
-  					<input class="ui green button" id="nextstep3" value="下一步" readonly>
-  				</form>
-		</div>
-
+		<a class="open-popup-link item" href="#upload">上传照片（PopUp）</a>
+		
 		<div class="right menu"  >
 				<div class="item">
      				<div class="ui icon input">
@@ -201,6 +71,137 @@
      				</div>
    			</div>
  			</div>
+	</div>
+
+	<div id="upload" class="white-popup  mfp-hide">
+
+			<div class="ui steps">
+   				<div class="ui active step" id="step1">
+   					选人
+   				</div>
+   				<div class="ui disabled step" id="step2">
+   					选照片
+   				</div>
+   				<div class="ui disabled step" id="step3">
+   					完成
+   				</div>
+   			</div>
+   			
+   			<div class="ui divider"></div>
+   			
+   			<form class="ui form chooseppform" id="chooseppform">
+   				<div class="field" id="fullNameTest">
+                    <label>姓名</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="fullName" placeholder="姓名" name="fullName">
+                        <i class="user icon"></i>
+                    </div>
+                </div>
+   				<div class="field" id="schoolTest">
+   					<label>学校</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
+                        <i class="book icon"></i>
+                    </div>
+                </div>
+   				<div class="field" id="entryTimeTest">
+   					<label>入学年份</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
+                        <i class="align justify icon"></i>
+                    </div>
+                </div>
+                <div class="ui error message"></div>
+   				<div class="ui divider"></div>
+ 					<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
+ 				</form>
+ 				
+ 				<form class="ui form" id="choosepicform" style="display:none">
+    			<div class="ui field">
+    				<label>照片描述</label>
+    				<textarea></textarea>
+    			</div>
+
+ 					<div class="ui divider"></div>
+ 					
+ 					<img id="img_prev" src="" alt="your image" ><br>
+ 					<div class="addpicbuttons"><a href="javascript:;" class="addpic">
+ 					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+ 					<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
+ 					<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
+ 				</form>
+ 				
+ 				<form class="ui form" id="confirmform" style="display:none">
+ 					<!-- 预览效果 -->
+ 					<div class="ui message">你将传给XXX的是下面这张图片：</div>
+ 					<div class="ui items">
+  					<div class="item">
+  						<div class="image">
+  							<img src="./img/profile_test/247146.jpg">
+  						</div>
+  						<div class="content">
+  							<div class="name">
+  								图片预览
+  							</div>
+  							<p class="description">图片描述</p>
+  						</div>
+  					</div>
+ 					</div>
+ 					<div class="ui divider"></div>
+ 					<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
+ 				</form>
+ 				
+ 				<form class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
+			<!--  	<label>我们找到了好多xxx</label>	-->
+				<div class="ui attached message">
+					我们找到了好多XXX：
+				</div>
+ 					<div class="ui selection list">
+ 						<div class="ui item segment" id="item0" onclick="clickppitem(0)">
+  						<a class="ui corner green label" style="display:none">
+  							<i class="checkmark small icon"></i>
+  						</a>
+ 							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
+ 							<div class="content">
+  							<div class="header">Snickerdoodle</div>
+  								An excellent companion
+  						</div>
+ 						</div>
+				  <div class="ui item segment" id="item1" onclick="clickppitem(1)">
+ 						<a class="ui corner green label" style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
+				    <div class="content">
+				      <div class="header">Poodle</div>
+				      A poodle, its pretty basic
+				    </div>
+				  </div>
+				  <div class="ui item segment" id="item2" onclick="clickppitem(2)">
+ 						<a class="ui corner green label" style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
+				    <div class="content">
+				      <div class="header">Paulo</div>
+				      He's also a dog
+				    </div>
+				  </div>
+				  <div class="ui item segment" id="item3" onclick="clickppitem(3)">
+ 						<a class="ui corner green label"  style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				  	<img class="ui avatar image" src="./img/profile_test/247140.jpg">
+				  	<div class="content">
+				  		<div class="header">新建词条</div>
+				  		.........
+				  	</div>
+				  </div>
+				</div>
+				<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+				<div class="ui divider"></div>
+ 					<input class="ui green button" id="nextstep3" value="下一步"  readonly>
+ 				</form>
 	</div>
 
 	<div id="profile-segment">
@@ -274,33 +275,6 @@
 	</div>
 	
 	<div class="ui three items" id="eventsegment"></div>
-
-
-	<div class="ui wide styled sidebar" id="upload_new_sidebar">
-		<form class="ui form" id="uploadform">
-  			
-   			<div class="ui field">
-     				<label>姓名</label>
-     				<input type="text" placeholder="姓名">
-   			</div>
-   			<div class="ui field">
-     				<label>年级</label>
-     				<input type="text" placeholder="年级">
-   			</div>
-   			<div class="ui field">
-     				<label>学校</label>
-     				<input type="text" placeholder="学校">
-   			</div>
-  			
-  			<div class="ui field"><label>照片描述</label><textarea></textarea></div>
-  			<img id="img_prev" src="" alt="your image" width="300px"><br>
-  			<div class="addpicbuttons">
-  				<a href="javascript:;" class="addpic">
-  					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>  			
-  				<button class="ui green disabled button" id="submitBtn"> 确定上传</button>
-  			</div>
-  		</form>
-	</div>
 
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
