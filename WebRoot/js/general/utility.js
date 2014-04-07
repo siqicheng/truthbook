@@ -51,12 +51,12 @@ function Redirect (url) {
 }
 
 function cleanUserInfoCookie(){
-	$.cookie("truthbook_email", null); 
-	$.cookie("truthbook_entryTime", null); 
-	$.cookie("truthbook_fullName", null); 
-	$.cookie("truthbook_isActivated", null); 
-	$.cookie("truthbook_school", null); 
-	$.cookie("truthbook_userId", null);	
+	$.cookie("truthbook_email", null,{expires: -1}); 
+	$.cookie("truthbook_entryTime", null,{expires: -1}); 
+	$.cookie("truthbook_fullName", null,{expires: -1}); 
+	$.cookie("truthbook_isActivated", null,{expires: -1}); 
+	$.cookie("truthbook_school", null,{expires: -1}); 
+	$.cookie("truthbook_userId", null,{expires: -1}); 
 }
 
 function setUserInfoCookie(data){
@@ -69,13 +69,31 @@ function setUserInfoCookie(data){
 	$.cookie("truthbook_userId", data.userId);	
 }
 
+function goHomePage(){
+	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook_userId"));
+	window.location.href = HomePage;
+}
 
+function goOthersPage(id){
+	$.cookie("truthbook_PageOwner_userId", id);
+	window.location.href = HomePage;
+}
 
+function cookieAvailableCheck(){
+	document.cookie = "cookieid=1; expires=60";
+	var result = document.cookie.indexOf("cookieid=") != -1;
+	if (!result) {
+		alert("浏览器未启用cookies");
+	}
+}
 
-
-
-
-
-
-
-
+function userLengthJson(data){
+	if (data.user.length != undefined){
+		return data.user.length;
+	} else if (data != null) {
+		return 1;
+	}
+	if(data == null){
+		return -1;
+	}
+}

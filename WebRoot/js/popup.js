@@ -75,12 +75,7 @@ $(function() {
 // 			Verify user quote: (fullName,school,entryTime) exist
 			var onAjaxSuccess = function(data,textStatus) {
 				console.log(data);
-				var len;
-				if(data.user.length!=undefined){
-					len=data.user.length;
-				} else if(data != null){
-					len=1;
-				};
+				var len =userLengthJson(data);
 				if(len == 1) {
 					console.log("find only one candidate");
 					$("#chooseppform").hide();
@@ -90,10 +85,11 @@ $(function() {
 				} else if(len > 1) {
 //					重名
 					console.log("find more than one candidates");
-					$("#rechoosemessage").html("我们找到了好多<b>"+$("#fullName").val()+"</b>：");
+					$("#rechoosemessage").html("我们找到了好多<b>"+user+"</b>：");
 					$("#chooseppform").hide();
 					$("#rechooseform").show();
-				} else if(data == null) {
+				} else if(len == -1) {
+//新建词条
 					console.log("null");
 				};
 			};
@@ -137,30 +133,16 @@ $(function() {
 			$("#rechooseerror").show();
 		}
 	});
-	
-	$(".upload_for_fri").click(function(){
-		
-	});
-	
-	function jsonlength(json) {
-		var i=0;
-		for (var x in json) {
-//			if(json.hasOwnProperty(x)){
-				i++;
-//			}
-		}
-		return i;
-	}
-});
 
-function clickppitem(num) {
-	if(typeof(selected_num)=="undefined") {
-		selected_num=num;
-		$("#item"+selected_num+" .label").show();
-	} else {
-		$("#item"+selected_num+" .label").hide();
-		selected_num=num;
-		$("#item"+selected_num+" .label").show();
+	function clickppitem(num) {
+		if(typeof(selected_num)=="undefined") {
+			selected_num=num;
+			$("#item"+selected_num+" .label").show();
+		} else {
+			$("#item"+selected_num+" .label").hide();
+			selected_num=num;
+			$("#item"+selected_num+" .label").show();
+		};
+		$("#rechooseerror").hide();
 	};
-	$("#rechooseerror").hide();
-};
+});

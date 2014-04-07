@@ -28,15 +28,12 @@
 						<div class="menu">
 							<div class="ui dropdown item">
 								极·友<i class="dropdown icon"></i>
-								<div class="menu">
-									<div class="item">张三</div>
-									<div class="item">王五</div>
+								<div class="list menu eFriendsList needicon">
 								</div>
 							</div>
 							<div class="ui dropdown item">
 								真·友<i class="dropdown icon"></i>
-								<div class="menu">
-									<div class="item">李四</div>
+								<div class="list menu nFriendsList needicon">
 								</div>
 							</div>
 						</div>
@@ -210,21 +207,21 @@
 	<div class="ui basic segment" id="menubar" >
 		<div class="ui four column grid" >
 			<div class="column">
-				<div class="ui red inverted fluid menu" >
+				<div class="ui red inverted fluid menu eFriends" >
 					<div class="ui dropdown fluid item" >
 						<i class="star small icon"></i> 极·友
-						<div class="ui small label">1</div>
-						<div class="ui list menu">
-     						<div class="item">
-     							<div class="right floated">
-     								<a class="upload_for_fri"><i class="cloud upload large icon"></i></a>
-     								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
-     							</div>
-     							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
-     							<a class="content" href="./test.html">张三</a>
-     						</div>
-     						<a class="item">李四</a>
-     						<a class="item">王五</a>
+						<div class="ui small label" id="eFriends_num">0</div>
+						<div class="ui list menu eFriendsList needicon" id="eFriendsList">
+<!--      						<div class="item"> -->
+<!--      							<div class="right floated"> -->
+<!--      								<a class="upload_for_fri"><i class="cloud upload large icon"></i></a> -->
+<!--      								<a href="./test.html"><i class="ban circle large icon"></i></a>     								 -->
+<!--      							</div> -->
+<!--      							<img class="ui avatar image" src="./img/profile_test/247142.jpg">  -->
+<!--      							<a class="content" href="./test.html">张三</a> -->
+<!--      						</div> -->
+<!--      						<a class="item">李四</a> -->
+<!--      						<a class="item">王五</a> -->
      					</div>
    					</div>
 				</div>
@@ -233,11 +230,8 @@
 				<div class="ui red inverted fluid menu">
 					<div class="ui dropdown fluid item">
 						<i class="half empty star small icon"></i> 真·友
-						<div class="ui small label" style="float:right">12</div>
-						<div class="menu">
-     						<a class="item">张三</a>
-     						<a class="item">李四</a>
-     						<a class="item">王五</a>
+						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
+						<div class="list menu nFriendsList needicon" id="nFriendsList">
    						</div>
    					</div>
 				</div>
@@ -275,13 +269,13 @@
 
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>
-	<script src="./assets/jquery/jquery.json-2.4.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/popup.js"></script>
+	<script src="./js/friends.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
@@ -310,15 +304,6 @@
  				);
 	
 	});
-	</script>
-
-	<script type="text/javascript">
-	//buttons on friends' list
-		$(".ui.list.menu .item").hover(function(){
-			$(this).children(".right.floated").fadeIn();},
-			function(){
-			$(this).children(".right.floated").fadeOut();}
-		);
 	</script>
 
 	<script>
