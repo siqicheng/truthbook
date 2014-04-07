@@ -12,7 +12,7 @@
   	</servlet-class>
   	<init-param>
 		<param-name>com.sun.jersey.config.property.packages</param-name>
-		<param-value>restful.gateway.login;org.codehaus.jackson.jaxrs</param-value>
+		<param-value>restful.gateway;org.codehaus.jackson.jaxrs</param-value>
 	</init-param>
   	<init-param>
 		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>

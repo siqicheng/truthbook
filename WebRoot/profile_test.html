@@ -109,11 +109,15 @@
 			</div>
 			<div class="column">
 				<div class="ui red inverted fluid menu"> 						
-					<div class="ui dropdown fluid item">
+					<div class="ui dropdown fluid item" id="notification">
 						<i class="mail small icon"></i> 消息通知
 						<div class="floating ui circular green label">05</div>
-						<div class="menu">
-     						<a class="item">您有一条新的好友请求</a>
+						<div class="ui list menu">
+     						<div class="item addfri_req">
+     							<img class="ui avatar image" src="./img/profile_test/247142.jpg">
+     							<div class="content">一条新的好友请求</div>
+     							<div class="hid_content" style="display:none">hidden</div>
+     						</div>
      						<a class="item">张三为您上传了一张照片</a>
      						<a class="item">5条新评论</a>
    						</div>
@@ -160,6 +164,7 @@
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
+	<script src="./js/notification.js"></script>
 
 	<script type="text/javascript">
 	$(document).ready(function() {
