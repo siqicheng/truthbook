@@ -8,8 +8,6 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 import db.mapping.object.User;
 import db.mapping.object.UserPassword;
 
