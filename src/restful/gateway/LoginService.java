@@ -304,6 +304,14 @@ public class LoginService {
 		return RestUtil.string2json(retValue);
 	}
 	
+	@GET
+	@Path("v1/fullName/{fullName}/verify")
+	@Produces("application/json")
+	public List<User> findUserByFullName(@PathParam("fullName") String fullName) {
+		List<User> fullName_list = this.userDAO.findByFullName(fullName);
+		return fullName_list;
+	}
+	
 	@POST
 	@Path("v1/user/verify")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -60,14 +60,15 @@
 		</a>
 		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
 		
-		<div class="right menu"  >
-				<div class="item">
+		<div class="right menu">
+				<form class="ui form item" onsubmit = "return searchUsers();">
      				<div class="ui icon input">
-       				<input type="text" placeholder="Search...">
-       				<i class="search link icon"></i>
+       				<input type="text" id = "searchFullName" placeholder="Search..." >
+       				<i class="search link icon" onclick = "searchUsers();"></i>
      				</div>
-   			</div>
- 			</div>
+   				</form>
+ 		</div>
+ 		
 	</div>
 
 	<div id="upload" class="white-popup  mfp-hide">
@@ -203,8 +204,29 @@
 
 	<div id="profile-segment">
 		<div class="ui stacked raised segment" style="height:300px;">
-			<div class="ui circular segment"></div>
-			<span id="testCookie"></span>
+<!-- 			<div class="ui circular segment"></div> -->
+			<div class="ui three wide column grid">
+				  <div class="column">
+					  <div class="ui segment">
+					    	<span id="testCookie1"></span>
+					  </div>
+				  </div>
+				  <div class="column">
+					  <div class="ui segment">
+					    	<span id="testCookie"></span>
+					  </div>
+				  </div>
+				  
+				  <div class="column">
+					  <div class="ui segment" > 
+					  	<div class="ui animated list">
+							<div id="testSearch">
+							</div>
+						</div>	
+					  </div>
+				  </div>
+			</div>
+
 		</div>
 	</div>
 
@@ -276,7 +298,6 @@
 
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>
-	<script src="./assets/jquery/jquery.json-2.4.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
@@ -291,8 +312,8 @@
 
 	<script type="text/javascript">
 	$(function() {
-		$("#testCookie").html("Cookie test : OK!");
-		$("#testCookie").append("<br>");$("#testCookie").append("<br>");
+		$("#testCookie1").html("Cookie test : OK!");
+		$("#testCookie1").append("<br>");
 		$("#testCookie").append("Email:\t"+$.cookie("truthbook_email"));$("#testCookie").append("<br>");
 		$("#testCookie").append("EntryTime:\t"+$.cookie("truthbook_entryTime"));$("#testCookie").append("<br>");
 		$("#testCookie").append("FullName:\t"+$.cookie("truthbook_fullName"));$("#testCookie").append("<br>");
@@ -300,7 +321,89 @@
 		$("#testCookie").append("School:\t"+$.cookie("truthbook_school"));$("#testCookie").append("<br>");
 		$("#testCookie").append("UserID:\t"+$.cookie("truthbook_userId"));$("#testCookie").append("<br>");
 		$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId"));$("#testCookie").append("<br>");
+		printUserNameById($.cookie("truthbook_PageOwner_userId"));
+		
 	});
+	
+function printUserNameById(id){
+	if(id != undefined && id != null){
+		var path = "v1/" + id;
+		var url=ServerRoot+ServiceType.LOGIN+path;
+		var onAjaxSuccess = function(data,textStatus){
+			if (data != null ){
+				$("#testCookie").append("PageOwnersUserName:\t" + data.fullName);$("#testCookie").append("<br>");
+				return true;
+			}
+			else{
+				("#testCookie").append("PageOwnersUserName:\t" + data.fullName);$("#testCookie").append("<br>");		
+				return true;
+			}
+		};
+		var onAjaxError = function(xhr,status,error){
+			return false;
+		};
+		var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+		ajax_call(ajax_obj);
+	}	
+	
+}	
+	
+function searchUsers(){
+	
+	
+	
+	userFullName = $("#searchFullName").attr("value"); 
+	if (userFullName != null){
+		var path = "v1/fullName/";
+		var action = "/verify";
+		var url=ServerRoot+ServiceType.LOGIN+path + userFullName + action;
+		var onAjaxSuccess = function(data,textStatus){
+			if (data == null){
+				alert(data);
+				return false;
+			}
+			else{		
+				length = userLengthJson(data);
+// 				alert("length: "+length);
+				if (length == 1){
+				userId = data.user.userId;
+				fullName = data.user.fullName;
+				school = data.user.school;
+				entryTime = data.user.entryTime;
+				email = data.user.email;
+				$("#testSearch").append("<div class=\"item\" > <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "\t" + email + "</div></div></div>");
+				
+// 					userID = data.user.userId;
+// 					goOthersPage(userID);
+				} else if (length > 0){
+					for(i = 0;i<length;++i){
+						userId = data.user[i].userId;
+						fullName = data.user[i].fullName;
+						school = data.user[i].school;
+						entryTime = data.user[i].entryTime;
+						email = data.user[i].email;
+						$("#testSearch").append("<div class=\"item\" > <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "\t" + email + "</div></div></div>");
+// 						$("#testSearch").append("");
+// 						$("#testSearch").append("<a class=\"header\" onclick = \"goOthersPage("+ userId + ")\">"+ fullName + "</a>");
+// 						$("#testSearch").append("<div class=\"description\">" + school + "\t" + entryTime + "\t" + email + "</div>");
+// 						$("#testSearch").append("</div>");
+// 						$("#testSearch").append("</div>");
+					}
+				}
+				return true;
+			}
+		};
+		var onAjaxError = function(xhr,status,error){
+			alert("Error: " + error);
+			return false;
+		};
+		var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+		ajax_call(ajax_obj);	
+	} else {
+		
+	}
+	return false;
+};
 	</script>
 	
 	<script type="text/javascript">

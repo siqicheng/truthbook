@@ -29,7 +29,7 @@ function ajax_call(ajax_obj){
 		dataType: ajax_obj.dataType,
 		success: ajax_obj.onSuccess,
 		error: ajax_obj.onError,
-		complete: ajax_obj.onComplete
+		complete: ajax_obj.onComplete,
 	});
 }
 
@@ -56,7 +56,8 @@ function cleanUserInfoCookie(){
 	$.cookie("truthbook_fullName", null,{expires: -1}); 
 	$.cookie("truthbook_isActivated", null,{expires: -1}); 
 	$.cookie("truthbook_school", null,{expires: -1}); 
-	$.cookie("truthbook_userId", null,{expires: -1});	
+	$.cookie("truthbook_userId", null,{expires: -1});
+	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
 }
 
 function setUserInfoCookie(data){
@@ -78,6 +79,13 @@ function goZhangSan(){
 	window.location.href = HomePage; 
 }
 
+function goOthersPage(id){
+	$.cookie("truthbook_PageOwner_userId", id);
+	window.location.href = HomePage;
+}
+
+
+
 function cookieAvailableCheck(){
     document.cookie = "cookieid=1; expires=60";
     var result = document.cookie.indexOf("cookieid=") != -1;
@@ -87,7 +95,17 @@ function cookieAvailableCheck(){
     }
 }
 
-
+function userLengthJson(data){
+	if (data.user.length != undefined){
+		return data.user.length;
+	
+	} else if (data != null) {
+		return 1;
+	}
+	if(data == null){
+		return -1;
+	}
+}
 
 
 
