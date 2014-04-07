@@ -8,12 +8,13 @@
    	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
    	<link href="./CSS/position.css" rel="stylesheet">
    	<link href="./CSS/addpicBtn.css" rel="stylesheet">
+   	<link href="./CSS/topBar.css" rel="stylesheet">
    	<link href="./CSS/menuBar.css" rel="stylesheet">
    	<link href="./CSS/eventSegment.css" rel="stylesheet">
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
-   	<link rel="shortcut icon" href="img/logo_red.ico" />
+   	<link rel="shortcut icon" href="img/logo_red.ico"/>
 </head>
-	
+
 <body style="background-color:#DEDCDE;margin:0px;">
 
 	<div class="ui fixed small menu" id="topbar" >
@@ -22,13 +23,30 @@
 				<i class="add icon"></i> 上传照片（sidebar）
 				<div class="menu">
 					<a class="item" id="upload_for_new_btn">新建好友档案</a>
-					<a class="item" id="upload_for_fri_btn">为已有好友上传</a>
+					<div class="ui dropdown item" id="upload_for_fri_btn">
+						为已有好友上传 <i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="ui dropdown item">
+								极·友<i class="dropdown icon"></i>
+								<div class="menu">
+									<div class="item">张三</div>
+									<div class="item">王五</div>
+								</div>
+							</div>
+							<div class="ui dropdown item">
+								真·友<i class="dropdown icon"></i>
+								<div class="menu">
+									<div class="item">李四</div>
+								</div>
+							</div>
+						</div>
+					</div>
  				</div>
 			</div>
 			<a class="item" id="close_sidebar_btn" style="display:none">
 				<i class="remove icon"></i> 关闭 </a>
 		</div>		
-		<div class="title item">
+		<div class="title item" onclick = "goHomePage();" style="cursor:pointer;">
 	        <img src="img/Truthbook_red.png" width="140px" >
 	    </div>		      
 		<a class="active green item">
@@ -40,21 +58,174 @@
 		<a class="orange item">
 	    	<i class="setting icon"></i>
 		</a>
-		<a class="item" id="uploadPic">上传照片（PopUp）</a>
-		<a class='open-popup-link item' id='uploadFriend' href="./uploadpic.html">已经是好友？</a>
-		<div class="right menu"  >
-				<div class="item">
+		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
+		
+		<div class="right menu">
+				<form class="ui form item" onsubmit = "return searchUsers();">
      				<div class="ui icon input">
-       				<input type="text" placeholder="Search...">
-       				<i class="search link icon"></i>
+       				<input type="text" id = "searchFullName" placeholder="Search..." >
+       				<i class="search link icon" onclick = "searchUsers();"></i>
      				</div>
+   				</form>
+ 		</div>
+ 		
+	</div>
+
+	<div id="upload" class="white-popup  mfp-hide">
+
+			<div class="ui steps">
+   				<div class="ui active step" id="step1" style="cursor:pointer;">
+   					选人
+   				</div>
+   				<div class="ui disabled step" id="step2">
+   					选照片
+   				</div>
+   				<div class="ui disabled step" id="step3">
+   					完成
+   				</div>
    			</div>
- 			</div>
+   			
+   			<div class="ui divider"></div>
+   			
+   			<form class="ui form chooseppform" id="chooseppform" onSubmit="return false;">
+   				<div class="field" id="fullNameTest">
+                    <label>姓名</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="fullName" placeholder="姓名" name="fullName">
+                        <i class="user icon"></i>
+                    </div>
+                </div>
+   				<div class="field" id="schoolTest">
+   					<label>学校</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
+                        <i class="book icon"></i>
+                    </div>
+                </div>
+   				<div class="field" id="entryTimeTest">
+   					<label>入学年份</label>
+                    <div class="ui left labeled icon input">
+                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
+                        <i class="align justify icon"></i>
+                    </div>
+                </div>
+                <div class="ui error message"></div>
+   				<div class="ui divider"></div>
+ 					<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
+ 				</form>
+ 				
+ 				<div class="ui form" id="choosepicform" style="display:none">
+    			<div class="ui field">
+    				<label>照片描述</label>
+    				<textarea></textarea>
+    			</div>
+
+ 					<div class="ui divider"></div>
+ 					
+ 					<img id="img_prev" src="" alt="your image" ><br>
+ 					<div class="addpicbuttons"><a href="javascript:;" class="addpic">
+ 					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+ 					<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
+ 					<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
+ 				</div>
+ 				
+ 				<div class="ui form" id="confirmform" style="display:none">
+ 					<!-- 预览效果 -->
+ 					<div class="ui message" id="previewmessage"></div>
+ 					<div class="ui items">
+  					<div class="item">
+  						<div class="image">
+  							<img src="./img/profile_test/247146.jpg">
+  						</div>
+  						<div class="content">
+  							<div class="name">
+  								图片预览
+  							</div>
+  							<p class="description">图片描述</p>
+  						</div>
+  					</div>
+ 					</div>
+ 					<div class="ui divider"></div>
+ 					<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
+ 				</div>
+ 				
+ 				<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
+			<!--  	<label>我们找到了好多xxx</label>	-->
+				<div class="ui attached message" id="rechoosemessage">
+					我们找到了好多
+				</div>
+ 					<div class="ui selection list">
+ 						<div class="ui item segment" id="item0" onclick="clickppitem(0)">
+  						<a class="ui corner green label" style="display:none">
+  							<i class="checkmark small icon"></i>
+  						</a>
+ 							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
+ 							<div class="content">
+  							<div class="header">Snickerdoodle</div>
+  								An excellent companion
+  						</div>
+ 						</div>
+				  <div class="ui item segment" id="item1" onclick="clickppitem(1)">
+ 						<a class="ui corner green label" style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
+				    <div class="content">
+				      <div class="header">Poodle</div>
+				      A poodle, its pretty basic
+				    </div>
+				  </div>
+				  <div class="ui item segment" id="item2" onclick="clickppitem(2)">
+ 						<a class="ui corner green label" style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
+				    <div class="content">
+				      <div class="header">Paulo</div>
+				      He's also a dog
+				    </div>
+				  </div>
+				  <div class="ui item segment" id="item3" onclick="clickppitem(3)">
+ 						<a class="ui corner green label"  style="display:none">
+ 							<i class="checkmark small icon"></i>
+ 						</a>
+				  	<img class="ui avatar image" src="./img/profile_test/247140.jpg">
+				  	<div class="content">
+				  		<div class="header">新建词条</div>
+				  		.........
+				  	</div>
+				  </div>
+				</div>
+				<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+				<div class="ui divider"></div>
+ 					<input class="ui green button" id="nextstep3" value="下一步"  readonly>
+ 				</div>
 	</div>
 
 	<div id="profile-segment">
 		<div class="ui stacked raised segment" style="height:300px;">
-			<div class="ui circular segment"></div>
+<!-- 			<div class="ui circular segment"></div> -->
+			<div class="ui three wide column grid">
+				  <div class="column">
+					  <div class="ui segment">
+					    	<span id="testCookie1"></span>
+					  </div>
+				  </div>
+				  <div class="column">
+					  <div class="ui segment">
+					    	<span id="testCookie"></span>
+					  </div>
+				  </div>
+				  
+				  <div class="column">
+					  <div class="ui segment" > 
+					  	<div class="ui animated list">
+							<div id="testSearch">
+							</div>
+						</div>	
+					  </div>
+				  </div>
+			</div>
 		</div>
 	</div>
 
@@ -68,11 +239,11 @@
 						<div class="ui list menu">
      						<div class="item">
      							<div class="right floated">
-     								<a href="./test.html"><i class="cloud upload large icon"></i></a>
+     								<a class="upload_for_fri"><i class="cloud upload large icon"></i></a>
      								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
      							</div>
      							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
-     							<a class="content" href="./test.html">张三</a>
+     							<a class="content" onclick = "goZhangSan()">张三</a>
      						</div>
      						<a class="item">李四</a>
      						<a class="item">王五</a>
@@ -121,45 +292,119 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="ui three segment" id="eventsegment"></div>
-
-	<div class="ui wide styled sidebar" id="upload_new_sidebar">
-		<form class="ui form" id="uploadform">
-  			
-   			<div class="ui field">
-     				<label>姓名</label>
-     				<input type="text" placeholder="姓名">
-   			</div>
-   			<div class="ui field">
-     				<label>年级</label>
-     				<input type="text" placeholder="年级">
-   			</div>
-   			<div class="ui field">
-     				<label>学校</label>
-     				<input type="text" placeholder="学校">
-   			</div>
-  			
-  			<div class="ui field"><label>照片描述</label><textarea></textarea></div>
-  			<img id="img_prev" src="" alt="your image" width="300px"><br>
-  			<div class="addpicbuttons">
-  				<a href="javascript:;" class="addpic">
-  					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>  			
-  				<button class="ui green disabled button" id="submitBtn"> 确定上传</button>
-  			</div>
-  		</form>
-	</div>
+	
+	<div class="ui three items" id="eventsegment"></div>
 
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<script src="./assets/jquery/jquery.cookie.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
-
+	<script src="./js/general/utility.js"></script>
+	<script src="./js/general/globalValue.js"></script>	
+	<script src="./js/popup.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
+	<script src="./js/general/globalValue.js"></script>
 
+	<script type="text/javascript">
+	$(function() {
+		$("#testCookie1").html("Cookie test : OK!");
+		$("#testCookie1").append("<br>");
+		$("#testCookie").append("Email:\t"+$.cookie("truthbook_email"));$("#testCookie").append("<br>");
+		$("#testCookie").append("EntryTime:\t"+$.cookie("truthbook_entryTime"));$("#testCookie").append("<br>");
+		$("#testCookie").append("FullName:\t"+$.cookie("truthbook_fullName"));$("#testCookie").append("<br>");
+		$("#testCookie").append("IsActivated:\t"+$.cookie("truthbook_isActivated"));$("#testCookie").append("<br>");
+		$("#testCookie").append("School:\t"+$.cookie("truthbook_school"));$("#testCookie").append("<br>");
+		$("#testCookie").append("UserID:\t"+$.cookie("truthbook_userId"));$("#testCookie").append("<br>");
+		$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId"));$("#testCookie").append("<br>");
+		printUserNameById($.cookie("truthbook_PageOwner_userId"));
+		
+	});
+	
+function printUserNameById(id){
+	if(id != undefined && id != null){
+		var path = "v1/" + id;
+		var url=ServerRoot+ServiceType.LOGIN+path;
+		var onAjaxSuccess = function(data,textStatus){
+			if (data != null ){
+				$("#testCookie").append("PageOwnersUserName:\t" + data.fullName);$("#testCookie").append("<br>");
+				return true;
+			}
+			else{
+				("#testCookie").append("PageOwnersUserName:\t" + data.fullName);$("#testCookie").append("<br>");		
+				return true;
+			}
+		};
+		var onAjaxError = function(xhr,status,error){
+			return false;
+		};
+		var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+		ajax_call(ajax_obj);
+	}	
+	
+}	
+	
+function searchUsers(){
+	
+	
+	
+	userFullName = $("#searchFullName").attr("value"); 
+	if (userFullName != null){
+		var path = "v1/fullName/";
+		var action = "/verify";
+		var url=ServerRoot+ServiceType.LOGIN+path + userFullName + action;
+		var onAjaxSuccess = function(data,textStatus){
+			if (data == null){
+				alert(data);
+				return false;
+			}
+			else{		
+				length = userLengthJson(data);
+// 				alert("length: "+length);
+				if (length == 1){
+				userId = data.user.userId;
+				fullName = data.user.fullName;
+				school = data.user.school;
+				entryTime = data.user.entryTime;
+				email = data.user.email;
+				$("#testSearch").append("<div class=\"item\" > <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "\t" + email + "</div></div></div>");
+				
+// 					userID = data.user.userId;
+// 					goOthersPage(userID);
+				} else if (length > 0){
+					for(i = 0;i<length;++i){
+						userId = data.user[i].userId;
+						fullName = data.user[i].fullName;
+						school = data.user[i].school;
+						entryTime = data.user[i].entryTime;
+						email = data.user[i].email;
+						$("#testSearch").append("<div class=\"item\" > <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "\t" + email + "</div></div></div>");
+// 						$("#testSearch").append("");
+// 						$("#testSearch").append("<a class=\"header\" onclick = \"goOthersPage("+ userId + ")\">"+ fullName + "</a>");
+// 						$("#testSearch").append("<div class=\"description\">" + school + "\t" + entryTime + "\t" + email + "</div>");
+// 						$("#testSearch").append("</div>");
+// 						$("#testSearch").append("</div>");
+					}
+				}
+				return true;
+			}
+		};
+		var onAjaxError = function(xhr,status,error){
+			alert("Error: " + error);
+			return false;
+		};
+		var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+		ajax_call(ajax_obj);	
+	} else {
+		
+	}
+	return false;
+};
+	</script>
+	
 	<script type="text/javascript">
 	$(document).ready(function() {
 			//semantic dropdown intialization
@@ -179,6 +424,24 @@
 			function(){
 			$(this).children(".right.floated").fadeOut();}
 		);
+	</script>
+
+	<script>
+		$(function(){
+			$(".open_popup_link").magnificPopup({
+				type:"inline",
+				midClick: true
+			});
+		});
+	</script>
+
+	<script>
+		$(function() {
+			$("#upload_for_fri_btn").dropdown( {
+				on: "hover"
+				
+			});
+		});
 	</script>
 
 </body>

@@ -14,15 +14,12 @@
 <body class="body_bg">
 	<div class="absolute-center" style="width:380px; height:400px">
 		<img src="img/Truthbook_capital.png" width="380" >
-<!-- 		<p style="color:papayawhip; text-align:center;margin-top: 0px;font-family:华文;">分享 	你眼中的TA，<br> -->
-<!-- 		   看见  	TA眼中的你。 -->
-<!-- 		</p> -->
 		<!-- login form -->
 		<form class="ui form login-form" style="width:300px; margin-left: 40px;">	    		
 			<!--email field-->
   			<div class="field">
     			<div class="ui left labeled icon input">
-      				<input type="text" id="email" name="email" placeholder="用户名">
+      				<input type="text" id="email" name="email" placeholder="邮箱">
       				<i class="user icon"></i>
     			</div>
     		</div>
@@ -37,7 +34,7 @@
   			<div id="resText"></div>
   			<div class="ui error message" id="errorMessageLogin" style="display: none">用户名或密码不正确</div>
 		</form>
-		
+
 		<!-- register form, display none in default -->
 		<form class="ui form register-form" style="width:300px; margin-left: 40px; display: none;">	                
                 <!-- fullName field -->
@@ -87,7 +84,7 @@
 	  			<input class="ui disabled fluid blue button" type ="submit" id="register_button" value = "注册">
         </form>
 	</div>
-	        	
+
     <!-- register&login toggle button -->
 	<div class="bottom-left">
 	    <button class="ui basic animated button" id="registerToggle"> 
@@ -105,12 +102,14 @@
 	</div>
      	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<script src="./assets/jquery/jquery.cookie.js"></script>	
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./js/general/utility.js"></script>
+	<script src="./js/general/globalValue.js"></script>	
 	<script src="./js/form_toggle.js"></script>	
 	<script type="text/javascript">
 	//login form functions
-		$(function() {				
+		$(function() {		
 			//form validation
 			$( '.ui.form.login-form' )
 				.form({
@@ -145,26 +144,43 @@
 					$("#errorMessageLogin").hide();
                 }
 			});
-		
+			$(function() {
+				
+				cookieAvailableCheck();
+				//clean all truthbook cookie
+				cleanUserInfoCookie();				
+			});
+
+	
 		$('.ui.form.login-form')
 			.submit(function(){			
 				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
-				if(isValidLoginForm == true){	
-					var url="http://localhost:8080/truthbook/services/loginService/v1/login";
+				if(isValidLoginForm == true){
+					var path = "v1/login";
+					var url=ServerRoot+ServiceType.LOGIN+path;
+// 					var url="http://localhost:8080/truthbook/services/loginService/v1/login";
 					var data= $('.ui.form.login-form').serialize();
 					var onAjaxSuccess = function(data,textStatus){
-						if (data == "true"){
-							window.location.href = "http://localhost:8080/truthbook/profile_test.html";
-							return true;
-						}
-						else{
+						if (data == false){
 							$("#errorMessageLogin").show();
 // 							$("#errorMessageLogin").text("Login failed. Please validate your username/password.");
 // 							console.log("Login failed. Please validate your username/password.");
 							return false;
+
+						}
+						else{		
+							$("#errorMessageLogin").hide();
+							setUserInfoCookie(data);
+							goHomePage();
+							return true;
 						}
 					};
-					var ajax_obj = getAjaxObj(url,"POST","text",onAjaxSuccess);
+					var onAjaxError = function(xhr,status,error){
+						$("#errorMessageLogin").show();
+						$("#errorMessageLogin").text("登陆失败:" + error);
+						return false;
+					};
+					var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
 					ajax_obj.data = data;
 					ajax_call(ajax_obj);
 					return false;	
@@ -182,10 +198,10 @@
 				});
 	</script>
 	<script type="text/javascript">
-		
+
 		window.isValidEmailGlb = 0;
 		window.touchedPassword = 0;
-		
+
 		/*
 		 *  Combine two form pre-check
 		 *	1. Semantic form validation
@@ -277,29 +293,32 @@
 			.submit(function(){
 				var isValidForm = $('.ui.form.register-form').form('validate form');
 				if(isValidForm == true && isValidEmailGlb == 1){
-					var url="http://localhost:8080/truthbook/services/loginService/v1/register";
+					var path = "v1/full/register";
+					var url=ServerRoot+ServiceType.LOGIN+path;		
+					//var url="http://localhost:8080/truthbook/services/loginService/v1/register";
 					var data= $('.ui.form.register-form').serialize();
 					var onAjaxSuccess = function(data,textStatus){
-						if (data == "true"){
-// 							console.log("success");
-// 							alert();
-							window.location.href = "http://localhost:8080/truthbook/profile_test.html";
+						if (data == false){
+
+						} else {
+							setUserInfoCookie(data);
+							goHomePage();
 							return true;
 						}
 					};
 					var onAjaxError = function(xhr,status,error){
-											$("#errorMessageMail").show();
-											$("#errorMessageMail").text("Register failed with error:" + error);
-											console.log("Register failed with error:" + error);
-											return false;
-										};
-					var ajax_obj = getAjaxObj(url,"POST","text",onAjaxSuccess,onAjaxError);
+						$("#errorMessageMail").show();
+						$("#errorMessageMail").text("注册失败:" + error);
+						console.log("Register failed with error:" + error);
+						return false;
+					};
+					var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
 					ajax_obj.data = data;
 					ajax_call(ajax_obj);
 					return false;
 				}
 				return false;
-			});	
+			});
         
         /*	Helper function
          */
@@ -316,7 +335,7 @@
 		function disableButton(buttonID){
 			document.getElementById(buttonID).className = "ui disabled fluid blue button";
 		}
-		
+
         /*	
          *	checkEmail() is used for email input.
          *	Email validation need an AJAX check with the back-end.
@@ -326,15 +345,12 @@
 				$("#errorMessageMail").hide();
 				hideCheckmarklabel();
 				return;
-			}
-			var url = "http://localhost:8080/truthbook/services/loginService/v1/email/"+email;
+			}			
+			var path = "v1/email/";
+			var action = "/verify";
+			var url=ServerRoot+ServiceType.LOGIN+path + email + action;	
 			var onAjaxSuccess = function (data,textStatus){
-				if(data == "true"){
-					$("#errorMessageMail").show();
-					hideCheckmarklabel();
-					disableButton("register_button");
-				}
-				else{
+				if(data == false){	
 					$("#errorMessageMail").hide();
 					if(document.getElementById("emailTest").className == "field") {
 						showCheckmarklabel();
@@ -342,16 +358,20 @@
 					}	else {
 						hideCheckmarklabel();
 					}	
+				} else {
+					$("#errorMessageMail").show();
+					hideCheckmarklabel();
+					disableButton("register_button");
 				}
 				console.log("status:"+textStatus+" data:"+data);
 			};
-			
+
 			var onAjaxError = function(xhr,status,error){
 					$("#errorMessageMail").show();
 					$("#errorMessageMail").text("status:"+status+" error:"+error);
 					console.log("status:"+status+" error:"+error);
 				};
-			var ajax_obj = getAjaxObj(url,"GET","text",onAjaxSuccess,onAjaxError);
+			var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
 			ajax_call(ajax_obj);
 		}
         
@@ -367,7 +387,7 @@
 				}
 			}
 		}
-		        
+
         /*	
          *	checkButtonValidPW() is only used for password input.
          *	After user touched the password input, former inputs can be allowed to do the button valid check.	
@@ -381,4 +401,10 @@
 			}
 		}		
 
-	</script>	
+	</script>
+</body>
+<<<<<<< HEAD
+</html>
+=======
+</html>
+>>>>>>> yiming
