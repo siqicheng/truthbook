@@ -67,6 +67,14 @@
        				<i class="search link icon" onclick = "searchUsers();"></i>
      				</div>
    				</form>
+   				<div class = "ui animated button icon" id="exitButton"> 
+   					<div class="visible content">
+					    <i class="off icon"></i>
+					</div>
+   					<div class="hidden content">
+					    <i class="sign out icon"></i>
+					</div>
+   				</div>
  		</div>
  		
 	</div>
@@ -294,7 +302,33 @@
 	</div>
 	
 	<div class="ui three items" id="eventsegment"></div>
-
+	
+  <div class="ui basic modal transition hidden" style="margin-top: -159px;">
+    <div class="header">
+      退出 Truthbook
+    </div>
+    <div class="content">
+      <div class="left">
+        <i class="home icon"></i>
+      </div>
+      <div class="right">
+        <p>确定一定以及肯定要下线并且   <b>注销登录</b>   了吗?</p>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="two fluid ui buttons">
+        <div class="ui negative labeled icon button">
+          <i class="remove icon"></i>
+          不，我错了
+        </div>
+        <div class="ui positive right labeled icon button">
+          是，谁都别拦着我
+          <i class="checkmark icon"></i>
+        </div>
+      </div>
+    </div>
+    </div>
+    
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
@@ -322,7 +356,21 @@
 		$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId"));$("#testCookie").append("<br>");
 		printUserNameById($.cookie("truthbook_PageOwner_userId"));
 		
+		$( "#exitButton" ).click(function() {
+			$('.basic.modal')
+		   	.modal('setting', {
+		   		closable: false,
+		   		onApprove : function() {
+			    	cleanUserInfoCookie();
+			    	goLogin();
+			    }
+		   	})
+		   	.modal('show');
+		});
 	});
+	
+
+	
 	
 function printUserNameById(id){
 	if(id != undefined && id != null){
@@ -348,9 +396,7 @@ function printUserNameById(id){
 }	
 	
 function searchUsers(){
-	
-	
-	
+	$("#testSearch").html("");
 	userFullName = $("#searchFullName").attr("value"); 
 	if (userFullName != null){
 		var path = "v1/fullName/";

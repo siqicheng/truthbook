@@ -85,6 +85,9 @@ function goOthersPage(id){
 	window.location.href = HomePage;
 }
 
+function goLogin(){
+	window.location.href = LoginPage;
+}
 
 
 function cookieAvailableCheck(){

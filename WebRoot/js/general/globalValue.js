@@ -9,3 +9,4 @@ ServiceType = {
             	   USERPROFILE :"userProfile/"
                };
 HomePage = "http://localhost:8080/truthbook/profile_test.html";
+LoginPage = "http://localhost:8080/truthbook/";
