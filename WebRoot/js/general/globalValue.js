@@ -9,3 +9,5 @@ ServiceType = {
             	   USERPROFILE :"userProfile/"
                };
 HomePage = "http://localhost:8080/truthbook/profile_test.html";
+
+toId = -1;

@@ -97,3 +97,15 @@ function userLengthJson(data){
 		return -1;
 	}
 }
+
+function showSidebar(){
+	$("#upload").removeClass("mfp-hide white-popup");
+	$("#upload").addClass("ui very wide styled sidebar");
+	$("#upload").sidebar("show");
+}
+
+function showPopup(){
+	$("#upload").removeClass("ui very wide styled sidebar");
+	$("#upload").addClass("white-popup");
+	$("#upload").show();
+}

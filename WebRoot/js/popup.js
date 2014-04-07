@@ -89,7 +89,7 @@ $(function() {
 					$("#chooseppform").hide();
 					$("#rechooseform").show();
 				} else if(len == -1) {
-//新建词条
+//TODO: 新建词条
 					console.log("null");
 				};
 			};
@@ -145,4 +145,5 @@ $(function() {
 		};
 		$("#rechooseerror").hide();
 	};
+
 });
