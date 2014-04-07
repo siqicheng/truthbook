@@ -74,6 +74,7 @@ function goHomePage(){
 	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook_userId"));
 	window.location.href = HomePage;
 }
+
 function goZhangSan(){
 	$.cookie("truthbook_PageOwner_userId","42203:张三");
 	window.location.href = HomePage; 
