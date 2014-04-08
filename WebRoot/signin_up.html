@@ -348,7 +348,7 @@
 			}			
 			var path = "v1/email/";
 			var action = "/verify";
-			var url=ServerRoot+ServiceType.LOGIN+path + email + action;	
+			var url=ServerRoot+ServiceType.LOGIN + path + email + action;	
 			var onAjaxSuccess = function (data,textStatus){
 				if(data == false){	
 					$("#errorMessageMail").hide();
