@@ -299,39 +299,41 @@
 
 	<script type="text/javascript">
 	$(function() {
-		$("#testCookie1").html("Cookie test : OK!");
-		$("#testCookie1").append("<br>");
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("Email:\t"+tmp.email);
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("EntryTime:\t"+tmp.entryTime);
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("FullName:\t"+tmp.fullName);
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("IsActivated:\t"+tmp.isActivated);
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("School:\t"+tmp.school);
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("UserID:\t"+tmp.userId);
-		$("#testCookie").append("<br>");
-		$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId"));$("#testCookie").append("<br>");
-		printUserNameById($.cookie("truthbook_PageOwner_userId"));
-		
-		$( "#exitButton" ).click(function() {
-			$('.basic.modal')
-		   	.modal('setting', {
-		   		closable: false,
-		   		onApprove : function() {
-			    	cleanUserInfoCookie();
-			    	goLogin();
-			    }
-		   	})
-		   	.modal('show');
-		});
+		handleLogout();
+		testFunction_Cookie();
 	});
 	
-
+function handleLogout(){
+	$( "#exitButton" ).click(function() {
+		$('.basic.modal')
+	   	.modal('setting', {
+	   		closable: false,
+	   		onApprove : function() {
+		    	cleanUserInfoCookie();
+		    	goLogin();
+		    }
+	   	})
+	   	.modal('show');
+	});
+}
+	
+function testFunction_Cookie(){
+	$("#testCookie1").html("Cookie test : OK!");
+	$("#testCookie").append("Email:\t"+tmp.email);
+	$("#testCookie").append("<br>");
+	$("#testCookie").append("EntryTime:\t"+tmp.entryTime);
+	$("#testCookie").append("<br>");
+	$("#testCookie").append("FullName:\t"+tmp.fullName);
+	$("#testCookie").append("<br>");
+	$("#testCookie").append("IsActivated:\t"+tmp.isActivated);
+	$("#testCookie").append("<br>");
+	$("#testCookie").append("School:\t"+tmp.school);
+	$("#testCookie").append("<br>");
+	$("#testCookie").append("UserID:\t"+tmp.userId);
+	$("#testCookie").append("<br>");
+	$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId"));$("#testCookie").append("<br>");
+	printUserNameById($.cookie("truthbook_PageOwner_userId"));
+}
 	
 	
 function printUserNameById(id){

@@ -88,13 +88,13 @@ function cookieAvailableCheck(){
 }
 
 function userLengthJson(data){
+	if(data == null){
+		return -1;
+	}
 	if (data.user.length != undefined){
 		return data.user.length;
 	} else if (data != null) {
 		return 1;
-	}
-	if(data == null){
-		return -1;
 	}
 }
 
