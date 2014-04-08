@@ -4,7 +4,9 @@ $(function() {
 	friendsId = new Object();
 	friendsId.eFriends = new Array();
 	friendsId.nFriends = new Array();
-	freshFriendsLists(tmp.userId);
+//	freshFriendsLists(tmp.userId);
+
+	getFriends(tmp.userId,1);
 	
 	function getFriends(id, type) {
 		var path = "v1/friends/"+id+"/"+type;
@@ -14,11 +16,41 @@ $(function() {
 			if(type == 1) {
 				$.cookie("nFriends", data);
 				freshLists("nFriends");
+				getFriends(tmp.userId,2);
 			} else {
 				$.cookie("eFriends", data);
 				freshLists("eFriends");
 				addbtn();
 				cleanFriendsCookie();
+				$(".eFriendsList.upload_for_fri .item").click(function() {
+					var towhom = friendsId.eFriends[$(this).index()];
+					upload_choosepic(towhom);	
+				});
+				
+				$(".nFriendsList.upload_for_fri .item").click(function() {
+					var towhom = friendsId.nFriends[$(this).index()];
+					upload_choosepic(towhom);
+				});
+				
+				$(".eFriendsList .upload_for_fri_btn").click(function() {
+					var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+					upload_choosepic(towhom);
+				});
+				
+				$(".nFriendsList .upload_for_fri_btn").click(function() {
+					var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+					upload_choosepic(towhom);
+				});
+				
+				$(".eFriendsList.needicon .frienditem").click(function() {
+					var towhom = friendsId.eFriends[$(this).parent().index()];
+					goOthersPage(towhom["userId"]);
+				});
+				
+				$(".nFriendsList.needicon .frienditem").click(function() {
+					var towhom = friendsId.nFriends[$(this).parent().index()];
+					goOthersPage(towhom["userId"]);
+				});
 			}
 		};
 		var onAjaxError = function(xhr, textStatus, error) {
@@ -87,36 +119,6 @@ $(function() {
 	function freshFriendsLists(id) {
 //		cleanFriendsCookie();
 		getFriends(id,1);
-		getFriends(id,2);
 		
-		$(".eFriendsList.upload_for_fri .item").click(function() {
-			var towhom = friendsId.eFriends[$(this).index()];
-			upload_choosepic(towhom);	
-		});
-		
-		$(".nFriendsList.upload_for_fri .item").click(function() {
-			var towhom = friendsId.nFriends[$(this).index()];
-			upload_choosepic(towhom);
-		});
-		
-		$(".eFriendsList .upload_for_fri_btn").click(function() {
-			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
-			upload_choosepic(towhom);
-		});
-		
-		$(".nFriendsList .upload_for_fri_btn").click(function() {
-			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
-			upload_choosepic(towhom);
-		});
-		
-		$(".eFriendsList.needicon .item").click(function() {
-			var towhom = friendsId.eFriends[$(this).index()];
-			goOthersPage(towhom["userId"]);
-		});
-		
-		$(".nFriendsList.needicon .item").click(function() {
-			var towhom = friendsId.nFriends[$(this).index()];
-			goOthersPage(towhom["userId"]);
-		});
 	}
 });
