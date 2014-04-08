@@ -100,6 +100,18 @@
            </div>
        </button>
 	</div>
+	
+	<div class="ui test modal white-popup">				<!-- 重名选人 -->
+		<div class="ui form" id="rechooseform"> 
+			<div class="ui attached message" id="rechoosemessage">
+			</div>
+					<div class="ui selection list" id="rechooselist">
+			</div>
+			<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择</div>
+			<div class="ui divider"></div>
+			<input class="ui green button" id="confirmbtn" value="确认"  readonly>
+ 		</div>
+	</div>
      	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>	
@@ -207,7 +219,7 @@
 		 *	1. Semantic form validation
 		 *  2. Email existance
 		 */	        
-        $(function() {        	
+        $(function() {
             $('.ui.form.register-form')
                 .form({
                     username: {
@@ -293,32 +305,105 @@
 			.submit(function(){
 				var isValidForm = $('.ui.form.register-form').form('validate form');
 				if(isValidForm == true && isValidEmailGlb == 1){
-					var path = "v1/full/register";
-					var url=ServerRoot+ServiceType.LOGIN+path;		
-					//var url="http://localhost:8080/truthbook/services/loginService/v1/register";
-					var data= $('.ui.form.register-form').serialize();
-					var onAjaxSuccess = function(data,textStatus){
-						if (data == false){
-
-						} else {
-							setUserInfoCookie(data);
-							goHomePage();
-							return true;
+					var user = $("#fullName").val();
+					var path = "v1/user/verify";
+					var url=ServerRoot+ServiceType.LOGIN+path;
+						var data = $('.ui.form.register-form').serialize();
+						console.log(data);
+			//			Verify user quote: (fullName,school,entryTime) exist
+					var onAjaxSuccess = function(data,textStatus) {
+						console.log(data);
+						var len =userLengthJson(data);
+						uploadCandidates = new Array();	//存在词条的候选数组
+						var num = -1;
+						for(var i=0;i<len;i++){
+							if(len>1){
+								if(data.user[i]["isActivated"] == "false"){
+									num++;
+									uploadCandidates[num]=data.user[i];
+								} else {
+									continue;
+								}
+							} else {
+								if(data.user["isActivated"] == true){
+									num++;
+									uploadCandidates[num]=data.user;
+								} else {
+									continue;
+								}
+							}
 						}
+						if(num >= 0) {
+			//				词条存在
+							console.log("find one or more candidates");
+							var rechoosemessage, html;
+							if(num>0){
+								rechoosemessage = "我们找到了好多<b>"+user+"</b>：";
+							} else {
+								rechoosemessage = "我们找到了一个<b>"+user+"</b>：";
+							}
+							html = "";
+							for(i=0;i<=num;i++){
+								html = html + "<div class=\"ui item segment rechooseitem\">" +
+											"<a class=\"ui corner green label\" style=\"display:none\">" +
+											"<i class=\"checkmark small icon\"></i> </a>" +
+				 							"<img class=\"ui avatar image\" src=" + uploadCandidates[i]["imgURL"] +">" + 
+				 							"<div class=\"content\">" +
+				  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
+				  							"</div></div>";
+							}
+							html = html + "<div class=\"ui item segment rechooseitem\">" +
+							"<a class=\"ui corner green label\" style=\"display:none\">" +
+							"<i class=\"checkmark small icon\"></i> </a>" +
+								"<img class=\"ui avatar image\" src=" +  +">" + 
+								"<div class=\"content\">" +
+								"<div class=\"header\">继续新建词条</div>以上都不是？</div></div>";
+							$("#rechoosemessage").html(rechoosemessage);
+							$("#rechooselist").html(html);
+							$(".ui.item.rechooseitem").click(function(){
+								$(this).siblings().children(".label").hide();
+								$(this).children(".label").show();
+								selected_num=$(this).next().index()-1;
+								console.log(selected_num);
+								$("#rechooseerror").hide();
+							});
+        					$(".test.modal").modal('show');
+						} else {
+							console.log("no quote found");
+							var path = "v1/full/register";
+							var url=ServerRoot+ServiceType.LOGIN+path;		
+							//var url="http://localhost:8080/truthbook/services/loginService/v1/register";
+							var data= $('.ui.form.register-form').serialize();
+							var onAjaxSuccess = function(data,textStatus){
+								if (data == false){
+		
+								} else {
+									setUserInfoCookie(data);
+									goHomePage();
+									return true;
+								}
+							};
+							var onAjaxError = function(xhr,status,error){
+								$("#errorMessageMail").show();
+								$("#errorMessageMail").text("注册失败:" + error);
+								console.log("Register failed with error:" + error);
+								return false;
+							};
+							var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
+							ajax_obj.data = data;
+							ajax_call(ajax_obj);
+						};
 					};
 					var onAjaxError = function(xhr,status,error){
-						$("#errorMessageMail").show();
-						$("#errorMessageMail").text("注册失败:" + error);
-						console.log("Register failed with error:" + error);
-						return false;
+							console.log("Register failed with error:" + error);
+							return false;
 					};
 					var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
 					ajax_obj.data = data;
 					ajax_call(ajax_obj);
-					return false;
-				}
-				return false;
-			});
+		}
+		return false;
+	});
         
         /*	Helper function
          */
@@ -399,8 +484,7 @@
 			if(isValidForm == true && isValidEmailGlb == 1){
 				document.getElementById("register_button").className = "ui fluid blue button";
 			}
-		}		
-
+		}
 	</script>
 </body>
 </html>
