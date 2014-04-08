@@ -61,7 +61,7 @@ function setUserInfoCookie(data){
 }
 
 function goHomePage(){
-	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook_userId"));
+	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook")["userId"]);
 	window.location.href = HomePage;
 }
 
