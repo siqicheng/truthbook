@@ -1,11 +1,6 @@
 #MyEclipse Hibernate Properties
-<<<<<<< HEAD
-#Sun Apr 06 11:32:29 CST 2014
-sessionFactoryName=sessionFactory.HibernateSessionFactory
-=======
 #Sat Apr 05 13:31:06 CST 2014
 sessionFactoryName=SessionFactory.HibernateSessionFactory
->>>>>>> siqicheng
 genBasicCompId=false
 profile=
 daoSFId=
@@ -16,11 +11,7 @@ reStrategyClass=
 detectO2O=false
 springDaoFile=
 useJavaTypes=true
-<<<<<<< HEAD
-keyGenerator=
-=======
 keyGenerator=native
->>>>>>> siqicheng
 libInstallFolder=WebRoot/WEB-INF/lib
 addLibs2Project=true
 genVersionTag=false
@@ -31,8 +22,4 @@ reSettingsFile=
 configFile=/truthbook/src/hibernate.cfg.xml
 createConfigFile=true
 addLibs2Classpath=true
-<<<<<<< HEAD
-baseDaoClass=
-=======
 baseDaoClass=db.mapping.object.BaseHibernateDAO
->>>>>>> siqicheng
