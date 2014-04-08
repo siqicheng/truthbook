@@ -26,6 +26,7 @@ $(function() {
 	};
 	
 	function freshFriendsLists(id) {
+//		cleanFriendsCookie();
 		getFriends(id,1);
 		getFriends(id,2);
 		friendsId = new Object();
@@ -85,9 +86,10 @@ $(function() {
 				+friendsId[type][i]["imgURL"]+"\">"+ 
 					"<div class=\"content frienditem\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
 					friendsId[type][i]["fullName"] +
-					"</div>"+"</div>";
+					"</div></div>";
 			}
 			$("."+type+"List").html(html);
+			$("#"+type+"List").addClass("needicon");
 		}
 	}
 		
@@ -104,18 +106,13 @@ $(function() {
 		);
 	}
 	
-	function cleanFriendsCookie() {
-		$.cookie("eFriends", null, {expires: -1});
-		$.cookie("nFriends", null, {expires: -1});
-	}
-	
-	function upload_choosepic(pp) {
-		toId = pp["userId"];
+	function upload_choosepic(people) {
+		toId = people["userId"];
 		console.log(toId);
 		selected_bool = true;
-		$("#fullName").attr("value",pp["fullName"]);
-		$("#school").attr("value",pp["school"]);
-		$("#entryTime").attr("value",pp["entryTime"]);
+		$("#fullName").attr("value",people["fullName"]);
+		$("#school").attr("value",people["school"]);
+		$("#entryTime").attr("value",people["entryTime"]);
 		$("#chooseppform").hide();
 		$("#rechooseform").hide();
 		$("#confirmform").hide();

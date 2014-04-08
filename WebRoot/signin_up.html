@@ -62,7 +62,7 @@
                 <div class="field" id="emailTest">
                     <div class="ui left labeled icon input">
                     
-                        <input type="text" id="email" name="email" placeholder="邮箱" onblur="checkEmail(this.value)" >
+                        <input type="text" id="email" name="email"  placeholder="邮箱" onblur="checkEmail(this.value)" >
                        	<div class="ui corner label green" id = "cornerlabel" style="display: none"> 
 	  	            		<i class="checkmark small icon" id="correctCheckmark" style="display: none"></i>
 	                	</div> 
@@ -77,7 +77,7 @@
                 <!--password field-->
                 <div class="field" id="pwTest">
                     <div class="ui left icon input">
-                        <input type="password" id="password" name="password" placeholder="密码" onblur="checkButtonValidPW()">
+                        <input type="password" id="password" name="password"  placeholder="密码" onblur="checkButtonValidPW()">
                         <i class="lock icon"></i>
                     </div>
                 </div>
@@ -160,7 +160,8 @@
 				
 				cookieAvailableCheck();
 				//clean all truthbook cookie
-				cleanUserInfoCookie();				
+				cleanUserInfoCookie();
+				cleanFriendsCookie();
 			});
 
 	
@@ -213,6 +214,7 @@
 
 		window.isValidEmailGlb = 0;
 		window.touchedPassword = 0;
+		window.selected_num = -1;
 
 		/*
 		 *  Combine two form pre-check
@@ -367,31 +369,19 @@
 								console.log(selected_num);
 								$("#rechooseerror").hide();
 							});
+							$("#confirmbtn").click(function() {
+								if(selected_num == -1) {
+									$("#rechooseerror").show();
+								} else if(selected_num == -2) {
+									register_new($('.ui.form.register-form').serialize());
+								} else {
+									take_quote(uploadCandidates[selected_num]["userId"], $('.ui.form.register-form').serializeArray());
+								}
+							});
         					$(".test.modal").modal('show');
 						} else {
 							console.log("no quote found");
-							var path = "v1/full/register";
-							var url=ServerRoot+ServiceType.LOGIN+path;		
-							//var url="http://localhost:8080/truthbook/services/loginService/v1/register";
-							var data= $('.ui.form.register-form').serialize();
-							var onAjaxSuccess = function(data,textStatus){
-								if (data == false){
-		
-								} else {
-									setUserInfoCookie(data);
-									goHomePage();
-									return true;
-								}
-							};
-							var onAjaxError = function(xhr,status,error){
-								$("#errorMessageMail").show();
-								$("#errorMessageMail").text("注册失败:" + error);
-								console.log("Register failed with error:" + error);
-								return false;
-							};
-							var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
-							ajax_obj.data = data;
-							ajax_call(ajax_obj);
+							register_new($('.ui.form.register-form').serialize());
 						};
 					};
 					var onAjaxError = function(xhr,status,error){
@@ -407,6 +397,56 @@
         
         /*	Helper function
          */
+        function register_new(info) {
+    		var path = "v1/full/register";
+			var url=ServerRoot+ServiceType.LOGIN+path;		
+			var data= info;
+			var onAjaxSuccess = function(data,textStatus){
+				if (data == false){
+
+				} else {
+					setUserInfoCookie(data);
+					goHomePage();
+					return true;
+				}
+			};
+			var onAjaxError = function(xhr,status,error){
+				$("#errorMessageMail").show();
+				$("#errorMessageMail").text("注册失败:" + error);
+				console.log("Register failed with error:" + error);
+				return false;
+			};
+			var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
+			ajax_obj.data = data;
+			ajax_call(ajax_obj);
+        }
+        
+        function take_quote(id, register_info) {
+        	var path = "v1/takeQuote/register";
+        	var url = ServerRoot + ServiceType.LOGIN + path;
+        	var email=register_info[3].value;
+        	var password=register_info[4].value;
+        	var data = "user_id="+id+"&email="+email+"&password="+password;
+        	var onAjaxSuccess = function(data,textStatus){
+        		if(data == false){
+        			alert("take quote failed");
+        		} else {
+        			setUserInfoCookie(data);
+					goHomePage();
+        			console.log("take quote success");
+        		}
+        	};
+        	var onAjaxError = function(xhr,status,error){
+				$("#errorMessageMail").show();
+				$("#errorMessageMail").text("注册失败:" + error);
+				console.log("Register failed with error:" + error);
+				return false;
+			};
+			var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
+			ajax_obj.data = data;
+			ajax_call(ajax_obj);
+        }
+         
 		function  showCheckmarklabel() {
 			$("#cornerlabel").show();
 			$("#correctCheckmark").show();

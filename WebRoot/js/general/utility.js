@@ -55,6 +55,11 @@ function cleanUserInfoCookie(){
 	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
 }
 
+function cleanFriendsCookie() {
+	$.cookie("eFriends", null,{expires: -1});
+	$.cookie("nFriends", null, {expires: -1});
+}
+
 function setUserInfoCookie(data){
 	//alert(data.email+data.entryTime+data.fullName+data.isActivated+data.school+data.userId);
 	$.cookie("truthbook", data);
@@ -98,11 +103,6 @@ function userLengthJson(data){
 	}
 }
 
-function showSidebar(){
-	$("#upload").removeClass("mfp-hide white-popup");
-	$("#upload").addClass("ui very wide styled sidebar");
-	$("#upload").sidebar("show");
-}
 
 function cookieAvailableCheck(){
     document.cookie = "cookieid=1; expires=60";
@@ -114,8 +114,16 @@ function cookieAvailableCheck(){
 }
 
 
+function showSidebar(){
+	$("#upload").removeClass("mfp-hide white-popup");
+	$("#upload").addClass("ui very wide styled sidebar");
+	$("#upload").sidebar("show");
+}
+
 function showPopup(){
 	$("#upload").removeClass("ui very wide styled sidebar");
 	$("#upload").addClass("white-popup");
 	$("#upload").show();
 }
+
+//TODO: 返回好友关系
