@@ -88,7 +88,7 @@ $(function() {
 //				};
 				html= html + "<div class=\"item \">"+
 				"<img class=\"ui avatar image\" src=\""
-				+friendsId[type][i]["imgURL"]+"\">"+ 
+				+DefaultImg+"\">"+ 
 					"<div class=\"content frienditem\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
 					friendsId[type][i]["fullName"] +
 					"</div></div>";

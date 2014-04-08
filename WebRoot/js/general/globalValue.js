@@ -18,3 +18,4 @@ $(function (){
 });
 
 LoginPage = "http://localhost:8080/truthbook/";
+DefaultImg = "img/logo_red.ico";
