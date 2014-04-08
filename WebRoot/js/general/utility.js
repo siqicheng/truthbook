@@ -29,7 +29,7 @@ function ajax_call(ajax_obj){
 		dataType: ajax_obj.dataType,
 		success: ajax_obj.onSuccess,
 		error: ajax_obj.onError,
-		complete: ajax_obj.onComplete
+		complete: ajax_obj.onComplete,
 	});
 }
 
@@ -52,11 +52,11 @@ function Redirect (url) {
 
 function cleanUserInfoCookie(){
 	$.cookie("truthbook", null,{expires: -1});
+	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
 }
 
 function setUserInfoCookie(data){
 	//alert(data.email+data.entryTime+data.fullName+data.isActivated+data.school+data.userId);
-	$.cookie.json = true;
 	$.cookie("truthbook", data);
 }
 
@@ -65,9 +65,18 @@ function goHomePage(){
 	window.location.href = HomePage;
 }
 
+function goZhangSan(){
+	$.cookie("truthbook_PageOwner_userId","42203:张三");
+	window.location.href = HomePage; 
+}
+
 function goOthersPage(id){
 	$.cookie("truthbook_PageOwner_userId", id);
 	window.location.href = HomePage;
+}
+
+function goLogin(){
+	window.location.href = LoginPage;
 }
 
 function cookieAvailableCheck(){
@@ -94,6 +103,16 @@ function showSidebar(){
 	$("#upload").addClass("ui very wide styled sidebar");
 	$("#upload").sidebar("show");
 }
+
+function cookieAvailableCheck(){
+    document.cookie = "cookieid=1; expires=60";
+    var result = document.cookie.indexOf("cookieid=") != -1;
+    if (!result) {
+        alert("浏览器未启用cookies");
+     
+    }
+}
+
 
 function showPopup(){
 	$("#upload").removeClass("ui very wide styled sidebar");

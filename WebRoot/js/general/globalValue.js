@@ -16,3 +16,5 @@ selected_bool = false;
 $(function (){
 	$.cookie.json = true;
 });
+
+LoginPage = "http://localhost:8080/truthbook/";

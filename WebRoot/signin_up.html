@@ -19,7 +19,7 @@
 			<!--email field-->
   			<div class="field">
     			<div class="ui left labeled icon input">
-      				<input type="text" id="email" name="email" placeholder="用户名">
+      				<input type="text" id="email" name="email" placeholder="邮箱">
       				<i class="user icon"></i>
     			</div>
     		</div>
@@ -145,10 +145,13 @@
                 }
 			});
 			$(function() {
+				
+				cookieAvailableCheck();
 				//clean all truthbook cookie
-				cleanUserInfoCookie();
+				cleanUserInfoCookie();				
 			});
 
+	
 		$('.ui.form.login-form')
 			.submit(function(){			
 				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
@@ -168,7 +171,7 @@
 						else{		
 							$("#errorMessageLogin").hide();
 							setUserInfoCookie(data);
-							window.location.href = HomePage;
+							goHomePage();
 							return true;
 						}
 					};
@@ -290,7 +293,6 @@
 			.submit(function(){
 				var isValidForm = $('.ui.form.register-form').form('validate form');
 				if(isValidForm == true && isValidEmailGlb == 1){
-
 					var path = "v1/full/register";
 					var url=ServerRoot+ServiceType.LOGIN+path;		
 					//var url="http://localhost:8080/truthbook/services/loginService/v1/register";
@@ -300,7 +302,7 @@
 
 						} else {
 							setUserInfoCookie(data);
-							window.location.href = HomePage;
+							goHomePage();
 							return true;
 						}
 					};
@@ -317,8 +319,6 @@
 				}
 				return false;
 			});
-
-
         
         /*	Helper function
          */
