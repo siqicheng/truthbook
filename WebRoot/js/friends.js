@@ -55,13 +55,13 @@ $(function() {
 			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
 			upload_choosepic(towhom);
 		});
-
-		$(".eFritendsList .frienditem").click(function() {
+		
+		$(".eFriendsList.needicon .item").click(function() {
 			var towhom = friendsId.eFriends[$(this).index()];
 			goOthersPage(towhom["userId"]);
 		});
 		
-		$(".nFritendsList .frienditem").click(function() {
+		$(".nFriendsList.needicon .item").click(function() {
 			var towhom = friendsId.nFriends[$(this).index()];
 			goOthersPage(towhom["userId"]);
 		});
@@ -73,25 +73,19 @@ $(function() {
 		var num = userLengthJson(friendsList);
 		if(num>-1) {
 			$("#"+type+"_num").html(num);
-			if(num == 1) {
-				friendsId[type][0] = friendsList.user;
-				var html="<div class=\"item frienditem\">"+
-				"<img class=\"ui avatar image\" src=\""
-				+friendsList.user["imgURL"]+"\">"+ 
-					"<a class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
-					friendsList.user["fullName"] +
-					"</a>" + "</div>";
-			} else {
-					var html="";
-					for(var i=0;i<num;i++){
+			var html="";
+			for(var i=0;i<num;i++){
+				if(num == 1) {
+					friendsId[type][i] = friendsList.user;
+				} else {
 					friendsId[type][i] = friendsList.user[i];
-					html= html + "<div class=\"item frienditem\">"+
-					"<img class=\"ui avatar image\" src=\""
-					+friendsList.user[i]["imgURL"]+"\">"+ 
-						"<div class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
-						friendsList.user[i]["fullName"] +
-						"</div>"+"</div>";
-				}
+				};
+				html= html + "<div class=\"item \">"+
+				"<img class=\"ui avatar image\" src=\""
+				+friendsId[type][i]["imgURL"]+"\">"+ 
+					"<div class=\"content frienditem\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
+					friendsId[type][i]["fullName"] +
+					"</div>"+"</div>";
 			}
 			$("."+type+"List").html(html);
 		}
@@ -131,48 +125,4 @@ $(function() {
 		$("#step3").attr("class","ui disabled step");
 		showSidebar();
 	}
-//	$(".eFriends").click(function(){
-//		getFriends($.cookie("truthbook_userId"), 2);
-//		var friendsList = $.cookie("eFriends");
-//		console.log(friendsList);
-//		var num = userLengthJson(friendsList);
-//		if(num>-1) {
-//			$("#eFriend_num").html(num);
-//			if(num == 1) {
-//				var html="<div class=\"item\">"+
-//				"<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
-//				"</div>"+
-//				"<img class=\"ui avatar image\" src=\""
-//				+friendsList[user]["imgURL"]+"\">"+ 
-//					"<a class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\" href=\"./test.html\">" +
-//					friendsList[user]["fullName"] +
-//					"</a>" +
-//					"<a href=\"./test.html\"><i class=\"cloud upload large icon\"></i></a>" +
-//					"<a href=\"./test.html\"><i class=\"ban circle large icon\"></i></a>" +"</div>";
-//				//var html="<a class=\"item\">"+info["name"]+"</a>";
-//				$("#eFriendList").append(html);
-//			} else {
-//				for(var i=0;i<num;i++){
-//					var html="<div class=\"item\">"+
-//					"<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
-//					"<a href=\"./test.html\"><i class=\"cloud upload large icon\"></i></a>" +
-//					"<a href=\"./test.html\"><i class=\"ban circle large icon\"></i></a>" +
-//					"</div>"+
-//					"<img class=\"ui avatar image\" src=\""
-//					+friendsList.user[i]["imgURL"]+"\">"+ 
-//						"<a class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\" href=\"./test.html\">" +
-//						friendsList.user[i]["fullName"] +
-//						"</a>"+"</div>";
-//					//var html="<a class=\"item\">"+info["name"]+"</a>";
-//					$("#eFriendList").append(html);
-//				}
-//			}
-//			$(".ui.list.menu .item").hover(function(){
-//				$(this).children(".right.floated").fadeIn();},
-//				function(){
-//				$(this).children(".right.floated").fadeOut();}
-//			);	
-//		}
-//		
-//	});
 });
