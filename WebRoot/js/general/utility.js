@@ -51,27 +51,17 @@ function Redirect (url) {
 }
 
 function cleanUserInfoCookie(){
-	$.cookie("truthbook_email", null,{expires: -1}); 
-	$.cookie("truthbook_entryTime", null,{expires: -1}); 
-	$.cookie("truthbook_fullName", null,{expires: -1}); 
-	$.cookie("truthbook_isActivated", null,{expires: -1}); 
-	$.cookie("truthbook_school", null,{expires: -1}); 
-	$.cookie("truthbook_userId", null,{expires: -1});
+	$.cookie("truthbook", null,{expires: -1});
 	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
 }
 
 function setUserInfoCookie(data){
 	//alert(data.email+data.entryTime+data.fullName+data.isActivated+data.school+data.userId);
-	$.cookie("truthbook_email", data.email); 
-	$.cookie("truthbook_entryTime", data.entryTime); 
-	$.cookie("truthbook_fullName", data.fullName); 
-	$.cookie("truthbook_isActivated", data.isActivated); 
-	$.cookie("truthbook_school", data.school); 
-	$.cookie("truthbook_userId", data.userId);
+	$.cookie("truthbook", data);
 }
 
 function goHomePage(){
-	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook_userId"));
+	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook")["userId"]);
 	window.location.href = HomePage;
 }
 
@@ -89,6 +79,30 @@ function goLogin(){
 	window.location.href = LoginPage;
 }
 
+function cookieAvailableCheck(){
+	document.cookie = "cookieid=1; expires=60";
+	var result = document.cookie.indexOf("cookieid=") != -1;
+	if (!result) {
+		alert("浏览器未启用cookies");
+	}
+}
+
+function userLengthJson(data){
+	if (data.user.length != undefined){
+		return data.user.length;
+	} else if (data != null) {
+		return 1;
+	}
+	if(data == null){
+		return -1;
+	}
+}
+
+function showSidebar(){
+	$("#upload").removeClass("mfp-hide white-popup");
+	$("#upload").addClass("ui very wide styled sidebar");
+	$("#upload").sidebar("show");
+}
 
 function cookieAvailableCheck(){
     document.cookie = "cookieid=1; expires=60";
@@ -99,20 +113,9 @@ function cookieAvailableCheck(){
     }
 }
 
-function userLengthJson(data){
-	if (data.user.length != undefined){
-		return data.user.length;
-	
-	} else if (data != null) {
-		return 1;
-	}
-	if(data == null){
-		return -1;
-	}
+
+function showPopup(){
+	$("#upload").removeClass("ui very wide styled sidebar");
+	$("#upload").addClass("white-popup");
+	$("#upload").show();
 }
-
-
-
-
-
-

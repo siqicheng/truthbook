@@ -9,4 +9,12 @@ ServiceType = {
             	   USERPROFILE :"userProfile/"
                };
 HomePage = "http://localhost:8080/truthbook/profile_test.html";
+
+toId = -1;
+selected_bool = false;
+
+$(function (){
+	$.cookie.json = true;
+});
+
 LoginPage = "http://localhost:8080/truthbook/";

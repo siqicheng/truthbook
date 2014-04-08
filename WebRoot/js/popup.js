@@ -63,8 +63,8 @@ $(function() {
 	);
 	
 	$("#nextstep1").click(function() {
-//		var isValidForm = $("#chooseppform").form("validate form");
-//		if(isValidForm == true) {
+		var isValidForm = $("#chooseppform").form("validate form");
+		if((isValidForm == true)&&(! selected_bool)) {
 			var user = $("#fullName").val();
 			$("#previewmessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			
@@ -75,25 +75,39 @@ $(function() {
 // 			Verify user quote: (fullName,school,entryTime) exist
 			var onAjaxSuccess = function(data,textStatus) {
 				console.log(data);
-				var len;
-				if(data.user.length!=undefined){
-					len=data.user.length;
-				} else if(data != null){
-					len=1;
-				};
-				if(len == 1) {
-					console.log("find only one candidate");
-					$("#chooseppform").hide();
-    				$("#choosepicform").show();
-    				$("#step1").attr("class","ui step");
-    				$("#step2").attr("class","ui active step");
-				} else if(len > 1) {
-//					重名
+				var len =userLengthJson(data);
+				if(len >= 1) {
+//					用户存在且不是通过好友进入update的
 					console.log("find more than one candidates");
-					$("#rechoosemessage").html("我们找到了好多<b>"+$("#fullName").val()+"</b>：");
+					var rechoosemessage, html;
+					if(len>1) {
+						rechoosemessage = "我们找到了好多<b>"+user+"</b>：";
+						html = "";
+						for(var i=0;i<len;i++){
+							html = html + "<div class=\"ui item segment rechooseitem\">" +
+										"<a class=\"ui corner green label\" style=\"display:none\">" +
+										"<i class=\"checkmark small icon\"></i> </a>" +
+			 							"<img class=\"ui avatar image\" src=" + data.user[i]["imgURL"] +">" + 
+			 							"<div class=\"content\">" +
+			  							"<div class=\"header\">" + data.user[i]["fullName"] + "</div>" + data.user[i]["school"] + "\t" + data.user[i]["entryTime"] +
+			  							"</div></div>";
+						}
+					} else {
+						$("#rechoosemessage").html("我们找到了一个已经在使用Truthbook的<b>"+user+"</b>：");
+						
+					};
+					$("#rechoosemessage").html(rechoosemessage);
+					$("#rechooselist").html(html);
+					$(".ui.item.rechooseitem").click(function(){
+						$(this).siblings().children(".label").hide();
+						$(this).children(".label").show();
+						selected_num=$(this).index();
+						$("#rechooseerror").hide();
+					});
 					$("#chooseppform").hide();
 					$("#rechooseform").show();
-				} else if(data == null) {
+				} else if(len == -1) {
+//TODO: 新建词条
 					console.log("null");
 				};
 			};
@@ -104,7 +118,15 @@ $(function() {
 			var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
  			ajax_obj.data = data;
 			ajax_call(ajax_obj);
-//		}
+		} else if (selected_bool) {
+			$("#chooseppform").hide();
+			$("#rechooseform").hide();
+			$("#confirmform").hide();
+			$("#choosepicform").show();
+			$("#step1").attr("class","ui step");
+			$("#step2").attr("class","ui active step");
+			$("#step3").attr("class","ui disabled step");
+		}
 	});
 	
 	
@@ -225,30 +247,4 @@ $(function() {
 			$("#rechooseerror").show();
 		}
 	});
-	
-	$(".upload_for_fri").click(function(){
-		
-	});
-	
-	function jsonlength(json) {
-		var i=0;
-		for (var x in json) {
-//			if(json.hasOwnProperty(x)){
-				i++;
-//			}
-		}
-		return i;
-	}
 });
-
-function clickppitem(num) {
-	if(typeof(selected_num)=="undefined") {
-		selected_num=num;
-		$("#item"+selected_num+" .label").show();
-	} else {
-		$("#item"+selected_num+" .label").hide();
-		selected_num=num;
-		$("#item"+selected_num+" .label").show();
-	};
-	$("#rechooseerror").hide();
-};

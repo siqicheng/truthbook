@@ -28,15 +28,12 @@
 						<div class="menu">
 							<div class="ui dropdown item">
 								极·友<i class="dropdown icon"></i>
-								<div class="menu">
-									<div class="item">张三</div>
-									<div class="item">王五</div>
+								<div class="list menu eFriendsList upload_for_fri">
 								</div>
 							</div>
 							<div class="ui dropdown item">
 								真·友<i class="dropdown icon"></i>
-								<div class="menu">
-									<div class="item">李四</div>
+								<div class="list menu nFriendsList upload_for_fri">
 								</div>
 							</div>
 						</div>
@@ -158,51 +155,9 @@
  				</div>
  				
  				<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
-			<!--  	<label>我们找到了好多xxx</label>	-->
 				<div class="ui attached message" id="rechoosemessage">
-					我们找到了好多
 				</div>
- 					<div class="ui selection list">
- 						<div class="ui item segment" id="item0" onclick="clickppitem(0)">
-  						<a class="ui corner green label" style="display:none">
-  							<i class="checkmark small icon"></i>
-  						</a>
- 							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
- 							<div class="content">
-  							<div class="header">Snickerdoodle</div>
-  								An excellent companion
-  						</div>
- 						</div>
-				  <div class="ui item segment" id="item1" onclick="clickppitem(1)">
- 						<a class="ui corner green label" style="display:none">
- 							<i class="checkmark small icon"></i>
- 						</a>
-				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
-				    <div class="content">
-				      <div class="header">Poodle</div>
-				      A poodle, its pretty basic
-				    </div>
-				  </div>
-				  <div class="ui item segment" id="item2" onclick="clickppitem(2)">
- 						<a class="ui corner green label" style="display:none">
- 							<i class="checkmark small icon"></i>
- 						</a>
-				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
-				    <div class="content">
-				      <div class="header">Paulo</div>
-				      He's also a dog
-				    </div>
-				  </div>
-				  <div class="ui item segment" id="item3" onclick="clickppitem(3)">
- 						<a class="ui corner green label"  style="display:none">
- 							<i class="checkmark small icon"></i>
- 						</a>
-				  	<img class="ui avatar image" src="./img/profile_test/247140.jpg">
-				  	<div class="content">
-				  		<div class="header">新建词条</div>
-				  		.........
-				  	</div>
-				  </div>
+ 					<div class="ui selection list" id="rechooselist">
 				</div>
 				<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
 				<div class="ui divider"></div>
@@ -240,21 +195,22 @@
 	<div class="ui basic segment" id="menubar" >
 		<div class="ui four column grid" >
 			<div class="column">
-				<div class="ui red inverted fluid menu" >
+				<div class="ui red inverted fluid menu eFriends" >
 					<div class="ui dropdown fluid item" >
 						<i class="star small icon"></i> 极·友
-						<div class="ui small label">1</div>
-						<div class="ui list menu">
-     						<div class="item">
-     							<div class="right floated">
-     								<a class="upload_for_fri"><i class="cloud upload large icon"></i></a>
-     								<a href="./test.html"><i class="ban circle large icon"></i></a>     								
-     							</div>
-     							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
-     							<a class="content" onclick = "goZhangSan()">张三</a>
-     						</div>
-     						<a class="item">李四</a>
-     						<a class="item">王五</a>
+						<div class="ui small label" id="eFriends_num">0</div>
+						<div class="ui list menu eFriendsList needicon" id="eFriendsList">
+<!--      						<div class="item"> -->
+<!--      							<div class="right floated"> -->
+<!--      								<a class="upload_for_fri"><i class="cloud upload large icon"></i></a> -->
+<!--      								<a href="./test.html"><i class="ban circle large icon"></i></a>     								 -->
+<!--      							</div> -->
+<!--      							<img class="ui avatar image" src="./img/profile_test/247142.jpg">  -->
+<!--      							<a class="content" href="./test.html">张三</a> -->
+<!--      						</div> -->
+<!--      						<a class="item">李四</a> -->
+<!--      						<a class="item">王五</a> -->
+
      					</div>
    					</div>
 				</div>
@@ -263,11 +219,8 @@
 				<div class="ui red inverted fluid menu">
 					<div class="ui dropdown fluid item">
 						<i class="half empty star small icon"></i> 真·友
-						<div class="ui small label" style="float:right">12</div>
-						<div class="menu">
-     						<a class="item">张三</a>
-     						<a class="item">李四</a>
-     						<a class="item">王五</a>
+						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
+						<div class="list menu nFriendsList needicon" id="nFriendsList">
    						</div>
    					</div>
 				</div>
@@ -335,24 +288,33 @@
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
+	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/general/globalValue.js"></script>	
 	<script src="./js/popup.js"></script>
+	<script src="./js/friends.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
-	<script src="./js/general/globalValue.js"></script>
 
 	<script type="text/javascript">
 	$(function() {
 		$("#testCookie1").html("Cookie test : OK!");
 		$("#testCookie1").append("<br>");
-		$("#testCookie").append("Email:\t"+$.cookie("truthbook_email"));$("#testCookie").append("<br>");
-		$("#testCookie").append("EntryTime:\t"+$.cookie("truthbook_entryTime"));$("#testCookie").append("<br>");
-		$("#testCookie").append("FullName:\t"+$.cookie("truthbook_fullName"));$("#testCookie").append("<br>");
-		$("#testCookie").append("IsActivated:\t"+$.cookie("truthbook_isActivated"));$("#testCookie").append("<br>");
-		$("#testCookie").append("School:\t"+$.cookie("truthbook_school"));$("#testCookie").append("<br>");
-		$("#testCookie").append("UserID:\t"+$.cookie("truthbook_userId"));$("#testCookie").append("<br>");
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("Email:\t"+tmp.email);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("EntryTime:\t"+tmp.entryTime);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("FullName:\t"+tmp.fullName);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("IsActivated:\t"+tmp.isActivated);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("School:\t"+tmp.school);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("UserID:\t"+tmp.userId);
+		$("#testCookie").append("<br>");
 		$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId"));$("#testCookie").append("<br>");
 		printUserNameById($.cookie("truthbook_PageOwner_userId"));
 		
@@ -459,17 +421,7 @@ function searchUsers(){
  					{on: 'click'
  					}
  				);
-	
 	});
-	</script>
-
-	<script type="text/javascript">
-	//buttons on friends' list
-		$(".ui.list.menu .item").hover(function(){
-			$(this).children(".right.floated").fadeIn();},
-			function(){
-			$(this).children(".right.floated").fadeOut();}
-		);
 	</script>
 
 	<script>
@@ -485,7 +437,6 @@ function searchUsers(){
 		$(function() {
 			$("#upload_for_fri_btn").dropdown( {
 				on: "hover"
-				
 			});
 		});
 	</script>
