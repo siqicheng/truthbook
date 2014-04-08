@@ -93,21 +93,34 @@ $(function() {
 			  							"</div></div>";
 						}
 					} else {
-						$("#rechoosemessage").html("我们找到了一个已经在使用Truthbook的<b>"+user+"</b>：");
-						
+						$("#rechoosemessage").html("我们找到了一个<b>"+user+"</b>：");
+						html = "<div class=\"ui item segment rechooseitem\">" +
+						"<a class=\"ui corner green label\" style=\"display:none\">" +
+						"<i class=\"checkmark small icon\"></i> </a>" +
+							"<img class=\"ui avatar image\" src=" + data.user["imgURL"] +">" + 
+							"<div class=\"content\">" +
+							"<div class=\"header\">" + data.user["fullName"] + "</div>" + data.user["school"] + "\t" + data.user["entryTime"] +
+							"</div></div>";
 					};
+					html = html + "<div class=\"ui item segment rechooseitem\">" +
+					"<a class=\"ui corner green label\" style=\"display:none\">" +
+					"<i class=\"checkmark small icon\"></i> </a>" +
+						"<img class=\"ui avatar image\" src=" + data.user["imgURL"] +">" + 
+						"<div class=\"content\">" +
+						"<div class=\"header\">继续新建词条</div>以上都不是？</div></div>";
 					$("#rechoosemessage").html(rechoosemessage);
 					$("#rechooselist").html(html);
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
-						selected_num=$(this).index();
+						selected_num=$(this).next().index()-1;
+						console.log(selected_num);
 						$("#rechooseerror").hide();
 					});
 					$("#chooseppform").hide();
 					$("#rechooseform").show();
 				} else if(len == -1) {
-//TODO: 新建词条
+//TODO: 新建词条function, selected_num==-2时也是新建词条
 					console.log("null");
 				};
 			};
@@ -128,94 +141,6 @@ $(function() {
 			$("#step3").attr("class","ui disabled step");
 		}
 	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	$("#nextstep1").click(function() {
-////		var isValidForm = $("#chooseppform").form("validate form");
-////		if(isValidForm == true) {
-//			var user = $("#fullName").val();
-//			$("#previewmessage").html("你将传给<b>"+user+"</b>的照片如下：");
-//			
-//			var path = "v1/user/verify";
-//			var url=ServerRoot+ServiceType.LOGIN+path;
-// 			var data = $("#chooseppform").serialize();
-// 			console.log(data);
-//// 			Verify user quote: (fullName,school,entryTime) exist
-//			var onAjaxSuccess = function(data,textStatus) {
-//				console.log(data);
-//				if(data == "true") {
-//					alert("true");
-//					$("#chooseppform").hide();
-//    				$("#choosepicform").show();
-//    				$("#step1").attr("class","ui step");
-//    				$("#step2").attr("class","ui active step");
-//				} else if(data == "false") {
-////					重名
-//					console.log("false");
-//					$("#rechoosemessage").html("我们找到了好多<b>"+$("#fullName").val()+"</b>：");
-//					$("#chooseppform").hide();
-//					$("#rechooseform").show();
-//				} else if(data == null) {
-//					console.log("null");
-//				};
-//			};
-//			var onAjaxError = function(xhr,status,error){
-//					console.log("Register failed with error:" + error);
-//					return false;
-//			};
-//			var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
-// 			ajax_obj.data = data;
-//			ajax_call(ajax_obj);
-////		}
-//	});
-	
-	
-	
-	
-	
-	
-//	$("#nextstep1").click(function() {
-////		var isValidForm = $("#chooseppform").form("validate form");
-////		if(isValidForm == true) {
-//			$("#previewmessage").html("你将传给<b>"+$("#fullName").val()+"</b>的照片如下：");
-//			var url = "http://localhost:8080/truthbook/dummy/false.html";
-// 			var data = $("#chooseppform").serialize();
-// 			
-//// 			Verify user quote: (fullName,school,entryTime) exist
-// 			
-//			var onAjaxSuccess = function(data,textStatus) {
-//				if(data == "true") {
-//					$("#chooseppform").hide();
-//    				$("#choosepicform").show();
-//    				$("#step1").attr("class","ui step");
-//    				$("#step2").attr("class","ui active step");
-//				} else if(data == "false") {
-////					重名
-//					$("#rechoosemessage").html("我们找到了好多<b>"+$("#fullName").val()+"</b>：");
-//					$("#chooseppform").hide();
-//					$("#rechooseform").show();
-//				} else if(data == 2) {
-////					新建
-//				};
-//			};
-//			var onAjaxError = function(xhr,status,error){
-//					console.log("Register failed with error:" + error);
-//					return false;
-//			};
-//			var ajax_obj = getAjaxObj(url,"GET","text",onAjaxSuccess,onAjaxError);
-// 			ajax_obj.data = data;
-//			ajax_call(ajax_obj);
-////		}
-//	});
 	$("#nextstep2").click(function() {
 		var url = "http://localhost:8080/truthbook/dummy/true.html";
 		var data = $("#choosepicform").serialize();
