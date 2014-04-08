@@ -14,14 +14,26 @@ $(function() {
 		var onAjaxSuccess = function(data, textStatus) {
 			var num = userLengthJson(data);
 			if(type == 1) {
-				$.cookie("nFriends", data);
+				for(var i=0;i<num;i++){
+					if(num == 1) {
+						friendsId["nFriends"][i] = data.user;
+					} else {
+						friendsId["nFriends"][i] = data.user[i];
+					};
+				};
 				freshLists("nFriends");
 				getFriends(tmp.userId,2);
 			} else {
-				$.cookie("eFriends", data);
+				for(var i=0;i<num;i++){
+					if(num == 1) {
+						friendsId["eFriends"][i] = data.user;
+					} else {
+						friendsId["eFriends"][i] = data.user[i];
+					};
+				};
 				freshLists("eFriends");
 				addbtn();
-				cleanFriendsCookie();
+//				cleanFriendsCookie();
 				$(".eFriendsList.upload_for_fri .item").click(function() {
 					var towhom = friendsId.eFriends[$(this).index()];
 					upload_choosepic(towhom);	
@@ -62,18 +74,18 @@ $(function() {
 	
 
 	function freshLists(type) {
-		var friendsList;
-		if(type == "eFriends") {friendsList = $.cookie("eFriends");} else {friendsList = $.cookie("nFriends");}
-		var num = userLengthJson(friendsList);
-		if(num>-1) {
+//		var friendsList;
+//		if(type == "eFriends") {friendsList = $.cookie("eFriends");} else {friendsList = $.cookie("nFriends");}
+		var num = friendsId[type].length;
+		if(num>0) {
 			$("#"+type+"_num").html(num);
 			var html="";
 			for(var i=0;i<num;i++){
-				if(num == 1) {
-					friendsId[type][i] = friendsList.user;
-				} else {
-					friendsId[type][i] = friendsList.user[i];
-				};
+//				if(num == 1) {
+//					friendsId[type][i] = friendsList.user;
+//				} else {
+//					friendsId[type][i] = friendsList.user[i];
+//				};
 				html= html + "<div class=\"item \">"+
 				"<img class=\"ui avatar image\" src=\""
 				+friendsId[type][i]["imgURL"]+"\">"+ 
