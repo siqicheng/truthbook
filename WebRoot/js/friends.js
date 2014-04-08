@@ -34,8 +34,37 @@ $(function() {
 		freshLists("eFriends");
 		freshLists("nFriends");
 		addbtn();
-		
 		cleanFriendsCookie();
+		
+		$(".eFriendsList.upload_for_fri .item").click(function() {
+			var towhom = friendsId.eFriends[$(this).index()];
+			upload_choosepic(towhom);	
+		});
+		
+		$(".nFriendsList.upload_for_fri .item").click(function() {
+			var towhom = friendsId.nFriends[$(this).index()];
+			upload_choosepic(towhom);
+		});
+		
+		$(".eFriendsList .upload_for_fri_btn").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+			upload_choosepic(towhom);
+		});
+		
+		$(".nFriendsList .upload_for_fri_btn").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+			upload_choosepic(towhom);
+		});
+
+		$(".eFritendsList .frienditem").click(function() {
+			var towhom = friendsId.eFriends[$(this).index()];
+			goOthersPage(towhom["userId"]);
+		});
+		
+		$(".nFritendsList .frienditem").click(function() {
+			var towhom = friendsId.nFriends[$(this).index()];
+			goOthersPage(towhom["userId"]);
+		});
 	}
 	
 	function freshLists(type) {
@@ -46,25 +75,25 @@ $(function() {
 			$("#"+type+"_num").html(num);
 			if(num == 1) {
 				friendsId[type][0] = friendsList.user;
-				var html="<div class=\"item\">"+
+				var html="<div class=\"item frienditem\">"+
 				"<img class=\"ui avatar image\" src=\""
 				+friendsList.user["imgURL"]+"\">"+ 
 					"<a class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
 					friendsList.user["fullName"] +
 					"</a>" + "</div>";
-				$("."+type+"List").append(html);
 			} else {
-				for(var i=0;i<num;i++){
+					var html="";
+					for(var i=0;i<num;i++){
 					friendsId[type][i] = friendsList.user[i];
-					var html="<div class=\"item\">"+
+					html= html + "<div class=\"item frienditem\">"+
 					"<img class=\"ui avatar image\" src=\""
 					+friendsList.user[i]["imgURL"]+"\">"+ 
 						"<div class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
 						friendsList.user[i]["fullName"] +
 						"</div>"+"</div>";
-					$("."+type+"List").append(html);
 				}
 			}
+			$("."+type+"List").html(html);
 		}
 	}
 		
@@ -80,26 +109,6 @@ $(function() {
 			$(this).children(".right.floated").fadeOut();}
 		);
 	}
-	
-	$(".eFriendsList.upload_for_fri .item").click(function() {
-		var towhom = friendsId.eFriends[$(this).index()];
-		upload_choosepic(towhom);	
-	});
-	
-	$(".nFriendsList.upload_for_fri .item").click(function() {
-		var towhom = friendsId.nFriends[$(this).index()];
-		upload_choosepic(towhom);
-	});
-	
-	$(".eFriendsList .upload_for_fri_btn").click(function() {
-		var towhom = friendsId.eFriends[$(this).parent().parent().index()];
-		upload_choosepic(towhom);
-	});
-	
-	$(".nFriendsList .upload_for_fri_btn").click(function() {
-		var towhom = friendsId.nFriends[$(this).parent().parent().index()];
-		upload_choosepic(towhom);
-	});
 	
 	function cleanFriendsCookie() {
 		$.cookie("eFriends", null, {expires: -1});

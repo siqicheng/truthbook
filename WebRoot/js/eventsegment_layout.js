@@ -132,6 +132,7 @@ var items = [
 
 $(document).ready(function() {
 	//layout items 
+	items = [];
 	itemLayout(items);
 	//initialize all items
 	itemInitialize();
