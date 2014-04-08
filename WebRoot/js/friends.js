@@ -1,6 +1,11 @@
 $(function() {
-	$.cookie.json = true;
-	freshFriendsLists($.cookie("truthbook_userId"));
+//	tmp=eval("("+$.cookie("truthbook")+")");
+	tmp=$.cookie("truthbook");
+	
+//	tmp = new Object();
+//	tmp = eval("("+$.cookie("truthbook")+")");
+	
+	freshFriendsLists(tmp.userId);
 	
 	function getFriends(id, type) {
 		var path = "v1/friends/"+id+"/"+type;
@@ -40,17 +45,17 @@ $(function() {
 		if(num>-1) {
 			$("#"+type+"_num").html(num);
 			if(num == 1) {
-				friendsId[type][0] = friendsList.user["userId"];
+				friendsId[type][0] = friendsList.user;
 				var html="<div class=\"item\">"+
 				"<img class=\"ui avatar image\" src=\""
 				+friendsList.user["imgURL"]+"\">"+ 
-					"<a class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\" href=\"./test.html\">" +
+					"<a class=\"content\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
 					friendsList.user["fullName"] +
 					"</a>" + "</div>";
 				$("."+type+"List").append(html);
 			} else {
 				for(var i=0;i<num;i++){
-					friendsId[type][i] = friendsList.user[i]["userId"];
+					friendsId[type][i] = friendsList.user[i];
 					var html="<div class=\"item\">"+
 					"<img class=\"ui avatar image\" src=\""
 					+friendsList.user[i]["imgURL"]+"\">"+ 
@@ -77,28 +82,37 @@ $(function() {
 	}
 	
 	$(".eFriendsList.upload_for_fri .item").click(function() {
-		var toId = friendsId.eFriends[$(this).index()];
-		upload_choosepic(toId);	
-	})
+		var towhom = friendsId.eFriends[$(this).index()];
+		upload_choosepic(towhom);	
+	});
 	
 	$(".nFriendsList.upload_for_fri .item").click(function() {
-		var toId = friendsId.nFriends[$(this).index()];
-		upload_choosepic(toId);
-	})
+		var towhom = friendsId.nFriends[$(this).index()];
+		upload_choosepic(towhom);
+	});
 	
-	$(".upload_for_fri_btn").click(function() {
-		var toId = friendsId.eFriends[$(this).parent().parent().index()];
-		upload_choosepic(toId);
-	})
+	$(".eFriendsList .upload_for_fri_btn").click(function() {
+		var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+		upload_choosepic(towhom);
+	});
+	
+	$(".nFriendsList .upload_for_fri_btn").click(function() {
+		var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+		upload_choosepic(towhom);
+	});
 	
 	function cleanFriendsCookie() {
 		$.cookie("eFriends", null, {expires: -1});
 		$.cookie("nFriends", null, {expires: -1});
 	}
 	
-	function upload_choosepic(id) {
-		toId = id;
+	function upload_choosepic(pp) {
+		toId = pp["userId"];
 		console.log(toId);
+		selected_bool = true;
+		$("#fullName").attr("value",pp["fullName"]);
+		$("#school").attr("value",pp["school"]);
+		$("#entryTime").attr("value",pp["entryTime"]);
 		$("#chooseppform").hide();
 		$("#rechooseform").hide();
 		$("#confirmform").hide();
@@ -106,9 +120,7 @@ $(function() {
 		$("#step1").attr("class","ui step");
 		$("#step2").attr("class","ui active step");
 		$("#step3").attr("class","ui disabled step");
-		$("#upload").removeClass("mfp-hide white-popup");
-		$("#upload").addClass("ui very wide styled sidebar");
-		$("#upload").sidebar("show");
+		showSidebar();
 	}
 //	$(".eFriends").click(function(){
 //		getFriends($.cookie("truthbook_userId"), 2);

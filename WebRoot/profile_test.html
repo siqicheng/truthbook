@@ -146,50 +146,9 @@
  				</div>
  				
  				<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
-			<!--  	<label>我们找到了好多xxx</label>	-->
 				<div class="ui attached message" id="rechoosemessage">
 				</div>
- 					<div class="ui selection list">
- 						<div class="ui item segment" id="item0" onclick="clickppitem(0)">
-  						<a class="ui corner green label" style="display:none">
-  							<i class="checkmark small icon"></i>
-  						</a>
- 							<img class="ui avatar image" src="./img/profile_test/247142.jpg"> 
- 							<div class="content">
-  							<div class="header">Snickerdoodle</div>
-  								An excellent companion
-  						</div>
- 						</div>
-				  <div class="ui item segment" id="item1" onclick="clickppitem(1)">
- 						<a class="ui corner green label" style="display:none">
- 							<i class="checkmark small icon"></i>
- 						</a>
-				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
-				    <div class="content">
-				      <div class="header">Poodle</div>
-				      A poodle, its pretty basic
-				    </div>
-				  </div>
-				  <div class="ui item segment" id="item2" onclick="clickppitem(2)">
- 						<a class="ui corner green label" style="display:none">
- 							<i class="checkmark small icon"></i>
- 						</a>
-				    <img class="ui avatar image" src="./img/profile_test/247142.jpg">
-				    <div class="content">
-				      <div class="header">Paulo</div>
-				      He's also a dog
-				    </div>
-				  </div>
-				  <div class="ui item segment" id="item3" onclick="clickppitem(3)">
- 						<a class="ui corner green label"  style="display:none">
- 							<i class="checkmark small icon"></i>
- 						</a>
-				  	<img class="ui avatar image" src="./img/profile_test/247140.jpg">
-				  	<div class="content">
-				  		<div class="header">新建词条</div>
-				  		.........
-				  	</div>
-				  </div>
+ 					<div class="ui selection list" id="rechooselist">
 				</div>
 				<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
 				<div class="ui divider"></div>
@@ -273,24 +232,31 @@
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
+	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/popup.js"></script>
 	<script src="./js/friends.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
-	<script src="./js/general/globalValue.js"></script>
 
 	<script type="text/javascript">
 	$(function() {
 		$("#testCookie").html("test cookie");
-		$("#testCookie").append("<br>");$("#testCookie").append("<br>");
-		$("#testCookie").append("Email:\t"+$.cookie("truthbook_email"));$("#testCookie").append("<br>");
-		$("#testCookie").append("EntryTime:\t"+$.cookie("truthbook_entryTime"));$("#testCookie").append("<br>");
-		$("#testCookie").append("FullName:\t"+$.cookie("truthbook_fullName"));$("#testCookie").append("<br>");
-		$("#testCookie").append("IsActivated:\t"+$.cookie("truthbook_isActivated"));$("#testCookie").append("<br>");
-		$("#testCookie").append("School:\t"+$.cookie("truthbook_school"));$("#testCookie").append("<br>");
-		$("#testCookie").append("UserID:\t"+$.cookie("truthbook_userId"));$("#testCookie").append("<br>");
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("Email:\t"+tmp.email);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("EntryTime:\t"+tmp.entryTime);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("FullName:\t"+tmp.fullName);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("IsActivated:\t"+tmp.isActivated);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("School:\t"+tmp.school);
+		$("#testCookie").append("<br>");
+		$("#testCookie").append("UserID:\t"+tmp.userId);
+		$("#testCookie").append("<br>");
 	});
 	</script>
 	

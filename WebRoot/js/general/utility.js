@@ -51,22 +51,13 @@ function Redirect (url) {
 }
 
 function cleanUserInfoCookie(){
-	$.cookie("truthbook_email", null,{expires: -1}); 
-	$.cookie("truthbook_entryTime", null,{expires: -1}); 
-	$.cookie("truthbook_fullName", null,{expires: -1}); 
-	$.cookie("truthbook_isActivated", null,{expires: -1}); 
-	$.cookie("truthbook_school", null,{expires: -1}); 
-	$.cookie("truthbook_userId", null,{expires: -1}); 
+	$.cookie("truthbook", null,{expires: -1});
 }
 
 function setUserInfoCookie(data){
 	//alert(data.email+data.entryTime+data.fullName+data.isActivated+data.school+data.userId);
-	$.cookie("truthbook_email", data.email); 
-	$.cookie("truthbook_entryTime", data.entryTime); 
-	$.cookie("truthbook_fullName", data.fullName); 
-	$.cookie("truthbook_isActivated", data.isActivated); 
-	$.cookie("truthbook_school", data.school); 
-	$.cookie("truthbook_userId", data.userId);	
+	$.cookie.json = true;
+	$.cookie("truthbook", data);
 }
 
 function goHomePage(){
