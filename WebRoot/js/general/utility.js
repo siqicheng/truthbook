@@ -140,3 +140,19 @@ function getRelationship(friendId) {
 	}
 	return 0;
 }
+
+function addFriend(data, onSuccess, onError) {
+	var path = "v1/friends/add",
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function updateFriendRelationship(data, onSuccess, onError) {
+	var path = "v1/friends/update",
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "PUT", "json", onSuccess, onError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}

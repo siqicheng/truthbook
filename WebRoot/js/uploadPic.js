@@ -184,7 +184,12 @@ $(function() {
 				} else {
 					console.log("Register new quote falied");
 				}
-//				$("#upload").hide();
+				var userId = $.cookie("truthbook").userId;
+				var inviteData ="id=" + toId + "&friend_id=" + userId + "&type=1&is_invitee=true";
+				var onSuccess = function() {
+					console.log("Add friend success");
+				};
+				addFriend(inviteData, onSuccess);
 			},
 			onAjaxError = function(xhr, status, error) {
 				console.log("Register new quote failed with error: " + error);
@@ -196,6 +201,12 @@ $(function() {
 		} else {
 			toId = uploadCandidates[selected_num]["userId"];
 			console.log("upload pic for " + toId);
+			var userId = $.cookie("truthbook").userId;
+			var inviteData ="id=" + toId + "&friend_id=" + userId + "&type=1&is_invitee=true";
+			var onSuccess = function() {
+				console.log("Update friend relationship success");
+			};
+			updateFriendRelationship(inviteData, onSuccess);
 		}
 		$.magnificPopup.close();
 		$(".sidebar").sidebar("hide");
