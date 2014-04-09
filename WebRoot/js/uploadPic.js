@@ -1,24 +1,20 @@
 $(function() {
+	
 	$("#step1").click(function() {
-		$("#step1").attr("class","ui active step");
-		$("#step2").attr("class","ui disabled step");
-		$("#step3").attr("class","ui disabled step");
-		$("#chooseppform").show();
-		$("#choosepicform").hide();
-		$("#confirmform").hide();
-		$("#rechooseform").hide();
+		resetUpload();
 	});
 	$("#step2").click(function() {
 		if($("#step2").attr("class") != "ui disabled step") {
 			$("#step1").attr("class","ui step");
 			$("#step2").attr("class","ui active step");
-			$("#step3").attr("class","ui disabled step");    				
+			$("#step3").attr("class","ui disabled step");
 			$("#chooseppform").hide();
 			$("#choosepicform").show();
 			$("#confirmform").hide();
 			$("#rechooseform").hide();
 		}
 	});
+	
 	$(".ui.form.chooseppform").form(
 	{
 		username:{
@@ -71,10 +67,10 @@ $(function() {
 			var path = "v1/user/verify";
 			var url=ServerRoot+ServiceType.LOGIN+path;
  			var data = $("#chooseppform").serialize();
- 			console.log(data);
+ 			console.log("choose people form data : " + data);
 // 			Verify user quote: (fullName,school,entryTime) exist
 			var onAjaxSuccess = function(data,textStatus) {
-				console.log(data);
+				console.log("Varify people exists : " + data);
 				var len =userLengthJson(data);
 				if(len >= 1) {
 //					用户存在且不是通过好友进入update的
@@ -120,11 +116,15 @@ $(function() {
 					$("#rechooseform").show();
 				} else if(len == -1) {
 //TODO: 新建词条function, selected_num==-2时也是新建词条
-					console.log("null");
+					selected_num = -2;
+					$("#chooseppform").hide();
+					$("#choosepicform").show();
+					$("#step1").attr("class","ui step");
+					$("#step2").attr("class","ui active step");
 				};
 			};
 			var onAjaxError = function(xhr,status,error){
-					console.log("Register failed with error:" + error);
+					console.log("Choosepp failed with error:" + error);
 					return false;
 			};
 			var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
@@ -132,14 +132,12 @@ $(function() {
 			ajax_call(ajax_obj);
 		} else if (selected_bool) {
 			$("#chooseppform").hide();
-			$("#rechooseform").hide();
-			$("#confirmform").hide();
 			$("#choosepicform").show();
 			$("#step1").attr("class","ui step");
 			$("#step2").attr("class","ui active step");
-			$("#step3").attr("class","ui disabled step");
 		}
 	});
+	
 	$("#nextstep2").click(function() {
 		var url = "http://localhost:8080/truthbook/dummy/true.html";
 		var data = $("#choosepicform").serialize();
@@ -161,8 +159,9 @@ $(function() {
 		ajax_obj.data = data;
 		ajax_call(ajax_obj);
 	});
+	
 	$("#nextstep3").click(function() {
-		if(typeof(selected_num)!="undefined") {
+		if(selected_num != -1) {
 			$("#rechooseform").hide();
 			$("#choosepicform").show();
 			$("#step1").attr("class","ui step");
@@ -171,4 +170,46 @@ $(function() {
 			$("#rechooseerror").show();
 		}
 	});
+	
+	$("#submitBtn").click(function(){
+		if(selected_num == -2) {
+			var path = "v1/quote/register",
+			url=ServerRoot+ServiceType.LOGIN+path,
+			data = $("#chooseppform").serialize(),
+			onAjaxSuccess = function(data, textStatus) {
+				if(data != false) {
+					console.log("New quote info: " + data);
+					toId = data["userId"];
+					console.log("upload pic for " + toId);
+				} else {
+					console.log("Register new quote falied");
+				}
+//				$("#upload").hide();
+			},
+			onAjaxError = function(xhr, status, error) {
+				console.log("Register new quote failed with error: " + error);
+				return false;
+			};
+			var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
+			ajax_obj.data = data;
+			ajax_call(ajax_obj);
+		} else {
+			toId = uploadCandidates[selected_num]["userId"];
+			console.log("upload pic for " + toId);
+		}
+		$.magnificPopup.close();
+		$(".sidebar").sidebar("hide");
+	});
 });
+
+function resetUpload() {
+	selected_num = -1;
+	$("#step1").attr("class","ui active step");
+	$("#step2").attr("class","ui disabled step");
+	$("#step3").attr("class","ui disabled step");
+	$("#choosepicform").hide();
+	$("#confirmform").hide();
+	$("#rechooseform").hide();
+	$("#chooseppform").show();
+	$("#chooseppform")[0].reset();
+}

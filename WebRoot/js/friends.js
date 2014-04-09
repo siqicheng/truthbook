@@ -13,7 +13,7 @@ $(function() {
 		var url = ServerRoot + ServiceType.USERPROFILE + path;
 		var onAjaxSuccess = function(data, textStatus) {
 			var num = userLengthJson(data);
-			if(type == 1) {
+			if(type == type_nFriends) {
 				for(var i=0;i<num;i++){
 					if(num == 1) {
 						friendsId["nFriends"][i] = data.user;
@@ -69,13 +69,13 @@ $(function() {
 		"</div>";
 		$(".list.menu.needicon .item").prepend(html);
 		$(".list.menu.needicon .item").hover(function(){
-			$(this).children(".right.floated").fadeIn();},
+			$(this).children(".right.floated").fadeIn(50);},
 			function(){
-			$(this).children(".right.floated").fadeOut();}
+			$(this).children(".right.floated").fadeOut(50);}
 		);
 		$(".eFriendsList.upload_for_fri .item").click(function() {
 			var towhom = friendsId.eFriends[$(this).index()];
-			upload_choosepic(towhom);	
+			upload_choosepic(towhom);
 		});
 		
 		$(".nFriendsList.upload_for_fri .item").click(function() {

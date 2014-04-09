@@ -300,7 +300,7 @@
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/general/globalValue.js"></script>	
-	<script src="./js/popup.js"></script>
+	<script src="./js/uploadPic.js"></script>
 	<script src="./js/friends.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
@@ -437,7 +437,12 @@ function searchUsers(){
 		$(function(){
 			$(".open_popup_link").magnificPopup({
 				type:"inline",
-				midClick: true
+				midClick: true,
+				callbacks: {
+					afterClose: function() {
+						resetUpload();
+					}
+				}
 			});
 		});
 	</script>
