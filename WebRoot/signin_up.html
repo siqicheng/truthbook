@@ -100,9 +100,9 @@
            </div>
        </button>
 	</div>
-	
-	<div class="ui test modal white-popup">				<!-- 重名选人 -->
-		<div class="ui form" id="rechooseform"> 
+	<div class="ui dimmer page">>
+	<div class="ui test modal transition hidden white-popup" id="rechooseform">				<!-- 重名选人 -->
+		<form class="ui form" id="rechooseform"> 
 			<div class="ui attached message" id="rechoosemessage">
 			</div>
 					<div class="ui selection list" id="rechooselist">
@@ -110,7 +110,7 @@
 			<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择</div>
 			<div class="ui divider"></div>
 			<input class="ui green button" id="confirmbtn" value="确认"  readonly>
- 		</div>
+ 		</form>
 	</div>
      	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
@@ -161,7 +161,6 @@
 				cookieAvailableCheck();
 				//clean all truthbook cookie
 				cleanUserInfoCookie();
-				cleanFriendsCookie();
 			});
 
 	
@@ -327,7 +326,7 @@
 									continue;
 								}
 							} else {
-								if(data.user["isActivated"] == true){
+								if(data.user["isActivated"] == "false"){
 									num++;
 									uploadCandidates[num]=data.user;
 								} else {
@@ -349,7 +348,7 @@
 								html = html + "<div class=\"ui item segment rechooseitem\">" +
 											"<a class=\"ui corner green label\" style=\"display:none\">" +
 											"<i class=\"checkmark small icon\"></i> </a>" +
-				 							"<img class=\"ui avatar image\" src=" + uploadCandidates[i]["imgURL"] +">" + 
+				 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
 				 							"<div class=\"content\">" +
 				  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
 				  							"</div></div>";
@@ -378,7 +377,7 @@
 									take_quote(uploadCandidates[selected_num]["userId"], $('.ui.form.register-form').serializeArray());
 								}
 							});
-        					$(".test.modal").modal('show');
+        					$("#rechooseform").modal("show");
 						} else {
 							console.log("no quote found");
 							register_new($('.ui.form.register-form').serialize());

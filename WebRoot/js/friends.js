@@ -4,9 +4,9 @@ $(function() {
 	friendsId = new Object();
 	friendsId.eFriends = new Array();
 	friendsId.nFriends = new Array();
-//	freshFriendsLists(tmp.userId);
+	freshFriendsLists(tmp.userId);
 
-	getFriends(tmp.userId,1);
+//	getFriends(tmp.userId,1);
 	
 	function getFriends(id, type) {
 		var path = "v1/friends/"+id+"/"+type;
@@ -22,7 +22,8 @@ $(function() {
 					};
 				};
 				freshLists("nFriends");
-				getFriends(tmp.userId,2);
+//				console.log("id="+id);
+				getFriends(id,2);
 			} else {
 				for(var i=0;i<num;i++){
 					if(num == 1) {
@@ -32,37 +33,7 @@ $(function() {
 					};
 				};
 				freshLists("eFriends");
-				addbtn();
-//				cleanFriendsCookie();
-				$(".eFriendsList.upload_for_fri .item").click(function() {
-					var towhom = friendsId.eFriends[$(this).index()];
-					upload_choosepic(towhom);	
-				});
-				
-				$(".nFriendsList.upload_for_fri .item").click(function() {
-					var towhom = friendsId.nFriends[$(this).index()];
-					upload_choosepic(towhom);
-				});
-				
-				$(".eFriendsList .upload_for_fri_btn").click(function() {
-					var towhom = friendsId.eFriends[$(this).parent().parent().index()];
-					upload_choosepic(towhom);
-				});
-				
-				$(".nFriendsList .upload_for_fri_btn").click(function() {
-					var towhom = friendsId.nFriends[$(this).parent().parent().index()];
-					upload_choosepic(towhom);
-				});
-				
-				$(".eFriendsList.needicon .frienditem").click(function() {
-					var towhom = friendsId.eFriends[$(this).parent().index()];
-					goOthersPage(towhom["userId"]);
-				});
-				
-				$(".nFriendsList.needicon .frienditem").click(function() {
-					var towhom = friendsId.nFriends[$(this).parent().index()];
-					goOthersPage(towhom["userId"]);
-				});
+				addclickfunction();
 			}
 		};
 		var onAjaxError = function(xhr, textStatus, error) {
@@ -74,18 +45,11 @@ $(function() {
 	
 
 	function freshLists(type) {
-//		var friendsList;
-//		if(type == "eFriends") {friendsList = $.cookie("eFriends");} else {friendsList = $.cookie("nFriends");}
 		var num = friendsId[type].length;
 		if(num>0) {
 			$("#"+type+"_num").html(num);
 			var html="";
 			for(var i=0;i<num;i++){
-//				if(num == 1) {
-//					friendsId[type][i] = friendsList.user;
-//				} else {
-//					friendsId[type][i] = friendsList.user[i];
-//				};
 				html= html + "<div class=\"item \">"+
 				"<img class=\"ui avatar image\" src=\""
 				+DefaultImg+"\">"+ 
@@ -98,7 +62,7 @@ $(function() {
 		}
 	}
 		
-	function addbtn() {
+	function addclickfunction() {
 		var html = "<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
 		"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
 		"<a href=\"./test.html\"><i class=\"ban circle large icon\"></i></a>" +
@@ -109,6 +73,35 @@ $(function() {
 			function(){
 			$(this).children(".right.floated").fadeOut();}
 		);
+		$(".eFriendsList.upload_for_fri .item").click(function() {
+			var towhom = friendsId.eFriends[$(this).index()];
+			upload_choosepic(towhom);	
+		});
+		
+		$(".nFriendsList.upload_for_fri .item").click(function() {
+			var towhom = friendsId.nFriends[$(this).index()];
+			upload_choosepic(towhom);
+		});
+		
+		$(".eFriendsList .upload_for_fri_btn").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+			upload_choosepic(towhom);
+		});
+		
+		$(".nFriendsList .upload_for_fri_btn").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+			upload_choosepic(towhom);
+		});
+		
+		$(".eFriendsList.needicon .frienditem").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().index()];
+			goOthersPage(towhom["userId"]);
+		});
+		
+		$(".nFriendsList.needicon .frienditem").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().index()];
+			goOthersPage(towhom["userId"]);
+		});
 	}
 	
 	function upload_choosepic(people) {
