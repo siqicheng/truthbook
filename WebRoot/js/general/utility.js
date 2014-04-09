@@ -57,6 +57,11 @@ function cleanUserInfoCookie(){
 	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
 }
 
+function cleanFriendsCookie() {
+	$.cookie("eFriends", null,{expires: -1});
+	$.cookie("nFriends", null, {expires: -1});
+}
+
 function setUserInfoCookie(data){
 	$.cookie("truthbook", data);
 }
@@ -99,11 +104,6 @@ function userLengthJson(data){
 	}
 }
 
-function showSidebar(){
-	$("#upload").removeClass("mfp-hide white-popup");
-	$("#upload").addClass("ui very wide styled sidebar");
-	$("#upload").sidebar("show");
-}
 
 function cookieAvailableCheck(){
     document.cookie = "cookieid=1; expires=60";
@@ -114,10 +114,47 @@ function cookieAvailableCheck(){
     }
 }
 
+
+function showSidebar(){
+	$("#upload").removeClass("mfp-hide white-popup");
+	$("#upload").addClass("ui very wide styled sidebar");
+	$("#upload").sidebar("show");
+}
+
 function showPopup(){
 	$("#upload").removeClass("ui very wide styled sidebar");
 	$("#upload").addClass("white-popup");
 	$("#upload").show();
 }
 
+//TODO: 返回好友关系
+function getRelationship(friendId) {
+	for(friend in friendsId.eFriends) {
+		if(friendId == friendsId.eFriends[friend]["userId"]) {
+			return 2;
+		}
+	}
+	for(friend in friendsId.nFriends) {
+		if(friendId == friendsId.nFriends[friend]["userId"]) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+function addFriend(data, onSuccess, onError) {
+	var path = "v1/friends/add",
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function updateFriendRelationship(data, onSuccess, onError) {
+	var path = "v1/friends/update",
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "PUT", "json", onSuccess, onError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
 

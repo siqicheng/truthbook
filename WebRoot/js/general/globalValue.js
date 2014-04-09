@@ -15,11 +15,14 @@ HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
 
 toId = -1;
 selected_bool = false;
+type_nFriends = 1;
+type_eFriends = 2;
 
 $(function (){
 	$.cookie.json = true;
 });
 
 LoginPage = "http://"+localhost+":8080/truthbook/";
-friendListReturnTimes = 0;
-DefaultImage = "img/logo_red.ico";
+LoginPage = "http://localhost:8080/truthbook/";
+DefaultImg = "img/logo_red.ico";
+
