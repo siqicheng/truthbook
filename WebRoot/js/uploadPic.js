@@ -1,5 +1,5 @@
 $(function() {
-	
+
 	$("#step1").click(function() {
 		resetUpload();
 	});
