@@ -229,7 +229,41 @@ public class UserProfile {
 		
 	}
 	
-	@DELETE
+	//winkar modified
+	// return 0,1,2 for the exist type of friends ,otherwise return -1
+	@GET
+	@Path("v1/friends/{id}/{friend_id}/check")
+	@Produces("application/json")
+	public Object checkFriends(@PathParam("id") Integer id,@PathParam("friend_id") Integer friend_id) {
+		
+		User user = this.userDAO.findById(id);
+		
+		String property[] = {Relationship.USER_ID, Relationship.FRIEND_ID};
+		Object value[] = {user,friend_id};
+		
+		Session session = this.relationshipDAO.getSession();
+		try{
+			List Friends = this.relationshipDAO.findByProperties(property, value, Relationship.TABLE);
+			if(Friends.size() == 1){
+				Transaction tx = session.beginTransaction();
+				Object Friend = Friends.get(0);
+				if (Friend instanceof Relationship){
+					tx.commit();
+					session.close();
+					return RestUtil.string2json(((Relationship) Friend).getRelationship());
+				}				
+			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+		}
+		return RestUtil.string2json("-1");
+	}
+	//winkar modified
+	
+	
+	@GET
 	@Path("v1/friends/{id}/{friend_id}/delete")
 	@Produces("application/json")
 	public Object deleteFriend(@PathParam("id") Integer id,@PathParam("friend_id") Integer friend_id) {

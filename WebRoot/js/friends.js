@@ -1,10 +1,13 @@
 $(function() {
 //	tmp=eval("("+$.cookie("truthbook")+")");
 	tmp=$.cookie("truthbook");
-	
+	cleanFriendsCookie();
 //	tmp = new Object();
 //	tmp = eval("("+$.cookie("truthbook")+")");
-	
+
+	friendsId = new Object();
+	friendsId.eFriends = new Array();
+	friendsId.nFriends = new Array();
 	freshFriendsLists(tmp.userId);
 	
 	function getFriends(id, type) {
@@ -14,8 +17,43 @@ $(function() {
 			var num = userLengthJson(data);
 			if(type == 1) {
 				$.cookie("nFriends", data);
+				freshLists("nFriends");
+				getFriends($.cookie("truthbook").userId,2);
 			} else {
 				$.cookie("eFriends", data);
+				freshLists("eFriends");
+		 		addbtn();
+				cleanFriendsCookie();
+				
+				$(".eFriendsList.needicon .frienditem").click(function() {
+					var towhom = friendsId.eFriends[$(this).parent().index()];
+					goOthersPage(towhom["userId"]);
+				});
+				
+				$(".nFriendsList.needicon .frienditem").click(function() {
+					var towhom = friendsId.nFriends[$(this).parent().index()];
+					goOthersPage(towhom["userId"]);
+				});
+				$(".eFriendsList.upload_for_fri .item").click(function() {
+					var towhom = friendsId.eFriends[$(this).index()];
+					upload_choosepic(towhom);	
+				});
+				
+				$(".nFriendsList.upload_for_fri .item").click(function() {
+					var towhom = friendsId.nFriends[$(this).index()];
+					upload_choosepic(towhom);
+				});
+				
+				$(".eFriendsList .upload_for_fri_btn").click(function() {
+					var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+					upload_choosepic(towhom);
+				});
+				
+				$(".nFriendsList .upload_for_fri_btn").click(function() {
+					var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+					upload_choosepic(towhom);
+				});
+				addFriendButtonCheck();
 			}
 		};
 		var onAjaxError = function(xhr, textStatus, error) {
@@ -27,44 +65,6 @@ $(function() {
 	
 	function freshFriendsLists(id) {
 		getFriends(id,1);
-		getFriends(id,2);
-		friendsId = new Object();
-		friendsId.eFriends = new Array();
-		friendsId.nFriends = new Array();
-		freshLists("eFriends");
-		freshLists("nFriends");
-		addbtn();
-		cleanFriendsCookie();
-		
-		$(".eFriendsList.upload_for_fri .item").click(function() {
-			var towhom = friendsId.eFriends[$(this).index()];
-			upload_choosepic(towhom);	
-		});
-		
-		$(".nFriendsList.upload_for_fri .item").click(function() {
-			var towhom = friendsId.nFriends[$(this).index()];
-			upload_choosepic(towhom);
-		});
-		
-		$(".eFriendsList .upload_for_fri_btn").click(function() {
-			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
-			upload_choosepic(towhom);
-		});
-		
-		$(".nFriendsList .upload_for_fri_btn").click(function() {
-			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
-			upload_choosepic(towhom);
-		});
-		
-		$(".eFriendsList.needicon .item").click(function() {
-			var towhom = friendsId.eFriends[$(this).index()];
-			goOthersPage(towhom["userId"]);
-		});
-		
-		$(".nFriendsList.needicon .item").click(function() {
-			var towhom = friendsId.nFriends[$(this).index()];
-			goOthersPage(towhom["userId"]);
-		});
 	}
 	
 	function freshLists(type) {
@@ -82,7 +82,7 @@ $(function() {
 				};
 				html= html + "<div class=\"item \">"+
 				"<img class=\"ui avatar image\" src=\""
-				+friendsId[type][i]["imgURL"]+"\">"+ 
+				+DefaultImage+"\">"+ 
 					"<div class=\"content frienditem\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
 					friendsId[type][i]["fullName"] +
 					"</div>"+"</div>";
@@ -109,13 +109,13 @@ $(function() {
 		$.cookie("nFriends", null, {expires: -1});
 	}
 	
-	function upload_choosepic(pp) {
-		toId = pp["userId"];
+	function upload_choosepic(people) {
+		toId = people["userId"];
 		console.log(toId);
 		selected_bool = true;
-		$("#fullName").attr("value",pp["fullName"]);
-		$("#school").attr("value",pp["school"]);
-		$("#entryTime").attr("value",pp["entryTime"]);
+		$("#fullName").attr("value",people["fullName"]);
+		$("#school").attr("value",people["school"]);
+		$("#entryTime").attr("value",people["entryTime"]);
 		$("#chooseppform").hide();
 		$("#rechooseform").hide();
 		$("#confirmform").hide();

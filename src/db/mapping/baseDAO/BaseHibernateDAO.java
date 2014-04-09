@@ -2,11 +2,11 @@ package db.mapping.baseDAO;
 
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
-import db.mapping.object.Relationship;
 import sessionFactory.HibernateSessionFactory;
 
 
@@ -16,9 +16,12 @@ import sessionFactory.HibernateSessionFactory;
  */
 public class BaseHibernateDAO implements IBaseHibernateDAO {
 	
-	public Session getSession() {
+	public Session getSession(){
 		return HibernateSessionFactory.getSession();
 	}	
+	
+
+
 	
 	public List findByProperties(String propertyName[], Object value[],String table) {
 		try {
@@ -32,8 +35,10 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 				sql_frag = sql_frag + " and " + "model." + propertyName[i] + "= ?";
 			}
 			
-			String queryString = "from " + table + " as model where " + sql_frag;			
-			Query queryObject = getSession().createQuery(queryString);
+			String queryString = "from " + table + " as model where " + sql_frag;
+			Session session = getSession();
+			Query queryObject = session.createQuery(queryString);
+//			queryObject.setCacheable(false);
 			
 			for (int i=0; i<value.length;i++){
 				queryObject.setParameter(i, value[i]);
@@ -60,6 +65,7 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 			String queryString = "select user_id,friend_id,cast(relationship as varchar),is_invitee from " + table + " as model where " + sql_frag;
 			
 			Query queryObject = getSession().createSQLQuery(queryString).setResultTransformer(Transformers.aliasToBean(Entity));
+//			queryObject.setCacheable(false);
 			
 			for (int i=0; i<value.length;i++){
 				queryObject.setParameter(i, value[i]);

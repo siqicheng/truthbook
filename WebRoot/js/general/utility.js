@@ -7,7 +7,7 @@
  *	getAjaxObj
  *	Generate an object for AJAX call
  */
-function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete){
+function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete,cache){
 	var ajax_obj = new Object();
 	ajax_obj.url = url;
 	ajax_obj.type = type;
@@ -15,6 +15,7 @@ function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete){
 	ajax_obj.onSuccess = onAjaxSuccess;
 	ajax_obj.onError = onAjaxError;
 	ajax_obj.onComplete = onAjaxComplete;
+	ajax_obj.cache = cache;
 	return ajax_obj;
 }
 /*
@@ -30,6 +31,7 @@ function ajax_call(ajax_obj){
 		success: ajax_obj.onSuccess,
 		error: ajax_obj.onError,
 		complete: ajax_obj.onComplete,
+		cache:ajax_obj.cache,
 	});
 }
 
@@ -56,7 +58,6 @@ function cleanUserInfoCookie(){
 }
 
 function setUserInfoCookie(data){
-	//alert(data.email+data.entryTime+data.fullName+data.isActivated+data.school+data.userId);
 	$.cookie("truthbook", data);
 }
 
@@ -113,9 +114,10 @@ function cookieAvailableCheck(){
     }
 }
 
-
 function showPopup(){
 	$("#upload").removeClass("ui very wide styled sidebar");
 	$("#upload").addClass("white-popup");
 	$("#upload").show();
 }
+
+
