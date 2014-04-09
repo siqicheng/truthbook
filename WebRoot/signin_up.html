@@ -109,7 +109,11 @@
 			</div>
 			<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择</div>
 			<div class="ui divider"></div>
-			<input class="ui green button" id="confirmbtn" value="确认"  readonly>
+			<div class="ui action input">
+  				<input type="text"  id="checkinput" placeholder="你觉得是谁帮你上传了这张图片呢？">
+  				<div class="ui green button" id="confirmbtn">确认</div>
+			</div>
+<!-- 			<input class="ui green button" id="confirmbtn" value="确认"  readonly> -->
  		</form>
 	</div>
     </div>
@@ -375,7 +379,8 @@
 								} else if(selected_num == -2) {
 									register_new($('.ui.form.register-form').serialize());
 								} else {
-									take_quote(uploadCandidates[selected_num]["userId"], $('.ui.form.register-form').serializeArray());
+									var choosenQuote = uploadCandidates[selected_num];
+									checkInviterName(choosenQuote.userId, $("#checkinput").val());
 								}
 							});
         					$("#rechooseform").modal("show");
@@ -446,6 +451,36 @@
 			ajax_obj.data = data;
 			ajax_call(ajax_obj);
         }
+        
+        function checkInviterName(id, inviterName) {
+        	var path = "v1/friends/" + id +"/1",
+        		url = ServerRoot + ServiceType.USERPROFILE + path,
+        		onAjaxSuccess = function(data, textStatus) {
+        			var num = userLengthJson(data);
+        			var name;
+        			var inputName = $("#checkinput").val();
+        			for(var i=0;i<num;i++) {
+        				if(num>1) {
+        					name = data.user[i]["fullName"];
+        				} else {
+        					name = data.user["fullName"];
+        				};
+        				if(name == inputName) {
+        					take_quote(id, $('.ui.form.register-form').serializeArray());
+        					return true;
+        				}
+        			}
+					$("#checkinput").val("");
+					$("#checkinput").attr("placeholder","好像不是他/她哦");
+					return false;
+        		},
+        		onAjaxError = function(xhr, status, error) {
+        			console.log("Get inviter json failed with error: " + error);
+        		};
+        		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+        		ajax_call(ajax_obj);
+        }
+         
          
 		function  showCheckmarklabel() {
 			$("#cornerlabel").show();
