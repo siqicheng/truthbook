@@ -96,6 +96,13 @@ $(function() {
 	
 	$("#nextstep3").click(function() {
 		if(selected_num != -1) {
+			if(uploadCandidates[selected_num]["isActivated"]== "false") {
+				$("#rechooseform").hide();
+				$("#choosepicform").show();
+				$("#step1").attr("class","ui step");
+				$("#step2").attr("class","ui active step");
+				return;
+			}
 			var userId = $.cookie("truthbook").userId;
 			var selectedId = uploadCandidates[selected_num]["userId"];
 			var onSuccess = function(data, textStatus) {
