@@ -9,7 +9,7 @@
 
 function handleAddFriendButtonClick(){
 	$( "#addFriendButton" ).click(function() {
-		addFriend();
+		addFriendByTmpButton();
 	});
 	$( "#disabeFriendButton" ).click(function() {
 		confirmDeleteFriendPopUp();
@@ -18,16 +18,18 @@ function handleAddFriendButtonClick(){
 //		drawConfirmPopUp("test confirm message");
 	});
 	$("#uploadPhoto").click(function(){
-		upload_choosepic($.cookie("truthbook_PageOwner_userId"));;
+		var towhom = $.cookie("truthbook_PageOwner_userId");
+		upload_choosepic(towhom);
 	});	
 }
+
 
 /*	Check friend relations and show the related buttons accordingly.
  *
  */
 function addFriendButtonCheck(){
 	var userId = $.cookie("truthbook").userId;
-	var pageOwnerId = $.cookie("truthbook_PageOwner_userId");
+	var pageOwnerId = $.cookie("truthbook_PageOwner_userId").userId;
 	if ( pageOwnerId == undefined || pageOwnerId == null || userId == pageOwnerId ){
 		hideAddFriendButton();
 		hideAddPhotoButton();
@@ -89,10 +91,10 @@ function addFriendTransition(buttonId,onSuccessFunction){
  *
  */
 
-function deleteFriend(){
+function deleteFriendByTmpButton(){
 	var path = "v1/friends/";
 	var userId = $.cookie("truthbook").userId + "/";
-	var friendId = $.cookie("truthbook_PageOwner_userId");
+	var friendId = $.cookie("truthbook_PageOwner_userId").userId;
 	var action = "/delete";
 	var url=ServerRoot+ServiceType.USERPROFILE+path+userId+friendId+action;			
 	var onAjaxSuccess = function(data,textStatus){
@@ -122,10 +124,10 @@ function deleteFriend(){
  *
  */
 
-function addFriend(){
+function addFriendByTmpButton(){
 	var path = "v1/friends/add";
 	var url=ServerRoot+ServiceType.USERPROFILE+path;			
-	data = "id=" + $.cookie("truthbook").userId  + "&friend_id=" + $.cookie("truthbook_PageOwner_userId") + "&type=1&is_invitee=0";
+	data = "id=" + $.cookie("truthbook").userId  + "&friend_id=" + $.cookie("truthbook_PageOwner_userId").userId + "&type=1&is_invitee=0";
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
 			hideAddFriendButton();
@@ -165,13 +167,21 @@ function getRelationship(friendId) {
 	return 0;
 }
 
+
+function uploadByCookiePageOwner(pageOwnerObject){
+//	var towhom = 
+	
+	
+	upload_choosepic($.cookie("truthbook_PageOwner_userId"));
+}
+
 /*	This function use winkar modified friend relation check API
  *
  */
 //function isFriend(pageOwnerId){
 //	var path = "v1/friends/";
 //	var userId = $.cookie("truthbook").userId + "/";
-//	var friendId = $.cookie("truthbook_PageOwner_userId");
+//	var friendId = $.cookie("truthbook_PageOwner_userId").userId;
 //	var action = "/check";
 //	var url=ServerRoot+ServiceType.USERPROFILE+path+userId+friendId+action;			
 //	var onAjaxSuccess = function(data,textStatus){

@@ -67,7 +67,7 @@ function setUserInfoCookie(data){
 }
 
 function goHomePage(){
-	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook")["userId"]);
+	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
 	window.location.href = HomePage;
 }
 
@@ -77,8 +77,24 @@ function goZhangSan(){
 }
 
 function goOthersPage(id){
-	$.cookie("truthbook_PageOwner_userId", id);
-	window.location.href = HomePage;
+	var path = "v1/";
+	var url = ServerRoot + ServiceType.LOGIN + path +id;
+	var onAjaxSuccess = function(data,textStatus){
+		if(data == false){
+			alert("take user object failed");
+		} else {
+			$.cookie("truthbook_PageOwner_userId", data);
+			window.location.href = HomePage;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		$("#errorMessageMail").show();
+		$("#errorMessageMail").text("注册失败:" + error);
+		console.log("Register failed with error:" + error);
+		return false;
+	};
+	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
 }
 
 function goLogin(){

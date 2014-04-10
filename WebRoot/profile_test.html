@@ -92,91 +92,83 @@
 
 	<div id="upload" class="white-popup  mfp-hide">
 
-			<div class="ui steps">
-   				<div class="ui active step" id="step1" style="cursor:pointer;">
-   					选人
-   				</div>
-   				<div class="ui disabled step" id="step2">
-   					选照片
-   				</div>
-   				<div class="ui disabled step" id="step3">
-   					完成
-   				</div>
-   			</div>
+		<div class="ui steps">
+			<div class="ui active step" id="step1" style="cursor:pointer;">选人</div>
+			<div class="ui disabled step" id="step2">选照片</div>
+			<div class="ui disabled step" id="step3">完成</div>
+   		</div>
    			
-   			<div class="ui divider"></div>
+   		<div class="ui divider"></div>
    			
-   			<form class="ui form chooseppform" id="chooseppform" onSubmit="return false;">
-   				<div class="field" id="fullNameTest">
-                    <label>姓名</label>
-                    <div class="ui left labeled icon input">
-                        <input type="text" id="fullName" placeholder="姓名" name="fullName">
-                        <i class="user icon"></i>
-                    </div>
+		<form class="ui form chooseppform" id="chooseppform" onSubmit="return validateUploadFormOne()">
+			<div class="field" id="fullNameTest">
+            	<label>姓名</label>
+                <div class="ui left labeled icon input">
+                	<input type="text" id="fullName" placeholder="姓名" name="fullName">
+                	<i class="user icon"></i>
                 </div>
-   				<div class="field" id="schoolTest">
-   					<label>学校</label>
-                    <div class="ui left labeled icon input">
-                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
-                        <i class="book icon"></i>
-                    </div>
-                </div>
-   				<div class="field" id="entryTimeTest">
-   					<label>入学年份</label>
-                    <div class="ui left labeled icon input">
-                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
-                        <i class="align justify icon"></i>
-                    </div>
-                </div>
-                <div class="ui error message"></div>
-   				<div class="ui divider"></div>
- 					<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
- 				</form>
+       		</div>
+			<div class="field" id="schoolTest">
+				<label>学校</label>
+                <div class="ui left labeled icon input">
+                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
+                  	<i class="book icon"></i>
+               	</div>
+      		</div>
+			<div class="field" id="entryTimeTest">
+				<label>入学年份</label>
+           		<div class="ui left labeled icon input">
+  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
+					<i class="align justify icon"></i>
+        		</div>
+     		</div>
+            <div class="ui error message"></div>
+			<div class="ui divider"></div>
+				<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
+		</form>
  				
- 				<div class="ui form" id="choosepicform" style="display:none">
+ 			<div class="ui form" id="choosepicform" style="display:none">
     			<div class="ui field">
     				<label>照片描述</label>
     				<textarea></textarea>
     			</div>
 
- 					<div class="ui divider"></div>
- 					
- 					<img id="img_prev" src="" alt="your image" ><br>
- 					<div class="addpicbuttons"><a href="javascript:;" class="addpic">
- 					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
- 					<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
- 					<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
- 				</div>
+				<div class="ui divider"></div>
+				
+				<img id="img_prev" src="" alt="your image" ><br>
+				<div class="addpicbuttons"><a href="javascript:;" class="addpic">
+				<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+				<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
+				<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
+ 			</div>
  				
- 				<div class="ui form" id="confirmform" style="display:none">
- 					<!-- 预览效果 -->
- 					<div class="ui message" id="previewmessage"></div>
- 					<div class="ui items">
-  					<div class="item">
-  						<div class="image">
-  							<img src="./img/profile_test/247146.jpg">
-  						</div>
-  						<div class="content">
-  							<div class="name">
-  								图片预览
-  							</div>
-  							<p class="description">图片描述</p>
-  						</div>
-  					</div>
- 					</div>
- 					<div class="ui divider"></div>
- 					<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
- 				</div>
+ 			<div class="ui form" id="confirmform" style="display:none">
+				<!-- 预览效果 -->
+				<div class="ui message" id="previewmessage"></div>
+				<div class="ui items">
+					<div class="item">
+						<div class="image">
+							<img src="./img/profile_test/247146.jpg">
+						</div>
+						<div class="content">
+							<div class="name">
+								图片预览
+							</div>
+							<p class="description">图片描述</p>
+						</div>
+					</div>
+				</div>
+				<div class="ui divider"></div>
+				<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
+ 			</div>
  				
- 				<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
-					<div class="ui attached message" id="rechoosemessage">
-					</div>
-	 					<div class="ui selection list" id="rechooselist">
-					</div>
-					<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
-					<div class="ui divider"></div>
-	 					<input class="ui green button" id="nextstep3" value="下一步"  readonly>
- 				</div>
+			<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
+				<div class="ui attached message" id="rechoosemessage"></div>
+				<div class="ui selection list" id="rechooselist"></div>
+				<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+				<div class="ui divider"></div>
+					<input class="ui green button" id="nextstep3" value="下一步"  readonly>
+			</div>
 	</div>
 
 	<div id="profile-segment">
@@ -372,79 +364,18 @@
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
 	
+	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	
 	<script src="./js/friendRelationButtonHandler.js"></script>
 	<script src="./js/userAndPageInfo.js"></script>
 	<script src="./js/general/searchBar.js"></script>
+
 	
 	<script type="text/javascript">
-	
 	$(function() {
 		handleLogoutPopUp();
 		testFunction_Cookie();
 // 		addFriendButtonCheck();
-		
 	});
-	
-
-	function drawConfirmPopUp(messageToShow){
-		$("#alertMessage").html(messageToShow);
-		$('.page.dimmer.message')
-		  .dimmer('setting',{
-					  closable: true,
-					  onHide: function(){
-					      return false;
-					  },
-					  duration: {
-				  			show : 500,
-				  			hide : 700
-					  }
-				  })
-		 .dimmer('show');
-	}
-	
-	function drawConfirmPopUp_dummyDimmerForExtention(messageToShow){
-		$("#dummyDimmerForExtention").html(messageToShow);
-		$('.page.dimmer.dummyDimmerForExtention')
-		  .dimmer('setting',{
-					  closable: true,
-					  onHide: function(){
-					      return false;
-					  },
-					  duration: {
-				  			show : 500,
-				  			hide : 700
-					  }
-				  })
-		 .dimmer('show');
-	}
-		
-	
-	function handleLogoutPopUp(){
-		$( "#exitButton" ).click(function() {
-			$('.basic.modal.logout')
-		   	.modal('setting', {
-		   		closable: true,
-		   		onApprove : function() {
-			    	cleanUserInfoCookie();
-			    	goLogin();
-			    }
-		   	})
-		   	.modal('show');
-		});
-	}
-	
-	function confirmDeleteFriendPopUp(){
-		$('.small.modal.deleteFriend')
-	   	.modal('setting', {
-	   		closable: true,
-	   		onApprove : function() {
-				deleteFriend();
-		    }
-	   	})
-	   	.modal('show');
-	}
-	
-
 	
 
 	</script>
@@ -461,25 +392,25 @@
 	</script>
 
 	<script>
-		$(function(){
-			$(".open_popup_link").magnificPopup({
-				type:"inline",
-				midClick: true,
-				callbacks: {
-					afterClose: function() {
-						resetUpload();
-					}
+	$(function(){
+		$(".open_popup_link").magnificPopup({
+			type:"inline",
+			midClick: true,
+			callbacks: {
+				afterClose: function() {
+					resetUpload();
 				}
-			});
+			}
 		});
+	});
 	</script>
 
 	<script>
-		$(function() {
-			$("#upload_for_fri_btn").dropdown( {
-				on: "hover"
-			});
+	$(function() {
+		$("#upload_for_fri_btn").dropdown( {
+			on: "hover"
 		});
+	});
 	</script>
 
 </body>
