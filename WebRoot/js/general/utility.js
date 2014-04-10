@@ -143,7 +143,6 @@ function showPopup(){
 	$("#upload").show();
 }
 
-//TODO: 返回好友关系
 function getRelationship(friendId) {
 	for(friend in friendsId.eFriends) {
 		if(friendId == friendsId.eFriends[friend]["userId"]) {

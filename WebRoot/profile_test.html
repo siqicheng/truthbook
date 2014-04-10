@@ -124,7 +124,7 @@
      		</div>
             <div class="ui error message"></div>
 			<div class="ui divider"></div>
-			<input class="ui green button" id="nextstep1"  value="下一步" readonly>
+			<div class="ui green button" id="nextstep1" >下一步</div>
 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div>
 		</form>
  				
@@ -140,7 +140,7 @@
 				<div class="addpicbuttons"><a href="javascript:;" class="addpic">
 				<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
 				<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
-				<input class="ui green button nextstep" id="nextstep2"  value="下一步" readonly> </div>
+				<div class="ui green button nextstep" id="nextstep2"  >下一步</div> </div>
  			</div>
  				
  			<div class="ui form" id="confirmform" style="display:none">
@@ -160,7 +160,7 @@
 					</div>
 				</div>
 				<div class="ui divider"></div>
-				<input class="ui green button" id="submitBtn"  value="确定上传" readonly>
+				<div class="ui green button" id="submitBtn"  >确定上传</div>
  			</div>
  				
 			<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
@@ -180,7 +180,7 @@
 				    </div>
 				</div>
 				<div class="ui divider"></div>
-					<input class="ui green button" id="nextstep3" value="下一步"  readonly>
+					<div class="ui green button" id="nextstep3" >下一步</div>
 			</div>
 	</div>
 
@@ -322,16 +322,16 @@
 	    	</div>
 	    </div>
 		
-	 	<div class="ui small modal deleteFriend">
-		    <div class="header">真的不能再做朋友了么？</div>
+	 	<div class="ui small modal deleteFriend" id="testModal">
+		    <div class="header" id="modalHeader"></div>
 	    	<div class="content">
-				<p>从前共你&nbsp&nbsp&nbsp&nbsp促膝把酒倾通宵都不够<br>我有痛快过&nbsp&nbsp&nbsp&nbsp你有没有?</p>
+				<p id="modalContent"></p>
 	   		</div>
 	    	<div class="actions">
 	    		<div class="ui buttons">
-				  <div class="ui negative button">算了，还是继续做朋友</div>
+				  <div class="ui negative button" id="modalNegativeBtn"></div>
 				  <div class="or"></div>
-				  <div class="ui positive right labeled icon button">不，真的不能和你再做朋友了。<i class="checkmark icon"></i></div>
+				  <div class="ui positive right labeled icon button" id="modalPositiveBtn"><i class="checkmark icon"></i></div>
 				</div>
 	    	</div>
 	    </div>
@@ -412,7 +412,7 @@
 			callbacks: {
 				beforeOpen: function() {
 // 					resetUpload();
-					selected_num=-1;
+// 					selected_num=-1;
 				}
 			}
 		});
