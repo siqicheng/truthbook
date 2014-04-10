@@ -1,7 +1,7 @@
 $('#upload')
 	.sidebar({
 		onShow: function(){
-			resetUpload();
+//			resetUpload();
 			$("#upload_menu").toggle();
 			$("#close_sidebar_btn").slideDown();
 			},

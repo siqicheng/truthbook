@@ -124,7 +124,8 @@
      		</div>
             <div class="ui error message"></div>
 			<div class="ui divider"></div>
-				<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
+			<input class="ui green button" id="nextstep1"  value="下一步" readonly>
+			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div>
 		</form>
  				
  			<div class="ui form" id="choosepicform" style="display:none">
@@ -343,7 +344,7 @@
 		            <h2 class="ui inverted icon header">
 		                <i class="icon circular inverted emphasized green checked checkbox"></i>
 		                朕知道了
-		                <div class="sub header" id="alertMessage"></div>
+		                <div class="sub header"  id="alertMessage"></div>
 		            </h2>
 		        </div>
 		    </div>
@@ -410,7 +411,7 @@
 			midClick: true,
 			callbacks: {
 				beforeOpen: function() {
-					resetUpload();
+// 					resetUpload();
 				}
 			}
 		});

@@ -48,7 +48,14 @@ $(function() {
 	
 	
 	$("#step1").click(function() {
-		resetUpload();
+		selected_num = -1;
+		$("#step1").attr("class","ui active step");
+		$("#step2").attr("class","ui disabled step");
+		$("#step3").attr("class","ui disabled step");
+		$("#choosepicform").hide();
+		$("#confirmform").hide();
+		$("#rechooseform").hide();
+		$("#chooseppform").show();
 	});
 	$("#step2").click(function() {
 		if($("#step2").attr("class") != "ui disabled step") {
