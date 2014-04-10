@@ -12,7 +12,8 @@
    	<link href="./CSS/menuBar.css" rel="stylesheet">
    	<link href="./CSS/eventSegment.css" rel="stylesheet">
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
-   	<link rel="shortcut icon" href="img/logo_red.ico"/>
+    <link href="./CSS/notification.css" rel="stylesheet">
+  	<link rel="shortcut icon" href="img/logo_red.ico"/>
 </head>
 
 <body style="background-color:#DEDCDE;margin:0px;">
@@ -277,21 +278,21 @@
    					</div>
 				</div>
 			</div>
-			<div class="column">
+			<div class="column" id="notificolumn">
 				<div class="ui red inverted fluid menu"> 						
-					<div class="ui dropdown fluid item" id="notification">
+					<div class="ui dropdown fluid item" id="notifiBtn">
 						<i class="mail small icon"></i> 消息通知
-						<div class="floating ui circular green label">05</div>
-						<div class="ui list menu">
-     						<div class="item addfri_req">
-     							<img class="ui avatar image" src="./img/profile_test/247142.jpg">
-     							<div class="content">一条新的好友请求</div>
-     							<div class="hid_content" style="display:none">hidden</div>
-     						</div>
-     						<a class="item">张三为您上传了一张照片</a>
-     						<a class="item">5条新评论</a>
-   						</div>
+						<div class="floating ui circular green label" id="news_num"></div>
    					</div>
+   				</div>
+				<div class="ui divided selection list" id="notifipanel">
+					<div class="item friendreq_news"></div>
+					<div class="item image_news"></div>
+					<div class="item comment_news"></div>
+					<div class="item update_news"></div>
+					<div class="item invite_news"></div>
+					<div class="item accept_news"></div>
+					<div class="item signup_news"></div>
 				</div>
 			</div>
 		</div>
