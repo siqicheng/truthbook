@@ -1,6 +1,6 @@
 var items = [
              {
-            	 imgsrc: "http://echographs.com/wp-content/uploads/2012/06/flame_thrower_740_nologo.gif",
+            	 imgsrc: "http://lorempixel.com/319/542/",
             	 descript: "This dog has some things going for it. Its pretty cute and looks like it'd be fun to cuddle up with.",
             	 meta: "yyyy-mm-dd",
             	 uploader: {
@@ -29,7 +29,7 @@ var items = [
             	 like_num: 1  	 
               },
               {
-            	  imgsrc:"http://media02.hongkiat.com/cinemagraph-iphone-android-apps/echograph.gif",
+            	  imgsrc:"http://lorempixel.com/319/549/",
             	  descript:"Sometimes its more important to have a dog you know you can trust. But not every dog is trustworthy, you can tell by looking at its smile.",
             	  meta:"yyyy-mm-dd",
             	  uploader: {
@@ -69,7 +69,7 @@ var items = [
             	  like_num:3            		  
               },              
               {
-            	  imgsrc:"http://echographs.com/wp-content/uploads/2012/07/WindyBlueDress740.gif/",
+            	  imgsrc:"http://echographs.com/wp-content/uploads/2012/06/flame_thrower_740_nologo.gif",
             	  descript:"Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.",
             	  meta:"yyyy-mm-dd",
             	  uploader: {
@@ -89,7 +89,7 @@ var items = [
             	  like_num:4            		  
               },
               {
-            	  imgsrc:"http://echographs.com/wp-content/uploads/2012/07/JonYiPeek.gif",
+            	  imgsrc:"http://lorempixel.com/319/600/",
             	  descript:"Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.",
             	  meta:"yyyy-mm-dd",
             	  uploader: {
@@ -109,7 +109,7 @@ var items = [
             	  like_num:5            		  
               },
               {
-            	  imgsrc:"http://lorempixel.com/319/540/",
+            	  imgsrc:"http://media02.hongkiat.com/cinemagraph-iphone-android-apps/echograph.gif",
             	  descript:"Silly dogs can be quite fun to have as companions. You never know what kind of ridiculous thing they will do.",
             	  meta:"yyyy-mm-dd",
             	  uploader: {

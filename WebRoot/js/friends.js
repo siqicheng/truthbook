@@ -63,9 +63,10 @@ $(function() {
 	}
 		
 	function addclickfunction() {
-		var html = "<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
-		"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large active icon\"></i></a>" +
-		"<a href=\"./test.html\"><i class=\"ban circle large icon\"></i></a>" +
+		var html = "<div class=\"right floated\" style=\"padding-top:5px;width:100px;margin:0;display:none;\">" +
+		"<a class=\"invite_upload_btn\"><i class=\"screenshot large icon\"></i></a>" +
+		"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
+		"<a class=\"degrade_fri_btn\"><i class=\"trash large icon\"></i></a>" +
 		"</div>";
 		$(".list.menu.needicon .item").prepend(html);
 		$(".list.menu.needicon .item").hover(function(){
@@ -91,6 +92,16 @@ $(function() {
 		$(".nFriendsList .upload_for_fri_btn").click(function() {
 			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
 			upload_choosepic(towhom);
+		});
+
+		$(".eFriendsList .degrade_fri_btn").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+			confirmDeleteFriendPopUp(towhom);
+		});
+		
+		$(".nFriendsList .degrade_fri_btn").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+			confirmDeleteFriendPopUp(towhom);
 		});
 		
 		$(".eFriendsList.needicon .frienditem").click(function() {
