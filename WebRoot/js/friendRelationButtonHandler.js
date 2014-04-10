@@ -30,6 +30,15 @@ function handleAddFriendButtonClick(){
 function addFriendButtonCheck(){
 	var userId = $.cookie("truthbook").userId;
 	var pageOwnerId = $.cookie("truthbook_PageOwner_userId").userId;
+	var pageOwnerisActivated = $.cookie("truthbook_PageOwner_userId").isActivated;
+	if( pageOwnerisActivated == "false"){
+		$("#addFriendButton").hide();
+		$("#disabeFriendButton").hide();
+		$("#uploadPhoto").show();
+		addFriendTransition("#uploadPhoto");
+		handleAddFriendButtonClick();
+		return;
+	}
 	if ( pageOwnerId == undefined || pageOwnerId == null || userId == pageOwnerId ){
 		hideAddFriendButton();
 		hideAddPhotoButton();
@@ -168,13 +177,6 @@ function getRelationship(friendId) {
 }
 
 
-function uploadByCookiePageOwner(pageOwnerObject){
-//	var towhom = 
-	
-	
-	upload_choosepic($.cookie("truthbook_PageOwner_userId"));
-}
-
 /*	This function use winkar modified friend relation check API
  *
  */
@@ -205,15 +207,6 @@ function uploadByCookiePageOwner(pageOwnerObject){
 //	ajax_obj.cache = "false";
 //	ajax_call(ajax_obj);
 //}
-
-
-
-
-
-
-
-
-
 
 
 

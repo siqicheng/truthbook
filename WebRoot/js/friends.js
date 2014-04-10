@@ -64,7 +64,7 @@ $(function() {
 		
 	function addclickfunction() {
 		var html = "<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
-		"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
+		"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large active icon\"></i></a>" +
 		"<a href=\"./test.html\"><i class=\"ban circle large icon\"></i></a>" +
 		"</div>";
 		$(".list.menu.needicon .item").prepend(html);
@@ -116,6 +116,7 @@ function upload_choosepic(people) {
 	toId = people["userId"];
 	console.log(toId);
 	selected_bool = true;
+	showSidebar();
 	$("#fullName").attr("value",people["fullName"]);
 	$("#school").attr("value",people["school"]);
 	$("#entryTime").attr("value",people["entryTime"]);
@@ -126,5 +127,5 @@ function upload_choosepic(people) {
 	$("#step1").attr("class","ui step");
 	$("#step2").attr("class","ui active step");
 	$("#step3").attr("class","ui disabled step");
-	showSidebar();
+//	showSidebar();
 }
