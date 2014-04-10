@@ -49,6 +49,7 @@ $(function() {
 	
 	$("#step1").click(function() {
 		selected_num = -1;
+		selected_bool = false;
 		$("#step1").attr("class","ui active step");
 		$("#step2").attr("class","ui disabled step");
 		$("#step3").attr("class","ui disabled step");
@@ -95,10 +96,34 @@ $(function() {
 	
 	$("#nextstep3").click(function() {
 		if(selected_num != -1) {
-			$("#rechooseform").hide();
-			$("#choosepicform").show();
-			$("#step1").attr("class","ui step");
-			$("#step2").attr("class","ui active step");
+			var userId = $.cookie("truthbook").userId;
+			var selectedId = uploadCandidates[selected_num]["userId"];
+			var onSuccess = function(data, textStatus) {
+				if(data>0) {
+					$("#rechooseform").hide();
+					$("#choosepicform").show();
+					$("#step1").attr("class","ui step");
+					$("#step2").attr("class","ui active step");
+				} else {
+					var header = "你和他/她还不是好友",
+						content = "加为好友之前无法为他/她上传照片，是否加为好友",
+						negativeBtn = "取消",
+						positiveBtn = "发送好友申请";
+						approveFunction = function() {
+							//发送好友申请
+							alert("已发送好友申请");
+							$("testModal").modal("hide");
+						},
+						denyFunction = function() {
+							$("testModal").modal("hide");
+						};
+						testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction, denyFunction);
+				}
+			};
+			var onError = function(xhr, status, error) {
+				console.log("Check friend relationship failed with error: " + error);
+			};
+			checkFriendRelationship(selectedId, userId, onSuccess, onError);
 		} else {
 			$("#rechooseerror").show();
 		}

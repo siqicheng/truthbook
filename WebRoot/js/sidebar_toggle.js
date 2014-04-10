@@ -2,7 +2,7 @@ $('#upload')
 	.sidebar({
 		onShow: function(){
 //			resetUpload();
-			selected_num=-1;
+//			selected_num=-1;
 			$("#upload_menu").toggle();
 			$("#close_sidebar_btn").slideDown();
 			},

@@ -12,8 +12,17 @@ function handleAddFriendButtonClick(){
 		addFriendByTmpButton();
 	});
 	$( "#disabeFriendButton" ).click(function() {
-		confirmDeleteFriendPopUp();
+//		confirmDeleteFriendPopUp();
+		var header = "真的不能再做朋友了么？",
+		content = "从前共你\t促膝把酒倾通宵都不够<br>我有痛快过\t你有没有?",
+		negativeBtn = "算了，还是继续做朋友",
+		positiveBtn = "不，真的不能和你再做朋友了。";
+		approveFunction = function() {
+			deleteFriendByTmpButton();
+		};
+		testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);
 	});
+	
 	$("#addFriendWaitingButton").click(function(){
 //		drawConfirmPopUp("test confirm message");
 	});

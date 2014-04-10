@@ -56,3 +56,16 @@ function confirmDeleteFriendPopUp(){
    	.modal('show');
 }
 
+function testModalPopup(header, content, negativeBtn, positiveBtn, onApproveFunction, onDenyFunction){
+	$("#modalHeader").html(header);
+	$("#modalContent").html(content);
+	$("#modalNegativeBtn").html(negativeBtn);
+	$("#modalPositiveBtn").html(positiveBtn);
+	$("#testModal").modal("setting", {
+		closable:true,
+		onApprove : onApproveFunction,
+		onDeny : onDenyFunction
+	})
+	.modal("show");
+}
+
