@@ -135,12 +135,12 @@ $(function() {
 			ajax_obj.data = data;
 			ajax_call(ajax_obj);
 		} else {
-			toId = uploadCandidates[selected_num]["userId"];
+			if(! selected_bool) {toId = uploadCandidates[selected_num]["userId"];};
 			console.log("upload pic for " + toId);
 			var userId = $.cookie("truthbook").userId;
 			var onSuccess = function(data, textStatus) {
 				var onSuccess = function(data,textStatus) {
-//					drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
+					drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
 					console.log("Update friend relationship success");
 				};
 				if(data> 0) {
@@ -181,7 +181,9 @@ function resetUpload() {
 	$("#confirmform").hide();
 	$("#rechooseform").hide();
 	$("#chooseppform").show();
-	$("#chooseppform")[0].reset();
+	$("#fullName").val("");
+	$("#school").val("");
+	$("#entryTime").val("");
 }
 
 
