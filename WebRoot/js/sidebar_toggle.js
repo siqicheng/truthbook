@@ -1,10 +1,13 @@
 $('#upload')
 	.sidebar({
 		onShow: function(){
+//			resetUpload();
+//			selected_num=-1;
 			$("#upload_menu").toggle();
 			$("#close_sidebar_btn").slideDown();
 			},
 		onHide: function(){
+			selected_bool = false;
 			$("#upload_menu").slideDown();
 			$("#close_sidebar_btn").toggle();
 			}
@@ -14,12 +17,8 @@ $('#upload')
 
 
 $(".open_popup_link").click(function(){
-	$("#upload").removeClass("ui very wide styled sidebar");
-	$("#upload").addClass("white-popup");
-	$("#upload").show();
+	showPopup();
 });
 $("#upload_for_new_btn").click(function(){
-	$("#upload").removeClass("mfp-hide white-popup");
-	$("#upload").addClass("ui very wide styled sidebar");
-	$("#upload").sidebar("show");
+	showSidebar();
 });
