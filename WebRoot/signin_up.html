@@ -103,11 +103,21 @@
 	<div class="ui dimmer page">
 	<div class="ui test modal transition hidden white-popup" id="rechooseform">				<!-- 重名选人 -->
 		<form class="ui form" id="rechooseform"> 
-			<div class="ui attached message" id="rechoosemessage">
-			</div>
-					<div class="ui selection list" id="rechooselist">
-			</div>
-			<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择</div>
+			<div class="ui two column middle aligned relaxed grid basic segment">
+					<div class="left aligned column">
+						<div class="ui attached message" id="rechoosemessage"></div>
+						<div class="ui selection list" id="rechooselist"></div>
+					</div>
+					<div class="ui vertical divider">
+						
+					</div>
+					<div class="center aligned column">
+					    <div>
+					    	<img class="ui medium image" src="img\profile_test\247144.jpg">
+				    	</div>
+				    </div>
+				</div>
+			<div class="ui red bottom attached message"  id="rechooseerror" style="display:none">请选择</div>
 			<div class="ui divider"></div>
 			<div class="ui action input">
   				<input type="text"  id="checkinput" placeholder="你觉得是谁帮你上传了这张图片呢？">

@@ -158,19 +158,27 @@ function getRelationship(friendId) {
 	return 0;
 }
 
-function addFriend(data, onSuccess, onError) {
+function addFriendAPI(id, friend_id, type, is_invitee,  onSuccess, onError) {
 	var path = "v1/friends/add",
 		url = ServerRoot + ServiceType.USERPROFILE + path,
+		data ="id=" + id + "&friend_id=" + friend_id + "&type=" + type + "&is_invitee=" + is_invitee,
 		ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
 
-function updateFriendRelationship(data, onSuccess, onError) {
+function updateFriendRelationship(id, friend_id, type, is_invitee, onSuccess, onError) {
 	var path = "v1/friends/update",
 		url = ServerRoot + ServiceType.USERPROFILE + path,
+		data ="id=" + id + "&friend_id=" + friend_id + "&type=" + type + "&is_invitee=" + is_invitee,
 		ajax_obj = getAjaxObj(url, "PUT", "json", onSuccess, onError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
 
+function checkFriendRelationship(id, friend_id, onSuccess, onError) {
+	var path = "v1/friends/"+ id + "/" + friend_id + "/check",
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_call(ajax_obj);
+}

@@ -1,6 +1,7 @@
 $('#upload')
 	.sidebar({
 		onShow: function(){
+			resetUpload();
 			$("#upload_menu").toggle();
 			$("#close_sidebar_btn").slideDown();
 			},
@@ -8,7 +9,6 @@ $('#upload')
 			selected_bool = false;
 			$("#upload_menu").slideDown();
 			$("#close_sidebar_btn").toggle();
-			resetUpload();
 			}
 		})
 	.sidebar('attach events', '#close_sidebar_btn', 'hide')

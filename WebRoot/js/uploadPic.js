@@ -42,7 +42,7 @@ $(function() {
 				},
 			},
 			{
-				on: "blur",
+				on: "submit",
 			}
 			);
 	
@@ -111,12 +111,14 @@ $(function() {
 					console.log("Register new quote falied");
 				}
 				var userId = $.cookie("truthbook").userId;
-				var inviteData ="id=" + toId + "&friend_id=" + userId + "&type=1&is_invitee=true";
+//				var inviteData ="id=" + toId + "&friend_id=" + userId + "&type=1&is_invitee=true";
 				var onSuccess = function() {
 					drawConfirmPopUp("新建词条完成！赶快去通知好友来玩吧！");
 					console.log("Add friend success");
 				};
-				addFriend(inviteData, onSuccess);
+				addFriendAPI(toId, userId, type_nFriends, "true", onSuccess);
+				addFriendAPI(userId, toId, type_nFriends, "false");
+				freshFriendsLists(userId);
 			},
 			onAjaxError = function(xhr, status, error) {
 				console.log("Register new quote failed with error: " + error);
@@ -129,13 +131,31 @@ $(function() {
 			toId = uploadCandidates[selected_num]["userId"];
 			console.log("upload pic for " + toId);
 			var userId = $.cookie("truthbook").userId;
-			var inviteData ="id=" + toId + "&friend_id=" + userId + "&type=1&is_invitee=true";
-			var onSuccess = function(data,textStatus) {
-//				drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
-				console.log("Update friend relationship success");
+			var onSuccess = function(data, textStatus) {
+				var onSuccess = function(data,textStatus) {
+//					drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
+					console.log("Update friend relationship success");
+				};
+				if(data> 0) {
+					updateFriendRelationship(toId, userId, type_nFriends, "true", onSuccess);
+					updateFriendRelationship(userId, toId, type_nFriends, "false");
+				} else {
+					var quote_bool = !(uploadCandidates[selected_num]["isActivated"] == "true");
+					if(quote_bool) {
+						addFriendAPI(toId, userId, type_nFriends, "true", onSuccess);
+						addFriendAPI(userId, toId, type_nFriends, "false");
+					} else {
+						alert("You are not his/her friend now!"); //待完成
+					}
+				}
+				freshFriendsLists(userId);
 			};
-			updateFriendRelationship(inviteData, onSuccess);
+			var onError = function(xhr, status, error) {
+				console.log("Check friend relationship failed with error: " + error);
+			};
+			checkFriendRelationship(toId, userId, onSuccess, onError);
 		}
+		var userId = $.cookie("truthbook").userId;
 		$.magnificPopup.close();
 		$(".sidebar").sidebar("hide");
 	});
@@ -218,7 +238,7 @@ function nextstep1Onclick() {
 					html = html + "<div class=\"ui item segment rechooseitem\">" +
 								"<a class=\"ui corner green label\" style=\"display:none\">" +
 								"<i class=\"checkmark small icon\"></i> </a>" +
-	 							"<img class=\"ui avatar image\" src=" + uploadCandidates[i]["imgURL"] +">" + 
+	 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
 	 							"<div class=\"content\">" +
 	  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
 	  							"</div></div>";
@@ -226,7 +246,7 @@ function nextstep1Onclick() {
 				html = html + "<div class=\"ui item segment rechooseitem\">" +
 				"<a class=\"ui corner green label\" style=\"display:none\">" +
 				"<i class=\"checkmark small icon\"></i> </a>" +
-					"<img class=\"ui avatar image\" src=" + data.user["imgURL"] +">" + 
+					"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
 					"<div class=\"content\">" +
 					"<div class=\"header\">继续新建词条</div>以上都不是？</div></div>";
 				$("#rechoosemessage").html(rechoosemessage);
@@ -241,7 +261,6 @@ function nextstep1Onclick() {
 				$("#chooseppform").hide();
 				$("#rechooseform").show();
 			} else if(len == -1) {
-//TODO: 新建词条function, selected_num==-2时也是新建词条
 				selected_num = -2;
 				$("#chooseppform").hide();
 				$("#choosepicform").show();
