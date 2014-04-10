@@ -124,7 +124,8 @@
      		</div>
             <div class="ui error message"></div>
 			<div class="ui divider"></div>
-				<input class="ui green button nextstep" id="nextstep1"  value="下一步" readonly>
+			<input class="ui green button" id="nextstep1"  value="下一步" readonly>
+			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div>
 		</form>
  				
  			<div class="ui form" id="choosepicform" style="display:none">
@@ -163,9 +164,21 @@
  			</div>
  				
 			<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
-				<div class="ui attached message" id="rechoosemessage"></div>
-				<div class="ui selection list" id="rechooselist"></div>
-				<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+				<div class="ui two column middle aligned relaxed grid basic segment">
+					<div class="middle aligned column">
+						<div class="ui attached message" id="rechoosemessage"></div>
+						<div class="ui selection list" id="rechooselist"></div>
+						<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+					</div>
+					<div class="ui vertical divider">
+						
+					</div>
+					<div class="center aligned column">
+					    <div>
+					    	<img class="ui medium image" src="img\profile_test\247144.jpg">
+				    	</div>
+				    </div>
+				</div>
 				<div class="ui divider"></div>
 					<input class="ui green button" id="nextstep3" value="下一步"  readonly>
 			</div>
@@ -340,7 +353,7 @@
 		            <h2 class="ui inverted icon header">
 		                <i class="icon circular inverted emphasized green checked checkbox"></i>
 		                朕知道了
-		                <div class="sub header" id="alertMessage"></div>
+		                <div class="sub header"  id="alertMessage"></div>
 		            </h2>
 		        </div>
 		    </div>
@@ -406,8 +419,9 @@
 			type:"inline",
 			midClick: true,
 			callbacks: {
-				afterClose: function() {
-					resetUpload();
+				beforeOpen: function() {
+// 					resetUpload();
+					selected_num=-1;
 				}
 			}
 		});

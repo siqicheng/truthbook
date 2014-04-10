@@ -5,7 +5,7 @@ $(function() {
 	friendsId.eFriends = new Array();
 	friendsId.nFriends = new Array();
 	freshFriendsLists(tmp.userId);
-
+});
 //	getFriends(tmp.userId,1);
 	
 	function getFriends(id, type) {
@@ -107,9 +107,8 @@ $(function() {
 	function freshFriendsLists(id) {
 //		cleanFriendsCookie();
 		getFriends(id,1);
-		
 	}
-});
+//});
 
 
 function upload_choosepic(people) {

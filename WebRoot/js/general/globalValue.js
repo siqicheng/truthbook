@@ -14,6 +14,7 @@ ServiceType = {
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
 
 toId = -1;
+selected_num = -1;
 selected_bool = false;
 type_nFriends = 1;
 type_eFriends = 2;
@@ -25,4 +26,3 @@ $(function (){
 LoginPage = "http://"+localhost+":8080/truthbook/";
 LoginPage = "http://localhost:8080/truthbook/";
 DefaultImg = "img/logo_red.ico";
-
