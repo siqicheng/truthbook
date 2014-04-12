@@ -247,7 +247,6 @@ function resetUpload() {
 }
 
 function gotoChoosePeople() {
-	picReceiver = null;
 	$(".ui.step").attr("class", "ui disabled step");
 	$("#step1").attr("class", "ui active step");
 	$(".ui.form.uploadForm").hide();

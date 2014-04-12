@@ -7,7 +7,7 @@ $('#upload')
 			$("#close_sidebar_btn").slideDown();
 			},
 		onHide: function(){
-			selected_bool = false;
+//			selected_bool = false;
 			$("#upload_menu").slideDown();
 			$("#close_sidebar_btn").toggle();
 			}

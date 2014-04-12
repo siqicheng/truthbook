@@ -112,18 +112,13 @@ $(function() {
 
 
 function upload_choosepic(people) {
-	toId = people["userId"];
-	console.log(toId);
-	selected_bool = true;
+	picReceiver = people;
 	$("#fullName").attr("value",people["fullName"]);
 	$("#school").attr("value",people["school"]);
 	$("#entryTime").attr("value",people["entryTime"]);
-	$("#chooseppform").hide();
-	$("#rechooseform").hide();
-	$("#confirmform").hide();
-	$("#choosepicform").show();
-	$("#step1").attr("class","ui step");
-	$("#step2").attr("class","ui active step");
-	$("#step3").attr("class","ui disabled step");
+	$("#fullName").attr("disabled", "disabled");
+	$("#school").attr("disabled", "disabled");
+	$("#entryTime").attr("disabled", "disabled");
+	gotoChoosePic();
 	showSidebar();
 }
