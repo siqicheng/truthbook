@@ -97,8 +97,8 @@ function addFriendTransition(buttonId,onSuccessFunction){
 }
 
 function confirmDeleteFriendPopUp(towhom){
-	var header = "真的不能再做朋友了么？",
-	content = "从前共你\t促膝把酒倾通宵都不够<br>我有痛快过\t你有没有?",
+	var header = "真的连朋友都不能做了么？",
+	content = "從前共你\t促膝把酒傾通宵都不夠<br>我有痛快過\t你有沒有?",
 	negativeBtn = "算了，还是继续做朋友",
 	positiveBtn = "不，真的不能和你再做朋友了。";
 	approveFunction = function() {
@@ -107,7 +107,42 @@ function confirmDeleteFriendPopUp(towhom){
 	testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);	
 }
 
+function confirmDegradeFriendPopUp(towhom){
+	var header = "過去那樣厚，真的不能让我做你的\t\t\t极·友\t\t\t么？（降级之后不可更改，只能通过好友努力为你传照片才能升级回来哦！）",
+	content = "為何舊知己\t在最後<br>變不到老友",
+	negativeBtn = "算了，还是继续做朋友",
+	positiveBtn = "不知你是我敵友,已沒法望透";
+	approveFunction = function() {
+		degradeFriendByTmpButton(towhom);
+	};
+	testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);	
+}
 
+
+function degradeFriendByTmpButton(towhom){
+	var path = "v1/friends/update";
+	//There is a problem here that degrade a friend can delete their invitation relation.
+	var data = "id=" + $.cookie("truthbook").userId  + "&friend_id=" + towhom["userId"] + "&type=" + "1" + "&is_invitee=" + "0" + "\"";
+	var url=ServerRoot+ServiceType.USERPROFILE+path;	
+	var onAjaxSuccess = function(data,textStatus){
+		if (data == true ){
+			drawConfirmPopUp("成功把 "+towhom["fullName"] +" 降级为真·友");
+			freshFriendsLists($.cookie("truthbook").userId);
+			return true;
+		}
+		else{
+			alert("failed to degrade friend!");
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		return false;
+	};
+	var ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+	
+}
 
 /*	This function need to be modified!!!
  *  Now, only valid for delete by OwnersPage delete button. 
