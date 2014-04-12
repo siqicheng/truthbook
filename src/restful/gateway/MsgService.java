@@ -14,6 +14,8 @@ import org.hibernate.Transaction;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
 import db.mapping.object.Message;
+import db.mapping.object.ReadMessage;
+import db.mapping.object.ReadMessageDAO;
 import db.mapping.object.MessageDAO;
 import db.mapping.object.Relationship;
 
@@ -23,6 +25,7 @@ import java.util.List;
 @Path("push")
 public class MsgService {
 	private MessageDAO messageDAO;
+	private MessageDAO readMessageDAO;
 	
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
@@ -95,11 +98,14 @@ public class MsgService {
 		Session session = this.messageDAO.getSession();
 		try{
 			Message message = this.messageDAO.findById(id);
+			ReadMessage readmsg = new ReadMessage(message);
+			readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));
 			
 			Transaction tx = session.beginTransaction();
 			session.delete(message);
+			session.save(readmsg);
+			
 			tx.commit();
-			session.close();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();

@@ -1,5 +1,5 @@
 #MyEclipse Hibernate Properties
-#Sat Apr 05 13:31:06 CST 2014
+#Sat Apr 12 14:28:29 CST 2014
 sessionFactoryName=SessionFactory.HibernateSessionFactory
 genBasicCompId=false
 profile=
@@ -16,7 +16,7 @@ libInstallFolder=WebRoot/WEB-INF/lib
 addLibs2Project=true
 genVersionTag=false
 sessionFactoryId=
-basePersistenceClass=
+basePersistenceClass=db.mapping.object.Message
 genAnnotations=false
 reSettingsFile=
 configFile=/truthbook/src/hibernate.cfg.xml
