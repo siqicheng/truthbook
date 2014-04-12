@@ -181,3 +181,19 @@ function checkFriendRelationship(id, friend_id, onSuccess, onError) {
 		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
 	ajax_call(ajax_obj);
 }
+
+function registerNewQuote(data, onSuccess, onError) {
+	var path = "v1/quote/register",
+	url = ServerRoot + ServiceType.LOGIN +path,
+	ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function verifyUserExists(data, onSuccess, onError) {
+	var path = "v1/user/verify",
+		url = ServerRoot + ServiceType.LOGIN +path,
+		ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
