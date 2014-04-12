@@ -32,7 +32,7 @@ public class MsgService {
 		this.readMessageDAO = new ReadMessageDAO();
 	}
 
-	@PUT
+	@GET
 	@Path("v1/message/{id}/{srcid}/{type}/send")
 	@Produces("application/json")
 	public Object sendMesssage(@PathParam("id") Integer id,
@@ -69,6 +69,38 @@ public class MsgService {
 		Session session=this.messageDAO.getSession();
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			
+			if (Messages.size()>0){
+				List message_list = new ArrayList();
+				
+				for (Object message : Messages){
+					if (message instanceof Message){
+						message_list.add(message);
+					}
+				}
+				
+				Message[] messages = new Message[message_list.size()];
+				for (int i=0; i<message_list.size();i++){
+					messages[i] = (Message) message_list.get(i);
+				}
+				return messages;
+			}
+			return null;
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@GET
+	@Path("v1/message/{userid}/get")
+	@Produces("application/json")
+	public Object getMessage(@PathParam("userid") Integer id) {
+		
+		
+		Session session=this.messageDAO.getSession();
+		try{
+			List Messages=this.messageDAO.findByUserId(id);
 			
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
