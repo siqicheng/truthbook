@@ -24,7 +24,7 @@
 		<mapping resource="db/mapping/object/User.hbm.xml" />
 		<mapping resource="db/mapping/object/UserPassword.hbm.xml" />
 		<mapping resource="db/mapping/object/Relationship.hbm.xml" />
-
+		<mapping resource="db/mapping/object/Message.hbm.xml" />
 	</session-factory>
 
 

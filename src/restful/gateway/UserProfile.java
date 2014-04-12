@@ -241,22 +241,12 @@ public class UserProfile {
 		String property[] = {Relationship.USER_ID, Relationship.FRIEND_ID};
 		Object value[] = {user,friend_id};
 		
-		Session session = this.relationshipDAO.getSession();
-		try{
-			List Friends = this.relationshipDAO.findByProperties(property, value, Relationship.TABLE);
-			if(Friends.size() == 1){
-				Transaction tx = session.beginTransaction();
-				Object Friend = Friends.get(0);
-				if (Friend instanceof Relationship){
-					tx.commit();
-					session.close();
-					return RestUtil.string2json(((Relationship) Friend).getRelationship());
-				}				
-			}
-
-		}catch (Exception e){
-			e.printStackTrace();
-			session.close();
+		List Friends = this.relationshipDAO.findByProperties(property, value, Relationship.TABLE);
+		if(Friends.size() == 1){
+			Object Friend = Friends.get(0);
+			if (Friend instanceof Relationship){
+				return RestUtil.string2json(((Relationship) Friend).getRelationship());
+			}				
 		}
 		return RestUtil.string2json("-1");
 	}
