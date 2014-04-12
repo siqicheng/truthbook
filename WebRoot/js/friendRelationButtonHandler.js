@@ -12,15 +12,7 @@ function handleAddFriendButtonClick(){
 		addFriendByTmpButton();
 	});
 	$( "#disabeFriendButton" ).click(function() {
-//		confirmDeleteFriendPopUp();
-		var header = "真的不能再做朋友了么？",
-		content = "从前共你\t促膝把酒倾通宵都不够<br>我有痛快过\t你有没有?",
-		negativeBtn = "算了，还是继续做朋友",
-		positiveBtn = "不，真的不能和你再做朋友了。";
-		approveFunction = function() {
-			deleteFriendByTmpButton();
-		};
-		testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);
+		confirmDeleteFriendPopUp($.cookie("truthbook_PageOwner_userId"));
 	});
 	
 	$("#addFriendWaitingButton").click(function(){
@@ -104,15 +96,28 @@ function addFriendTransition(buttonId,onSuccessFunction){
 	});
 }
 
+function confirmDeleteFriendPopUp(towhom){
+	var header = "真的不能再做朋友了么？",
+	content = "从前共你\t促膝把酒倾通宵都不够<br>我有痛快过\t你有没有?",
+	negativeBtn = "算了，还是继续做朋友",
+	positiveBtn = "不，真的不能和你再做朋友了。";
+	approveFunction = function() {
+		deleteFriendByTmpButton(towhom);
+	};
+	testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);	
+}
+
+
+
 /*	This function need to be modified!!!
  *  Now, only valid for delete by OwnersPage delete button. 
  *
  */
 
-function deleteFriendByTmpButton(){
+function deleteFriendByTmpButton(towhom){
 	var path = "v1/friends/";
 	var userId = $.cookie("truthbook").userId + "/";
-	var friendId = $.cookie("truthbook_PageOwner_userId").userId;
+	var friendId = towhom["userId"];//
 	var action = "/delete";
 	var url=ServerRoot+ServiceType.USERPROFILE+path+userId+friendId+action;			
 	var onAjaxSuccess = function(data,textStatus){
