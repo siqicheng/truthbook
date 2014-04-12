@@ -59,7 +59,7 @@ public class MsgService {
 
 	@GET
 	@Path("v1/message/{userid}/{type}/get")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id,
 			@PathParam("type") String type) {
 		
@@ -94,7 +94,7 @@ public class MsgService {
 
 	@GET
 	@Path("v1/message/{userid}/get")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
 		
@@ -126,7 +126,7 @@ public class MsgService {
 	
 	@PUT
 	@Path("v1/message/{messageid}/read")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object readMessage(@PathParam("messageid") Integer id){
 		Session session = this.messageDAO.getSession();
 		try{
