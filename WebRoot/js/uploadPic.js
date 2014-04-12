@@ -49,7 +49,7 @@ $(function() {
 	
 	$("#step1").click(function() {
 		selected_num = -1;
-		selected_bool = false;
+//		selected_bool = false;
 		$("#step1").attr("class","ui active step");
 		$("#step2").attr("class","ui disabled step");
 		$("#step3").attr("class","ui disabled step");
@@ -96,6 +96,13 @@ $(function() {
 	
 	$("#nextstep3").click(function() {
 		if(selected_num != -1) {
+			if(selected_num == -2) {
+				$("#rechooseform").hide();
+				$("#choosepicform").show();
+				$("#step1").attr("class","ui step");
+				$("#step2").attr("class","ui active step");
+				return;
+			}
 			if(uploadCandidates[selected_num]["isActivated"]== "false") {
 				$("#rechooseform").hide();
 				$("#choosepicform").show();
