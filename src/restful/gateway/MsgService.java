@@ -47,6 +47,7 @@ public class MsgService {
 			Transaction tx=session.beginTransaction();
 			session.save(newinstance);
 			tx.commit();
+			session.close();
 			return RestUtil.string2json("true");
 			
 		}catch (Exception e){
@@ -87,6 +88,7 @@ public class MsgService {
 			return null;
 		}catch (Exception e){
 			e.printStackTrace();
+			session.close();
 			return null;
 		}
 	}

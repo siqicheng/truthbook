@@ -95,6 +95,16 @@ $(function() {
 			upload_choosepic(towhom);
 		});
 		
+		$(".eFriendsList .invite_upload_btn").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+			confirmInviteFriendUploadPopUp(towhom);
+		});
+		
+		$(".nFriendsList .invite_upload_btn").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+			confirmInviteFriendUploadPopUp(towhom);
+		});
+		
 		$(".eFriendsList .upload_for_fri_btn").click(function() {
 			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
 			upload_choosepic(towhom);

@@ -193,33 +193,33 @@
 <!-- 					  </div> -->
 
 					  					    	
-				<div class="ui" align="center" style="height:220px;">
-					<div class="ui icon header" id = "headicon">
-					<img class="rounded ui image icon" src="http://lorempixel.com/319/391/" style="width:110px; height: 110px;">我光荣
-					  <div class="sub header">复旦大学</div>
-					  <div class="sub header">2008级</div>
-					</div>
-				</div>
-				<div class="ui" align="center">
-				    <button class="ui green vertical animated button" id="addFriendButton" style="display:none;"> 
-				        <div class="visible content">&ensp;<i class="add user basic icon"></i>&ensp;</div>
-				        <div class="hidden content">做朋友</div>
-				    </button>
-			 	    <button class="ui basic animated button" id="addFriendWaitingButton" style="display:none;"> 
-			           <div class="visible content"> 等待对方确认 </div>
-			           <div class="hidden content">
-			               <i class="sign in icon"></i>
-			           </div>
-			        </button>		        
-			 	    <button class="ui blue vertical animated button" id="uploadPhoto" style="display:none;"> 
-			           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div>
-			           <div class="hidden content">传照片</div>
-			       </button>
-			       <button class="ui black vertical animated button" id="disabeFriendButton" style="display:none;"> 
-			           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
-			           <div class="hidden content">变路人</div>
-			       </button>
-				</div>
+						<div class="ui item" align="center" style="height:220px;">
+							<div class="ui icon header" id = "headicon">
+							<img class="rounded ui image icon" src="http://lorempixel.com/319/391/" style="width:110px; height: 110px;">我光荣
+							  <div class="sub header">复旦大学</div>
+							  <div class="sub header">2008级</div>
+							</div>
+						</div>
+						<div class="ui item" align="center">
+						    <button class="ui green vertical animated button" id="addFriendButton" style="display:none;"> 
+						        <div class="visible content">&ensp;<i class="add user basic icon"></i>&ensp;</div>
+						        <div class="hidden content">做朋友</div>
+						    </button>
+					 	    <button class="ui basic animated button" id="addFriendWaitingButton" style="display:none;"> 
+					           <div class="visible content"> 等待对方确认 </div>
+					           <div class="hidden content">
+					               <i class="sign in icon"></i>
+					           </div>
+					        </button>		        
+					 	    <button class="ui blue vertical animated button" id="uploadPhoto" style="display:none;"> 
+					           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div>
+					           <div class="hidden content">传照片</div>
+					       </button>
+					       <button class="ui black vertical animated button" id="disabeFriendButton" style="display:none;"> 
+					           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
+					           <div class="hidden content">变路人</div>
+					       </button>
+						</div>
 				  </div>
 				  <div class="column">
 					  <div class="ui segment">
@@ -228,12 +228,12 @@
 				  </div>
 				  
 				  <div class="column">
-					  <div class="ui segment" > 
-					  	<div class="ui animated list">
+<!-- 					  <div class="ui inverted segment" >  -->
+					  	<div class="ui selection animated list">
 							<div id="testSearch">
 							</div>
 						</div>	
-					  </div>
+<!-- 					  </div> -->
 				  </div>
 			</div>
 
@@ -276,27 +276,29 @@
 			<div class="column">
 				<div class="ui red inverted fluid menu">
 					<div class="ui dropdown fluid item">
-						<i class="users small icon"></i> 最近来访
-						<div class="ui small label" style="float:right">3</div>
+						<i class="users small icon"></i> 来访
+						<div class="ui small label" style="float:right">153</div>
 						<div class="menu">
-     						<a class="item">张三</a>
-     						<a class="item">李四</a>
-     						<a class="item">王五</a>
+<!--      						<a class="item">张三</a> -->
+<!--      						<a class="item">李四</a> -->
+<!--      						<a class="item">王五</a> -->
    						</div>
    					</div>
 				</div>
 			</div>
-			<div class="column">
+			<div class="column">	
 				<div class="ui red inverted fluid menu"> 						
 					<div class="ui dropdown fluid item">
 						<i class="mail small icon"></i> 消息通知
-						<div class="floating ui circular green label">05</div>
-						<div class="menu">
-     						<a class="item">您有一条新的好友请求</a>
-     						<a class="item">张三为您上传了一张照片</a>
-     						<a class="item">5条新评论</a>
+						<div class="floating ui circular green label" id = "unreadMessageNum" style="display:none;">00</div>
+						<div class="list menu message" id="messageList">
+							<div class="item">
+								<div class="content"  style="textAlign:center;padding-top: 7px;font-size:16px;width:120px;">
+									一键清空所有消息
+								</div>
+							</div>
    						</div>
-   					</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -357,11 +359,11 @@
 		<div class="ui page dimmer message hidden">
 		    <div class="content">
 		        <div class="center">  	
-		            <h2 class="ui inverted icon header">
+		            <h1 class="ui inverted icon header">
 		                <i class="icon circular inverted emphasized green checked checkbox"></i>
 		                朕知道了
 		                <div class="sub header"  id="alertMessage"></div>
-		            </h2>
+		            </h1>
 		        </div>
 		    </div>
 		</div>
@@ -369,11 +371,11 @@
 		<div class="ui page dimmer dummyDimmerForExtention hidden">
 		    <div class="content">
 		        <div class="center">  	
-		            <h2 class="ui inverted icon header">
+		            <h1 class="ui inverted icon header">
 		                <i class="icon circular inverted emphasized green checked checkbox"></i>
 		                朕知道了
 		                <div class="sub header" id="dummyDimmerForExtention"></div>
-		            </h2>
+		            </h1>
 		        </div>
 		    </div>
 		</div>
@@ -397,6 +399,7 @@
 	<script src="./js/friendRelationButtonHandler.js"></script>
 	<script src="./js/userAndPageInfo.js"></script>
 	<script src="./js/general/searchBar.js"></script>
+	<script src="./js/message/messageBarController.js"></script>	
 	<script src="./js/eventsegment_layout.js"></script>
 	
 	<script type="text/javascript">

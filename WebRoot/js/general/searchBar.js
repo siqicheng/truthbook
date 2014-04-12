@@ -23,18 +23,18 @@ function searchUsers(){
 					school = data.user.school;
 					entryTime = data.user.entryTime;
 					email = data.user.email;
-					$("#testSearch").append("<div class=\"item\" > <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+
+					$("#testSearch").append("<div class=\"item\" >  <img class=\"ui avatar image\" src=\"" + DefaultImg + "\">  <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+
 											 userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime +
 											  "\t" + email + "</div></div></div>");
 
-				} else if (length > 0){
+				} else if (length > 1){
 					for(i = 0;i<length;++i){
 						userId = data.user[i].userId;
 						fullName = data.user[i].fullName;
 						school = data.user[i].school;
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
-						$("#testSearch").append("<div class=\"item\" > <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ 
+						$("#testSearch").append("<div class=\"item\" > <img class=\"ui avatar image\" src=\"" + DefaultImg + "\"> <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ 
 						userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "\t" + 
 						email + "</div></div></div>");
 					}

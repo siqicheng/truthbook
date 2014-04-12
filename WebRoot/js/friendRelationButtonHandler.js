@@ -96,6 +96,26 @@ function addFriendTransition(buttonId,onSuccessFunction){
 	});
 }
 
+
+function confirmInviteFriendUploadPopUp(towhom){
+	var header = "确定邀请"+towhom["fullName"]+"为你上传照片？";
+	var content = "你是我的眼<br>&ensp;&ensp;&ensp;&ensp;&ensp;带我领略四季的变换<br>你是我的眼<br>&ensp;&ensp;&ensp;&ensp;&ensp;"+
+					"带我穿越拥挤的人潮<br>你是我的眼<br>&ensp;&ensp;&ensp;&ensp;&ensp;带我阅读浩瀚的书海";
+	var negativeBtn = "取消";
+	var negativeBtnHidden = "就是那么简单几句我办不到";
+	var positiveBtn = "确定";
+	var positiveBtnHidden = "世界纷纷扰扰喧喧闹闹你眼里的我才是真实";
+	var logo="screenshot";
+	approveFunction = function() {
+		inviteFriendToUpload(towhom);
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction,onDenyFunction, logo);	
+}
+
+
 function confirmDeleteFriendPopUp(towhom){
 	var header = "我当你一世朋友，真的不能做朋友了么？";
 	var content = "從前共你\t促膝把酒傾通宵都不夠<br>我有痛快過\t你有沒有?";
@@ -214,7 +234,7 @@ function addFriendByTmpButton(){
 	var onAjaxError = function(xhr,status,error){
 		return false;
 	};
-	var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
+	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
@@ -268,6 +288,42 @@ function getRelationship(friendId) {
 //	ajax_obj.cache = "false";
 //	ajax_call(ajax_obj);
 //}
+
+
+
+function inviteFriendToUpload(towhom){
+	var receiver = towhom["userId"];
+	var sender = $.cookie("truthbook").userId;
+	var path = "v1/message/"+receiver+"/" + sender + MessageType.INVITETOUPLOAD + "/send";
+	var url=ServerRoot+ServiceType.NOTIFICATION+path;		
+	var onAjaxSuccess = function(data,textStatus){
+		if (data == true ){
+			drawConfirmPopUp("邀请已发出<br>受邀者 : " + towhom["fullName"]);
+			return true;
+		}
+		else{
+			drawConfirmPopUp("邀请已发送失败<br>受邀者 : " + towhom["fullName"]);
+			alert("failed to send message");
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("邀请已发送失败 Error："+error);
+		return false;
+	};
+	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

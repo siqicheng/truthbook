@@ -14,7 +14,7 @@ import db.mapping.object.User;
 
 @XmlRootElement
 @XmlSeeAlso({User.class})
-public class ReadMessage extends db.mapping.object.Message implements
+public class ReadMessage implements
 		java.io.Serializable {
 
 	// Fields
