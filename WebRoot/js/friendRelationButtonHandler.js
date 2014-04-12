@@ -97,25 +97,37 @@ function addFriendTransition(buttonId,onSuccessFunction){
 }
 
 function confirmDeleteFriendPopUp(towhom){
-	var header = "真的连朋友都不能做了么？",
-	content = "從前共你\t促膝把酒傾通宵都不夠<br>我有痛快過\t你有沒有?",
-	negativeBtn = "算了，还是继续做朋友",
-	positiveBtn = "不，真的不能和你再做朋友了。";
+	var header = "我当你一世朋友，真的不能做朋友了么？";
+	var content = "從前共你\t促膝把酒傾通宵都不夠<br>我有痛快過\t你有沒有?";
+	var negativeBtn = "继续做朋友";
+	var negativeBtnHidden = "多想一天，彼此都不追究";
+	var positiveBtn = "解除好友关系";
+	var positiveBtnHidden = "位置變了，各有隊友";
+	var logo="trash";
 	approveFunction = function() {
 		deleteFriendByTmpButton(towhom);
 	};
-	testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);	
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction,onDenyFunction, logo);	
 }
 
 function confirmDegradeFriendPopUp(towhom){
-	var header = "過去那樣厚，真的不能让我做你的\t\t\t极·友\t\t\t么？（降级之后不可更改，只能通过好友努力为你传照片才能升级回来哦！）",
-	content = "為何舊知己\t在最後<br>變不到老友",
-	negativeBtn = "算了，还是继续做朋友",
-	positiveBtn = "不知你是我敵友,已沒法望透";
+	var header = "过去那样厚，真的不能让我做你的极·友么？";
+	var content = "為何舊知己\t在最後<br>變不到老友";
+	var negativeBtn = "继续做极·友";
+	var negativeBtnHidden = "一直躲避的藉口，非甚麼大仇";
+	var positiveBtn = "降级（不可更改）";
+	var positiveBtnHidden = "是敵與是友，各自也沒有自由";
+	var logo="level down";
 	approveFunction = function() {
 		degradeFriendByTmpButton(towhom);
 	};
-	testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);	
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction, onDenyFunction, logo);	
 }
 
 

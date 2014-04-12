@@ -314,26 +314,39 @@
 	   		</div>
 	    	<div class="actions">
 	      		<div class="two fluid ui buttons">
-	        		<div class="ui negative labeled icon button">
-	          			<i class="remove icon"></i>不，我错了
+	        		<div class="ui negative fade animated left labeled icon button ">
+	          			<i class="remove icon"></i>
+	          			<div class="visible content">取消</div>
+	          			<div class="hidden content">对不起，是我点错了</div>
 	        		</div>
-	        		<div class="ui positive right labeled icon button">
-	          			是，谁都别拦着我<i class="checkmark icon"></i>
+	        		<div class="ui positive fade animated right labeled icon button">
+	        			<div class="visible content">退出</div>
+	          			<div class="hidden content">谁都别拦着我</div>
+	          			<i class="checkmark icon"></i>
 	        		</div>
 	      		</div>
 	    	</div>
 	    </div>
 		
-	 	<div class="ui small modal deleteFriend" id="testModal">
+	 	<div class="ui basic modal deleteFriend transition hidden" id="testModal" style="margin-top: -159px;">
 		    <div class="header" id="modalHeader"></div>
 	    	<div class="content">
-				<p id="modalContent"></p>
+	    		<div class="left"style="width: 40%"><i class="home icon" id = "modalLogo"></i></div>
+				<div class="right"><p id="modalContent"></p></div>
 	   		</div>
 	    	<div class="actions">
-	    		<div class="ui buttons">
-				  <div class="ui negative button" id="modalNegativeBtn"></div>
-				  <div class="or"></div>
-				  <div class="ui positive right labeled icon button" id="modalPositiveBtn"><i class="checkmark icon"></i></div>
+	    		<div class="ui two fluid buttons">
+				  <div class="ui negative vertical animated left labeled icon button">
+	          			<i class="remove icon"></i>
+	          			<div class="visible content" id="modalNegativeBtn">取消</div>
+	          			<div class="hidden content" id="modalNegativeBtnHidden"></div>				  
+				  </div>
+<!-- 				  <div class="or"></div> -->
+				  <div class="ui positive vertical animated right labeled icon button">
+	        			<div class="visible content" id="modalPositiveBtn">确定</div>
+	          			<div class="hidden content" id="modalPositiveBtnHidden"></div>				  
+				  		<i class="checkmark icon"></i>
+				  </div>
 				</div>
 	    	</div>
 	    </div>

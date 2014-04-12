@@ -43,11 +43,5 @@
             </key>
             <one-to-many class="db.mapping.object.Relationship" />
         </set>
-        <set name="messages" inverse="true">
-            <key>
-                <column name="user_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.Message" />
-        </set>
     </class>
 </hibernate-mapping>
