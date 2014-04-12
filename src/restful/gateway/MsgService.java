@@ -22,16 +22,17 @@ import db.mapping.object.Relationship;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("push")
+@Path("notification")
 public class MsgService {
 	private MessageDAO messageDAO;
-	private MessageDAO readMessageDAO;
+	private ReadMessageDAO readMessageDAO;
 	
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
+		this.readMessageDAO = new ReadMessageDAO();
 	}
 
-	@GET
+	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/send")
 	@Produces("application/json")
 	public Object sendMesssage(@PathParam("id") Integer id,
@@ -91,7 +92,7 @@ public class MsgService {
 		}
 	}
 	
-	@GET
+	@PUT
 	@Path("v1/message/{messageid}/read")
 	@Produces("application/json")
 	public Object readMessage(@PathParam("messageid") Integer id){
