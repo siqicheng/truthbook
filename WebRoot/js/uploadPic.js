@@ -246,6 +246,7 @@ $(function() {
 
 function upload_choosepic(people) {
 	picReceiver = people;
+	upload_for_friend = true;
 	$("#fullName").attr("value",people["fullName"]);
 	$("#school").attr("value",people["school"]);
 	$("#entryTime").attr("value",people["entryTime"]);
@@ -259,6 +260,7 @@ function upload_choosepic(people) {
 	/*Help functions*/
 function resetUpload() {
 	picReceiver = null;
+	upload_for_friend = false;
 	gotoChoosePeople();
 	$("#fullName").val("");
 	$("#school").val("");
@@ -269,7 +271,7 @@ function resetUpload() {
 }
 
 function gotoChoosePeople() {
-	picReceiver = null;
+	if(! upload_for_friend) {picReceiver = null;};
 	$(".ui.step").attr("class", "ui disabled step");
 	$(".ui.step").css("cursor", "default");
 	$("#step1").attr("class", "ui active step");

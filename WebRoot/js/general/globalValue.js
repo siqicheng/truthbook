@@ -17,6 +17,7 @@ NEW_QUOTE = -1;
 
 
 picReceiver = null;
+upload_for_friend = false;
 type_nFriends = 1;
 type_eFriends = 2;
 
