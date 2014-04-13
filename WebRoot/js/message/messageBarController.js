@@ -164,6 +164,7 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 			messageId = data.message[i].messageId,
 			fullName = data.message[i].friend.fullName;
 		}
+
 		html = html +"<div class=\"item message\" >"+
 			"<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
 				"<span class=\"this_userId\" style=\"display:none;\">" + userId + "</span>" +
@@ -198,12 +199,10 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 		var thisUserId = $(this).parent().children(".this_userId").html();
 		var thisMessageId = $(this).parent().children(".this_messageId").html();
 		buttonTwoOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent().parent());
-		
-		
 
-		
 	});
 }
+
 
 
 function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId){
@@ -324,5 +323,6 @@ function deleteHeadMessageNumUpdate(thisItem){
 		thisItem.parent().parent().children(".header.item").children(".messageNumber.head").html(newNumOfMessage);
 	}
 }
+
 
 

@@ -1,6 +1,8 @@
 package db.mapping.object;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -23,24 +25,47 @@ public class Message implements java.io.Serializable {
 	private Integer userId;
 	private User friend;
 	private Timestamp createTime;
-
+	private Map<String,String> content;
+	
 	// Constructors
 
 	/** default constructor */
 	public Message() {
+		this.content = new HashMap();
+		this.content.put("status", "unsend");
 	}
 
 	/** full constructor */
-	public Message(String messageType, Integer userId, User friend,
-			Timestamp createTime) {
+	public Message(String messageType, Integer userId, User friend
+			, Timestamp createTime) {
+		this.content = new HashMap();
 		this.messageType = messageType;
 		this.userId = userId;
 		this.friend = friend;
 		this.createTime = createTime;
+		this.content.put("status", "unsend");
 	}
 
 	// Property accessors
 
+	@XmlTransient
+	public String getStatus(){
+		if (this.content.containsKey("status")){
+			return this.content.get("status");
+		}
+		return null;
+	}
+
+	
+	public void setStatus(String status){
+		this.content.put("status", status);
+	}
+	
+	@XmlTransient
+	public Map<String,String> getContent(){
+		return this.content;
+	}
+	
 	public Integer getMessageId() {
 		return this.messageId;
 	}
