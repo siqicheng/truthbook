@@ -116,8 +116,11 @@ $(function() {
 					var userId = $.cookie("truthbook").userId,
 						onSuccess = function() {
 							drawConfirmPopUp("新建词条完成！赶快去通知好友来玩吧！");
-							resetUpload();
-							freshFriendsLists(userId);
+
+							$.magnificPopup.close();
+							$(".sidebar").sidebar("hide");
+							refreshTopbarFriendsLists($.cookie("truthbook").userId);
+							refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 							console.log("Add friend success");
 						};
 					addFriendAPI(data.userId, userId, type_nFriends, "true");
@@ -136,13 +139,17 @@ $(function() {
 					if(data>0) {
 						//上传照片
 						drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
-						resetUpload();
+
+						$.magnificPopup.close();
+						$(".sidebar").sidebar("hide");
 					} else {
 						var userId = $.cookie("truthbook").userId,
 							onSuccess = function(data, textStatus) {
 								//上传照片
 								drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
-								resetUpload();
+
+								$.magnificPopup.close();
+								$(".sidebar").sidebar("hide");
 							};
 						addFriendAPI(picReceiver.userId, userId, type_nFriends, "true");
 						addFriendAPI(userId, picReceiver.userId, type_nFriends, "false", onSuccess);
@@ -156,9 +163,10 @@ $(function() {
 			console.log("upload pic for " + picReceiver);
 			var userId = $.cookie("truthbook").userId;
 			//上传照片
+
+			$.magnificPopup.close();
+			$(".sidebar").sidebar("hide");
 		};
-		$.magnificPopup.close();
-		$(".sidebar").sidebar("hide");
 	});
 
 	function nextstep1Function() {
@@ -261,6 +269,7 @@ function resetUpload() {
 }
 
 function gotoChoosePeople() {
+	picReceiver = null;
 	$(".ui.step").attr("class", "ui disabled step");
 	$(".ui.step").css("cursor", "default");
 	$("#step1").attr("class", "ui active step");

@@ -1,13 +1,12 @@
 $('#upload')
 	.sidebar({
 		onShow: function(){
-//			resetUpload();
+			resetUpload();
 //			selected_num=-1;
 			$("#upload_menu").toggle();
 			$("#close_sidebar_btn").slideDown();
 			},
 		onHide: function(){
-			resetUpload();
 //			selected_bool = false;
 			$("#upload_menu").slideDown();
 			$("#close_sidebar_btn").toggle();
