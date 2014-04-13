@@ -192,47 +192,47 @@ public class MsgService {
 		}
 	}
 	
-	@GET
-	@Path("v1/message/{messageid}/{type}/read")
-	@Produces("application/json;charset=utf-8")
-	public Object readMessage(@PathParam("messageid") Integer id , @PathParam("type") String type){
-		
-		
-		Session session = this.messageDAO.getSession();
-		
-		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
-		Object value[] = {id,type};	
-		
-		try{
-			Transaction tx = session.beginTransaction();
-			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
-			
-			for (Object message : Messages){
-				if (message instanceof Message){
-					
-					ReadMessage readmsg = new ReadMessage( (Message) message);
-					readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));
-					
-					session.delete(message);
-					session.save(readmsg);
-				}
-			}
-			
-			tx.commit();	
-			session.close();
-			return RestUtil.string2json("true");
-			
-		}catch (Exception e){
-			e.printStackTrace();
-			session.close();
-			return RestUtil.string2json("false");
-		}
-	}
+//	@GET
+//	@Path("v1/message/{messageid}/{type}/read")
+//	@Produces("application/json;charset=utf-8")
+//	public Object readMessage(@PathParam("messageid") Integer id , @PathParam("type") String type){
+//		
+//		
+//		Session session = this.messageDAO.getSession();
+//		
+//		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
+//		Object value[] = {id,type};	
+//		
+//		try{
+//			Transaction tx = session.beginTransaction();
+//			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+//			
+//			for (Object message : Messages){
+//				if (message instanceof Message){
+//					
+//					ReadMessage readmsg = new ReadMessage( (Message) message);
+//					readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));
+//					
+//					session.delete(message);
+//					session.save(readmsg);
+//				}
+//			}
+//			
+//			tx.commit();	
+//			session.close();
+//			return RestUtil.string2json("true");
+//			
+//		}catch (Exception e){
+//			e.printStackTrace();
+//			session.close();
+//			return RestUtil.string2json("false");
+//		}
+//	}
 	
 	@GET
-	@Path("v1/message/{messageid}/{type}/readSended")
+	@Path("v1/message/{userid}/{type}/read")
 	@Produces("application/json;charset=utf-8")
-	public Object readSendedMessage(@PathParam("messageid") Integer id , @PathParam("type") String type){
+	public Object readSendedMessage(@PathParam("userid") Integer id , @PathParam("type") String type){
 		
 		
 		Session session = this.messageDAO.getSession();
