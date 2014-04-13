@@ -93,6 +93,6 @@ function newsAddicon(){
 	$panel.children(".item").append("<div class='hid_content'></div>\n");
 	
 	var news_num = friendreq_num + image_num + comment_num + update_num + invite_num + accept_num + signup_num;
-	$("#news_num").append(news_num);
+	$("#unreadMessageNum").append(news_num);
 }
 

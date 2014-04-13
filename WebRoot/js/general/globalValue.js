@@ -14,7 +14,7 @@ ServiceType = {
        };
 MessageType = {
  	   INVITETOUPLOAD:"/inviteToUpload",
-	   ADDFRIEND :"/userProfile"			
+	   ADDFRIEND :"/friendRequest"			
 };
 
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";

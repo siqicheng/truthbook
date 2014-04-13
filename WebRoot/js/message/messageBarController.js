@@ -15,6 +15,7 @@ function messageLengthJson(data){
 
 function getMessage(){
 	getInviteToUploadMessage();
+	getFriendRequestMessage();
 }
 
 function getInviteToUploadMessage(){
@@ -38,8 +39,6 @@ function getInviteToUploadMessage(){
 	};
 	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);
-	
-	
 }
 
 function updateNewMessageNum(numOfInviteToUploadMessage){
@@ -47,15 +46,15 @@ function updateNewMessageNum(numOfInviteToUploadMessage){
 	if (newNumOfMessage <= 0){
 		$("#unreadMessageNum").hide();
 	} else if (newNumOfMessage<10){
-		showMessageTransition("#unreadMessageNum");
+		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html("0" + newNumOfMessage);
 	} else {
-		showMessageTransition("#unreadMessageNum");
+		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html(newNumOfMessage);
 	}
 }
 
-function showMessageTransition(id){
+function showMessageNumberTransition(id){
 	$(id).transition({	
 		animation : 'scale fade in', 
 		duration  : '0.6s',
@@ -63,8 +62,24 @@ function showMessageTransition(id){
 	$(id).show();
 }
 
+function showHiddenMessageTransition(id){
+//	$(id).transition({	
+//		animation : 'toggle', 
+//		duration  : '0.4s',
+//	});
+	$(id).slideToggle("slow");
+
+}
+
+function enableHeaderMenu(numOfInviteToUploadMessage){
+	html = "<div class=\"header item\" id=\"inviteMessageHeaderMenu\"><i class=\"cloud upload icon\"></i>" + 
+			numOfInviteToUploadMessage + "条上传照片邀请</div>"
+	$("#inviteMessageMenu").html(html);
+}
+
 function updateNewMessageMenuList(numOfInviteToUploadMessage,data){
-	var html = "";
+	enableHeaderMenu(numOfInviteToUploadMessage);
+	var html = "<div id = \"inviteMessageContent\" style=\"display:none;\">";
 	for(var i=0;i<numOfInviteToUploadMessage;i++){
 		if (numOfInviteToUploadMessage == 1){
 			var userId = data.message.friend.userId,
@@ -75,7 +90,7 @@ function updateNewMessageMenuList(numOfInviteToUploadMessage,data){
 			messageId = data.message[i].messageId,
 			fullName = data.message[i].friend.fullName;
 		}
-		html = html +"<div class=\"item message\">"+
+		html = html +"<div class=\"item message\" >"+
 			"<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
 			"<span class=\"this_userId\" style=\"display:none;\">" + userId + "</span>" +
 			"<span class=\"this_messageId\" style=\"display:none;\">" + messageId + "</span>" +
@@ -86,7 +101,12 @@ function updateNewMessageMenuList(numOfInviteToUploadMessage,data){
 			fullName + "：帮我传张照片吧" +
 			"</div></div>";
 	}
-	$("#messageList").append(html);
+	html = html +"</div>";
+	$("#inviteMessageMenu").append(html);
+	$("#inviteMessageHeaderMenu").click(function(){
+		showHiddenMessageTransition("#inviteMessageContent");
+	});
+	
 	$(".list.menu.message .item.message").hover(function(){
 		$(this).children(".right.floated").fadeIn(50);},
 		function(){
