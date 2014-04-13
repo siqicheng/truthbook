@@ -16,7 +16,7 @@ function messageLengthJson(data){
 function getMessage(){
 	$("#unreadMessageNum").html("00");
 	getNewMessage(MessageType.INVITETOUPLOAD);
-//	getNewMessage(MessageType.ADDFRIEND);
+	getNewMessage(MessageType.ADDFRIEND);
 //	getInviteToUploadMessage();
 //	getFriendRequestMessage();
 	
@@ -31,7 +31,7 @@ function getNewMessage(messageType){
 	var onAjaxSuccess = function(data, textStatus) {
 //		drawConfirmPopUp("test data : " + messageLengthJson(data));
 		if (data == null){
-			drawConfirmPopUp("data: "+data);//maybe need to modify the number of total message later
+//			drawConfirmPopUp("data: "+data);//maybe need to modify the number of total message later
 		}else{
 			var numOfMessage = messageLengthJson(data);
 			if (numOfMessage > 0){
@@ -47,32 +47,32 @@ function getNewMessage(messageType){
 	ajax_call(ajax_obj);
 }
 
-function getInviteToUploadMessage(){
-	var receiver = $.cookie("truthbook").userId;
-	var path = "v1/message/"+receiver + "/" + MessageType.INVITETOUPLOAD.typeName + "/get";
-	var url = ServerRoot + ServiceType.NOTIFICATION + path;
-	var onAjaxSuccess = function(data, textStatus) {
-//		drawConfirmPopUp("test data : " + messageLengthJson(data));
-		if (data == null){
-			//maybe need to modify the number of total message later
-		}else{
-			var numOfInviteToUploadMessage = messageLengthJson(data);
-			if (numOfInviteToUploadMessage > 0){
-				updateNewMessageNum(numOfInviteToUploadMessage);
-				updateNewMessageMenuList(numOfInviteToUploadMessage,data);
-			}
-		}
-	};
-	var onAjaxError = function(xhr, textStatus, error) {
-		drawConfirmPopUp("error: "+error);
-	};
-	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-	ajax_call(ajax_obj);
-}
+//function getInviteToUploadMessage(){
+//	var receiver = $.cookie("truthbook").userId;
+//	var path = "v1/message/"+receiver + "/" + MessageType.INVITETOUPLOAD.typeName + "/get";
+//	var url = ServerRoot + ServiceType.NOTIFICATION + path;
+//	var onAjaxSuccess = function(data, textStatus) {
+////		drawConfirmPopUp("test data : " + messageLengthJson(data));
+//		if (data == null){
+//			//maybe need to modify the number of total message later
+//		}else{
+//			var numOfInviteToUploadMessage = messageLengthJson(data);
+//			if (numOfInviteToUploadMessage > 0){
+//				updateNewMessageNum(numOfInviteToUploadMessage);
+//				updateNewMessageMenuList(numOfInviteToUploadMessage,data);
+//			}
+//		}
+//	};
+//	var onAjaxError = function(xhr, textStatus, error) {
+//		drawConfirmPopUp("error: "+error);
+//	};
+//	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+//	ajax_call(ajax_obj);
+//}
 
 function updateNewMessageNum(numOfMessage){
 	var newNumOfMessage =numOfMessage +Number($("#unreadMessageNum").html());
-	drawConfirmPopUp(newNumOfMessage);
+//	drawConfirmPopUp(newNumOfMessage);
 	if (newNumOfMessage <= 0){
 		$("#unreadMessageNum").hide();
 	} else if (newNumOfMessage<10){
@@ -144,9 +144,9 @@ function pickHeadIconName(messageTypeName){
 }
 
 function enableHeaderMenu(numOfMessage,messageType){
-	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\"><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
-			"<b class =\"messageNumber head\">" + numOfMessage + "</b>" + 
-			messageType.typeHeadMenuName+ "</div>";
+	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\"><div><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
+			"<span class =\"messageNumber head\">" + numOfMessage + "</span>" + 
+			messageType.typeHeadMenuName+ "</div></div>";
 	$("#"+messageType.typeName+"_MessageMenu").html(html);
 }
 
@@ -294,7 +294,7 @@ function deleteMessageButtonOnclick(messageId,messageTypeNumber,thisItem){
 	var onAjaxError = function(xhr, textStatus, error) {
 		drawConfirmPopUp("delete ajax error: " + error);			
 	};
-	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	var ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }
 
@@ -317,7 +317,7 @@ function deleteHeadMessageNumUpdate(thisItem){
 	var newNumOfMessage =Number(thisItem.parent().parent().children(".header.item").children(".messageNumber.head").html()) - 1;
 	if (newNumOfMessage <= 0){
 		$("#unreadMessageNum").html("00");
-		$("#unreadMessageNum").hide();
+		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 		thisItem.parent().parent().children(".header.item").hide();
 	} else {
 		thisItem.parent().parent().children(".header.item").children(".messageNumber.head").html(newNumOfMessage);

@@ -123,12 +123,10 @@ public class MsgService {
 				for (int i=0; i<message_list.size();i++){
 					messages[i] = (Message) message_list.get(i);
 				}
-				session.close();
 				return messages;
 			}
 			return null;
 		}catch (Exception e){
-			session.close();
 			e.printStackTrace();
 			session.close();
 			return null;
