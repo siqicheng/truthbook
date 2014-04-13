@@ -1,0 +1,110 @@
+ServerRoot = http://localhost:8080/truthbook/services
+ServiceType = notification
+version = v1
+
+
+用于消息的收发
+需要建立两张新表: message,readmessage
+
+
+CREATE TABLE `message` (
+`message_id` int(11) NOT NULL AUTO_INCREMENT,
+`message_type` varchar(20) NOT NULL,
+`user_id` int(11) NOT NULL,
+`source_id` int(11) NOT NULL,
+`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE
+CURRENT_TIMESTAMP,
+PRIMARY KEY (`message_id`),
+UNIQUE KEY `message_id` (`message_id`),
+KEY `FK38EB000791A5E669` (`source_id`),
+KEY `FK38EB0007EE1C84B9` (`user_id`),
+CONSTRAINT `FK38EB000791A5E669` FOREIGN KEY (`source_id`) REFERENCES `user`
+(`user_id`),
+CONSTRAINT `FK38EB0007EE1C84B9` FOREIGN KEY (`user_id`) REFERENCES `user`
+(`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 MAX_ROWS=10000000 PACK_KEYS=0;
+
+
+CREATE TABLE `read_message` (
+`message_id` int(11) NOT NULL AUTO_INCREMENT,
+`message_type` varchar(20) NOT NULL,
+`user_id` int(11) NOT NULL,
+`source_id` int(11) NOT NULL,
+`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE
+CURRENT_TIMESTAMP,
+`read_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`message_id`),
+UNIQUE KEY `message_id_UNIQUE` (`message_id`),
+KEY `FK6B600A5E91A5E669` (`source_id`),
+KEY `FK6B600A5EEE1C84B9` (`user_id`),
+CONSTRAINT `FK6B600A5E91A5E669` FOREIGN KEY (`source_id`) REFERENCES `user`
+(`user_id`),
+CONSTRAINT `FK6B600A5EEE1C84B9` FOREIGN KEY (`user_id`) REFERENCES `user`
+(`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+
+
+@PUT
+@PATH("v1/message/{user_id}/{source_id}/{type}/send")
+@Produc("application/json")
+向 message 表中插入信息
+表示由 source_id 产生,向 user_id 发送的信息
+type 为任意字符串
+
+返回值:true/false     代表操作的成功与否
+
+
+@GET
+@Path("v1/message/{userid}/get")
+@Produces("application/json;charset=utf-8")
+获得指定user 的所有message
+
+格式同下
+
+@GET
+@Path("v1/message/{userid}/{type}/get")
+@Produces("application/json")
+获取 message 表中某 user_id 的特定 type 的 message,并将其置为已读
+返回值示例:
+{
+     "message":[
+         {"friend":{
+             "email":"siqicheng@hotmail.com",
+             "entryTime":"2008",
+             "fullName":"csq",
+             "isActivated":"true",
+             "school":"fudan",
+             "userId":"2"
+             },
+         "messageId":"5",
+         "messageType":"addFriend",
+         "userId":"1"},
+         {"friend":{
+             "email":"siqicheng@hotmail.com",
+             "entryTime":"2008",
+             "fullName":"csq",
+             "isActivated":"true",
+             "school":"fudan",
+             "userId":"2"
+             },
+         "messageId":"6",
+         "messageType":"addFriend",
+         "userId":"1"}
+     ]
+}
+
+
+@PUT
+@Path("v1/message/{messageid}/read")
+@Produces("application/json")
+返回值:true/false
+从 message 表中删除指定message并加入 read_message 表中
+
+@PUT
+@Path("v1/message/{userid}/{type}/read")
+@Produces("application/json;charset=utf-8")
+将指定用户的指定类型的，已经标记为已读的message,表中删除并加入read_message表中
+
+返回值:true/false
