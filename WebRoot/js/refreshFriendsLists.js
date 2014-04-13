@@ -51,6 +51,7 @@ function getUserEFriendsLists(id) {
 				userFriendsLists.eFriends[i] = data.user[i];
 			};
 		};
+		addFriendButtonCheck();
 		console.log("Get eFriends List success");
 		console.log(userFriendsLists.eFriends);
 		refreshTopbarLists(id);

@@ -294,7 +294,7 @@ function getRelationship(friendId) {
 function inviteFriendToUpload(towhom){
 	var receiver = towhom["userId"];
 	var sender = $.cookie("truthbook").userId;
-	var path = "v1/message/"+receiver+"/" + sender + MessageType.INVITETOUPLOAD + "/send";
+	var path = "v1/message/"+receiver+"/" + sender + "/" + MessageType.INVITETOUPLOAD.typeName + "/send";
 	var url=ServerRoot+ServiceType.NOTIFICATION+path;		
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){

@@ -16,9 +16,11 @@ function messageLengthJson(data){
 function getMessage(){
 	$("#unreadMessageNum").html("00");
 	getNewMessage(MessageType.INVITETOUPLOAD);
-	getNewMessage(MessageType.ADDFRIEND);
+//	getNewMessage(MessageType.ADDFRIEND);
 //	getInviteToUploadMessage();
 //	getFriendRequestMessage();
+	
+	
 }
 
 
@@ -29,7 +31,7 @@ function getNewMessage(messageType){
 	var onAjaxSuccess = function(data, textStatus) {
 //		drawConfirmPopUp("test data : " + messageLengthJson(data));
 		if (data == null){
-			//maybe need to modify the number of total message later
+			drawConfirmPopUp("data: "+data);//maybe need to modify the number of total message later
 		}else{
 			var numOfMessage = messageLengthJson(data);
 			if (numOfMessage > 0){
@@ -39,7 +41,7 @@ function getNewMessage(messageType){
 		}
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		console.log("getFriends error: "+ error);
+		drawConfirmPopUp("error: "+error);
 	};
 	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);
@@ -62,7 +64,7 @@ function getInviteToUploadMessage(){
 		}
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		console.log("getFriends error: "+ error);
+		drawConfirmPopUp("error: "+error);
 	};
 	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);
@@ -70,6 +72,7 @@ function getInviteToUploadMessage(){
 
 function updateNewMessageNum(numOfMessage){
 	var newNumOfMessage =numOfMessage +Number($("#unreadMessageNum").html());
+	drawConfirmPopUp(newNumOfMessage);
 	if (newNumOfMessage <= 0){
 		$("#unreadMessageNum").hide();
 	} else if (newNumOfMessage<10){
@@ -314,6 +317,8 @@ function deleteMessageTrasition(messageTypeNumber,thisItem){
 function deleteHeadMessageNumUpdate(thisItem){
 	var newNumOfMessage =Number(thisItem.parent().parent().children(".header.item").children(".messageNumber.head").html()) - 1;
 	if (newNumOfMessage <= 0){
+		$("#unreadMessageNum").html("00");
+		$("#unreadMessageNum").hide();
 		thisItem.parent().parent().children(".header.item").hide();
 	} else {
 		thisItem.parent().parent().children(".header.item").children(".messageNumber.head").html(newNumOfMessage);
