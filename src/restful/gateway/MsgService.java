@@ -22,6 +22,8 @@ import db.mapping.object.Relationship;
 import java.util.ArrayList;
 import java.util.List;
 
+import sessionFactory.HibernateSessionFactory;
+
 @Path("push")
 public class MsgService {
 	private MessageDAO messageDAO;
@@ -83,9 +85,12 @@ public class MsgService {
 				for (int i=0; i<message_list.size();i++){
 					messages[i] = (Message) message_list.get(i);
 				}
+				session.close();
+				//HibernateSessionFactory.closeSession();
 				return messages;
 			}
-			session.close();
+		//	session.close();
+			
 			return null;
 		}catch (Exception e){
 			e.printStackTrace();
