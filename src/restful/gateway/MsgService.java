@@ -29,27 +29,27 @@ public class MsgService {
 		this.messageDAO = new MessageDAO();
 	}
 	
-	private static boolean assertType(String Type)throws Exception{
-		
-		try{
-			for (String t: MsgService.messageTypes) {
-				if (t.equals(Type)){
-					return true;
-				}
-			}
-			
-			StringBuffer tmp = new StringBuffer();
-			tmp.append( "Message type must be one of the listed:\n");
-			for (String s : MsgService.messageTypes){
-				tmp.append(s+"\n");
-			}
-			throw new Exception(tmp.toString());
-			
-		} catch (Exception e){
-			e.printStackTrace();
-			return false;
-		}
-	}
+//	private static boolean assertType(String Type)throws Exception{
+//		
+//		try{
+//			for (String t: MsgService.messageTypes) {
+//				if (t.equals(Type)){
+//					return true;
+//				}
+//			}
+//			
+//			StringBuffer tmp = new StringBuffer();
+//			tmp.append( "Message type must be one of the listed:\n");
+//			for (String s : MsgService.messageTypes){
+//				tmp.append(s+"\n");
+//			}
+//			throw new Exception(tmp.toString());
+//			
+//		} catch (Exception e){
+//			e.printStackTrace();
+//			return false;
+//		}
+//	}
 
 	@GET
 	@Path("v1/message/{id}/{srcid}/{type}/send")
@@ -88,10 +88,7 @@ public class MsgService {
 	public Object getMessage(@PathParam("userid") Integer id,
 			@PathParam("type") String type) throws Exception {
 		
-	//	if  (!MsgService.assertType(type)) {
-	//		return false;
-	//	}
-		
+		Session session = this.messageDAO.getSession();
 		
 		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
 		Object value[] = {id,type};	
@@ -99,14 +96,23 @@ public class MsgService {
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
 			
+			
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
 				
+				Transaction tx = session.beginTransaction();
+				
 				for (Object message : Messages){
 					if (message instanceof Message){
+						
+						((Message) message).setStatus("sended");
+						session.update((Message)message);
 						message_list.add(message);
 					}
 				}
+				
+				tx.commit();
+				session.close();
 				
 				Message[] messages = new Message[message_list.size()];
 				for (int i=0; i<message_list.size();i++){
@@ -116,6 +122,7 @@ public class MsgService {
 			}
 			return null;
 		}catch (Exception e){
+			session.close();
 			e.printStackTrace();
 			return null;
 		}
@@ -126,17 +133,27 @@ public class MsgService {
 	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
+		Session session = this.messageDAO.getSession();
+		
 		try{
 			List Messages=this.messageDAO.findByUserId(id);
+
 			
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
+			
+				Transaction tx = session.beginTransaction();
 				
 				for (Object message : Messages){
 					if (message instanceof Message){
+						
+						((Message) message).setStatus("sended");
+						session.update((Message)message);
 						message_list.add(message);
 					}
 				}
+				
+				tx.commit();
 				
 				Message[] messages = new Message[message_list.size()];
 				for (int i=0; i<message_list.size();i++){
@@ -146,6 +163,7 @@ public class MsgService {
 			}
 			return null;
 		}catch (Exception e){
+			session.close();
 			e.printStackTrace();
 			return null;
 		}
@@ -191,6 +209,43 @@ public class MsgService {
 			
 			for (Object message : Messages){
 				if (message instanceof Message){
+					
+					ReadMessage readmsg = new ReadMessage( (Message) message);
+					readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));
+					
+					session.delete(message);
+					session.save(readmsg);
+				}
+			}
+			
+			tx.commit();	
+			session.close();
+			return RestUtil.string2json("true");
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}
+	}
+	
+	@GET
+	@Path("v1/message/{messageid}/{type}/readSended")
+	@Produces("application/json;charset=utf-8")
+	public Object readSendedMessage(@PathParam("messageid") Integer id , @PathParam("type") String type){
+		
+		
+		Session session = this.messageDAO.getSession();
+		
+		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
+		Object value[] = {id,type};	
+		
+		try{
+			Transaction tx = session.beginTransaction();
+			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			
+			for (Object message : Messages){
+				if (message instanceof Message && ((Message) message).getStatus().equals("sended")){
 					
 					ReadMessage readmsg = new ReadMessage( (Message) message);
 					readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));

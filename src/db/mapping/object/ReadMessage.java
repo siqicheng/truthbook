@@ -1,6 +1,8 @@
 package db.mapping.object;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -25,11 +27,13 @@ public class ReadMessage  implements
 	private User friend;
 	private Timestamp createTime;
 	private Timestamp readTime;
-
+	private Map<String,String> content;
+	
 	// Constructors
 
 	/** default constructor */
 	public ReadMessage() {
+		this.content = new HashMap();
 	}
 
 	public ReadMessage(Message message){
@@ -38,6 +42,7 @@ public class ReadMessage  implements
 		this.friend = message.getFriend();
 		this.createTime = message.getCreateTime();
 		this.readTime = new Timestamp(System.currentTimeMillis());
+		this.content = message.getContent();
 	}
 	
 	/** full constructor */
@@ -48,6 +53,7 @@ public class ReadMessage  implements
 		this.friend = friend;
 		this.createTime = createTime;
 		this.readTime = readTime;
+		this.content = new HashMap();
 	}
 
 	// Property accessors
