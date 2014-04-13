@@ -3,14 +3,20 @@
  *
  */
 
-//localhost = "175.186.106.40";
+//localhost = "172.13.0.47";
 localhost = "localhost";
 
 ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
 ServiceType = {
-            	   LOGIN:"loginService/",
-            	   USERPROFILE :"userProfile/"
-               };
+    	   LOGIN:"loginService/",
+    	   USERPROFILE :"userProfile/",
+    	   NOTIFICATION :"push/"
+       };
+MessageType = {
+ 	   INVITETOUPLOAD:"/inviteToUpload",
+	   ADDFRIEND :"/userProfile"			
+};
+
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
 
 toId = -1;
@@ -24,5 +30,5 @@ $(function (){
 });
 
 LoginPage = "http://"+localhost+":8080/truthbook/";
-LoginPage = "http://localhost:8080/truthbook/";
+//LoginPage = "http://localhost:8080/truthbook/";
 DefaultImg = "img/logo_red.ico";

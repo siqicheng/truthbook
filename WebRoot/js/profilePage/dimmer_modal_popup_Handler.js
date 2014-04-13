@@ -46,7 +46,7 @@ function handleLogoutPopUp(){
 }
 
 function confirmDeleteFriendPopUp(){
-	$('.small.modal.deleteFriend')
+	$('.basic.modal.deleteFriend')
    	.modal('setting', {
    		closable: true,
    		onApprove : function() {
@@ -56,11 +56,14 @@ function confirmDeleteFriendPopUp(){
    	.modal('show');
 }
 
-function testModalPopup(header, content, negativeBtn, positiveBtn, onApproveFunction, onDenyFunction){
+function testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, onApproveFunction, onDenyFunction, logo){
 	$("#modalHeader").html(header);
 	$("#modalContent").html(content);
 	$("#modalNegativeBtn").html(negativeBtn);
+	$("#modalNegativeBtnHidden").html(negativeBtnHidden);
 	$("#modalPositiveBtn").html(positiveBtn);
+	$("#modalPositiveBtnHidden").html(positiveBtnHidden);
+	$("#modalLogo").attr("class",logo + " icon");
 	$("#testModal").modal("setting", {
 		closable:true,
 		onApprove : onApproveFunction,

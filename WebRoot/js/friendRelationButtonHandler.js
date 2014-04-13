@@ -96,18 +96,85 @@ function addFriendTransition(buttonId,onSuccessFunction){
 	});
 }
 
-function confirmDeleteFriendPopUp(towhom){
-	var header = "真的不能再做朋友了么？",
-	content = "从前共你\t促膝把酒倾通宵都不够<br>我有痛快过\t你有没有?",
-	negativeBtn = "算了，还是继续做朋友",
-	positiveBtn = "不，真的不能和你再做朋友了。";
+
+function confirmInviteFriendUploadPopUp(towhom){
+	var header = "确定邀请"+towhom["fullName"]+"为你上传照片？";
+	var content = "你是我的眼<br>&ensp;&ensp;&ensp;&ensp;&ensp;带我领略四季的变换<br>你是我的眼<br>&ensp;&ensp;&ensp;&ensp;&ensp;"+
+					"带我穿越拥挤的人潮<br>你是我的眼<br>&ensp;&ensp;&ensp;&ensp;&ensp;带我阅读浩瀚的书海";
+	var negativeBtn = "取消";
+	var negativeBtnHidden = "就是那么简单几句我办不到";
+	var positiveBtn = "确定";
+	var positiveBtnHidden = "世界纷纷扰扰喧喧闹闹你眼里的我才是真实";
+	var logo="screenshot";
 	approveFunction = function() {
-		deleteFriendByTmpButton(towhom);
+		inviteFriendToUpload(towhom);
 	};
-	testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction);	
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction,onDenyFunction, logo);	
 }
 
 
+function confirmDeleteFriendPopUp(towhom){
+	var header = "我当你一世朋友，真的不能做朋友了么？";
+	var content = "從前共你\t促膝把酒傾通宵都不夠<br>我有痛快過\t你有沒有?";
+	var negativeBtn = "继续做朋友";
+	var negativeBtnHidden = "多想一天，彼此都不追究";
+	var positiveBtn = "解除好友关系";
+	var positiveBtnHidden = "位置變了，各有隊友";
+	var logo="trash";
+	approveFunction = function() {
+		deleteFriendByTmpButton(towhom);
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction,onDenyFunction, logo);	
+}
+
+function confirmDegradeFriendPopUp(towhom){
+	var header = "过去那样厚，真的不能让我做你的极·友么？";
+	var content = "為何舊知己\t在最後<br>變不到老友";
+	var negativeBtn = "继续做极·友";
+	var negativeBtnHidden = "一直躲避的藉口，非甚麼大仇";
+	var positiveBtn = "降级（不可更改）";
+	var positiveBtnHidden = "是敵與是友，各自也沒有自由";
+	var logo="level down";
+	approveFunction = function() {
+		degradeFriendByTmpButton(towhom);
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction, onDenyFunction, logo);	
+}
+
+
+function degradeFriendByTmpButton(towhom){
+	var path = "v1/friends/update";
+	//There is a problem here that degrade a friend can delete their invitation relation.
+	var data = "id=" + $.cookie("truthbook").userId  + "&friend_id=" + towhom["userId"] + "&type=" + "1" + "&is_invitee=" + "0" + "\"";
+	var url=ServerRoot+ServiceType.USERPROFILE+path;	
+	var onAjaxSuccess = function(data,textStatus){
+		if (data == true ){
+			drawConfirmPopUp("成功把 "+towhom["fullName"] +" 降级为真·友");
+			freshFriendsLists($.cookie("truthbook").userId);
+			return true;
+		}
+		else{
+			alert("failed to degrade friend!");
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		return false;
+	};
+	var ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+	
+}
 
 /*	This function need to be modified!!!
  *  Now, only valid for delete by OwnersPage delete button. 
@@ -221,6 +288,42 @@ function getRelationship(friendId) {
 //	ajax_obj.cache = "false";
 //	ajax_call(ajax_obj);
 //}
+
+
+
+function inviteFriendToUpload(towhom){
+	var receiver = towhom["userId"];
+	var sender = $.cookie("truthbook").userId;
+	var path = "v1/message/"+receiver+"/" + sender + MessageType.INVITETOUPLOAD + "/send";
+	var url=ServerRoot+ServiceType.NOTIFICATION+path;		
+	var onAjaxSuccess = function(data,textStatus){
+		if (data == true ){
+			drawConfirmPopUp("邀请已发出<br>受邀者 : " + towhom["fullName"]);
+			return true;
+		}
+		else{
+			drawConfirmPopUp("邀请已发送失败<br>受邀者 : " + towhom["fullName"]);
+			alert("failed to send message");
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("邀请已发送失败 Error："+error);
+		return false;
+	};
+	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

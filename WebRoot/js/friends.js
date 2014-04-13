@@ -1,9 +1,7 @@
 $(function() {
 	tmp=$.cookie("truthbook");
 
-	friendsId = new Object();
-	friendsId.eFriends = new Array();
-	friendsId.nFriends = new Array();
+
 	freshFriendsLists(tmp.userId);
 });
 //	getFriends(tmp.userId,1);
@@ -23,6 +21,7 @@ $(function() {
 				};
 				freshLists("nFriends");
 //				console.log("id="+id);
+				addclickfunction("nFriend");
 				getFriends(id,2);
 			} else {
 				for(var i=0;i<num;i++){
@@ -33,7 +32,7 @@ $(function() {
 					};
 				};
 				freshLists("eFriends");
-				addclickfunction();
+				addclickfunction("eFriend");
 				addFriendButtonCheck();
 			}
 		};
@@ -62,18 +61,30 @@ $(function() {
 		}
 	}
 		
-	function addclickfunction() {
+	function addclickfunction(friendType) {
+		var degrade = "";
+		var menuType = "";
+		if(friendType == "nFriend"){
+			degrade = "trash";
+			menuType = "nFriendsList";
+		} else {
+			degrade = "level down";
+			menuType = "eFriendsList";
+		}
+	
 		var html = "<div class=\"right floated\" style=\"padding-top:5px;width:100px;margin:0;display:none;\">" +
 		"<a class=\"invite_upload_btn\"><i class=\"screenshot large icon\"></i></a>" +
 		"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
-		"<a class=\"degrade_fri_btn\"><i class=\"trash large icon\"></i></a>" +
+		"<a class=\"degrade_fri_btn\"><i class=\"" + degrade + " large icon\"></i></a>" +
 		"</div>";
-		$(".list.menu.needicon .item").prepend(html);
+		
+		$(".list.menu." + menuType + ".needicon .item").prepend(html);
 		$(".list.menu.needicon .item").hover(function(){
 			$(this).children(".right.floated").fadeIn(50);},
 			function(){
 			$(this).children(".right.floated").fadeOut(50);}
 		);
+		
 		$(".eFriendsList.upload_for_fri .item").click(function() {
 			var towhom = friendsId.eFriends[$(this).index()];
 			upload_choosepic(towhom);
@@ -82,6 +93,16 @@ $(function() {
 		$(".nFriendsList.upload_for_fri .item").click(function() {
 			var towhom = friendsId.nFriends[$(this).index()];
 			upload_choosepic(towhom);
+		});
+		
+		$(".eFriendsList .invite_upload_btn").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+			confirmInviteFriendUploadPopUp(towhom);
+		});
+		
+		$(".nFriendsList .invite_upload_btn").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+			confirmInviteFriendUploadPopUp(towhom);
 		});
 		
 		$(".eFriendsList .upload_for_fri_btn").click(function() {
@@ -96,7 +117,7 @@ $(function() {
 
 		$(".eFriendsList .degrade_fri_btn").click(function() {
 			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
-			confirmDeleteFriendPopUp(towhom);
+			confirmDegradeFriendPopUp(towhom);
 		});
 		
 		$(".nFriendsList .degrade_fri_btn").click(function() {
@@ -117,6 +138,9 @@ $(function() {
 	
 	function freshFriendsLists(id) {
 //		cleanFriendsCookie();
+		friendsId = new Object();
+		friendsId.eFriends = new Array();
+		friendsId.nFriends = new Array();
 		getFriends(id,1);
 	}
 //});
