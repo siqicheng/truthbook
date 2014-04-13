@@ -7,7 +7,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.MediaType;
 
 import java.sql.Timestamp;
 import org.hibernate.Transaction;
@@ -17,7 +16,6 @@ import db.mapping.object.Message;
 import db.mapping.object.ReadMessage;
 import db.mapping.object.ReadMessageDAO;
 import db.mapping.object.MessageDAO;
-import db.mapping.object.Relationship;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +24,32 @@ import java.util.List;
 public class MsgService {
 	private MessageDAO messageDAO;
 	private ReadMessageDAO readMessageDAO;
-	
+	private static final String messageTypes[]={"friendAdd","friendLevelUp","imageUpload","invitedToUpload","quoteConfirm","imageAccepted"};
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
 		this.readMessageDAO = new ReadMessageDAO();
+	}
+	
+	private static boolean assertType(String Type)throws Exception{
+		
+		try{
+			for (String t: MsgService.messageTypes) {
+				if (t.equals(Type)){
+					return true;
+				}
+			}
+			
+			StringBuffer tmp = new StringBuffer();
+			tmp.append( "Message type must be one of the listed:\n");
+			for (String s : MsgService.messageTypes){
+				tmp.append(s+"\n");
+			}
+			throw new Exception(tmp.toString());
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@GET
@@ -37,7 +57,12 @@ public class MsgService {
 	@Produces("application/json")
 	public Object sendMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
-			@PathParam("type") String type) {
+			@PathParam("type") String type) throws Exception {
+		
+		if  (!MsgService.assertType(type)) {
+			return RestUtil.string2json("false");
+		}
+		
 		Session session=this.messageDAO.getSession();
 		try{
 			User src = (new UserDAO()).findById(srcid);
@@ -61,7 +86,12 @@ public class MsgService {
 	@Path("v1/message/{userid}/{type}/get")
 	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id,
-			@PathParam("type") String type) {
+			@PathParam("type") String type) throws Exception {
+		
+		if  (!MsgService.assertType(type)) {
+			return false;
+		}
+		
 		
 		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
 		Object value[] = {id,type};	

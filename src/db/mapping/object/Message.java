@@ -31,8 +31,8 @@ public class Message implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Message(String messageType, Integer userId, User friend,
-			Timestamp createTime) {
+	public Message(String messageType, Integer userId, User friend
+			,Timestamp createTime) {
 		this.messageType = messageType;
 		this.userId = userId;
 		this.friend = friend;
