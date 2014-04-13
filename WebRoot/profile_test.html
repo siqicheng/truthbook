@@ -12,11 +12,13 @@
    	<link href="./CSS/menuBar.css" rel="stylesheet">
    	<link href="./CSS/eventSegment.css" rel="stylesheet">
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
-   	<link rel="shortcut icon" href="img/logo_red.ico"/>
+    <link href="./CSS/notification.css" rel="stylesheet">
+  	<link rel="shortcut icon" href="img/logo_red.ico"/>
    	
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
+
 </head>
 
 <body style="background-color:#DEDCDE;margin:0px;">
@@ -285,10 +287,11 @@
    					</div>
 				</div>
 			</div>
-			<div class="column">	
+			<div class="column" id="notificolumn">
 				<div class="ui red inverted fluid menu"> 						
-					<div class="ui dropdown fluid item">
+					<div class="ui dropdown fluid item" id="notifiBtn">
 						<i class="mail small icon"></i> 消息通知
+<!-- <<<<<<< HEAD -->
 						<div class="floating ui circular green label" id = "unreadMessageNum" style="display:none;">00</div>
 						<div class="list menu message" id="messageList">
 							<div class="item">
@@ -298,6 +301,19 @@
 							</div>
    						</div>
 					</div>
+<!-- ======= -->
+<!-- 						<div class="floating ui circular green label" id="news_num"></div> -->
+<!--    					</div> -->
+<!--    				</div> -->
+<!-- 				<div class="ui divided selection list" id="notifipanel"> -->
+<!-- 					<div class="item friendreq_news"></div> -->
+<!-- 					<div class="item image_news"></div> -->
+<!-- 					<div class="item comment_news"></div> -->
+<!-- 					<div class="item update_news"></div> -->
+<!-- 					<div class="item invite_news"></div> -->
+<!-- 					<div class="item accept_news"></div> -->
+<!-- 					<div class="item signup_news"></div> -->
+<!-- >>>>>>> zeyouwu -->
 				</div>
 			</div>
 		</div>
@@ -400,7 +416,8 @@
 	<script src="./js/general/searchBar.js"></script>
 	<script src="./js/message/messageBarController.js"></script>	
 	<script src="./js/eventsegment_layout.js"></script>
-	
+	<script src="./js/notification.js"></script>
+
 	<script type="text/javascript">
 	$(function() {
 		handleLogoutPopUp();

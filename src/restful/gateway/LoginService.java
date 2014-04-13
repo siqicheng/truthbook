@@ -239,14 +239,6 @@
 //
 //}
 
-
-
-
-
-
-
-
-
 package restful.gateway;
 
 import java.util.Iterator;
