@@ -21,7 +21,7 @@ import db.mapping.object.MessageDAO;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("notification")
+@Path("push")
 public class MsgService {
 	private MessageDAO messageDAO;
 	private static final String messageTypes[]={"friendAdd","friendLevelUp","invitedToUpload","quoteConfirm","imageAccepted"};
@@ -154,11 +154,13 @@ public class MsgService {
 				}
 				
 				tx.commit();
+				session.close();
 				
 				Message[] messages = new Message[message_list.size()];
 				for (int i=0; i<message_list.size();i++){
 					messages[i] = (Message) message_list.get(i);
 				}
+				
 				return messages;
 			}
 			return null;
