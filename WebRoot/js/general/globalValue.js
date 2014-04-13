@@ -59,6 +59,7 @@ NEW_QUOTE = -1;
 
 
 picReceiver = null;
+upload_for_friend = false;
 type_nFriends = 1;
 type_eFriends = 2;
 
@@ -69,4 +70,3 @@ $(function (){
 LoginPage = "http://"+localhost+":8080/truthbook/";
 DefaultImg = "img/logo_red.ico";
 QuoteImg = "img/logo.ico";
-

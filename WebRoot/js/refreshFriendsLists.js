@@ -2,16 +2,12 @@ $(function() {
 	refreshTopbarFriendsLists($.cookie("truthbook").userId);
 	refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 });
-userFriendsLists = new Object();
-userFriendsLists.nFriends = new Array();
-userFriendsLists.eFriends = new Array();
-
-pageownerFriendsLists = new Object();
-pageownerFriendsLists.nFriends = new Array();
-pageownerFriendsLists.eFriends = new Array();
 
 /*Refresh topbar friends lists: topbar-->user's friends*/
 function refreshTopbarFriendsLists(id) {
+	userFriendsLists = new Object();
+	userFriendsLists.nFriends = new Array();
+	userFriendsLists.eFriends = new Array();
 	var onSuccess = function(data, textStatus) {
 		var num = userLengthJson(data);
 		for(var i=0; i<num; i++) {
@@ -54,6 +50,7 @@ function getUserEFriendsLists(id) {
 		addFriendButtonCheck();
 		console.log("Get eFriends List success");
 		console.log(userFriendsLists.eFriends);
+		addFriendButtonCheck();
 		refreshTopbarLists(id);
 	};
 	var onError = function(xhr, status, error) {
@@ -137,6 +134,10 @@ function addTopbarClickFunction() {
 
 /*Refresh Menubar Friends Lists   Menubar-->Pageowner's friends*/
 function refreshMenubarFriendsLists(id) {
+	if(id != $.cookie("truthbook_PageOwner_userId").userId) {return;};
+	pageownerFriendsLists = new Object();
+	pageownerFriendsLists.nFriends = new Array();
+	pageownerFriendsLists.eFriends = new Array();
 	var onSuccess = function(data, textStatus) {
 		var num = userLengthJson(data);
 		for(var i=0; i<num; i++) {
@@ -213,6 +214,9 @@ function refreshMenubarLists(id) {
 					pageownerFriendsLists.nFriends[i]["fullName"] +
 					"</div></div>";
 		};
+		if(id == $.cookie("truthbook").userId) {
+			$("#nFriendsList").addClass("needicon");
+		};
 	} else if(id != $.cookie("truthbook").userId) {
 		html = "<div class=\"item\">" +
 			"<div class=\"content\">" +
@@ -239,7 +243,10 @@ function refreshMenubarLists(id) {
 					"<div class=\"content frienditem\">" +
 					pageownerFriendsLists.eFriends[i]["fullName"] +
 					"</div></div>";
-		}
+		};
+		if(id == $.cookie("truthbook").userId) {
+			$("#eFriendsList").addClass("needicon");
+		};
 	} else if(id != $.cookie("truthbook").userId) {
 			html = "<div class=\"item\">" +
 			"<div class=\"content\">" +
@@ -249,11 +256,7 @@ function refreshMenubarLists(id) {
 	};
 	$(pre + ".eFriendsList").html(html);
 
-	if(id == $.cookie("truthbook").userId) {
-		$("#nFriendsList").addClass("needicon");
-		$("#eFriendsList").addClass("needicon");
-		addButton();
-	};
+	addButton();
 	addMenubarClickFunction();
 }
 
@@ -280,16 +283,38 @@ function addMenubarClickFunction() {
 }
 
 function addButton() {
-	var html = "<div class=\"right floated\" style=\"display:none;\">" +
+	var degrade = "trash";
+	var html = "<div class=\"right floated\" style=\"padding-top:5px;width:100px;margin:0;display:none;\">" +
+	"<a class=\"invite_upload_btn\"><i class=\"screenshot large icon\"></i></a>" +
 	"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
-	"<a href=\"./test.html\"><i class=\"ban circle large icon\"></i></a>" +
+	"<a class=\"degrade_fri_btn\"><i class=\"" + degrade + " large icon\"></i></a>" +
 	"</div>";
-	$(".list.menu.needicon .item").prepend(html);
+	$(".list.menu.nFriendsList.needicon .item").prepend(html);
+	
+	degrade = "level down";
+	var html = "<div class=\"right floated\" style=\"padding-top:5px;width:100px;margin:0;display:none;\">" +
+	"<a class=\"invite_upload_btn\"><i class=\"screenshot large icon\"></i></a>" +
+	"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
+	"<a class=\"degrade_fri_btn\"><i class=\"" + degrade + " large icon\"></i></a>" +
+	"</div>";
+	$(".list.menu.eFriendsList.needicon .item").prepend(html);
+	
 	$(".list.menu.needicon .item").hover(function(){
 		$(this).children(".right.floated").fadeIn(50);},
 		function(){
 		$(this).children(".right.floated").fadeOut(50);}
 	);
+	
+	$(".eFriendsList .invite_upload_btn").click(function() {
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		confirmInviteFriendUploadPopUp(towhom);
+	});
+	
+	$(".nFriendsList .invite_upload_btn").click(function() {
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		confirmInviteFriendUploadPopUp(towhom);
+	});
+	
 	$(".eFriendsList .upload_for_fri_btn").click(function() {
 		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
 		upload_choosepic(towhom);
@@ -298,5 +323,15 @@ function addButton() {
 	$(".nFriendsList .upload_for_fri_btn").click(function() {
 		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
 		upload_choosepic(towhom);
+	});
+
+	$(".eFriendsList .degrade_fri_btn").click(function() {
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		confirmDegradeFriendPopUp(towhom);
+	});
+	
+	$(".nFriendsList .degrade_fri_btn").click(function() {
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		confirmDeleteFriendPopUp(towhom);
 	});
 }
