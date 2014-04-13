@@ -262,7 +262,9 @@ function resetUpload() {
 
 function gotoChoosePeople() {
 	$(".ui.step").attr("class", "ui disabled step");
+	$(".ui.step").css("cursor", "default");
 	$("#step1").attr("class", "ui active step");
+	$("#step1").css("cursor", "pointer");
 	$(".ui.form.uploadForm").hide();
 	$("#choosePeople").show();
 };
@@ -279,10 +281,13 @@ function gotoChoosePic() {
 	$("#step1").attr("class", "ui step");
 	$("#step2").attr("class", "ui active step");
 	$("#step3").attr("class", "ui disabled step");
+	$(".ui.step").css("cursor", "pointer");
+	$("#step3").css("cursor", "default");
 }
 function gotoConfirm() {
 	$(".ui.form.uploadForm").hide();
 	$("#confirm").show();
 	$(".ui.step").attr("class", "ui step");
 	$("#step3").attr("class", "ui active step");
+	$(".ui.step").css("cursor", "pointer");
 }

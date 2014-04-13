@@ -84,9 +84,9 @@
 		<h3 class="ui header">上传照片</h3>
 		
 		<div class="ui three small steps">
-			<div class="ui active step" id="step1" style="cursor:pointer;">选人</div>
-			<div class="ui disabled step" id="step2">选照片</div>
-			<div class="ui disabled step" id="step3">完成</div>
+			<div class="ui active step" id="step1" style="cursor: pointer;">选人</div>
+			<div class="ui disabled step" id="step2" style="cursor: default">选照片</div>
+			<div class="ui disabled step" id="step3" style="cursor: default">完成</div>
    		</div>
    			
    		<div class="ui divider"></div>
@@ -95,21 +95,21 @@
 			<div class="field" id="fullNameTest">
             	<label>姓名</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="fullName" placeholder="姓名" name="fullName">
+                	<input type="text" id="fullName" placeholder="姓名" name="fullName" onchange="picReceiver = null">
                 	<i class="user icon"></i>
                 </div>
        		</div>
 			<div class="field" id="schoolTest">
 				<label>学校</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
+                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" onchange="picReceiver = null">
                   	<i class="book icon"></i>
                	</div>
       		</div>
 			<div class="field" id="entryTimeTest">
 				<label>入学年份</label>
            		<div class="ui left labeled icon input">
-  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
+  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" onchange="picReceiver = null">
 					<i class="align justify icon"></i>
         		</div>
      		</div>
