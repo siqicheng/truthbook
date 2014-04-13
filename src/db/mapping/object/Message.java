@@ -23,7 +23,7 @@ public class Message implements java.io.Serializable {
 	private Integer userId;
 	private User friend;
 	private Timestamp createTime;
-
+	
 	// Constructors
 
 	/** default constructor */

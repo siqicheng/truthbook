@@ -24,11 +24,9 @@ import java.util.List;
 @Path("notification")
 public class MsgService {
 	private MessageDAO messageDAO;
-	private ReadMessageDAO readMessageDAO;
-	private static final String messageTypes[]={"friendAdd","friendLevelUp","imageUpload","invitedToUpload","quoteConfirm","imageAccepted"};
+	private static final String messageTypes[]={"friendAdd","friendLevelUp","invitedToUpload","quoteConfirm","imageAccepted"};
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
-		this.readMessageDAO = new ReadMessageDAO();
 	}
 	
 	private static boolean assertType(String Type)throws Exception{
