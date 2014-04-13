@@ -3,7 +3,7 @@
  *
  */
 
-//localhost = "175.186.106.40";
+//localhost = "172.13.0.47";
 localhost = "localhost";
 
 ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
@@ -30,5 +30,5 @@ $(function (){
 });
 
 LoginPage = "http://"+localhost+":8080/truthbook/";
-LoginPage = "http://localhost:8080/truthbook/";
+//LoginPage = "http://localhost:8080/truthbook/";
 DefaultImg = "img/logo_red.ico";

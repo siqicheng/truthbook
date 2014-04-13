@@ -234,7 +234,7 @@ function addFriendByTmpButton(){
 	var onAjaxError = function(xhr,status,error){
 		return false;
 	};
-	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }

@@ -22,7 +22,7 @@ function getInviteToUploadMessage(){
 	var path = "v1/message/"+receiver + MessageType.INVITETOUPLOAD + "/get";
 	var url = ServerRoot + ServiceType.NOTIFICATION + path;
 	var onAjaxSuccess = function(data, textStatus) {
-		drawConfirmPopUp("test data : " + messageLengthJson(data));
+//		drawConfirmPopUp("test data : " + messageLengthJson(data));
 		if (data == null){
 			//maybe need to modify the number of total message later
 		}else{
@@ -125,9 +125,10 @@ function updateNewMessageMenuList(numOfInviteToUploadMessage,data){
 			}
 		};
 		var onAjaxError = function(xhr, textStatus, error) {
+			drawConfirmPopUp("delete ajax error: " + error);			
 //			console.log("getFriends error: "+ error);
 		};
-		var ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+		var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 		ajax_call(ajax_obj);
 		
 	});
