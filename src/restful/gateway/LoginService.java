@@ -281,7 +281,7 @@ public class LoginService {
 
 	@GET
 	@Path("v1/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public User getUser(@PathParam("id") Integer id) {
 		this.user = this.userDAO.findById(id);
 		return this.user;
@@ -289,7 +289,7 @@ public class LoginService {
 		
 	@GET
 	@Path("v1/email/{email}/verify")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public String emailExist(@PathParam("email") String email) {
 		List email_list = this.userDAO.findByEmail(email);
 		String retValue = email_list.isEmpty()?"false":"true";
@@ -298,7 +298,7 @@ public class LoginService {
 	
 	@GET
 	@Path("v1/fullName/{fullName}/verify")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public List<User> findUserByFullName(@PathParam("fullName") String fullName) {
 		List<User> fullName_list = this.userDAO.findByFullName(fullName);
 		return fullName_list;
@@ -306,7 +306,7 @@ public class LoginService {
 	
 	@POST
 	@Path("v1/user/verify")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public List<User> userExist(
 			@FormParam("fullName") String fullName,			
 			@FormParam("school") String school,			
@@ -322,7 +322,7 @@ public class LoginService {
 	
 	@POST
 	@Path("v1/login")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public Object login(@FormParam("email") String email,@FormParam("password") String password) {
 		this.user.setEmail(email);
 		this.user.setIsActivated(true);
@@ -339,7 +339,7 @@ public class LoginService {
 		
 	@POST
 	@Path("v1/full/register")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public Object fullRegister(
 			@FormParam("fullName") String fullName,			
 			@FormParam("school") String school,			
@@ -372,7 +372,7 @@ public class LoginService {
 	
 	@POST
 	@Path("v1/quote/register")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public Object quoteRegister(
 			@FormParam("fullName") String fullName,			
 			@FormParam("school") String school,			
@@ -398,7 +398,7 @@ public class LoginService {
 	
 	@POST
 	@Path("v1/takeQuote/register")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public Object takeQuoteRegister(
 			@FormParam("user_id") Integer id,
 			@FormParam("email") String email,
@@ -429,7 +429,7 @@ public class LoginService {
 	
 	@PUT
 	@Path("v1/update")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=utf-8")
 	public Object updateUser(
 			@FormParam("user_id") Integer id,
 			@FormParam("fullName") String fullName,			

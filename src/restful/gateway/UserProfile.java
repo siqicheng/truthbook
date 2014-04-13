@@ -161,7 +161,7 @@ public class UserProfile {
 //	
 	@POST
 	@Path("v1/friends/add")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object addFriend(@FormParam("id") Integer id,@FormParam("friend_id") Integer friend_id,@FormParam("type") String type,@FormParam("is_invitee") Boolean is_invitee) {
 		
 		User user = this.userDAO.findById(id);		
@@ -196,7 +196,7 @@ public class UserProfile {
 	
 	@PUT
 	@Path("v1/friends/update")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object updateFriend(@FormParam("id") Integer id,@FormParam("friend_id") Integer friend_id,@FormParam("type") String type,@FormParam("is_invitee") Boolean is_invitee) {
 		
 		User user = this.userDAO.findById(id);
@@ -233,7 +233,7 @@ public class UserProfile {
 	// return 0,1,2 for the exist type of friends ,otherwise return -1
 	@GET
 	@Path("v1/friends/{id}/{friend_id}/check")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object checkFriends(@PathParam("id") Integer id,@PathParam("friend_id") Integer friend_id) {
 		
 		User user = this.userDAO.findById(id);
@@ -255,7 +255,7 @@ public class UserProfile {
 	
 	@GET
 	@Path("v1/friends/{id}/{friend_id}/delete")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object deleteFriend(@PathParam("id") Integer id,@PathParam("friend_id") Integer friend_id) {
 		
 		User user = this.userDAO.findById(id);
@@ -291,7 +291,7 @@ public class UserProfile {
 	
 	@GET
 	@Path("v1/friends/{id}/{type}")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public User[] getFriends(@PathParam("id") Integer id,@PathParam("type") String type) throws Exception {
 		
 		User user = this.userDAO.findById(id);

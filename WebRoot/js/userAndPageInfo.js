@@ -5,16 +5,21 @@
 
 
 function testFunction_Cookie(){
+	
+	
+	$("#user_name").html($.cookie("truthbook_PageOwner_userId").fullName);
+	$("#user_school").html($.cookie("truthbook_PageOwner_userId").school);
+	$("#user_entryTime").html($.cookie("truthbook_PageOwner_userId").entryTime+"级");
 	$("#testCookie1").html("Cookie test : OK!");
 	$("#testCookie").append("Email:\t"+$.cookie("truthbook").email);
-	$("#testCookie").append("<br>");
-	$("#testCookie").append("EntryTime:\t"+$.cookie("truthbook").entryTime);
-	$("#testCookie").append("<br>");
-	$("#testCookie").append("FullName:\t"+$.cookie("truthbook").fullName);
+//	$("#testCookie").append("<br>");
+//	$("#testCookie").append("EntryTime:\t"+$.cookie("truthbook").entryTime);
+//	$("#testCookie").append("<br>");
+//	$("#testCookie").append("FullName:\t"+$.cookie("truthbook").fullName);
 	$("#testCookie").append("<br>");
 	$("#testCookie").append("IsActivated:\t"+$.cookie("truthbook").isActivated);
-	$("#testCookie").append("<br>");
-	$("#testCookie").append("School:\t"+$.cookie("truthbook").school);
+//	$("#testCookie").append("<br>");
+//	$("#testCookie").append("School:\t"+$.cookie("truthbook").school);
 	$("#testCookie").append("<br>");
 	$("#testCookie").append("UserID:\t"+$.cookie("truthbook").userId);
 	$("#testCookie").append("<br>");

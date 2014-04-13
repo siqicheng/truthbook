@@ -33,7 +33,7 @@ public class MsgService {
 
 	@GET
 	@Path("v1/message/{id}/{srcid}/{type}/send")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object sendMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
 			@PathParam("type") String type) {
@@ -59,7 +59,7 @@ public class MsgService {
 
 	@GET
 	@Path("v1/message/{userid}/{type}/get")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id,
 			@PathParam("type") String type) {
 		
@@ -83,9 +83,10 @@ public class MsgService {
 				for (int i=0; i<message_list.size();i++){
 					messages[i] = (Message) message_list.get(i);
 				}
+				session.close();
 				return messages;
 			}
-			session.close();
+//			session.close();
 			return null;
 		}catch (Exception e){
 			e.printStackTrace();
@@ -96,7 +97,7 @@ public class MsgService {
 	
 	@GET
 	@Path("v1/message/{messageid}/read")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object readMessage(@PathParam("messageid") Integer id){
 		Session session = this.messageDAO.getSession();
 		try{
