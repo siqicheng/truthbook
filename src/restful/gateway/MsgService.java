@@ -53,7 +53,7 @@ public class MsgService {
 
 	@GET
 	@Path("v1/message/{id}/{srcid}/{type}/send")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object sendMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
 			@PathParam("type") String type) throws Exception {
@@ -61,6 +61,9 @@ public class MsgService {
 	//	if  (!MsgService.assertType(type)) {
 	//		return RestUtil.string2json("false");
 	//	}
+		if (id==srcid){
+			return RestUtil.string2json("false");
+		}
 		
 		Session session=this.messageDAO.getSession();
 		try{

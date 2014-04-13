@@ -21,7 +21,7 @@
 			com.mysql.jdbc.Driver
 		</property>
 		<property name="show_sql">true</property>
-		
+		<property name="hibernate.current_session_context_class">thread</property>
 		<mapping resource="db/mapping/object/User.hbm.xml" />
 		<mapping resource="db/mapping/object/UserPassword.hbm.xml" />
 		<mapping resource="db/mapping/object/Relationship.hbm.xml" />
