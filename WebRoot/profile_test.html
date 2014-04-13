@@ -35,21 +35,11 @@
 							<div class="ui dropdown item">
 								极·友<i class="dropdown icon"></i>
 								<div class="list menu eFriendsList upload_for_fri">
-									<div class="item">
-										<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
-											你现在还没有极·友哦
-										</div>
-									</div>
 								</div>
 							</div>
 							<div class="ui dropdown item">
 								真·友<i class="dropdown icon"></i>
 								<div class="list menu nFriendsList upload_for_fri">
-									<div class="item">
-										<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
-											你现在还没有真·友哦
-										</div>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -93,59 +83,61 @@
 	</div>
 
 	<div id="upload" class="white-popup  mfp-hide">
-
-		<div class="ui steps">
-			<div class="ui active step" id="step1" style="cursor:pointer;">选人</div>
-			<div class="ui disabled step" id="step2">选照片</div>
-			<div class="ui disabled step" id="step3">完成</div>
+		<h3 class="ui header">上传照片</h3>
+		
+		<div class="ui three small steps">
+			<div class="ui active step" id="step1" style="cursor: pointer;">选人</div>
+			<div class="ui disabled step" id="step2" style="cursor: default">选照片</div>
+			<div class="ui disabled step" id="step3" style="cursor: default">完成</div>
    		</div>
    			
    		<div class="ui divider"></div>
    			
-		<form class="ui form chooseppform" id="chooseppform" onSubmit="return validateUploadFormOne()">
+		<form class="ui form uploadForm" id="choosePeople" onSubmit="return validateUploadFormOne()">
 			<div class="field" id="fullNameTest">
             	<label>姓名</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="fullName" placeholder="姓名" name="fullName">
+                	<input type="text" id="fullName" placeholder="姓名" name="fullName" onchange="picReceiver = null">
                 	<i class="user icon"></i>
                 </div>
        		</div>
 			<div class="field" id="schoolTest">
 				<label>学校</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school">
+                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" onchange="picReceiver = null">
                   	<i class="book icon"></i>
                	</div>
       		</div>
 			<div class="field" id="entryTimeTest">
 				<label>入学年份</label>
            		<div class="ui left labeled icon input">
-  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime">
+  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" onchange="picReceiver = null">
 					<i class="align justify icon"></i>
         		</div>
      		</div>
             <div class="ui error message"></div>
-			<div class="ui divider"></div>
-			<div class="ui green button" id="nextstep1" >下一步</div>
-			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div>
+<!-- 			<div class="ui divider"></div> -->
+			<div class="ui black fluid button" id="nextstep1" >下一步</div>
+<!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
 		</form>
  				
- 			<div class="ui form" id="choosepicform" style="display:none">
+ 			<div class="ui form uploadForm" id="choosePic" style="display:none">
     			<div class="ui field">
     				<label>照片描述</label>
     				<textarea></textarea>
     			</div>
 
-				<div class="ui divider"></div>
+<!-- 				<div class="ui divider"></div> -->
 				
 				<img id="img_prev" src="" alt="your image" ><br>
-				<div class="addpicbuttons"><a href="javascript:;" class="addpic">
-				<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+				<a href="javascript:;" class="addpic">
+					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片
+				</a>
 				<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
-				<div class="ui green button nextstep" id="nextstep2"  >下一步</div> </div>
+				<div class="ui black fluid button" id="nextstep3"  >下一步</div>
  			</div>
  				
- 			<div class="ui form" id="confirmform" style="display:none">
+ 			<div class="ui form uploadForm" id="confirm" style="display:none">
 				<!-- 预览效果 -->
 				<div class="ui message" id="previewmessage"></div>
 				<div class="ui items">
@@ -161,28 +153,25 @@
 						</div>
 					</div>
 				</div>
-				<div class="ui divider"></div>
-				<div class="ui green button" id="submitBtn"  >确定上传</div>
+<!-- 				<div class="ui divider"></div> -->
+				<div class="ui black fluid button" id="submitBtn"  >确定上传</div>
  			</div>
  				
-			<div class="ui form" id="rechooseform" style="display:none"> <!-- 重名选人 -->
-				<div class="ui two column middle aligned relaxed grid basic segment">
+			<div class="ui form uploadForm" id="rechoosePeople" style="display:none"> <!-- 重名选人 -->
+				<div class="ui two column divided grid">
 					<div class="middle aligned column">
-						<div class="ui attached message" id="rechoosemessage"></div>
+						<div class="ui attached message" id="rechooseMessage"></div>
 						<div class="ui selection list" id="rechooselist"></div>
-						<div class="ui red bottom attached message segment"  id="rechooseerror" style="display:none">请选择要发给的对象</div>
+						<div class="ui red bottom attached message segment"  id="rechooseError" style="display:none">请选择要发给的对象</div>
 					</div>
-					<div class="ui vertical divider">
-						
-					</div>
-					<div class="center aligned column">
+					<div class="middle aligned column">
 					    <div>
 					    	<img class="ui medium image" src="img\profile_test\247144.jpg">
 				    	</div>
 				    </div>
 				</div>
 				<div class="ui divider"></div>
-					<div class="ui green button" id="nextstep3" >下一步</div>
+				<div class="ui black fluid button" id="nextstep2" >下一步</div>
 			</div>
 	</div>
 
@@ -250,12 +239,7 @@
 					<div class="ui dropdown fluid item" >
 						<i class="star small icon"></i> 极·友
 						<div class="ui small label" id="eFriends_num">0</div>
-						<div class="ui list menu eFriendsList" id="eFriendsList">	
-							<div class="item">
-								<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
-									你现在还没有极·友哦
-								</div>
-							</div>
+						<div class="ui list menu eFriendsList goto_fri_page" id="eFriendsList">	
      					</div>
    					</div>
 				</div>
@@ -265,12 +249,7 @@
 					<div class="ui dropdown fluid item">
 						<i class="half empty star small icon"></i> 真·友
 						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
-						<div class="list menu nFriendsList" id="nFriendsList">
-							<div class="item">
-								<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
-									你现在还没有真·友哦
-								</div>
-							</div>
+						<div class="list menu nFriendsList goto_fri_page" id="nFriendsList">
    						</div>
    					</div>
 				</div>
@@ -422,7 +401,7 @@
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/uploadPic.js"></script>
-	<script src="./js/friends.js"></script>
+	<script src="./js/refreshFriendsLists.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	
@@ -462,8 +441,8 @@
 			type:"inline",
 			midClick: true,
 			callbacks: {
-				beforeOpen: function() {
-// 					resetUpload();
+				afterClose: function() {
+					resetUpload();
 // 					selected_num=-1;
 				}
 			}

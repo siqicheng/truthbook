@@ -165,6 +165,17 @@ $('.ui.form.register-form')
 							checkInviterName(choosenQuote.userId, $("#checkinput").val());
 						}
 					});
+					$("#rechooseform").submit(function() {
+						if(selected_num == -1) {
+							$("#rechooseerror").show();
+						} else if(selected_num == -2) {
+							register_new($('.ui.form.register-form').serialize());
+						} else {
+							var choosenQuote = uploadCandidates[selected_num];
+							checkInviterName(choosenQuote.userId, $("#checkinput").val());
+						}
+						return false;
+					});
 					$("#rechooseform").modal("show");
 				} else {
 					console.log("no quote found");
