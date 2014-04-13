@@ -299,7 +299,16 @@ function deleteMessageButtonOnclick(messageId,messageTypeNumber,thisItem){
 function deleteMessageTrasition(messageTypeNumber,thisItem){
 	deleteMessageNumUpdate(-1);
 	deleteHeadMessageNumUpdate(thisItem);
-	thisItem.transition('horizontal flip out');
+//	thisItem.transition('horizontal flip out');
+	thisItem.transition({
+		animation : 'horizontal flip out', 
+		duration  : '0.3s',
+		complete  : function() {
+			thisItem.hide();
+	}
+	});
+	
+//	thisItem.hide();
 }
 
 function deleteHeadMessageNumUpdate(thisItem){
