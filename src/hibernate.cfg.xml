@@ -8,10 +8,10 @@
 
 	<session-factory>
 		<property name="hbm2ddl.auto">update</property>
-		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="connection.url">
-			jdbc:mysql://localhost:3306/truthbook
+		<property name="dialect">
+			org.hibernate.dialect.MySQLDialect
 		</property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/truthbook?useUnicode=true&amp;characterEncoding=utf8</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">passw0rd</property>
 		<property name="connection.driver_class">
@@ -24,7 +24,8 @@
 		<mapping resource="db/mapping/object/User.hbm.xml" />
 		<mapping resource="db/mapping/object/UserPassword.hbm.xml" />
 		<mapping resource="db/mapping/object/Relationship.hbm.xml" />
-
+		<mapping resource="db/mapping/object/Message.hbm.xml" />
+		<mapping resource="db/mapping/object/ReadMessage.hbm.xml" />
 	</session-factory>
 
 

@@ -1,9 +1,7 @@
 $(function() {
 	tmp=$.cookie("truthbook");
 
-	friendsId = new Object();
-	friendsId.eFriends = new Array();
-	friendsId.nFriends = new Array();
+
 	freshFriendsLists(tmp.userId);
 });
 //	getFriends(tmp.userId,1);
@@ -23,6 +21,7 @@ $(function() {
 				};
 				freshLists("nFriends");
 //				console.log("id="+id);
+				addclickfunction("nFriend");
 				getFriends(id,2);
 			} else {
 				for(var i=0;i<num;i++){
@@ -33,7 +32,7 @@ $(function() {
 					};
 				};
 				freshLists("eFriends");
-				addclickfunction();
+				addclickfunction("eFriend");
 				addFriendButtonCheck();
 			}
 		};
@@ -62,17 +61,30 @@ $(function() {
 		}
 	}
 		
-	function addclickfunction() {
-		var html = "<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
+	function addclickfunction(friendType) {
+		var degrade = "";
+		var menuType = "";
+		if(friendType == "nFriend"){
+			degrade = "trash";
+			menuType = "nFriendsList";
+		} else {
+			degrade = "level down";
+			menuType = "eFriendsList";
+		}
+	
+		var html = "<div class=\"right floated\" style=\"padding-top:5px;width:100px;margin:0;display:none;\">" +
+		"<a class=\"invite_upload_btn\"><i class=\"screenshot large icon\"></i></a>" +
 		"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
-		"<a href=\"./test.html\"><i class=\"ban circle large icon\"></i></a>" +
+		"<a class=\"degrade_fri_btn\"><i class=\"" + degrade + " large icon\"></i></a>" +
 		"</div>";
-		$(".list.menu.needicon .item").prepend(html);
+		
+		$(".list.menu." + menuType + ".needicon .item").prepend(html);
 		$(".list.menu.needicon .item").hover(function(){
 			$(this).children(".right.floated").fadeIn(50);},
 			function(){
 			$(this).children(".right.floated").fadeOut(50);}
 		);
+		
 		$(".eFriendsList.upload_for_fri .item").click(function() {
 			var towhom = friendsId.eFriends[$(this).index()];
 			upload_choosepic(towhom);
@@ -83,6 +95,16 @@ $(function() {
 			upload_choosepic(towhom);
 		});
 		
+		$(".eFriendsList .invite_upload_btn").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+			confirmInviteFriendUploadPopUp(towhom);
+		});
+		
+		$(".nFriendsList .invite_upload_btn").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+			confirmInviteFriendUploadPopUp(towhom);
+		});
+		
 		$(".eFriendsList .upload_for_fri_btn").click(function() {
 			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
 			upload_choosepic(towhom);
@@ -91,6 +113,16 @@ $(function() {
 		$(".nFriendsList .upload_for_fri_btn").click(function() {
 			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
 			upload_choosepic(towhom);
+		});
+
+		$(".eFriendsList .degrade_fri_btn").click(function() {
+			var towhom = friendsId.eFriends[$(this).parent().parent().index()];
+			confirmDegradeFriendPopUp(towhom);
+		});
+		
+		$(".nFriendsList .degrade_fri_btn").click(function() {
+			var towhom = friendsId.nFriends[$(this).parent().parent().index()];
+			confirmDeleteFriendPopUp(towhom);
 		});
 		
 		$(".eFriendsList.needicon .frienditem").click(function() {
@@ -106,12 +138,16 @@ $(function() {
 	
 	function freshFriendsLists(id) {
 //		cleanFriendsCookie();
+		friendsId = new Object();
+		friendsId.eFriends = new Array();
+		friendsId.nFriends = new Array();
 		getFriends(id,1);
 	}
 //});
 
 
 function upload_choosepic(people) {
+<<<<<<< HEAD
 	picReceiver = people;
 	$("#fullName").attr("value",people["fullName"]);
 	$("#school").attr("value",people["school"]);
@@ -121,4 +157,21 @@ function upload_choosepic(people) {
 	$("#entryTime").attr("disabled", "disabled");
 	gotoChoosePic();
 	showSidebar();
+=======
+	toId = people["userId"];
+	console.log(toId);
+	selected_bool = true;
+	showSidebar();
+	$("#fullName").attr("value",people["fullName"]);
+	$("#school").attr("value",people["school"]);
+	$("#entryTime").attr("value",people["entryTime"]);
+	$("#chooseppform").hide();
+	$("#rechooseform").hide();
+	$("#confirmform").hide();
+	$("#choosepicform").show();
+	$("#step1").attr("class","ui step");
+	$("#step2").attr("class","ui active step");
+	$("#step3").attr("class","ui disabled step");
+//	showSidebar();
+>>>>>>> siqicheng
 }
