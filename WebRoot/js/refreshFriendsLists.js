@@ -18,7 +18,17 @@ function refreshTopbarFriendsLists(id) {
 			if(num == 1) {
 				userFriendsLists.nFriends[i] = data.user;
 			} else {
-				userFriendsLists.nFriends[i] = data.user[i];
+				if(data.user[i]["isActivated"] == "true") {
+					for(var j=i-1; j>=0; j--){
+						if(userFriendsLists.nFriends[j]["isActivated"] == "true"){
+							break;
+						};
+					};
+					userFriendsLists.nFriends[i] = userFriendsLists.nFriends[j+1];
+					userFriendsLists.nFriends[j+1] = data.user[i];
+				} else {
+					userFriendsLists.nFriends[i] = data.user[i];
+				};
 			};
 		};
 		console.log("Get nFriends List success");
@@ -64,9 +74,14 @@ function refreshTopbarLists(id) {
 	if(num > 0) {
 		html = "";
 		for(var i=0; i<num; i++) {
+			if(userFriendsLists.nFriends[i]["isActivated"] == "false") {
+				img = QuoteImg;
+			} else {
+				img = DefaultImg;
+			};
 			html= html + "<div class=\"item \">"+
 				"<img class=\"ui avatar image\" src=\""
-				+ DefaultImg+ "\">" + 
+				+ img+ "\">" + 
 					"<div class=\"content frienditem\">" +
 					userFriendsLists.nFriends[i]["fullName"] +
 					"</div></div>";
@@ -127,7 +142,17 @@ function refreshMenubarFriendsLists(id) {
 			if(num == 1) {
 				pageownerFriendsLists.nFriends[i] = data.user;
 			} else {
-				pageownerFriendsLists.nFriends[i] = data.user[i];
+				if(data.user[i]["isActivated"] == "true") {
+					for(var j=i-1; j>=0; j--){
+						if(pageownerFriendsLists.nFriends[j]["isActivated"] == "true"){
+							break;
+						};
+					};
+					pageownerFriendsLists.nFriends[i] = pageownerFriendsLists.nFriends[j+1];
+					pageownerFriendsLists.nFriends[j+1] = data.user[i];
+				} else {
+					pageownerFriendsLists.nFriends[i] = data.user[i];
+				};
 			};
 		};
 		console.log("Get nFriends List success");
@@ -173,10 +198,16 @@ function refreshMenubarLists(id) {
 					"</div>";
 	if(num > 0) {
 		html = "";
+		var img;
 		for(var i=0; i<num; i++) {
-			html= html + "<div class=\"item \">"+
+			if(pageownerFriendsLists.nFriends[i]["isActivated"] == "false") {
+				img = QuoteImg;
+			} else {
+				img = DefaultImg;
+			};
+			html= html + "<div class=\"ui item\">"+
 				"<img class=\"ui avatar image\" src=\""
-				+ DefaultImg+ "\">" + 
+				+ img + "\">" + 
 					"<div class=\"content frienditem\">" +
 					pageownerFriendsLists.nFriends[i]["fullName"] +
 					"</div></div>";
