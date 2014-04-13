@@ -81,7 +81,8 @@
 	</div>
 
 	<div id="upload" class="white-popup  mfp-hide">
-
+		<h3 class="ui header">上传照片</h3>
+		
 		<div class="ui three small steps">
 			<div class="ui active step" id="step1" style="cursor:pointer;">选人</div>
 			<div class="ui disabled step" id="step2">选照片</div>
@@ -113,9 +114,9 @@
         		</div>
      		</div>
             <div class="ui error message"></div>
-			<div class="ui divider"></div>
-			<div class="ui green button" id="nextstep1" >下一步</div>
-			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div>
+<!-- 			<div class="ui divider"></div> -->
+			<div class="ui black fluid button" id="nextstep1" >下一步</div>
+<!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
 		</form>
  				
  			<div class="ui form uploadForm" id="choosePic" style="display:none">
@@ -124,13 +125,14 @@
     				<textarea></textarea>
     			</div>
 
-				<div class="ui divider"></div>
+<!-- 				<div class="ui divider"></div> -->
 				
 				<img id="img_prev" src="" alt="your image" ><br>
-				<div class="addpicbuttons"><a href="javascript:;" class="addpic">
-				<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片</a>
+				<a href="javascript:;" class="addpic">
+					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片
+				</a>
 				<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
-				<div class="ui green button nextstep" id="nextstep3"  >下一步</div> </div>
+				<div class="ui black fluid button" id="nextstep3"  >下一步</div>
  			</div>
  				
  			<div class="ui form uploadForm" id="confirm" style="display:none">
@@ -149,8 +151,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="ui divider"></div>
-				<div class="ui green button" id="submitBtn"  >确定上传</div>
+<!-- 				<div class="ui divider"></div> -->
+				<div class="ui black fluid button" id="submitBtn"  >确定上传</div>
  			</div>
  				
 			<div class="ui form uploadForm" id="rechoosePeople" style="display:none"> <!-- 重名选人 -->
@@ -169,8 +171,8 @@
 				    	</div>
 				    </div>
 				</div>
-				<div class="ui divider"></div>
-					<div class="ui green button" id="nextstep2" >下一步</div>
+<!-- 				<div class="ui divider"></div> -->
+				<div class="ui black fluid button" id="nextstep2" >下一步</div>
 			</div>
 	</div>
 
@@ -237,11 +239,6 @@
 						<i class="star small icon"></i> 极·友
 						<div class="ui small label" id="eFriends_num">0</div>
 						<div class="ui list menu eFriendsList goto_fri_page" id="eFriendsList">	
-							<div class="item">
-								<div class="content">
-									你现在还没有极·友哦
-								</div>
-							</div>
      					</div>
    					</div>
 				</div>
@@ -252,11 +249,6 @@
 						<i class="half empty star small icon"></i> 真·友
 						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
 						<div class="list menu nFriendsList goto_fri_page" id="nFriendsList">
-							<div class="item">
-								<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
-									你现在还没有真·友哦
-								</div>
-							</div>
    						</div>
    					</div>
 				</div>
@@ -400,8 +392,8 @@
 			type:"inline",
 			midClick: true,
 			callbacks: {
-				beforeOpen: function() {
-// 					resetUpload();
+				afterClose: function() {
+					resetUpload();
 // 					selected_num=-1;
 				}
 			}

@@ -181,6 +181,12 @@ function refreshMenubarLists(id) {
 					pageownerFriendsLists.nFriends[i]["fullName"] +
 					"</div></div>";
 		};
+	} else if(id != $.cookie("truthbook").userId) {
+		html = "<div class=\"item\">" +
+			"<div class=\"content\">" +
+			"	他现在还没有真·友哦 " +
+			"</div>" +
+			"</div>";
 	};
 	$(pre + ".nFriendsList").html(html);
 
@@ -202,7 +208,13 @@ function refreshMenubarLists(id) {
 					pageownerFriendsLists.eFriends[i]["fullName"] +
 					"</div></div>";
 		}
-	}
+	} else if(id != $.cookie("truthbook").userId) {
+			html = "<div class=\"item\">" +
+			"<div class=\"content\">" +
+			"	他现在还没有极·友哦 " +
+			"</div>" +
+			"</div>";
+	};
 	$(pre + ".eFriendsList").html(html);
 
 	if(id == $.cookie("truthbook").userId) {
