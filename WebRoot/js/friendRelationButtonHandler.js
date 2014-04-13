@@ -159,7 +159,8 @@ function degradeFriendByTmpButton(towhom){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
 			drawConfirmPopUp("成功把 "+towhom["fullName"] +" 降级为真·友");
-			freshFriendsLists($.cookie("truthbook").userId);
+			refreshTopbarFriendsLists($.cookie("truthbook").userId);
+			refreshMenubarFriendsLists($.cookie("truthbook").userId);
 			return true;
 		}
 		else{
@@ -193,6 +194,8 @@ function deleteFriendByTmpButton(towhom){
 			showAddFriendButton();
 // 			alert("delete friends success!");
 			drawConfirmPopUp("成功删除好友");
+			refreshTopbarFriendsLists($.cookie("truthbook").userId);
+			refreshMenubarFriendsLists($.cookie("truthbook").userId);
 			return true;
 		}
 		else{
@@ -224,6 +227,8 @@ function addFriendByTmpButton(){
 			showAddPhotoButton();
 // 			alert("add friends success!");
 			drawConfirmPopUp("成功加为好友");
+			refreshTopbarFriendsLists($.cookie("truthbook").userId);
+			refreshMenubarFriendsLists($.cookie("truthbook").userId);
 			return true;
 		}
 		else{
@@ -244,13 +249,13 @@ function addFriendByTmpButton(){
  *
  */
 function getRelationship(friendId) {
-	for(friend in friendsId.eFriends) {
-		if(friendId == friendsId.eFriends[friend]["userId"]) {
+	for(friend in userFriendsLists.eFriends) {
+		if(friendId == userFriendsLists.eFriends[friend]["userId"]) {
 			return 2;
 		}
 	}
-	for(friend in friendsId.nFriends) {
-		if(friendId == friendsId.nFriends[friend]["userId"]) {
+	for(friend in userFriendsLists.nFriends) {
+		if(friendId == userFriendsLists.nFriends[friend]["userId"]) {
 			return 1;
 		}
 	}
