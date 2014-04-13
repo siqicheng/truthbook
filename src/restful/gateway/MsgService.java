@@ -85,6 +85,7 @@ public class MsgService {
 				}
 				return messages;
 			}
+			session.close();
 			return null;
 		}catch (Exception e){
 			e.printStackTrace();
