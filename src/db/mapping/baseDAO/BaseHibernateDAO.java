@@ -44,6 +44,7 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 				queryObject.setParameter(i, value[i]);
 			}
 			
+			
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			throw re;

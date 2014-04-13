@@ -1,6 +1,7 @@
 package restful.gateway;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import javax.ws.rs.PUT;
 import javax.ws.rs.Produces;
@@ -73,6 +74,7 @@ public class MsgService {
 			Transaction tx=session.beginTransaction();
 			session.save(newinstance);
 			tx.commit();
+			session.close();
 			return RestUtil.string2json("true");
 			
 		}catch (Exception e){
@@ -96,7 +98,6 @@ public class MsgService {
 		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
 		Object value[] = {id,type};	
 		
-		Session session=this.messageDAO.getSession();
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
 			
@@ -127,8 +128,6 @@ public class MsgService {
 	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
-		
-		Session session=this.messageDAO.getSession();
 		try{
 			List Messages=this.messageDAO.findByUserId(id);
 			
@@ -167,8 +166,8 @@ public class MsgService {
 			Transaction tx = session.beginTransaction();
 			session.delete(message);
 			session.save(readmsg);
-			
 			tx.commit();
+			session.close();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
