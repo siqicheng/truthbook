@@ -236,6 +236,18 @@ $(function() {
 	}
 });
 
+function upload_choosepic(people) {
+	picReceiver = people;
+	$("#fullName").attr("value",people["fullName"]);
+	$("#school").attr("value",people["school"]);
+	$("#entryTime").attr("value",people["entryTime"]);
+	$("#fullName").attr("disabled", "disabled");
+	$("#school").attr("disabled", "disabled");
+	$("#entryTime").attr("disabled", "disabled");
+	gotoChoosePic();
+	showSidebar();
+}
+
 	/*Help functions*/
 function resetUpload() {
 	picReceiver = null;

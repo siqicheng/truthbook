@@ -157,6 +157,8 @@ function getRelationship(friendId) {
 	return 0;
 }
 
+/*Api helper functions*/
+
 function addFriendAPI(id, friend_id, type, is_invitee,  onSuccess, onError) {
 	var path = "v1/friends/add",
 		url = ServerRoot + ServiceType.USERPROFILE + path,
@@ -195,5 +197,12 @@ function verifyUserExists(data, onSuccess, onError) {
 		url = ServerRoot + ServiceType.LOGIN +path,
 		ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
 	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function getFriends(id, type, onSuccess, onError) {
+	var path = "v1/friends/" + id + "/" + type,
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
 	ajax_call(ajax_obj);
 }

@@ -33,21 +33,11 @@
 							<div class="ui dropdown item">
 								极·友<i class="dropdown icon"></i>
 								<div class="list menu eFriendsList upload_for_fri">
-									<div class="item">
-										<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
-											你现在还没有极·友哦
-										</div>
-									</div>
 								</div>
 							</div>
 							<div class="ui dropdown item">
 								真·友<i class="dropdown icon"></i>
 								<div class="list menu nFriendsList upload_for_fri">
-									<div class="item">
-										<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
-											你现在还没有真·友哦
-										</div>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -246,9 +236,9 @@
 					<div class="ui dropdown fluid item" >
 						<i class="star small icon"></i> 极·友
 						<div class="ui small label" id="eFriends_num">0</div>
-						<div class="ui list menu eFriendsList" id="eFriendsList">	
+						<div class="ui list menu eFriendsList goto_fri_page" id="eFriendsList">	
 							<div class="item">
-								<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
+								<div class="content">
 									你现在还没有极·友哦
 								</div>
 							</div>
@@ -261,7 +251,7 @@
 					<div class="ui dropdown fluid item">
 						<i class="half empty star small icon"></i> 真·友
 						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
-						<div class="list menu nFriendsList" id="nFriendsList">
+						<div class="list menu nFriendsList goto_fri_page" id="nFriendsList">
 							<div class="item">
 								<div class="content" style="padding-top: 7px;font-size:16px;width:120px">
 									你现在还没有真·友哦
@@ -372,7 +362,7 @@
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/uploadPic.js"></script>
-	<script src="./js/friends.js"></script>
+	<script src="./js/refreshFriendsLists.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	<script src="./js/eventsegment_layout.js"></script>
