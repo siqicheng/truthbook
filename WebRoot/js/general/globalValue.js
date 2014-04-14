@@ -27,12 +27,13 @@ MessageType = {
 		   typeButtonTwoName : "later_fri_btn",
 		   typeHeadMenuName : "条好友请求"
 	   },
-//	   ADDFRIEND :{
-//		   typeName : "friendRequest",
-//		   typeButtonOneName : "add_fri_btn",
-//		   typeButtonTwoName : "later_fri_btn",
-//		   typeHeadMenuName : "条好友请求"
-//	   },
+	   ACCEPTFRIEND :{
+		   number : "2",
+		   typeName : "acceptFriendRequest",
+		   typeButtonOneName : "no_btn",
+		   typeButtonTwoName : "delete_message_btn",
+		   typeHeadMenuName : "位好友接受好友请求"
+	   },
 //	   ADDFRIEND :{
 //		   typeName : "friendRequest",
 //		   typeButtonOneName : "add_fri_btn",

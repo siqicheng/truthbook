@@ -168,6 +168,13 @@ function addFriendAPI(id, friend_id, type, is_invitee,  onSuccess, onError) {
 	ajax_call(ajax_obj);
 }
 
+function deleteFriendAPI(userId, friendId,onAjaxSuccess,onAjaxError){
+	var path = "v1/friends/" + userId + "/" + friendId +"/delete",
+		url=ServerRoot+ServiceType.USERPROFILE+path,
+		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);	
+}
+
 function updateFriendRelationship(id, friend_id, type, is_invitee, onSuccess, onError) {
 	var path = "v1/friends/update",
 		url = ServerRoot + ServiceType.USERPROFILE + path,
@@ -186,8 +193,8 @@ function checkFriendRelationship(id, friend_id, onSuccess, onError) {
 
 function registerNewQuote(data, onSuccess, onError) {
 	var path = "v1/quote/register",
-	url = ServerRoot + ServiceType.LOGIN +path,
-	ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
+		url = ServerRoot + ServiceType.LOGIN +path,
+		ajax_obj = getAjaxObj(url, "POST", "json", onSuccess, onError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
@@ -206,3 +213,40 @@ function getFriends(id, type, onSuccess, onError) {
 		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
 	ajax_call(ajax_obj);
 }
+
+function getUserAPI(id, onSuccess, onError) {
+	var path = "v1/" + id,
+		url = ServerRoot + ServiceType.LOGIN + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_call(ajax_obj);
+}
+/*
+ * Message API
+ */
+function getMessageAPI(receiver,messageTypeName,onAjaxSuccess, onAjaxError){
+	var path = "v1/message/" + receiver + "/" + messageTypeName + "/get",
+		url = ServerRoot + ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);	
+}
+
+function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjaxError){
+	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName + "/send",
+		url=ServerRoot+ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -9,7 +9,8 @@
 
 function handleAddFriendButtonClick(){
 	$( "#addFriendButton" ).click(function() {
-		addFriendByTmpButton();
+//		addFriendByTmpButton();
+		friendRequestSend($.cookie("truthbook_PageOwner_userId"));
 	});
 	$( "#disabeFriendButton" ).click(function() {
 		confirmDeleteFriendPopUp($.cookie("truthbook_PageOwner_userId"));
@@ -24,6 +25,12 @@ function handleAddFriendButtonClick(){
 	});	
 }
 
+function buttonController_AF_AP_DF_AFW(addFriend,addPhoto,disableFriend,addFriendWaiting){
+	if (addFriend == 1)			{	showAddFriendButton();} else { hideAddFriendButton();}
+	if (addPhoto == 1)			{	showAddPhotoButton();} else { hideAddPhotoButton();}
+	if (disableFriend == 1)		{	showDisableFriendButton();} else { hideDisableFriendButton();}
+	if (addFriendWaiting == 1)	{	showFriendWaitingButton();} else { hideFriendWaitingButton();}
+}
 
 /*	Check friend relations and show the related buttons accordingly.
  *
@@ -32,39 +39,79 @@ function addFriendButtonCheck(){
 	var userId = $.cookie("truthbook").userId;
 	var pageOwnerId = $.cookie("truthbook_PageOwner_userId").userId;
 	var pageOwnerisActivated = $.cookie("truthbook_PageOwner_userId").isActivated;
-	if( pageOwnerisActivated == "false"){
-		
-		$("#addFriendButton").removeClass(" visible");
-		$("#addFriendButton").addClass(" hidden");
-		$("#disabeFriendButton").removeClass(" visible");
-		$("#disabeFriendButton").addClass(" hidden");
-		$("#uploadPhoto").removeClass(" hidden");
-		$("#uploadPhoto").addClass(" visible");
-		
-		addFriendTransition("#uploadPhoto");
+	if( pageOwnerisActivated == "false"){		//If owner is quote
+		buttonController_AF_AP_DF_AFW(0,1,0,0);
 		handleAddFriendButtonClick();
 		return;
 	}
 	if ( pageOwnerId == undefined || pageOwnerId == null || userId == pageOwnerId ){
-		hideAddFriendButton();
-		hideAddPhotoButton();
+		//Homepage or wrong page
+		buttonController_AF_AP_DF_AFW(0,0,0,0);
 		return;
 	}
-	isFriend(pageOwnerId);
-//	if (getRelationship(pageOwnerId)>0){
-//		hideAddFriendButton();
-//		showAddPhotoButton();
-//		handleAddFriendButtonClick();
-//		return;
-//	} else {
-//		hideAddPhotoButton();
-//		showAddFriendButton();
-//		handleAddFriendButtonClick();
-//		return;
-//	}
+	isFriendCheck(pageOwnerId);
 }
 
-/*	Four help function to show and hide buttons.
+/*	This function use winkar modified friend relation check API
+*
+*/
+function isFriendCheck(friendId){		
+	var onAjaxSuccess = function(data,textStatus){
+		if (data > 0 ){
+			buttonController_AF_AP_DF_AFW(0,1,1,0);
+			handleAddFriendButtonClick();
+			return true;
+		}
+		else{//not friend
+			isSentFriendRequestMessage(friendId,$.cookie("truthbook").userId);
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		return false;
+	};
+	
+	checkFriendRelationship($.cookie("truthbook").userId, friendId, onAjaxSuccess, onAjaxError)
+}
+
+function isSentFriendRequestMessage(friendId,ownId){
+	var onAjaxSuccess = function(data,textStatus){
+		if (data != null ){
+			var numMessage = messageLengthJson(data);
+			var hasSent = 0;
+			if (numMessage == 1){
+				if (ownId == data.message.friend.userId){
+					hasSent = 1;
+				}
+			} else {
+				for (var i = 0;i<numMessage;i++){
+					if (ownId == data.message[i].friend.userId){
+						hasSent = 1;
+						break;
+					} 
+				}	
+			}
+			if (hasSent ==1 ){
+				buttonController_AF_AP_DF_AFW(0,0,0,1);
+			} else {
+				buttonController_AF_AP_DF_AFW(1,0,0,0);
+			}
+		} else if (data == null) {
+			buttonController_AF_AP_DF_AFW(1,0,0,0);
+		}
+		handleAddFriendButtonClick();
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("拿不到消息 Error: " + error);
+		return false;
+	};	
+	getMessageAPI(friendId,MessageType.ADDFRIEND.typeName,onAjaxSuccess, onAjaxError);
+}
+
+
+
+/*	Six help function to show and hide buttons.
+ *  Stay like this in case we have different transition for different buttons.
  *
  */
 
@@ -74,30 +121,44 @@ function showAddFriendButton(){
 	addFriendTransition("#addFriendButton");
 }
 
+function showDisableFriendButton(){
+	$("#disabeFriendButton").removeClass(" hidden");
+	$("#disabeFriendButton").addClass(" visible");
+	addFriendTransition("#disabeFriendButton");
+}
+
 function showAddPhotoButton(){
 	$("#uploadPhoto").removeClass(" hidden");
-	$("#disabeFriendButton").removeClass(" hidden");
 	$("#uploadPhoto").addClass(" visible");
-	$("#disabeFriendButton").addClass(" visible");
 	addFriendTransition("#uploadPhoto");
-	addFriendTransition("#disabeFriendButton");
+}
+
+function showFriendWaitingButton(){
+	$("#addFriendWaitingButton").removeClass(" hidden");
+	$("#addFriendWaitingButton").addClass(" visible");
+	addFriendTransition("#addFriendWaitingButton");
 }
 
 function hideAddFriendButton(){
 	$("#addFriendButton").removeClass(" visible ");
 	$("#addFriendButton").addClass(" hidden");
-
 }
 	
 function hideAddPhotoButton(){
-	
 	$("#uploadPhoto").removeClass(" visible ");
 	$("#uploadPhoto").addClass(" hidden ");
+}
+
+function hideDisableFriendButton(){
 	$("#disabeFriendButton").removeClass(" visible ");
 	$("#disabeFriendButton").addClass(" hidden ");
-
-
 }
+
+function hideFriendWaitingButton(){
+	$("#addFriendWaitingButton").removeClass(" visible ");
+	$("#addFriendWaitingButton").addClass(" hidden ");
+}
+
 /*	Button change transition.
  *	
  */
@@ -166,10 +227,7 @@ function confirmDegradeFriendPopUp(towhom){
 
 
 function degradeFriendByTmpButton(towhom){
-	var path = "v1/friends/update";
 	//There is a problem here that degrade a friend can delete their invitation relation.
-	var data = "id=" + $.cookie("truthbook").userId  + "&friend_id=" + towhom["userId"] + "&type=" + "1" + "&is_invitee=" + "0" + "\"";
-	var url=ServerRoot+ServiceType.USERPROFILE+path;	
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
 			refreshTopbarFriendsLists($.cookie("truthbook").userId);
@@ -178,17 +236,16 @@ function degradeFriendByTmpButton(towhom){
 			return true;
 		}
 		else{
-			alert("failed to degrade friend!");
+			drawConfirmPopUp("降级失败");
 			return true;
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("降级请求发送失败Error: "+error);
 		return false;
 	};
-	var ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
-	ajax_obj.data = data;
-	ajax_call(ajax_obj);
 	
+	updateFriendRelationship($.cookie("truthbook").userId, towhom["userId"], "1", "0", onAjaxSuccess, onAjaxError)
 }
 
 /*	This function need to be modified!!!
@@ -196,125 +253,105 @@ function degradeFriendByTmpButton(towhom){
  *
  */
 
-function deleteFriendByTmpButton(towhom){
-	var path = "v1/friends/";
-	var userId = $.cookie("truthbook").userId + "/";
-	var friendId = towhom["userId"];//
-	var action = "/delete";
-	var url=ServerRoot+ServiceType.USERPROFILE+path+userId+friendId+action;			
+function deleteFriendByTmpButton(towhom){		
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
-			hideAddPhotoButton();
-			if( $.cookie("truthbook").userId!= $.cookie("truthbook_PageOwner_userId").userId){
-				showAddFriendButton();
+			if( towhom["userId"] == $.cookie("truthbook_PageOwner_userId").userId){
+				buttonController_AF_AP_DF_AFW(1,0,0,0);
+			} else {
+//				buttonController_AF_AP_DF_AFW(0,0,0,0);
 			}
 			refreshTopbarFriendsLists($.cookie("truthbook").userId);
 			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
-// 			alert("delete friends success!");
 			drawConfirmPopUp("成功删除好友");
 			return true;
 		}
 		else{
-			alert("failed to delete friend!");
+			drawConfirmPopUp("删除好友失败");
 			return true;
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("删除好友请求发送失败 Error : " + error);
 		return false;
 	};
-	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
-	ajax_obj.cache = "false";
-	ajax_call(ajax_obj);
 
+	deleteFriendAPI($.cookie("truthbook").userId, towhom["userId"]);
+	deleteFriendAPI(towhom["userId"], $.cookie("truthbook").userId,onAjaxSuccess,onAjaxError);
 }
 
-/*	This function need to be modified!!!
- *  Now, only valid for add by OwnersPage add button. 
- *
- */
-
-function addFriendByTmpButton(){
-	var path = "v1/friends/add";
-	var url=ServerRoot+ServiceType.USERPROFILE+path;			
-	data = "id=" + $.cookie("truthbook").userId  + "&friend_id=" + $.cookie("truthbook_PageOwner_userId").userId + "&type=1&is_invitee=0";
+function friendRequestSend(towhom){	
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
-			hideAddFriendButton();
-			showAddPhotoButton();
-// 			alert("add friends success!");
-			drawConfirmPopUp("成功加为好友");
+			if( towhom["userId"] == $.cookie("truthbook_PageOwner_userId").userId){
+				buttonController_AF_AP_DF_AFW(0,0,0,1);
+			} else {
+//				buttonController_AF_AP_DF_AFW(0,0,0,0);
+			}
+			drawConfirmPopUp("好友请求已发出<br>幸运儿 : " + towhom["fullName"]);
 			return true;
 		}
 		else{
-			alert("failed to add friend!");
+			drawConfirmPopUp("好友诏书发送失败<br>倒霉蛋 : " + towhom["fullName"]);
 			return true;
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("好友请求发送失败 Error："+error);
 		return false;
 	};
-	var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
-	ajax_obj.data = data;
-	ajax_call(ajax_obj);
+	
+	sendMessageAPI(towhom["userId"], $.cookie("truthbook").userId, MessageType.ADDFRIEND.typeName, onAjaxSuccess, onAjaxError);
+}
+
+function friendRequestAccept(id){
+	var onAjaxSuccess = function(data,textStatus){
+		sendFriendAcceptMessage(data);
+	}
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("获取用户数据失败 Error："+error);
+		return false;
+	};
+	
+	getUserAPI(id, onAjaxSuccess, onAjaxError);
+}
+
+function sendFriendAcceptMessage(towhom){		
+	var onAjaxSuccess = function(data,textStatus){
+		if (data == true ){
+			return true;
+		} else {
+			drawConfirmPopUp("接受回执发送失败<br>倒霉蛋 : " + towhom["fullName"]);
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("接受回执发送失败 Error："+error);
+		return false;
+	};
+	
+	sendMessageAPI(towhom["userId"], $.cookie("truthbook").userId, MessageType.ACCEPTFRIEND.typeName, onAjaxSuccess, onAjaxError);
 }
 
 /*	This function can only be used after the friend list load.
  *  get the relation between userId and FriendId
  *
  */
-function getRelationship(friendId) {
-	for(friend in friendsId.eFriends) {
-		if(friendId == friendsId.eFriends[friend]["userId"]) {
-			return 2;
-		}
-	}
-	for(friend in friendsId.nFriends) {
-		if(friendId == friendsId.nFriends[friend]["userId"]) {
-			return 1;
-		}
-	}
-	return 0;
-}
+//function getRelationship(friendId) {
+//	for(friend in friendsId.eFriends) {
+//		if(friendId == friendsId.eFriends[friend]["userId"]) {
+//			return 2;
+//		}
+//	}
+//	for(friend in friendsId.nFriends) {
+//		if(friendId == friendsId.nFriends[friend]["userId"]) {
+//			return 1;
+//		}
+//	}
+//	return 0;
+//}
 
-
-/*	This function use winkar modified friend relation check API
- *
- */
-function isFriend(pageOwnerId){
-	var path = "v1/friends/";
-	var userId = $.cookie("truthbook").userId + "/";
-	var friendId = $.cookie("truthbook_PageOwner_userId").userId;
-	var action = "/check";
-	var url=ServerRoot+ServiceType.USERPROFILE+path+userId+friendId+action;			
-	var onAjaxSuccess = function(data,textStatus){
-		if (data > 0 ){
-			hideAddFriendButton();
-			showAddPhotoButton();
-			handleAddFriendButtonClick();
-			return true;
-		}
-		else{
-			hideAddPhotoButton();
-			showAddFriendButton();
-			handleAddFriendButtonClick();
-			return true;
-		}
-	};
-	var onAjaxError = function(xhr,status,error){
-		return false;
-	};
-	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
-//	ajax_obj.cache = "false";
-	ajax_call(ajax_obj);
-}
-
-
-
-function inviteFriendToUpload(towhom){
-	var receiver = towhom["userId"];
-	var sender = $.cookie("truthbook").userId;
-	var path = "v1/message/"+receiver+"/" + sender + "/" + MessageType.INVITETOUPLOAD.typeName + "/send";
-	var url=ServerRoot+ServiceType.NOTIFICATION+path;		
+function inviteFriendToUpload(towhom){	
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
 			drawConfirmPopUp("邀请已发出<br>受邀者 : " + towhom["fullName"]);
@@ -322,7 +359,6 @@ function inviteFriendToUpload(towhom){
 		}
 		else{
 			drawConfirmPopUp("邀请已发送失败<br>受邀者 : " + towhom["fullName"]);
-			alert("failed to send message");
 			return true;
 		}
 	};
@@ -330,8 +366,8 @@ function inviteFriendToUpload(towhom){
 		drawConfirmPopUp("邀请已发送失败 Error："+error);
 		return false;
 	};
-	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
-	ajax_call(ajax_obj);
+	
+	sendMessageAPI(towhom["userId"], $.cookie("truthbook").userId, MessageType.INVITETOUPLOAD.typeName, onAjaxSuccess, onAjaxError);
 }
 
 

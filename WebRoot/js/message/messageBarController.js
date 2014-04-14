@@ -17,6 +17,7 @@ function getMessage(){
 	$("#unreadMessageNum").html("00");
 	getNewMessage(MessageType.INVITETOUPLOAD);
 	getNewMessage(MessageType.ADDFRIEND);
+	getNewMessage(MessageType.ACCEPTFRIEND);
 //	getInviteToUploadMessage();
 //	getFriendRequestMessage();
 	
@@ -130,6 +131,9 @@ function pickIconName(messageTypeName){
 	} else if (messageTypeName == MessageType.ADDFRIEND.typeName){
 		var iconArray = ["checkmark","remove"];
 		return iconArray;
+	} else if (messageTypeName == MessageType.ACCEPTFRIEND.typeName){
+		var iconArray = ["","remove"];
+		return iconArray;
 	}
 }
 
@@ -139,6 +143,9 @@ function pickHeadIconName(messageTypeName){
 		return iconArray;
 	} else if (messageTypeName == MessageType.ADDFRIEND.typeName){
 		var iconArray = "user";
+		return iconArray;
+	} else if (messageTypeName == MessageType.ACCEPTFRIEND.typeName){
+		var iconArray = "users";
 		return iconArray;
 	}
 	
@@ -173,7 +180,7 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 				"<a class=\""+messageType.typeButtonOneName+"\"><i class=\"" + iconName[0]  + " large icon\"></i></a>" +
 				"<a class=\""+messageType.typeButtonTwoName+"\"><i class=\"" + iconName[1]  + " large icon\"></i></a>" +
 			"</div>" +
-			"<div class=\"content message\">" +
+			"<div class=\"content message\" style=\"width: 150px;\">" +
 			fullName +
 			"</div></div>";
 	}
@@ -189,10 +196,37 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 		$(this).children(".right.floated").fadeOut(50);}
 	);
 	
+	$("#"+messageType.typeName+"MessageContent").children(".item.message").children(".content.message").hover(function(){
+		$(this).css("color","#33B2E1");},
+		function(){
+		$(this).css("color","");}
+	);
+	
+	$(".list.menu.message ." + messageType.typeButtonOneName).children(".icon").hover(function(){
+		$(this).css("color","#33B2E1");},
+		function(){
+		$(this).css("color","");}
+	);
+	
+	$(".list.menu.message ."+ messageType.typeButtonTwoName).children(".icon").hover(function(){
+		$(this).css("color","#33B2E1");},
+		function(){
+		$(this).css("color","");}
+	);
+	
+	
+	
+	$("#"+messageType.typeName+"MessageContent").children(".item.message").children(".content.message").click(function() {
+//		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()];
+//		goOthersPage(towhom["userId"]);
+		drawConfirmPopUp("correct");
+	});
+
+	
 	$(".list.menu.message ." + messageType.typeButtonOneName).click(function() {
 		var thisUserId = $(this).parent().children(".this_userId").html();
 		var thisMessageId = $(this).parent().children(".this_messageId").html();
-		buttonOneOnClickSwitch(messageType.number,thisUserId,thisMessageId);
+		buttonOneOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent().parent());
 		
 	});
 	
@@ -206,16 +240,16 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 
 
 
-function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId){
+function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
 	switch (messageTypeNumber){
 	case "0"://inviteToUpload
 		inviteToUploadButtonOneOnclick(thisUserId);	
 		break;
 	case "1"://friendRequest
-		friendRequestButtonOneOnclick(thisUserId);
+		friendRequestButtonOneOnclick(thisUserId,thisMessageId,thisMessageId,thisItem);
 		break;
 	case "2":
-
+		
 		break;
 	case "3":
 
@@ -241,7 +275,7 @@ function buttonTwoOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
 	  break;
 	case "2":
-
+		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "3":
 
@@ -275,8 +309,27 @@ function inviteToUploadButtonOneOnclick(id){
 	ajax_call(ajax_obj);
 }
 
-function friendRequestButtonOneOnclick(id){
-	
+function friendRequestButtonOneOnclick(id,thisMessageId,messageTypeNumber,thisItem){
+	var onAjaxSuccess = function(data,textStatus){
+		if (data == true ){
+			drawConfirmPopUp("成功加为好友");
+			deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+			refreshTopbarFriendsLists($.cookie("truthbook").userId);
+			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
+			friendRequestAccept(id);
+			return true;
+		} else {
+			drawConfirmPopUp("添加好友失败");
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("添加好友请求发送失败 Error: "+error);
+		return false;
+	};
+
+	addFriendAPI($.cookie("truthbook").userId, id, type_nFriends,"false");
+	addFriendAPI(id, $.cookie("truthbook").userId, type_nFriends,"false", onAjaxSuccess, onAjaxError);
 	
 }
 
