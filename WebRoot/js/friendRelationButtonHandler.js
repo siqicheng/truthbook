@@ -33,9 +33,14 @@ function addFriendButtonCheck(){
 	var pageOwnerId = $.cookie("truthbook_PageOwner_userId").userId;
 	var pageOwnerisActivated = $.cookie("truthbook_PageOwner_userId").isActivated;
 	if( pageOwnerisActivated == "false"){
-		$("#addFriendButton").hide();
-		$("#disabeFriendButton").hide();
-		$("#uploadPhoto").show();
+		
+		$("#addFriendButton").removeClass(" visible");
+		$("#addFriendButton").addClass(" hidden");
+		$("#disabeFriendButton").removeClass(" visible");
+		$("#disabeFriendButton").addClass(" hidden");
+		$("#uploadPhoto").removeClass(" hidden");
+		$("#uploadPhoto").addClass(" visible");
+		
 		addFriendTransition("#uploadPhoto");
 		handleAddFriendButtonClick();
 		return;
@@ -45,18 +50,18 @@ function addFriendButtonCheck(){
 		hideAddPhotoButton();
 		return;
 	}
-	if (getRelationship(pageOwnerId)>0){
-		hideAddFriendButton();
-		showAddPhotoButton();
-		handleAddFriendButtonClick();
-		return;
-	}
-	else{
-		hideAddPhotoButton();
-		showAddFriendButton();
-		handleAddFriendButtonClick();
-		return;
-	}
+	isFriend(pageOwnerId);
+//	if (getRelationship(pageOwnerId)>0){
+//		hideAddFriendButton();
+//		showAddPhotoButton();
+//		handleAddFriendButtonClick();
+//		return;
+//	} else {
+//		hideAddPhotoButton();
+//		showAddFriendButton();
+//		handleAddFriendButtonClick();
+//		return;
+//	}
 }
 
 /*	Four help function to show and hide buttons.
@@ -64,26 +69,35 @@ function addFriendButtonCheck(){
  */
 
 function showAddFriendButton(){
-	$("#addFriendButton").show();
+	$("#addFriendButton").removeClass(" hidden");
+	$("#addFriendButton").addClass(" visible");
 	addFriendTransition("#addFriendButton");
 }
 
 function showAddPhotoButton(){
-	$("#uploadPhoto").show();
-	$("#disabeFriendButton").show();
+	$("#uploadPhoto").removeClass(" hidden");
+	$("#disabeFriendButton").removeClass(" hidden");
+	$("#uploadPhoto").addClass(" visible");
+	$("#disabeFriendButton").addClass(" visible");
 	addFriendTransition("#uploadPhoto");
 	addFriendTransition("#disabeFriendButton");
 }
 
 function hideAddFriendButton(){
-	$("#addFriendButton").hide();
-}
+	$("#addFriendButton").removeClass(" visible ");
+	$("#addFriendButton").addClass(" hidden");
 
+}
+	
 function hideAddPhotoButton(){
-	$("#disabeFriendButton").hide();
-	$("#uploadPhoto").hide();
-}
+	
+	$("#uploadPhoto").removeClass(" visible ");
+	$("#uploadPhoto").addClass(" hidden ");
+	$("#disabeFriendButton").removeClass(" visible ");
+	$("#disabeFriendButton").addClass(" hidden ");
 
+
+}
 /*	Button change transition.
  *	
  */
@@ -158,9 +172,9 @@ function degradeFriendByTmpButton(towhom){
 	var url=ServerRoot+ServiceType.USERPROFILE+path;	
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
-			drawConfirmPopUp("成功把 "+towhom["fullName"] +" 降级为真·友");
 			refreshTopbarFriendsLists($.cookie("truthbook").userId);
-			refreshMenubarFriendsLists($.cookie("truthbook").userId);
+			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
+			drawConfirmPopUp("成功把 "+towhom["fullName"] +" 降级为真·友");
 			return true;
 		}
 		else{
@@ -191,11 +205,13 @@ function deleteFriendByTmpButton(towhom){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
 			hideAddPhotoButton();
-			showAddFriendButton();
+			if( $.cookie("truthbook").userId!= $.cookie("truthbook_PageOwner_userId").userId){
+				showAddFriendButton();
+			}
+			refreshTopbarFriendsLists($.cookie("truthbook").userId);
+			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 // 			alert("delete friends success!");
 			drawConfirmPopUp("成功删除好友");
-			refreshTopbarFriendsLists($.cookie("truthbook").userId);
-			refreshMenubarFriendsLists($.cookie("truthbook").userId);
 			return true;
 		}
 		else{
@@ -227,8 +243,6 @@ function addFriendByTmpButton(){
 			showAddPhotoButton();
 // 			alert("add friends success!");
 			drawConfirmPopUp("成功加为好友");
-			refreshTopbarFriendsLists($.cookie("truthbook").userId);
-			refreshMenubarFriendsLists($.cookie("truthbook").userId);
 			return true;
 		}
 		else{
@@ -249,13 +263,13 @@ function addFriendByTmpButton(){
  *
  */
 function getRelationship(friendId) {
-	for(friend in userFriendsLists.eFriends) {
-		if(friendId == userFriendsLists.eFriends[friend]["userId"]) {
+	for(friend in friendsId.eFriends) {
+		if(friendId == friendsId.eFriends[friend]["userId"]) {
 			return 2;
 		}
 	}
-	for(friend in userFriendsLists.nFriends) {
-		if(friendId == userFriendsLists.nFriends[friend]["userId"]) {
+	for(friend in friendsId.nFriends) {
+		if(friendId == friendsId.nFriends[friend]["userId"]) {
 			return 1;
 		}
 	}
@@ -266,33 +280,33 @@ function getRelationship(friendId) {
 /*	This function use winkar modified friend relation check API
  *
  */
-//function isFriend(pageOwnerId){
-//	var path = "v1/friends/";
-//	var userId = $.cookie("truthbook").userId + "/";
-//	var friendId = $.cookie("truthbook_PageOwner_userId").userId;
-//	var action = "/check";
-//	var url=ServerRoot+ServiceType.USERPROFILE+path+userId+friendId+action;			
-//	var onAjaxSuccess = function(data,textStatus){
-//		if (data > 0 ){
-//			hideAddFriendButton();
-//			showAddPhotoButton();
-//			handleAddFriendButtonClick();
-//			return true;
-//		}
-//		else{
-//			hideAddPhotoButton();
-//			showAddFriendButton();
-//			handleAddFriendButtonClick();
-//			return true;
-//		}
-//	};
-//	var onAjaxError = function(xhr,status,error){
-//		return false;
-//	};
-//	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+function isFriend(pageOwnerId){
+	var path = "v1/friends/";
+	var userId = $.cookie("truthbook").userId + "/";
+	var friendId = $.cookie("truthbook_PageOwner_userId").userId;
+	var action = "/check";
+	var url=ServerRoot+ServiceType.USERPROFILE+path+userId+friendId+action;			
+	var onAjaxSuccess = function(data,textStatus){
+		if (data > 0 ){
+			hideAddFriendButton();
+			showAddPhotoButton();
+			handleAddFriendButtonClick();
+			return true;
+		}
+		else{
+			hideAddPhotoButton();
+			showAddFriendButton();
+			handleAddFriendButtonClick();
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		return false;
+	};
+	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
 //	ajax_obj.cache = "false";
-//	ajax_call(ajax_obj);
-//}
+	ajax_call(ajax_obj);
+}
 
 
 
@@ -319,7 +333,6 @@ function inviteFriendToUpload(towhom){
 	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
 	ajax_call(ajax_obj);
 }
-
 
 
 

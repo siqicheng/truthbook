@@ -47,10 +47,9 @@ function getUserEFriendsLists(id) {
 				userFriendsLists.eFriends[i] = data.user[i];
 			};
 		};
-		addFriendButtonCheck();
 		console.log("Get eFriends List success");
 		console.log(userFriendsLists.eFriends);
-		addFriendButtonCheck();
+//		addFriendButtonCheck();
 		refreshTopbarLists(id);
 	};
 	var onError = function(xhr, status, error) {
@@ -261,15 +260,15 @@ function refreshMenubarLists(id) {
 }
 
 function addMenubarClickFunction() {
-	$("#menubar .eFriendsList.upload_for_fri .item").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).index()];
-		upload_choosepic(towhom);
-	});
-	
-	$("#menubar .nFriendsList.upload_for_fri .item").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).index()];
-		upload_choosepic(towhom);
-	});
+//	$("#menubar .eFriendsList.upload_for_fri .item").click(function() {
+//		var towhom = pageownerFriendsLists.eFriends[$(this).index()];
+//		upload_choosepic(towhom);
+//	});
+//	
+//	$("#menubar .nFriendsList.upload_for_fri .item").click(function() {
+//		var towhom = pageownerFriendsLists.nFriends[$(this).index()];
+//		upload_choosepic(towhom);
+//	});
 
 	$("#menubar .eFriendsList.goto_fri_page .frienditem").click(function() {
 		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()];

@@ -193,24 +193,29 @@
 							</div>
 						</div>
 						<div class="ui item" align="center">
-						    <button class="ui green vertical animated button" id="addFriendButton" style="display:none;"> 
-						        <div class="visible content">&ensp;<i class="add user basic icon"></i>&ensp;</div>
-						        <div class="hidden content">做朋友</div>
-						    </button>
-					 	    <button class="ui basic animated button" id="addFriendWaitingButton" style="display:none;"> 
-					           <div class="visible content"> 等待对方确认 </div>
-					           <div class="hidden content">
-					               <i class="sign in icon"></i>
-					           </div>
-					        </button>		        
-					 	    <button class="ui blue vertical animated button" id="uploadPhoto" style="display:none;"> 
-					           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div>
-					           <div class="hidden content">传照片</div>
-					       </button>
-					       <button class="ui black vertical animated button" id="disabeFriendButton" style="display:none;"> 
-					           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
-					           <div class="hidden content">变路人</div>
-					       </button>
+							<div class="ui buttons" align="center">
+							    <button class="ui green vertical animated button transition hidden" id="addFriendButton"
+							    style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+							        <div class="visible content">&ensp;<i class="add user basic icon"></i>&ensp;</div>
+							        <div class="hidden content">做朋友</div>
+							    </button>
+						 	    <button class="ui basic animated button transition hidden" id="addFriendWaitingButton" style="display:none;"> 
+						           <div class="visible content"> 等待对方确认 </div>
+						           <div class="hidden content">
+						               <i class="sign in icon"></i>
+						           </div>
+						        </button>		        
+						 	    <button class="ui blue vertical animated button transition hidden" id="uploadPhoto" 
+						 	    style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+						           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div>
+						           <div class="hidden content">传照片</div>
+						       </button>
+						       <button class="ui black vertical animated button transition hidden" id="disabeFriendButton"
+						       style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+						           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
+						           <div class="hidden content">变路人</div>
+						       </button>
+							</div>
 						</div>
 				  </div>
 				  <div class="column">
@@ -363,7 +368,6 @@
 				</div>
 	    	</div>
 	    </div>
-	    
 	</div>
 
     <div class="ui item dimmable">
@@ -401,11 +405,11 @@
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/uploadPic.js"></script>
-	<script src="./js/friends.js"></script>
+	<script src="./js/refreshFriendsLists.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	
-	
+<!-- 	<script src="./js/friends.js"></script> -->
 	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	
 	<script src="./js/friendRelationButtonHandler.js"></script>
 	<script src="./js/userAndPageInfo.js"></script>
@@ -418,7 +422,7 @@
 	$(function() {
 		handleLogoutPopUp();
 		testFunction_Cookie();
-// 		addFriendButtonCheck();
+		addFriendButtonCheck();
 	});
 	
 

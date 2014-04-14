@@ -87,7 +87,8 @@ function updateNewMessageNum(numOfMessage){
 function deleteMessageNumUpdate(numOfMessage){
 	var newNumOfMessage =numOfMessage +Number($("#unreadMessageNum").html());
 	if (newNumOfMessage <= 0){
-		$("#unreadMessageNum").hide();
+		$("#unreadMessageNum").html("00");
+		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 	} else if (newNumOfMessage<10){
 		changeMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html("0" + newNumOfMessage);
@@ -144,7 +145,7 @@ function pickHeadIconName(messageTypeName){
 }
 
 function enableHeaderMenu(numOfMessage,messageType){
-	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\"><div><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
+	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\"><div class=\"pickTheNumber\"><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
 			"<span class =\"messageNumber head\">" + numOfMessage + "</span>" + 
 			messageType.typeHeadMenuName+ "</div></div>";
 	$("#"+messageType.typeName+"_MessageMenu").html(html);
@@ -314,13 +315,11 @@ function deleteMessageTrasition(messageTypeNumber,thisItem){
 }
 
 function deleteHeadMessageNumUpdate(thisItem){
-	var newNumOfMessage =Number(thisItem.parent().parent().children(".header.item").children(".messageNumber.head").html()) - 1;
+	var newNumOfMessage =Number(thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html()) - 1;
 	if (newNumOfMessage <= 0){
-		$("#unreadMessageNum").html("00");
-		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 		thisItem.parent().parent().children(".header.item").hide();
 	} else {
-		thisItem.parent().parent().children(".header.item").children(".messageNumber.head").html(newNumOfMessage);
+		thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html(newNumOfMessage);
 	}
 }
 
