@@ -14,6 +14,10 @@ function messageLengthJson(data){
 }
 
 function getMessage(){
+	if ($.cookie("truthbook").userId != $.cookie("truthbook_PageOwner_userId").userId ){
+		$("#notifiBtn").html("<i class=\"qr code icon\"></i>");
+		return;
+	}
 	$("#unreadMessageNum").html("00");
 	getNewMessage(MessageType.INVITETOUPLOAD);
 	getNewMessage(MessageType.ADDFRIEND);
@@ -26,11 +30,7 @@ function getMessage(){
 
 
 function getNewMessage(messageType){
-	var receiver = $.cookie("truthbook").userId;
-	var path = "v1/message/" + receiver + "/" + messageType.typeName + "/get";
-	var url = ServerRoot + ServiceType.NOTIFICATION + path;
 	var onAjaxSuccess = function(data, textStatus) {
-//		drawConfirmPopUp("test data : " + messageLengthJson(data));
 		if (data == null){
 //			drawConfirmPopUp("data: "+data);//maybe need to modify the number of total message later
 		}else{
@@ -42,40 +42,18 @@ function getNewMessage(messageType){
 		}
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		drawConfirmPopUp("error: "+error);
+		drawConfirmPopUp("获取新系统通知 Error: "+error);
 	};
-	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-	ajax_call(ajax_obj);
+	
+	getMessageAPI($.cookie("truthbook").userId,messageType.typeName,onAjaxSuccess, onAjaxError)
 }
-
-//function getInviteToUploadMessage(){
-//	var receiver = $.cookie("truthbook").userId;
-//	var path = "v1/message/"+receiver + "/" + MessageType.INVITETOUPLOAD.typeName + "/get";
-//	var url = ServerRoot + ServiceType.NOTIFICATION + path;
-//	var onAjaxSuccess = function(data, textStatus) {
-////		drawConfirmPopUp("test data : " + messageLengthJson(data));
-//		if (data == null){
-//			//maybe need to modify the number of total message later
-//		}else{
-//			var numOfInviteToUploadMessage = messageLengthJson(data);
-//			if (numOfInviteToUploadMessage > 0){
-//				updateNewMessageNum(numOfInviteToUploadMessage);
-//				updateNewMessageMenuList(numOfInviteToUploadMessage,data);
-//			}
-//		}
-//	};
-//	var onAjaxError = function(xhr, textStatus, error) {
-//		drawConfirmPopUp("error: "+error);
-//	};
-//	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-//	ajax_call(ajax_obj);
-//}
 
 function updateNewMessageNum(numOfMessage){
 	var newNumOfMessage =numOfMessage +Number($("#unreadMessageNum").html());
 //	drawConfirmPopUp(newNumOfMessage);
 	if (newNumOfMessage <= 0){
-		$("#unreadMessageNum").hide();
+		$("#unreadMessageNum").html("00");
+		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 	} else if (newNumOfMessage<10){
 		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html("0" + newNumOfMessage);
@@ -152,9 +130,11 @@ function pickHeadIconName(messageTypeName){
 }
 
 function enableHeaderMenu(numOfMessage,messageType){
-	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\"><div class=\"pickTheNumber\"><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
-			"<span class =\"messageNumber head\">" + numOfMessage + "</span>" + 
-			messageType.typeHeadMenuName+ "</div></div>";
+	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\">" + 
+				"<div class=\"pickTheNumber\"><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
+				"<span class =\"messageNumber head\">" + numOfMessage + "</span>" + messageType.typeHeadMenuName + 
+		   "</div></div>";
+	
 	$("#"+messageType.typeName+"_MessageMenu").html(html);
 }
 
@@ -196,31 +176,32 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 		$(this).children(".right.floated").fadeOut(50);}
 	);
 	
-	$("#"+messageType.typeName+"MessageContent").children(".item.message").children(".content.message").hover(function(){
-		$(this).css("color","#33B2E1");},
-		function(){
-		$(this).css("color","");}
-	);
+	$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message")
+		.hover(	function(){$(this).css("color","#33B2E1");},
+				function(){$(this).css("color","");}
+			  );
 	
-	$(".list.menu.message ." + messageType.typeButtonOneName).children(".icon").hover(function(){
-		$(this).css("color","#33B2E1");},
-		function(){
-		$(this).css("color","");}
-	);
+	$(".list.menu.message ." + messageType.typeButtonOneName)
+		.children(".icon")		
+		.hover(	function(){$(this).css("color","#33B2E1");},
+				function(){$(this).css("color","");}
+			  );
 	
-	$(".list.menu.message ."+ messageType.typeButtonTwoName).children(".icon").hover(function(){
-		$(this).css("color","#33B2E1");},
-		function(){
-		$(this).css("color","");}
-	);
+	$(".list.menu.message ."+ messageType.typeButtonTwoName)
+		.children(".icon")
+		.hover(	function(){$(this).css("color","#33B2E1");},
+				function(){$(this).css("color","");}
+			  );
 	
-	
-	
-	$("#"+messageType.typeName+"MessageContent").children(".item.message").children(".content.message").click(function() {
-//		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()];
-//		goOthersPage(towhom["userId"]);
-		drawConfirmPopUp("correct");
-	});
+	$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message")
+		.click(function() {
+					itemOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent());
+				}
+		);
 
 	
 	$(".list.menu.message ." + messageType.typeButtonOneName).click(function() {
@@ -238,7 +219,31 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 	});
 }
 
+function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
+	switch (messageTypeNumber){
+	case "0"://inviteToUpload
+		
+		break;
+	case "1"://friendRequest
+		
+		break;
+	case "2"://acceptFriendRequest
+		
+		break;
+	case "3":
 
+		break;
+	case "4":
+
+		break;
+	case "5":
+
+		break;
+	case "6":
+
+		break;
+	}	
+}
 
 function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
 	switch (messageTypeNumber){
@@ -248,7 +253,7 @@ function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 	case "1"://friendRequest
 		friendRequestButtonOneOnclick(thisUserId,thisMessageId,thisMessageId,thisItem);
 		break;
-	case "2":
+	case "2"://acceptFriendRequest
 		
 		break;
 	case "3":
@@ -274,7 +279,7 @@ function buttonTwoOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 	case "1"://friendRequest
 		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
 	  break;
-	case "2":
+	case "2"://acceptFriendRequest
 		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "3":
@@ -293,20 +298,17 @@ function buttonTwoOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 }
 
 function inviteToUploadButtonOneOnclick(id){
-	var path = "v1/" + id;
-	var url = ServerRoot + ServiceType.LOGIN + path;
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == null){
-			console.log("cannot get friend object by id");
+			drawConfirmPopUp("找不到用户");
 		}else{
 			upload_choosepic(data);
 		}
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		console.log("getFriends error: "+ error);
+		drawConfirmPopUp("获取用户数据失败 Error: "+error);
 	};
-	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-	ajax_call(ajax_obj);
+	getUserAPI(id, onAjaxSuccess, onAjaxError);
 }
 
 function friendRequestButtonOneOnclick(id,thisMessageId,messageTypeNumber,thisItem){
@@ -334,28 +336,23 @@ function friendRequestButtonOneOnclick(id,thisMessageId,messageTypeNumber,thisIt
 }
 
 function deleteMessageButtonOnclick(messageId,messageTypeNumber,thisItem){
-	var path = "v1/message/"+messageId+"/read";
-	var url = ServerRoot + ServiceType.NOTIFICATION + path;
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){
 			deleteMessageTrasition(messageTypeNumber,thisItem);
-//			drawConfirmPopUp("delete");
-//			getMessage();
 		}else{
-			drawConfirmPopUp("cannot delete");
+			drawConfirmPopUp("标记信息已读失败");
 		}
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		drawConfirmPopUp("delete ajax error: " + error);			
+		drawConfirmPopUp("标记信息已读请求发送失败 Error: " + error);			
 	};
-	var ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
-	ajax_call(ajax_obj);	
+
+	markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError);
 }
 
 function deleteMessageTrasition(messageTypeNumber,thisItem){
 	deleteMessageNumUpdate(-1);
-	deleteHeadMessageNumUpdate(thisItem);
-//	thisItem.transition('horizontal flip out');
+	
 	thisItem.transition({
 		animation : 'horizontal flip out', 
 		duration  : '0.3s',
@@ -363,12 +360,11 @@ function deleteMessageTrasition(messageTypeNumber,thisItem){
 			thisItem.hide();
 	}
 	});
-	
-//	thisItem.hide();
+	deleteHeadMessageNumUpdate(thisItem);
 }
 
 function deleteHeadMessageNumUpdate(thisItem){
-	var newNumOfMessage =Number(thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html()) - 1;
+	var newNumOfMessage = Number(thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html()) - 1;
 	if (newNumOfMessage <= 0){
 		thisItem.parent().parent().children(".header.item").hide();
 	} else {

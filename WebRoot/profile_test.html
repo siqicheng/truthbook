@@ -22,15 +22,24 @@
 </head>
 
 <body style="background-color:#DEDCDE;margin:0px;">
-
-	<div class="ui fixed small menu" id="topbar" >
-		<div class="left menu">
+	<div class="ui fixed transparent main menu" id="topbar" >
+		<div class="left  menu">
+	
 			<div class="ui dropdown item" id="upload_menu">
-				<i class="add icon"></i> 上传照片（sidebar）
-				<div class="menu">
-					<a class="item" id="upload_for_new_btn">新建好友档案</a>
+				<i class="add icon"></i>传照片
+				
+<!-- 				<div class="ui basic vertical animated button">  -->
+<!-- 		           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div> -->
+<!-- 		           <div class="hidden content">传照片</div> -->
+<!-- 				</div> -->
+				
+				
+				
+				<div class=" dropdown menu">
+					<div class="item" id="upload_for_new_btn">新建好友档案</div>
+					
 					<div class="ui dropdown item" id="upload_for_fri_btn">
-						为已有好友上传 <i class="dropdown icon"></i>
+						为已有好友上传<i class="dropdown icon"></i>
 						<div class="menu">
 							<div class="ui dropdown item">
 								极·友<i class="dropdown icon"></i>
@@ -46,8 +55,8 @@
 					</div>
  				</div>
 			</div>
-			<a class="item" id="close_sidebar_btn" style="display:none">
-				<i class="remove icon"></i> 关闭 </a>
+			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove icon"></i>关闭</a>
+			
 		</div>		
 		<div class="title item" onclick = "goHomePage();" style="cursor:pointer;">
 	        <img src="img/Truthbook_red.png" width="140px" >
@@ -81,6 +90,9 @@
  		</div>
  		
 	</div>
+	
+
+
 
 	<div id="upload" class="white-popup  mfp-hide">
 		<h3 class="ui header">上传照片</h3>
@@ -174,7 +186,6 @@
 				<div class="ui black fluid button" id="nextstep2" >下一步</div>
 			</div>
 	</div>
-
 	<div id="profile-segment">
 		<div class="ui stacked raised segment" style="height:310px;">
 			<div class="ui three wide column grid">
@@ -275,16 +286,8 @@
 				<div class="ui red inverted fluid menu"> 						
 					<div class="ui dropdown fluid item" id="notifiBtn">
 						<i class="mail small icon"></i> 消息通知
-<!-- <<<<<<< HEAD -->
-						<div class="floating ui circular green label" id="unreadMessageNum" style="display:none;">00</div>
-						
-						
+						<div class="floating ui circular green label" id="unreadMessageNum" style="display:none;">00</div>					
 						<div class="ui divided list vertical menu message" >
-<!-- 							<div class="item"> -->
-<!-- 								<div class="content"  style="textAlign:center;padding-top: 7px;font-size:16px;width:120px;"> -->
-<!-- 									一键清空所有消息 -->
-<!-- 								</div> -->
-<!-- 							</div> -->
 							<div id="inviteToUpload_MessageMenu"></div>
 							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
 							<div id="friendRequest_MessageMenu"></div>
@@ -301,19 +304,6 @@
 														
    						</div>
 					</div>
-<!-- ======= -->
-<!-- 						<div class="floating ui circular green label" id="news_num"></div> -->
-<!--    					</div> -->
-<!--    				</div> -->
-<!-- 				<div class="ui divided vertical menu" id="notifipanel"> -->
-<!-- 					<div class="header item friendreq_news"></div> -->
-<!-- 					<div class="header item image_news"></div> -->
-<!-- 					<div class="header item comment_news"></div> -->
-<!-- 					<div class="header item update_news"></div> -->
-<!-- 					<div class="header item invite_news" id = "messageList"></div> -->
-<!-- 					<div class="header item accept_news"></div> -->
-<!-- 					<div class="header item signup_news"></div> -->
-<!-- >>>>>>> zeyouwu -->
 				</div>
 			</div>
 		</div>
@@ -435,7 +425,12 @@
  					{on: 'click'
  					}
  				);
+ 		$('.ui.accordion')
+		  .accordion()
+		;	
 	});
+	
+
 	</script>
 
 	<script>
