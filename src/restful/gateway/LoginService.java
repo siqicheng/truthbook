@@ -425,7 +425,7 @@ public class LoginService {
 			this.userPassword = new UserPassword(new UserPasswordId(email,password),this.user);
 			this.user.setUserPassword(userPassword);
 			this.user.setIsActivated(true);						
-			userDAO.save(this.user);
+			userDAO.update(this.user);
 			tx.commit();
 			return this.user;
 		}catch (Exception e){
