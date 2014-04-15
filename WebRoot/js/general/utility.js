@@ -77,36 +77,23 @@ function goZhangSan(){
 }
 
 function goOthersPage(id){
-	var path = "v1/";
-	var url = ServerRoot + ServiceType.LOGIN + path +id;
 	var onAjaxSuccess = function(data,textStatus){
 		if(data == false){
-			alert("take user object failed");
+			drawConfirmPopUp("获取用户失败");
 		} else {
 			$.cookie("truthbook_PageOwner_userId", data);
 			window.location.href = HomePage;
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
-		$("#errorMessageMail").show();
-		$("#errorMessageMail").text("注册失败:" + error);
-		console.log("Register failed with error:" + error);
+		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
 		return false;
 	};
-	var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
-	ajax_call(ajax_obj);
+	getUserAPI(id, onAjaxSuccess, onAjaxError);
 }
 
 function goLogin(){
 	window.location.href = LoginPage;
-}
-
-function cookieAvailableCheck(){
-	document.cookie = "cookieid=1; expires=60";
-	var result = document.cookie.indexOf("cookieid=") != -1;
-	if (!result) {
-		alert("浏览器未启用cookies");
-	}
 }
 
 function userLengthJson(data){
@@ -242,6 +229,17 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 		url = ServerRoot + ServiceType.NOTIFICATION + path,
 		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
+}
+
+/*
+ * Image API
+ */
+
+function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + userId + "/userId",
+		url = ServerRoot + ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
 }
 
 

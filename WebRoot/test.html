@@ -1,8 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>兼容IE火狐CHROME等主流浏览器</title>
+   	<meta charset="utf-8">
+   	<title>test</title>
+
    	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
    	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
    	<link href="./CSS/position.css" rel="stylesheet">
@@ -13,13 +14,83 @@
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
     <link href="./CSS/notification.css" rel="stylesheet">
   	<link rel="shortcut icon" href="img/logo_red.ico"/>
+   	
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
 </head>
 <body>
 	<div class="ui button">test</div>
+	<div class="ui shape" >
+		<div class="sides">
+			<div class="active side">
+				<!-- <div class="ui items"><div class="item"><div class="content">test</div></div></div> -->
+				1
+			</div>
+			<div class="side">
+				<!-- <div class="ui items"><div class="item"><div class="content">test2</div></div></div> -->
+				2
+			</div>
+		</div>	
+	</div>	
+<!-- 	<div class="ui shape">
+			<div class="sides">
+				<div class="active side ui items">
+					<div class="item">				
+					<div class="image">
+						<img src="http://lorempixel.com/319/242/">
+						<a style="display: none;"><i class="heart empty icon"></i></a>
+					</div>
+					<div class="content">
+						<p class="description">This dog has some things going for it. Its pretty cute and looks like it'd be fun to cuddle up with.</p>
+						<div class="meta">uploaded by <a href="http://localhost:8080/truthbook/profile_test.html" class="uploader">张三</a> yyyy-mm-dd</div>
+					</div>
+					<button class="ui tiny basic animated button commentToggle"> 
+				        <div class="visible content">&ensp;<i class="comment icon"></i>&ensp;</div>
+				        <div class="hidden content">评论(2)</div>
+				    </button>
+					</div>					
+				</div>
+				<div class="side ui items">
+					<div class="item" >
+					<h2 class="ui header">所有评论</h2>
+      				<div class="ui minimal comments">
+						<div class="comment">
+							<a href="http://localhost:8080/truthbook/profile_test.html" class="avatar"><img src="./img/profile_test/247142.jpg"></a>
+							<div class="content">
+								<a href="http://localhost:8080/truthbook/profile_test.html" class="author">张三</a>
+								<div class="metadata"><span class="date">yyyy-mm-dd</span></div>
+								<div class="text">最喜欢宫城良田了！！！</div>
+							</div>
+						</div>
+						<div class="comment">
+							<a href="http://localhost:8080/truthbook/profile_test.html" class="avatar"><img src="./img/profile_test/247144.jpg"></a>
+							<div class="content">
+								<a href="http://localhost:8080/truthbook/profile_test.html" class="author">李四</a>
+								<div class="metadata"><span class="date">yyyy-mm-dd</span></div>
+								<div class="text">图不错！</div>
+							</div>
+						</div>
+						<form class="ui reply form">
+							<div class="field"><textarea placeholder="你想说…"></textarea></div>
+							<div class="ui small teal button">添加评论</div>
+						</form>
+					</div>
+					<button class="ui tiny basic animated button commentToggle"> 
+				        <div class="visible content">&ensp;<i class="angle left icon"></i>&ensp;</div>
+				        <div class="hidden content">返回</div>
+				    </button>
+					</div>
+				</div>
+			</div>
+		</div> -->
         
+	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
-	<script src="./assets/jquery/jquery.cookie.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
+	<script src="./assets/jquery/jquery.cookie.js"></script>
+	
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
@@ -31,25 +102,9 @@
 	<script src="./js/eventsegment_layout.js"></script>
 	<script src="./js/notification.js"></script>
     <script type="text/javascript">
-    	$('.ui.button')
-  			.popup({
-			    position : 'bottom right',
-			    inline: true,
-			    on: 'click',
-			    closable: false,
-			    variation: 'large',
-			    html:  "<div id='testpopup' style='width:400px'>"+
-							"<img class='ui image' src='./img/profile_test/247143.jpg'>"+
-							"<div class='ui dimmer'>"+
-								"<div class='content'><div class='center'>"+
-									"<div class='ui mini buttons'>"+
-  										"<div class='ui positive button'>接受</div>"+
-  										"<div class='ui button'>忽略</div>"+
-  									"</div>"+
-								"</div></div>"+
-							"</div>"+
-						"</div>" 
-			  });
+    	$('.ui.button').click(function(){
+    		$('.ui.shape').shape('flip back');
+    	})
     </script>
 </body>
 </html>

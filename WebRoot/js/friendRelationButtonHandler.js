@@ -71,7 +71,7 @@ function isFriendCheck(friendId){
 		return false;
 	};
 	
-	checkFriendRelationship($.cookie("truthbook").userId, friendId, onAjaxSuccess, onAjaxError)
+	checkFriendRelationship($.cookie("truthbook").userId, friendId, onAjaxSuccess, onAjaxError);
 }
 
 function isSentFriendRequestMessage(friendId,ownId){

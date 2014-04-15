@@ -228,7 +228,7 @@ function refreshMenubarLists(id) {
 	num = pageownerFriendsLists.eFriends.length;
 	$("#eFriends_num").html(num);
 
-	var html = "<div class=\"item\">" +
+	var html = "<div class=\"item\" >" +
 					"<div class=\"content\">" +
 					"	你现在还没有极·友哦 " +
 					"</div>" +

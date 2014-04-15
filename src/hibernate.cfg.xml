@@ -27,6 +27,7 @@
 		<mapping resource="db/mapping/object/Relationship.hbm.xml" />
 		<mapping resource="db/mapping/object/Message.hbm.xml" />
 		<mapping resource="db/mapping/object/ReadMessage.hbm.xml" />
+<!-- 		<mapping resource="db/mapping/object/Image.hbm.xml" /> -->
 	</session-factory>
 
 
