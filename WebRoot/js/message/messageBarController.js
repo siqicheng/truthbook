@@ -14,59 +14,136 @@ function messageLengthJson(data){
 }
 
 function getMessage(){
-	getInviteToUploadMessage();
+	if ($.cookie("truthbook").userId != $.cookie("truthbook_PageOwner_userId").userId ){
+		$("#notifiBtn").html("<i class=\"qr code icon\"></i>");
+		return;
+	}
+	$("#unreadMessageNum").html("00");
+	getNewMessage(MessageType.INVITETOUPLOAD);
+	getNewMessage(MessageType.ADDFRIEND);
+	getNewMessage(MessageType.ACCEPTFRIEND);
+//	getInviteToUploadMessage();
+//	getFriendRequestMessage();
+	
+	
 }
 
-function getInviteToUploadMessage(){
-	var receiver = $.cookie("truthbook").userId;
-	var path = "v1/message/"+receiver + MessageType.INVITETOUPLOAD + "/get";
-	var url = ServerRoot + ServiceType.NOTIFICATION + path;
+
+function getNewMessage(messageType){
 	var onAjaxSuccess = function(data, textStatus) {
-//		drawConfirmPopUp("test data : " + messageLengthJson(data));
 		if (data == null){
-			//maybe need to modify the number of total message later
+//			drawConfirmPopUp("data: "+data);//maybe need to modify the number of total message later
 		}else{
-			var numOfInviteToUploadMessage = messageLengthJson(data);
-			if (numOfInviteToUploadMessage > 0){
-				updateNewMessageNum(numOfInviteToUploadMessage);
-				updateNewMessageMenuList(numOfInviteToUploadMessage,data);
+			var numOfMessage = messageLengthJson(data);
+			if (numOfMessage > 0){
+				updateNewMessageNum(numOfMessage);
+				updateNewMessageMenuList(numOfMessage,data,messageType);
 			}
 		}
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		console.log("getFriends error: "+ error);
+		drawConfirmPopUp("获取新系统通知 Error: "+error);
 	};
-	var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-	ajax_call(ajax_obj);
 	
-	
+	getMessageAPI($.cookie("truthbook").userId,messageType.typeName,onAjaxSuccess, onAjaxError)
 }
 
-function updateNewMessageNum(numOfInviteToUploadMessage){
-	var newNumOfMessage =numOfInviteToUploadMessage;// +Number($("#unreadMessageNum").html())
+function updateNewMessageNum(numOfMessage){
+	var newNumOfMessage =numOfMessage +Number($("#unreadMessageNum").html());
+//	drawConfirmPopUp(newNumOfMessage);
 	if (newNumOfMessage <= 0){
-		$("#unreadMessageNum").hide();
+		$("#unreadMessageNum").html("00");
+		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 	} else if (newNumOfMessage<10){
-		showMessageTransition("#unreadMessageNum");
+		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html("0" + newNumOfMessage);
 	} else {
-		showMessageTransition("#unreadMessageNum");
+		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html(newNumOfMessage);
 	}
 }
 
-function showMessageTransition(id){
+function deleteMessageNumUpdate(numOfMessage){
+	var newNumOfMessage =numOfMessage +Number($("#unreadMessageNum").html());
+	if (newNumOfMessage <= 0){
+		$("#unreadMessageNum").html("00");
+		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
+	} else if (newNumOfMessage<10){
+		changeMessageNumberTransition("#unreadMessageNum");
+		$("#unreadMessageNum").html("0" + newNumOfMessage);
+	} else {
+		changeMessageNumberTransition("#unreadMessageNum");
+		$("#unreadMessageNum").html(newNumOfMessage);
+	}
+}
+
+function changeMessageNumberTransition(id){
 	$(id).transition({	
-		animation : 'scale fade in', 
-		duration  : '0.6s',
+		animation : 'vertical flip in', 
+		duration  : '0.4s',
 	});
 	$(id).show();
 }
 
-function updateNewMessageMenuList(numOfInviteToUploadMessage,data){
-	var html = "";
-	for(var i=0;i<numOfInviteToUploadMessage;i++){
-		if (numOfInviteToUploadMessage == 1){
+function showMessageNumberTransition(id){
+	$(id).transition({
+		animation : 'scale fade in', 
+		duration  : '0.7s',
+	});
+	$(id).show();
+}
+
+function showHiddenMessageTransition(id){
+//	$(id).transition({	
+//		animation : 'toggle', 
+//		duration  : '0.4s',
+//	});
+	$(id).slideToggle();
+
+}
+
+function pickIconName(messageTypeName){
+	if(messageTypeName == MessageType.INVITETOUPLOAD.typeName){
+		var iconArray = ["cloud upload","remove"];
+		return iconArray;
+	} else if (messageTypeName == MessageType.ADDFRIEND.typeName){
+		var iconArray = ["checkmark","remove"];
+		return iconArray;
+	} else if (messageTypeName == MessageType.ACCEPTFRIEND.typeName){
+		var iconArray = ["","remove"];
+		return iconArray;
+	}
+}
+
+function pickHeadIconName(messageTypeName){
+	if(messageTypeName == MessageType.INVITETOUPLOAD.typeName){
+		var iconArray = "cloud";
+		return iconArray;
+	} else if (messageTypeName == MessageType.ADDFRIEND.typeName){
+		var iconArray = "user";
+		return iconArray;
+	} else if (messageTypeName == MessageType.ACCEPTFRIEND.typeName){
+		var iconArray = "users";
+		return iconArray;
+	}
+	
+}
+
+function enableHeaderMenu(numOfMessage,messageType){
+	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\">" + 
+				"<div class=\"pickTheNumber\"><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
+				"<span class =\"messageNumber head\">" + numOfMessage + "</span>" + messageType.typeHeadMenuName + 
+		   "</div></div>";
+	
+	$("#"+messageType.typeName+"_MessageMenu").html(html);
+}
+
+function updateNewMessageMenuList(numOfMessage,data,messageType){
+	enableHeaderMenu(numOfMessage,messageType);
+	var html = "<div id = \""+messageType.typeName+"MessageContent\" style=\"display:none;\">";
+	var iconName = pickIconName(messageType.typeName);
+	for(var i=0;i<numOfMessage;i++){
+		if (numOfMessage == 1){
 			var userId = data.message.friend.userId,
 			messageId = data.message.messageId,
 			fullName = data.message.friend.fullName;
@@ -75,72 +152,225 @@ function updateNewMessageMenuList(numOfInviteToUploadMessage,data){
 			messageId = data.message[i].messageId,
 			fullName = data.message[i].friend.fullName;
 		}
-		html = html +"<div class=\"item message\">"+
+
+		html = html +"<div class=\"item message\" >"+
 			"<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
-			"<span class=\"this_userId\" style=\"display:none;\">" + userId + "</span>" +
-			"<span class=\"this_messageId\" style=\"display:none;\">" + messageId + "</span>" +
-			"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
-			"<a class=\"delete_message_btn\"><i class=\"remove large icon\"></i></a>" +
+				"<span class=\"this_userId\" style=\"display:none;\">" + userId + "</span>" +
+				"<span class=\"this_messageId\" style=\"display:none;\">" + messageId + "</span>" +
+				"<a class=\""+messageType.typeButtonOneName+"\"><i class=\"" + iconName[0]  + " large icon\"></i></a>" +
+				"<a class=\""+messageType.typeButtonTwoName+"\"><i class=\"" + iconName[1]  + " large icon\"></i></a>" +
 			"</div>" +
-			"<div class=\"content message\" style=\"padding-top: 7px;font-size:16px;width:120px\">" +
-			fullName + "：帮我传张照片吧" +
+			"<div class=\"content message\" style=\"width: 150px;\">" +
+			fullName +
 			"</div></div>";
 	}
-	$("#messageList").append(html);
+	html = html +"</div>";
+	$("#"+messageType.typeName+"_MessageMenu").append(html);
+	$("#"+messageType.typeName+"HeaderMenu").click(function(){
+		showHiddenMessageTransition("#"+messageType.typeName+"MessageContent");
+	});
+	
 	$(".list.menu.message .item.message").hover(function(){
 		$(this).children(".right.floated").fadeIn(50);},
 		function(){
 		$(this).children(".right.floated").fadeOut(50);}
 	);
 	
-	$(".list.menu.message .upload_for_fri_btn").click(function() {
-		var id = $(this).parent().children(".this_userId").html();
-		var path = "v1/" + id;
-		var url = ServerRoot + ServiceType.LOGIN + path;
-		var onAjaxSuccess = function(data, textStatus) {
-			if (data == null){
-				console.log("cannot get friend object by id");
-			}else{
-				upload_choosepic(data);
-			}
-		};
-		var onAjaxError = function(xhr, textStatus, error) {
-			console.log("getFriends error: "+ error);
-		};
-		var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-		ajax_call(ajax_obj);
+	$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message")
+		.hover(	function(){$(this).css("color","#33B2E1");},
+				function(){$(this).css("color","");}
+			  );
+	
+	$(".list.menu.message ." + messageType.typeButtonOneName)
+		.children(".icon")		
+		.hover(	function(){$(this).css("color","#33B2E1");},
+				function(){$(this).css("color","");}
+			  );
+	
+	$(".list.menu.message ."+ messageType.typeButtonTwoName)
+		.children(".icon")
+		.hover(	function(){$(this).css("color","#33B2E1");},
+				function(){$(this).css("color","");}
+			  );
+	
+	$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message")
+		.click(function() {
+					itemOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent());
+				}
+		);
+
+	
+	$(".list.menu.message ." + messageType.typeButtonOneName).click(function() {
+		var thisUserId = $(this).parent().children(".this_userId").html();
+		var thisMessageId = $(this).parent().children(".this_messageId").html();
+		buttonOneOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent().parent());
+		
 	});
 	
-	$(".list.menu.message .delete_message_btn").click(function() {
-		var id = $(this).parent().children(".this_messageId").html();
-		var path = "v1/message/"+id+"/read";
-		var url = ServerRoot + ServiceType.NOTIFICATION + path;
-		var onAjaxSuccess = function(data, textStatus) {
-			if (data == true){
-				drawConfirmPopUp("delete");
-//				getInviteToUploadMessage();
-			}else{
-				drawConfirmPopUp("cannot delete");
-				console.log("cannot delete message");
-			}
-		};
-		var onAjaxError = function(xhr, textStatus, error) {
-			drawConfirmPopUp("delete ajax error: " + error);			
-//			console.log("getFriends error: "+ error);
-		};
-		var ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-		ajax_call(ajax_obj);
-		
+	$(".list.menu.message ."+ messageType.typeButtonTwoName).click(function() {
+		var thisUserId = $(this).parent().children(".this_userId").html();
+		var thisMessageId = $(this).parent().children(".this_messageId").html();
+		buttonTwoOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent().parent());
+
 	});
 }
 
+function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
+	switch (messageTypeNumber){
+	case "0"://inviteToUpload
+		
+		break;
+	case "1"://friendRequest
+		
+		break;
+	case "2"://acceptFriendRequest
+		
+		break;
+	case "3":
 
+		break;
+	case "4":
 
+		break;
+	case "5":
 
+		break;
+	case "6":
 
+		break;
+	}	
+}
 
+function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
+	switch (messageTypeNumber){
+	case "0"://inviteToUpload
+		inviteToUploadButtonOneOnclick(thisUserId);	
+		break;
+	case "1"://friendRequest
+		friendRequestButtonOneOnclick(thisUserId,thisMessageId,thisMessageId,thisItem);
+		break;
+	case "2"://acceptFriendRequest
+		
+		break;
+	case "3":
 
+		break;
+	case "4":
 
+		break;
+	case "5":
+
+		break;
+	case "6":
+
+		break;
+	}	
+}
+
+function buttonTwoOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
+	switch (messageTypeNumber){
+	case "0"://inviteToUpload
+		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);	
+		break;
+	case "1"://friendRequest
+		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+	  break;
+	case "2"://acceptFriendRequest
+		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+		break;
+	case "3":
+
+		break;
+	case "4":
+
+		break;
+	case "5":
+
+		break;
+	case "6":
+
+		break;
+	}		
+}
+
+function inviteToUploadButtonOneOnclick(id){
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == null){
+			drawConfirmPopUp("找不到用户");
+		}else{
+			upload_choosepic(data);
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("获取用户数据失败 Error: "+error);
+	};
+	getUserAPI(id, onAjaxSuccess, onAjaxError);
+}
+
+function friendRequestButtonOneOnclick(id,thisMessageId,messageTypeNumber,thisItem){
+	var onAjaxSuccess = function(data,textStatus){
+		if (data == true ){
+			drawConfirmPopUp("成功加为好友");
+			deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+			refreshTopbarFriendsLists($.cookie("truthbook").userId);
+			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
+			friendRequestAccept(id);
+			return true;
+		} else {
+			drawConfirmPopUp("添加好友失败");
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("添加好友请求发送失败 Error: "+error);
+		return false;
+	};
+
+	addFriendAPI($.cookie("truthbook").userId, id, type_nFriends,"false");
+	addFriendAPI(id, $.cookie("truthbook").userId, type_nFriends,"false", onAjaxSuccess, onAjaxError);
+	
+}
+
+function deleteMessageButtonOnclick(messageId,messageTypeNumber,thisItem){
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			deleteMessageTrasition(messageTypeNumber,thisItem);
+		}else{
+			drawConfirmPopUp("标记信息已读失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("标记信息已读请求发送失败 Error: " + error);			
+	};
+
+	markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError);
+}
+
+function deleteMessageTrasition(messageTypeNumber,thisItem){
+	deleteMessageNumUpdate(-1);
+	
+	thisItem.transition({
+		animation : 'horizontal flip out', 
+		duration  : '0.3s',
+		complete  : function() {
+			thisItem.hide();
+	}
+	});
+	deleteHeadMessageNumUpdate(thisItem);
+}
+
+function deleteHeadMessageNumUpdate(thisItem){
+	var newNumOfMessage = Number(thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html()) - 1;
+	if (newNumOfMessage <= 0){
+		thisItem.parent().parent().children(".header.item").hide();
+	} else {
+		thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html(newNumOfMessage);
+	}
+}
 
 
 

@@ -38,7 +38,7 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 			String queryString = "from " + table + " as model where " + sql_frag;
 			Session session = getSession();
 			Query queryObject = session.createQuery(queryString);
-//			queryObject.setCacheable(false);
+			queryObject.setCacheable(false);
 			
 			for (int i=0; i<value.length;i++){
 				queryObject.setParameter(i, value[i]);

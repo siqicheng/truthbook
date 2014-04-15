@@ -147,6 +147,7 @@ $(function() {
 
 
 function upload_choosepic(people) {
+
 	toId = people["userId"];
 	console.log(toId);
 	selected_bool = true;
@@ -161,5 +162,5 @@ function upload_choosepic(people) {
 	$("#step1").attr("class","ui step");
 	$("#step2").attr("class","ui active step");
 	$("#step3").attr("class","ui disabled step");
-//	showSidebar();
+
 }
