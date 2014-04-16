@@ -1,5 +1,6 @@
 package imageUpload;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.ProgressListener;
@@ -9,6 +10,7 @@ public class ImageUploadProgressListener implements ProgressListener {
 
 	public ImageUploadProgressListener(HttpServletRequest req) {
 		session=req.getSession();
+		//Cookie[] cookies = req.getCookies();
 		//UploadStatus status = new UploadStatus();
 		session.setAttribute("percent", "0");
 	}
