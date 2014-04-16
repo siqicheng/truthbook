@@ -3,10 +3,10 @@ package db.mapping.object;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
+
 
 import db.mapping.object.UserPassword;
 
@@ -15,7 +15,7 @@ import db.mapping.object.UserPassword;
  * User entity. @author MyEclipse Persistence Tools
  */
 @XmlRootElement
-@XmlSeeAlso({UserPassword.class,Relationship.class})
+@XmlSeeAlso({UserPassword.class,Relationship.class,Message.class})
 public class User  implements java.io.Serializable {
 
 
@@ -31,7 +31,7 @@ public class User  implements java.io.Serializable {
      private Set relationships = new HashSet(0);
      private Set portraits = new HashSet(0);
      private UserPassword userPassword;
-
+     private Set messages = new HashSet(0);
     // Constructors
 
     /** default constructor */
@@ -113,6 +113,17 @@ public class User  implements java.io.Serializable {
     public Set getComments() {
         return this.comments;
     }
+    
+    @XmlTransient
+    public Set getMessages(){
+    	return this.messages;
+    }
+    
+    
+    public void setMessages(Set messages){
+    	this.messages=messages;
+    }
+    
     
     public void setComments(Set comments) {
         this.comments = comments;

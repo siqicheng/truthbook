@@ -38,6 +38,7 @@ public class HibernateSessionFactory {
     private HibernateSessionFactory() {
     }
 	
+    
 	/**
      * Returns the ThreadLocal Session instance.  Lazy initialize
      * the <code>SessionFactory</code> if needed.
@@ -56,7 +57,7 @@ public class HibernateSessionFactory {
 					: null;
 			threadLocal.set(session);
 		}
-
+		session.clear();
         return session;
     }
 

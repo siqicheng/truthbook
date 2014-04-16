@@ -34,6 +34,5 @@ public class TestImage {
 //			e.printStackTrace();
 //		}
 //	}
-
 }
 
