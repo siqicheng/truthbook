@@ -242,7 +242,13 @@ function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
 	ajax_call(ajax_obj);
 }
 
-
+//Need to be added
+function getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + userId + "/userId/one",
+		url = ServerRoot + ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);	
+}
 
 
 

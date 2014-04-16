@@ -15,7 +15,7 @@ function imageLengthJson(data){
 
 function getImagePreCheck(){
 	if($.cookie("truthbook").userId == $.cookie("truthbook_PageOwner_userId").userId){
-		getAllImage();
+		getAllImage($.cookie("truthbook_PageOwner_userId").userId);
 	}else{
 		friendRelationCheck();
 	}
@@ -24,11 +24,11 @@ function getImagePreCheck(){
 function friendRelationCheck(){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data > 0 ){
-			getAllImage();
+			getAllImage($.cookie("truthbook_PageOwner_userId").userId);
 			return true;
 		}
 		else{
-			getGuestImage();
+			getGuestImage($.cookie("truthbook_PageOwner_userId").userId);
 			return true;
 		}
 	};
@@ -40,15 +40,15 @@ function friendRelationCheck(){
 	checkFriendRelationship($.cookie("truthbook").userId, $.cookie("truthbook_PageOwner_userId").userId, onAjaxSuccess, onAjaxError);
 }
 
-function getAllImage(){
+function getAllImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 		$.cookie("truthbook_Page_Image_Json", data);
 		if (data != null ){
-			$.cookie("truthbook_Page_Image_Pointer", 0);
 			var numTotalImage = imageLengthJson(data);
 			if(numTotalImage==1){
 				drawOneImage();
 			}else{
+				$.cookie("truthbook_Page_Image_Pointer", 0);
 				drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,numToShow,numTotalImage);
 			}
 			return true;
@@ -66,40 +66,111 @@ function getAllImage(){
 	getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError);
 }
 
-function getGuestImage(){
-//ToDo: Guest Image
+function getGuestImage(userId){
+	var onAjaxSuccess = function(data,textStatus){
+		if (data != null ){
+			drawOneImage();
+			return true;
+		}
+		else{
+			drawConfirmPopUp("他木有照片");
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
+		return false;
+	};
+	getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError);
 }
 
+/*********************************************************************************
+ * 	When the user only have one image or only allowed to see one image,
+ * 	Use this to draw one segement and do not draw the show more button.
+ */
 function drawOneImage(){
-//ToDo: 
+	var url = imageData.image.url;
+		discript = imageData.image.discript,
+		uploaderName =  imageData.image.uploaderName,
+		uploaderId = imageData.image.uploaderId,
+		createDate = imageData.image.createDate,
+		numOfComment = imageData.image.numOfComment,
+		display = "inline";
+	$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,uploaderId,
+											createDate,numOfComment,display));	
 }
 
+/*********************************************************************************
+ * 	The function to execute right after get all the image info from the server.
+ * 
+ * 	Two Usage:
+ * 			1.	numOfNextBatch == numToShow (10~20) < numTotalImage : 
+ * 					Import n images from cookie at a time and show them all
+ * 					ShowMore Button click will call drawNextBatchImage()
+ * 			2.	numOfNextBatch == numTotalImage > numToShow (10~20) :
+ * 					Import all images and show partial of them
+ * 					ShowMore Button click will call showNextBatchImage()
+ */
 function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage){
 	var currentPointer = $.cookie("truthbook_Page_Image_Pointer"),
 		imageData = $.cookie("truthbook_Page_Image_Json");
+	
 	for(var i = 0 ; i < numOfNextBatch ; i++){
 		var url = imageData.image[currentPointer+i].url;
 			discript = imageData.image[currentPointer+i].discript,
 			uploaderName =  imageData.image[currentPointer+i].uploaderName,
 			uploaderId = imageData.image[currentPointer+i].uploaderId,
 			createDate = imageData.image[currentPointer+i].createDate,
-			numOfComment = imageData.image[currentPointer+i].numOfComment;
-		$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment));		
+			numOfComment = imageData.image[currentPointer+i].numOfComment,
+			display = i < numToShow ?"inline":"none";	
 		
-		if (isLastImage(i,currentPointer,numTotalImage)){	
-			break;	
+		$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,
+								uploaderId,createDate,numOfComment,display));		
+		
+		if (isLastImage(i,currentPointer,numTotalImage)){
+			$.cookie("truthbook_Page_Image_Pointer", -1);
+			return;	
 		}
-		
 	}
+	$.cookie("truthbook_Page_Image_Pointer",currentPointer+numOfNextBatch-1);
+	return;
+}
+
+/*********************************************************************************
+ * 	In usage 2, search the whole images div and find the first hidden image
+ * 				show the next numToShow image or the rest if the rest is few.
+ * 	Return the number of the image left hidden.
+ */
+function showNextBatchImage(numToShow,numTotalImage){
+	var i = 0;
+	for (;i<numTotalImage;i++){
+		if ($("#eventsegment").children(".eventpile")[i].style.display == "none"){
+			break;
+		}
+	}
+	var j = 0
+	for(;j<numToShow;j++){
+		$("#eventsegment").children(".eventpile")[i+j].style.display = "inline";
+		if (i+j == numTotalImage - 1){
+			return 0;
+		}
+	}
+	return numTotalImage-i-1-numToShow;
 	
 }
 
+/*********************************************************************************
+ * 	In usage 1, check the cookie pointer position. 
+ */
 function isLastImage(i,currentPointer,numTotalImage){
-	return (i+currentPointer) == numTotalImage;
+	return (i+currentPointer) == (numTotalImage-1);
 }
 
-function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment){
-	html =  "<div class='eventpile'>" +
+/*********************************************************************************
+ * 	The whole HTML part to draw
+ */
+function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment,display){
+	html =  "<div class='eventpile' style='display : "+display+";' >" +
 		    	"<div class='ui shape'>" +
 		    		"<div class='sides'>" +
 		    			"<div class='active side ui items'>" +
@@ -149,7 +220,6 @@ function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComm
 		   	"</div>";
 	return html;
 }
-
 
 
 
