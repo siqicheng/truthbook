@@ -1,4 +1,4 @@
-package db.mapping.object;
+package test;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,6 +8,8 @@ import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.mapping.object.BaseHibernateDAO;
+
 /**
  * A data access object (DAO) providing persistence and search support for
  * ReadMessage entities. Transaction control of the save(), update() and
@@ -16,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * transactions. Each of these methods provides additional information for how
  * to configure it for the desired type of transaction control.
  * 
- * @see db.mapping.object.ReadMessage
+ * @see test.ReadMessage
  * @author MyEclipse Persistence Tools
  */
 

@@ -25,46 +25,62 @@ public class Message implements java.io.Serializable {
 	private Integer userId;
 	private User friend;
 	private Timestamp createTime;
-	private Map<String,String> content;
-	
+	//private Map<String,String> content;
+	private String status;
+	private Timestamp readTime;
+	public static final String READ_STATUS = "read";
+	public static final String SENT_STATUS = "sent";
+	public static final String UNSENT_STATUS = "unsent";
 	// Constructors
 
 	/** default constructor */
 	public Message() {
-		this.content = new HashMap();
-		this.content.put("status", "unsend");
+	//	this.content = new HashMap();
+	//	this.content.put("status", "unsend");
+		this.status=Message.UNSENT_STATUS;
 	}
 
 	/** full constructor */
 	public Message(String messageType, Integer userId, User friend
 			, Timestamp createTime) {
-		this.content = new HashMap();
 		this.messageType = messageType;
 		this.userId = userId;
 		this.friend = friend;
 		this.createTime = createTime;
-		this.content.put("status", "unsend");
+	//	this.content.put("status", "unsend");
+		this.status=Message.UNSENT_STATUS;
 	}
 
 	// Property accessors
 
 	@XmlTransient
+	public Timestamp getReadTime(){
+		return this.readTime;
+	}
+	
+	public void setReadTime(Timestamp readTime){
+		this.readTime=readTime;
+	}
+	
+	@XmlTransient
 	public String getStatus(){
-		if (this.content.containsKey("status")){
-			return this.content.get("status");
-		}
-		return null;
+	//	if (this.content.containsKey("status")){
+	//		return this.content.get("status");
+	//	}
+	//	return null;
+		return this.status;
 	}
 
 	
 	public void setStatus(String status){
-		this.content.put("status", status);
+	//	this.content.put("status", status);
+		this.status=status;
 	}
 	
-	@XmlTransient
-	public Map<String,String> getContent(){
-		return this.content;
-	}
+//	@XmlTransient
+//	public Map<String,String> getContent(){
+//		return this.content;
+//	}
 	
 	public Integer getMessageId() {
 		return this.messageId;

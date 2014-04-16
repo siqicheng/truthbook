@@ -1,4 +1,4 @@
-package restful.gateway;
+package backup;
 
 import java.beans.IntrospectionException;  
 
@@ -8,8 +8,6 @@ import java.beans.PropertyDescriptor;
   
 import java.math.BigDecimal;  
 import java.math.BigInteger;  
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;  
 import java.util.Map;  
 import java.util.Set;
@@ -164,13 +162,11 @@ public class RestUtil {
          }  
          return sb.toString();  
   }  
-	public static Date getCurrentDate(){
-		String  currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date());
-		return new Date(currentDate);
-	}
+
 	public static boolean isNull(Object input){
 		
 		boolean ret = (input !=null && !"".equals(input))?false:true;
 		return ret;
 	}
+
 }  

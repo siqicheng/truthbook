@@ -12,7 +12,7 @@ function searchUsers(){
 		var url=ServerRoot+ServiceType.LOGIN+path + userFullName + action;
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
-				$("#testSearch").append("Ooooops,鎵句笉鍒板璞�);
+				$("#testSearch").append("Ooooops,找不到对象");
 				return false;
 			}
 			else{		

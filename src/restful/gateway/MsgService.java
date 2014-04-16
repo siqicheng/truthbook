@@ -14,8 +14,6 @@ import org.hibernate.Transaction;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
 import db.mapping.object.Message;
-import db.mapping.object.ReadMessage;
-import db.mapping.object.ReadMessageDAO;
 import db.mapping.object.MessageDAO;
 
 import java.util.ArrayList;
@@ -26,32 +24,12 @@ import sessionFactory.HibernateSessionFactory;
 @Path("push")
 public class MsgService {
 	private MessageDAO messageDAO;
-	private static final String messageTypes[]={"friendAdd","friendLevelUp","invitedToUpload","quoteConfirm","imageAccepted"};
+
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
 	}
 	
-//	private static boolean assertType(String Type)throws Exception{
-//		
-//		try{
-//			for (String t: MsgService.messageTypes) {
-//				if (t.equals(Type)){
-//					return true;
-//				}
-//			}
-//			
-//			StringBuffer tmp = new StringBuffer();
-//			tmp.append( "Message type must be one of the listed:\n");
-//			for (String s : MsgService.messageTypes){
-//				tmp.append(s+"\n");
-//			}
-//			throw new Exception(tmp.toString());
-//			
-//		} catch (Exception e){
-//			e.printStackTrace();
-//			return false;
-//		}
-//	}
+
 
 	@GET
 	@Path("v1/message/{id}/{srcid}/{type}/send")
@@ -94,9 +72,11 @@ public class MsgService {
 			@PathParam("type") String type) throws Exception {
 		
 		Session session = this.messageDAO.getSession();
+
+		String status = Message.UNSENT_STATUS;
 		
-		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
-		Object value[] = {id,type};	
+		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE,MessageDAO.STATUS};
+		Object value[] = {id,type,status};	
 		
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
@@ -110,7 +90,8 @@ public class MsgService {
 				for (Object message : Messages){
 					if (message instanceof Message){
 						
-						((Message) message).setStatus("sended");
+						((Message) message).setStatus(Message.SENT_STATUS);
+
 						session.update((Message)message);
 						message_list.add(message);
 					}
@@ -139,11 +120,12 @@ public class MsgService {
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
 		Session session = this.messageDAO.getSession();
+		String status = Message.UNSENT_STATUS ;
+		String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
+		Object value[] = {id,status};	
 		
 		try{
-			List Messages=this.messageDAO.findByUserId(id);
-
-			
+			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
 			
@@ -151,8 +133,7 @@ public class MsgService {
 				
 				for (Object message : Messages){
 					if (message instanceof Message){
-						
-						((Message) message).setStatus("sended");
+						((Message) message).setStatus(Message.SENT_STATUS);
 						session.update((Message)message);
 						message_list.add(message);
 					}
@@ -176,21 +157,24 @@ public class MsgService {
 		}
 	}
 	
-	@PUT
+	@GET
 	@Path("v1/message/{messageid}/read")
 	@Produces("application/json;charset=utf-8")
 	public Object readMessage(@PathParam("messageid") Integer id){
 		Session session = this.messageDAO.getSession();
 		try{
 			Message message = this.messageDAO.findById(id);
-			ReadMessage readmsg = new ReadMessage(message);
-			readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));
+			if (message.getStatus().equals(Message.SENT_STATUS) ){
 			
-			Transaction tx = session.beginTransaction();
-			session.delete(message);
-			session.save(readmsg);
-			tx.commit();
-			session.close();
+				Transaction tx = session.beginTransaction();
+		//	session.delete(message);
+		//	session.save(readmsg);
+				message.setStatus(Message.READ_STATUS);
+				message.setReadTime(new Timestamp(System.currentTimeMillis()));
+				session.update(message);
+				tx.commit();
+				session.close();
+			}
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
@@ -239,8 +223,7 @@ public class MsgService {
 	@GET
 	@Path("v1/message/{userid}/{type}/read")
 	@Produces("application/json;charset=utf-8")
-	public Object readSendedMessage(@PathParam("userid") Integer id , @PathParam("type") String type){
-		
+	public Object readSentMessage(@PathParam("userid") Integer id , @PathParam("type") String type){
 		
 		Session session = this.messageDAO.getSession();
 		
@@ -252,13 +235,11 @@ public class MsgService {
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
 			
 			for (Object message : Messages){
-				if (message instanceof Message && ((Message) message).getStatus().equals("sended")){
+				if (message instanceof Message && ((Message) message).getStatus().equals(Message.SENT_STATUS)){
 					
-					ReadMessage readmsg = new ReadMessage( (Message) message);
-					readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));
-					
-					session.delete(message);
-					session.save(readmsg);
+					((Message)message).setStatus(Message.READ_STATUS);
+					((Message)message).setReadTime(new Timestamp(System.currentTimeMillis()));
+					session.update(message);
 				}
 			}
 			
