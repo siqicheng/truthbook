@@ -10,7 +10,7 @@ public class ImageUploadProgressListener implements ProgressListener {
 
 	public ImageUploadProgressListener(HttpServletRequest req) {
 		session=req.getSession();
-		//Cookie[] cookies = req.getCookies();
+		
 		//UploadStatus status = new UploadStatus();
 		session.setAttribute("percent", "0");
 	}
@@ -22,7 +22,7 @@ public class ImageUploadProgressListener implements ProgressListener {
 	public void update(long pBytesRead, long pContentLength, int pItems) {
 	//	UploadStatus status = (UploadStatus) session.getAttribute("status");
 	//	status.setPBytesRead(pBytesRead);
-	//	status.setPContentLength(pContentLength);
+	//	status.setPContentLength(pContentLength); 
 	//	status.setPItems(pItems);
 		double percent = (double)pBytesRead / (double) pContentLength;
 		session.setAttribute("percent", String.valueOf(percent));
