@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -14,11 +15,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
+import db.mapping.object.Message;
 import db.mapping.object.Relationship;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
@@ -35,10 +38,20 @@ public class ImageService {
 	}
 	
 	@GET
-	@Path("v1/image/latest")
+	@Path("v1/image/{userid}/latest")
 	@Produces("application/json;charset=utf-8")
-	public Object getLatestImage(){
-		return null;
+	public Object getLatestImage(@PathParam("userid") Integer userId){
+		User user = new UserDAO().findById(userId);
+		Set set = user.getImages();
+		Image latest = null;
+		for (Object image : set){
+			if (image instanceof Image){
+				if (latest==null || ((Image)image).getLastModified().after(latest.getLastModified())){
+					latest = (Image) image;
+				}
+			}
+		}
+		return latest;
 	}
 	
 	@POST
@@ -92,35 +105,34 @@ public class ImageService {
 	}
 	
 	@GET
-	@Path("v1/image/{userId}/userId")
+	@Path("v1/image/{userId}/user")
 	@Produces("application/json;charset=utf-8")
 	public Image[] getImagesByUser(@PathParam("userId") Integer userId) {
-		String property[] = {Image.USER_ID,Image.DELETED};
-		Object value[] = {userId,false};
+
+		User user = new UserDAO().findById(userId);
 		
-		List images = this.imageDAO.findByProperties(property, value, Image.TABLE);
+		Set set = user.getImages();
 		
-		if (images.size() > 0){
-			List image_list = new ArrayList();
-			for (Object image : images){
-				if (image instanceof Image){
-					if (image!= null){
-						image_list.add(image);
-					}					
-				}				
+		List image_list = new ArrayList();
+		for (Object image : set){
+			if (image instanceof Image){
+				image_list.add(image);
 			}
-			Image[] image = new Image[image_list.size()];
-			for (int i=0; i<image_list.size();i++){
-				image[i] = (Image) image_list.get(i);
-			}
-			
-			return image;
 		}
-		return null;		
+		
+		Image[] images = new Image[image_list.size()];
+		
+		for (int i=0; i<image_list.size();i++){
+			images[i] = (Image) image_list.get(i);
+		}
+		
+		return images;
+		
+		
 	}
 	
 	@GET
-	@Path("v1/image/{uploaderId}/uploaderId")
+	@Path("v1/image/{uploaderId}/uploader")
 	@Produces("application/json;charset=utf-8")
 	public Image[] getImagesByUploader(@PathParam("uploaderId") Integer uploaderId) {
 		String property[] = {Image.UPLOADER_ID,Image.DELETED};

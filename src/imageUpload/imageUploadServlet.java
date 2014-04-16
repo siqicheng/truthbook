@@ -20,6 +20,14 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.hibernate.Transaction;
+import org.hibernate.Session;
+
+import db.mapping.object.ImageDAO;
+import db.mapping.object.Image;
+import restful.gateway.RestUtil;
+import db.mapping.object.User;
+import db.mapping.object.UserDAO;
 
 public class imageUploadServlet extends HttpServlet {
 	
@@ -114,5 +122,23 @@ public class imageUploadServlet extends HttpServlet {
 		is.close();
 		
 		out.print("true");
+		
+		Session session = new ImageDAO().getSession();
+		Transaction tx = session.beginTransaction();
+		
+		Image image = new Image();
+		image.setApproved(false);
+		image.setContent("");
+		image.setCreateDate(RestUtil.getCurrentDate());
+		image.setDeleted(false);
+		image.setImageUrl(fileName);
+		image.setLastModified(RestUtil.getCurrentDate());
+		image.setUploaderId(userId);
+		User receiver = new UserDAO().findById(receiverId);
+		image.setUser(receiver);
+		
+		session.save(image);
+		tx.commit();
+		session.close();
 	}
 }
