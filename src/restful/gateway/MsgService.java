@@ -24,10 +24,12 @@ import sessionFactory.HibernateSessionFactory;
 @Path("push")
 public class MsgService {
 	private MessageDAO messageDAO;
+
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
 	}
 	
+
 
 	@GET
 	@Path("v1/message/{id}/{srcid}/{type}/send")
@@ -70,6 +72,7 @@ public class MsgService {
 			@PathParam("type") String type) throws Exception {
 		
 		Session session = this.messageDAO.getSession();
+
 		String status = Message.UNSENT_STATUS;
 		
 		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE,MessageDAO.STATUS};
@@ -88,6 +91,7 @@ public class MsgService {
 					if (message instanceof Message){
 						
 						((Message) message).setStatus(Message.SENT_STATUS);
+
 						session.update((Message)message);
 						message_list.add(message);
 					}
@@ -122,8 +126,6 @@ public class MsgService {
 		
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
-
-			
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
 			
@@ -131,7 +133,6 @@ public class MsgService {
 				
 				for (Object message : Messages){
 					if (message instanceof Message){
-						
 						((Message) message).setStatus(Message.SENT_STATUS);
 						session.update((Message)message);
 						message_list.add(message);
@@ -223,7 +224,6 @@ public class MsgService {
 	@Path("v1/message/{userid}/{type}/read")
 	@Produces("application/json;charset=utf-8")
 	public Object readSentMessage(@PathParam("userid") Integer id , @PathParam("type") String type){
-		
 		
 		Session session = this.messageDAO.getSession();
 		

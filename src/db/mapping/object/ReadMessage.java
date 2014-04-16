@@ -11,12 +11,15 @@ import javax.xml.bind.annotation.XmlTransient;
 import db.mapping.object.User;
 
 /**
- * Message entity. @author MyEclipse Persistence Tools
+ * ReadMessage entity. @author MyEclipse Persistence Tools
  */
 
 @XmlRootElement
 @XmlSeeAlso({User.class})
-public class Message implements java.io.Serializable {
+
+public class ReadMessage implements
+
+		java.io.Serializable {
 
 	// Fields
 
@@ -25,63 +28,38 @@ public class Message implements java.io.Serializable {
 	private Integer userId;
 	private User friend;
 	private Timestamp createTime;
-	//private Map<String,String> content;
-	private String status;
 	private Timestamp readTime;
-	public static final String READ_STATUS = "read";
-	public static final String SENT_STATUS = "sent";
-	public static final String UNSENT_STATUS = "unsent";
+	private Map<String,String> content;
+	
 	// Constructors
 
 	/** default constructor */
-	public Message() {
-	//	this.content = new HashMap();
-	//	this.content.put("status", "unsend");
-		this.status=Message.UNSENT_STATUS;
+	public ReadMessage() {
+		this.content = new HashMap();
 	}
 
+	public ReadMessage(Message message){
+		this.messageType = message.getMessageType();
+		this.userId = message.getUserId();
+		this.friend = message.getFriend();
+		this.createTime = message.getCreateTime();
+		this.readTime = new Timestamp(System.currentTimeMillis());
+		this.content = message.getContent();
+	}
+	
 	/** full constructor */
-	public Message(String messageType, Integer userId, User friend
-			, Timestamp createTime) {
+	public ReadMessage(String messageType, Integer userId, User friend,
+			Timestamp createTime, Timestamp readTime) {
 		this.messageType = messageType;
 		this.userId = userId;
 		this.friend = friend;
 		this.createTime = createTime;
-	//	this.content.put("status", "unsend");
-		this.status=Message.UNSENT_STATUS;
+		this.readTime = readTime;
+		this.content = new HashMap();
 	}
 
 	// Property accessors
 
-	@XmlTransient
-	public Timestamp getReadTime(){
-		return this.readTime;
-	}
-	
-	public void setReadTime(Timestamp readTime){
-		this.readTime=readTime;
-	}
-	
-	@XmlTransient
-	public String getStatus(){
-	//	if (this.content.containsKey("status")){
-	//		return this.content.get("status");
-	//	}
-	//	return null;
-		return this.status;
-	}
-
-	
-	public void setStatus(String status){
-	//	this.content.put("status", status);
-		this.status=status;
-	}
-	
-//	@XmlTransient
-//	public Map<String,String> getContent(){
-//		return this.content;
-//	}
-	
 	public Integer getMessageId() {
 		return this.messageId;
 	}
@@ -105,16 +83,15 @@ public class Message implements java.io.Serializable {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	
-//	@XmlTransient
+
 	public User getFriend() {
 		return this.friend;
 	}
 
 	public void setFriend(User friend) {
-		this.friend=friend;
+		this.friend = friend;
 	}
-	
+
 	@XmlTransient
 	public Timestamp getCreateTime() {
 		return this.createTime;
@@ -122,6 +99,15 @@ public class Message implements java.io.Serializable {
 
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
+	}
+
+	@XmlTransient
+	public Timestamp getReadTime() {
+		return this.readTime;
+	}
+
+	public void setReadTime(Timestamp readTime) {
+		this.readTime = readTime;
 	}
 
 }

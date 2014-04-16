@@ -119,11 +119,9 @@ public class User  implements java.io.Serializable {
     	return this.messages;
     }
     
-    
     public void setMessages(Set messages){
     	this.messages=messages;
     }
-    
     
     public void setComments(Set comments) {
         this.comments = comments;

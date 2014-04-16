@@ -6,7 +6,6 @@
 -->
 <hibernate-mapping>
     <class name="db.mapping.object.Message" table="message" catalog="truthbook">
-    
         <id name="messageId" type="java.lang.Integer">
             <column name="message_id" />
             <generator class="native" />
@@ -35,7 +34,6 @@
          <property name="readTime" type="java.sql.Timestamp">
             <column name="read_time"  />
         </property>
-        
         
     </class>
 </hibernate-mapping>
