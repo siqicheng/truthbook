@@ -32,6 +32,7 @@ public class User  implements java.io.Serializable {
      private Set portraits = new HashSet(0);
      private UserPassword userPassword;
      private Set messages = new HashSet(0);
+     private Set images = new HashSet(0);
     // Constructors
 
     /** default constructor */
@@ -61,7 +62,14 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
-
+    public Set getImages(){
+    	return this.images;
+    }
+    
+    public void setImages(Set images){
+    	this.images = images;
+    }
+    
     public Integer getUserId() {
         return this.userId;
     }
