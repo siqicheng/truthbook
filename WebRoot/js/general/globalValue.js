@@ -3,15 +3,48 @@
  *
  */
 
+
+/*********************************************************************************
+ * 	Enable Json storage
+ */
+$(function (){
+	$.cookie.json = true;
+});
+
+
+/*********************************************************************************
+ * 	Website and RESTful AJAX URL
+ */
+
 //localhost = "172.13.0.47";
 localhost = "localhost";
-
+LoginPage = "http://"+localhost+":8080/truthbook/";
+HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
+DefaultImg = "img/logo_red.ico";
+QuoteImg = "img/logo.ico";
 ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
 ServiceType = {
     	   LOGIN:"loginService/",
     	   USERPROFILE :"userProfile/",
     	   NOTIFICATION :"push/"
        };
+
+/*********************************************************************************
+ * 	Global Numbers
+ */
+
+NEW_QUOTE = -1;
+picReceiver = null;
+upload_for_friend = false;
+type_nFriends = 1;
+type_eFriends = 2;
+
+NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 10;
+
+/*********************************************************************************
+ * 	System Message Object
+ */
+
 MessageType = {
  	   INVITETOUPLOAD:{
  		   number : "0",
@@ -53,21 +86,3 @@ MessageType = {
 //		   typeHeadMenuName : "条好友请求"
 //	   }
 };
-
-HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
-
-NEW_QUOTE = -1;
-
-
-picReceiver = null;
-upload_for_friend = false;
-type_nFriends = 1;
-type_eFriends = 2;
-
-$(function (){
-	$.cookie.json = true;
-});
-
-LoginPage = "http://"+localhost+":8080/truthbook/";
-DefaultImg = "img/logo_red.ico";
-QuoteImg = "img/logo.ico";

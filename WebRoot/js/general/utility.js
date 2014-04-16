@@ -207,8 +207,8 @@ function getUserAPI(id, onSuccess, onError) {
 		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
 	ajax_call(ajax_obj);
 }
-/*
- * Message API
+/*********************************************************************************
+ * Message Service API
  */
 function getMessageAPI(receiver,messageTypeName,onAjaxSuccess, onAjaxError){
 	var path = "v1/message/" + receiver + "/" + messageTypeName + "/get",
@@ -231,8 +231,8 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 	ajax_call(ajax_obj);	
 }
 
-/*
- * Image API
+/*********************************************************************************
+ * Image Service API
  */
 
 function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
