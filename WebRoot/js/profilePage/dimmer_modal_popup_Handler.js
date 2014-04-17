@@ -71,4 +71,3 @@ function testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiv
 	})
 	.modal("show");
 }
-

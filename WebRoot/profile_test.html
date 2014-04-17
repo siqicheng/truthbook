@@ -73,9 +73,9 @@
 		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
 		
 		<div class="right menu">
-				<form class="ui form item" onsubmit = "return searchUsers();">
+				<form class="ui form item" onsubmit="return false">
      				<div class="ui icon input">
-       				<input type="text" id = "searchFullName" placeholder="Search..." >
+       				<input type="text" id = "searchFullName" onkeyup="searchUsers()" placeholder="Search..." >
        				<i class="search link icon" onclick = "searchUsers();"></i>
      				</div>
    				</form>
@@ -151,7 +151,7 @@
  				
  			<div class="ui form uploadForm" id="confirm" style="display:none">
 				<!-- 预览效果 -->
-				<div class="ui message" id="previewmessage"></div>
+				<div class="ui message" id="previewMessage"></div>
 				<div class="ui items">
 					<div class="item">
 						<div class="image">
@@ -214,7 +214,7 @@
 						 	    style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
 						           <div class="visible content">&ensp;<i class="half empty heart icon"></i>&ensp;</div>
 						           <div class="hidden content">等确认</div>
-						        </button>		        
+						        </button>
 						 	    <button class="ui blue vertical animated button transition hidden" id="uploadPhoto" 
 						 	    style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
 						           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div>

@@ -80,19 +80,21 @@ $(function() {
 					if(data>0) {
 						gotoChoosePic();
 					} else {
-						header = "你和他/她还不是好友",
-						content = "加为好友之前无法为他/她上传照片，是否加为好友",
-						negativeBtn = "取消",
-						positiveBtn = "发送好友申请";
-						approveFunction = function() {
-							//发送好友申请
-							alert("已发送好友申请");
-							$("testModal").modal("hide");
-						},
-						denyFunction = function() {
-							$("testModal").modal("hide");
-						};
-						testModalPopup(header, content, negativeBtn, positiveBtn, approveFunction, denyFunction);
+						var header = "你和他/她还不是好友",
+							content = "加为好友之前无法为他/她上传照片，是否加为好友",
+							negativeBtn = "取消",
+							negativeBtnHidden = "不能为他/她上传照片",
+							positiveBtn = "发送好友申请",
+							positiveBtnHidden = "等待通过后再传照片",
+							approveFunction = function() {
+								//TODO: 发送好友申请
+								alert("已发送好友申请");
+								$("testModal").modal("hide");
+							},
+							denyFunction = function() {
+								$("testModal").modal("hide");
+							};
+						testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction, denyFunction);
 					}
 				},
 				onError = function(xhr, status, error) {
@@ -105,7 +107,7 @@ $(function() {
 	});
 
 	$("#nextstep3").click(function() {
-		/*uploading picture unfinished*/
+		/*TODO: uploading picture unfinished*/
 		gotoConfirm();
 	});
 
@@ -125,7 +127,7 @@ $(function() {
 						};
 					addFriendAPI(data.userId, userId, type_nFriends, "true");
 					addFriendAPI(userId, data.userId, type_nFriends, "false", onSuccess);
-					//上传照片
+					//TODO: 上传照片
 				},
 				onError = function(xhr, status, error) {
 					console.log("Register new quote failed with error: " + error);
@@ -137,7 +139,7 @@ $(function() {
 			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
 					if(data>0) {
-						//上传照片
+						//TODO: 上传照片
 						drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
 
 						$.magnificPopup.close();
@@ -145,7 +147,7 @@ $(function() {
 					} else {
 						var userId = $.cookie("truthbook").userId,
 							onSuccess = function(data, textStatus) {
-								//上传照片
+								//TODO: 上传照片
 								drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
 
 								$.magnificPopup.close();
@@ -162,10 +164,8 @@ $(function() {
 		} else {
 			console.log("upload pic for " + picReceiver);
 			var userId = $.cookie("truthbook").userId;
-			//上传照片
-
-			$.magnificPopup.close();
-			$(".sidebar").sidebar("hide");
+			//TODO: 上传照片
+			uploadPic();
 		};
 	});
 
@@ -177,7 +177,7 @@ $(function() {
 		};
 		if(isValidForm == true) {
 			var user = $("#fullName").val();
-			$("#previewmessage").html("你将传给<b>"+user+"</b>的照片如下：");
+			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
 			console.log("choose people form data : " + data);
 	//		Verify user quote: (fullName,school,entryTime) exist
@@ -253,8 +253,34 @@ function upload_choosepic(people) {
 	$("#fullName").attr("disabled", "disabled");
 	$("#school").attr("disabled", "disabled");
 	$("#entryTime").attr("disabled", "disabled");
+	$("#previewMessage").html("你将传给<b>"+people.fullName+"</b>的照片如下：");
 	gotoChoosePic();
 	showSidebar();
+}
+
+function uploadPic() {
+	var uploadData = new FormData(),
+		url = "http://localhost:8080/truthbook/servlet/imageUpload",
+		onSuccess = function(data, textStatus) {
+			//TODO: 发通知
+			drawConfirmPopUp("为好友上传照片完成！");
+			$.magnificPopup.close();
+			$(".sidebar").sidebar("hide");
+		},
+		onError = function(xhr, status, error) {
+			console.log("uploadPic failed with error: " + status + "     " + error);
+		};
+	uploadData.append("file", $("#fileElem").val());
+	uploadData.append("username", $.cookie("truthbook").fullName);
+	uploadData.append("userid", $.cookie("truthbook").userId);
+	uploadData.append("receiverid", picReceiver.userId);
+	uploadData.append("receivername", picReceiver.fullName);
+	var ajax_obj = getAjaxObj(url, "post", "json", onSuccess, onError);
+	ajax_obj.data = uploadData;
+	ajax_obj.cache = false;
+	ajax_obj.contentType = false;
+	ajax_obj.processData = false;
+	ajax_call(ajax_obj);
 }
 
 	/*Help functions*/
@@ -281,8 +307,7 @@ function gotoChoosePeople() {
 };
 function gotoRechoose() {
 	$(".ui.step").attr("class", "ui disabled step");
-	$("#step1").attr("class", "ui step");
-	$("#step2").attr("class", "ui active step");
+	$("#step1").attr("class", "ui active step");
 	$(".ui.form.uploadForm").hide();
 	$("#rechoosePeople").show();
 }

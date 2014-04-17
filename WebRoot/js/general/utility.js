@@ -32,6 +32,8 @@ function ajax_call(ajax_obj){
 		error: ajax_obj.onError,
 		complete: ajax_obj.onComplete,
 		cache:ajax_obj.cache,
+		contentType: ajax_obj.contentType,
+		processData: ajax_obj.processData
 	});
 }
 

@@ -5,11 +5,8 @@
 
 function searchUsers(){
 	$("#testSearch").html("");
-	userFullName = $("#searchFullName").attr("value"); 
-	if (userFullName != null){
-		var path = "v1/fullName/";
-		var action = "/verify";
-		var url=ServerRoot+ServiceType.LOGIN+path + userFullName + action;
+	var userFullName = $("#searchFullName").val();
+	if (userFullName != ""){
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
 				$("#testSearch").append("Ooooops,找不到对象");
@@ -48,10 +45,15 @@ function searchUsers(){
 			alert("Error: " + error);
 			return false;
 		};
-		var ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
-		ajax_call(ajax_obj);	
-	} else {
-		
-	}
+		searchUsersAPI(userFullName, onAjaxSuccess, onAjaxError);
+	};
 	return false;
+};
+
+function searchUsersAPI(userFullName, onSuccess, onError){
+	var path = "v1/fullName/";
+	var action = "/verify";
+	var url=ServerRoot+ServiceType.LOGIN+path + userFullName + action;
+	var ajax_obj = getAjaxObj(url,"GET","json",onSuccess,onError);
+	ajax_call(ajax_obj);
 };
