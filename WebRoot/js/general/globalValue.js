@@ -67,13 +67,15 @@ MessageType = {
 		   typeButtonTwoName : "delete_message_btn",
 		   typeHeadMenuName : "位好友接受好友请求"
 	   },
+	   TAKEQUOTE :{
+		   number : "3",
+		   typeName : "takeQuote",
+		   typeButtonOneName : "go_fri_btn",
+		   typeButtonTwoName : "delete_message_btn",
+		   typeHeadMenuName : "位好友认领了你新建的词条"
+	   },
 //	   ADDFRIEND :{
-//		   typeName : "friendRequest",
-//		   typeButtonOneName : "add_fri_btn",
-//		   typeButtonTwoName : "later_fri_btn",
-//		   typeHeadMenuName : "条好友请求"
-//	   },
-//	   ADDFRIEND :{
+//	       number : "2",
 //		   typeName : "friendRequest",
 //		   typeButtonOneName : "add_fri_btn",
 //		   typeButtonTwoName : "later_fri_btn",
