@@ -88,7 +88,6 @@ public class ImageService {
 			image = null;
 		}
 		return image;
-		
 	}
 	
 	@GET
