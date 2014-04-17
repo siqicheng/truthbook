@@ -350,15 +350,15 @@ var items = [
               }               
              ];
 
-$(document).ready(function() {
-
-	itemLayout(items);
-	$('.testitemload').click(function(){
-		$('#eventsegment').masonry('destroy');
-		itemLayout(items);
-	});
-
-});
+//$(document).ready(function() {
+//	items =[];
+//	itemLayout(items);
+//	$('.testitemload').click(function(){
+//		$('#eventsegment').masonry('destroy');
+//		itemLayout(items);	
+//	});
+//
+//});
 
 function itemLayout(items){
 	var newitems = itemCreate(items);
@@ -370,11 +370,16 @@ function itemLayout(items){
 
 
 function itemInitialize(){
+	
+	$('#eventsegment').masonry({		
+		itemSelector: '.eventpile',
+		gutter: 11});
+	
 		//shape flip
-	$(".commentToggle").click(function(){		
-		$(this).parents('.ui.shape').shape('flip over');
-		$('#eventsegment').masonry();		
-	});
+//	$(".commentToggle").click(function(){		
+//		$(this).parents('.ui.shape').shape('flip over');
+//		$('#eventsegment').masonry();		
+//	});
 		
 		//After all images have loaded, rerange the masonry item
 	$('#eventsegment').imagesLoaded( function() {
@@ -382,9 +387,9 @@ function itemInitialize(){
 	});
 		
 		//force the mansonry layout run
-	$("#eventsegment").mouseover(function(){
-		$('#eventsegment').masonry();
-	});
+//	$("#eventsegment").mouseover(function(){
+//		$('#eventsegment').masonry();
+//	});
 		
 		
 	//buttons on images show on/off
@@ -404,7 +409,10 @@ function itemInitialize(){
 				items: {
  					src:  $($num_items[i]).attr("src")
 				},
-				type: 'image'
+				type: 'image',
+				image: {
+					verticalFit: false
+				}
 		}); 
 		};
 	

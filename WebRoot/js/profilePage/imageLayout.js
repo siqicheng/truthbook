@@ -1,5 +1,13 @@
 $(function(){
 	getImagePreCheck();
+	
+	$('.testitemload').click(function(){
+		$('#eventsegment').masonry('destroy');
+		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+//		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+		
+	});
+	
 });
 
 function imageLengthJson(data){
@@ -45,11 +53,12 @@ function getAllImage(userId){
 		$.cookie("truthbook_Page_Image_Json", data);
 		if (data != null ){
 			var numTotalImage = imageLengthJson(data);
+			$.cookie("truthbook_Page_Image_Num", numTotalImage);
 			if(numTotalImage==1){
 				drawOneImage(data);
 			}else{
 				$.cookie("truthbook_Page_Image_Pointer", 0);
-				drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,10,numTotalImage);
+				drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,numTotalImage);
 			}
 			return true;
 		}
@@ -95,9 +104,10 @@ function drawOneImage(imageData){
 		uploaderId = imageData.image.uploaderId,
 		createDate = imageData.image.createDate,
 		numOfComment = "waiting for back end",//imageData.image.numOfComment,
+		imageId = imageData.image.imageId,
 		display = "inline";
 	$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,uploaderId,
-											createDate,numOfComment,display));	
+											createDate,numOfComment,display,imageId));	
 }
 
 /*********************************************************************************
@@ -107,48 +117,56 @@ function drawOneImage(imageData){
  * 			1.	numOfNextBatch == numToShow (10~20) < numTotalImage : 
  * 					Import n images from cookie at a time and show them all
  * 					ShowMore Button click will call drawNextBatchImage()
- * 			2.	numOfNextBatch == numTotalImage > numToShow (10~20) :
+ * 		   *2.	numOfNextBatch == numTotalImage > numToShow (10~20) :
  * 					Import all images and show partial of them
  * 					ShowMore Button click will call showNextBatchImage()
  */
 function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage){
 	var currentPointer = $.cookie("truthbook_Page_Image_Pointer");
+	if (currentPointer == -1) {
+		itemInitialize();
+		return;
+	}
 	var	imageData = $.cookie("truthbook_Page_Image_Json");
-	var	imageId = imageInOrder(numTotalImage, imageData);
+	var	imageIdinorder = imageInOrder(numTotalImage, imageData);
 		
 	for(var i = 0 ; i < numOfNextBatch ; i++){
-		var url = imageData.image[currentPointer+imageId[i][1]].imageUrl;
-			discript = imageData.image[currentPointer+imageId[i][1]].discript,
-			uploaderName =  imageData.image[currentPointer+imageId[i][1]].uploaderName,
-			uploaderId = imageData.image[currentPointer+imageId[i][1]].uploaderId,
-			createDate = imageData.image[currentPointer+imageId[i][1]].createDate,
-			numOfComment = imageData.image[currentPointer+imageId[i][1]].numOfComment,
+		var url = imageData.image[imageIdinorder[i+currentPointer][1]].imageUrl;
+			discript = imageData.image[imageIdinorder[i+currentPointer][1]].discript,
+			uploaderName =  imageData.image[imageIdinorder[currentPointer+i][1]].uploaderName,
+			uploaderId = imageData.image[imageIdinorder[currentPointer+i][1]].uploaderId,
+			createDate = imageData.image[imageIdinorder[currentPointer+i][1]].createDate,
+			numOfComment = imageData.image[imageIdinorder[currentPointer+i][1]].numOfComment,
+			imageId = imageData.image[imageIdinorder[currentPointer+i][1]].imageId,
 			display = i < numToShow ?"inline":"none";	
-		
+
 		$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,
-								uploaderId,createDate,numOfComment,display));
+								uploaderId,createDate,numOfComment,display,imageId));
+		
+		addImageButtonHandler(imageId);
 		
 		if (isLastImage(i,currentPointer,numTotalImage)){
 			$.cookie("truthbook_Page_Image_Pointer", -1);
-			itemInitialize();	
+			itemInitialize();			
 			return;	
 		}
 	}
-	
+		
 	itemInitialize();
-	$.cookie("truthbook_Page_Image_Pointer",currentPointer+numOfNextBatch-1);
+	
+	$.cookie("truthbook_Page_Image_Pointer",currentPointer+numOfNextBatch);
 	return;
 }
 
 function imageInOrder(numTotalImage,data){
-	var imageId = [];
+	var imageIdinorder = [];
 	for (var i = 0 ; i < numTotalImage;i++){
-		imageId [i] = [];
-		imageId [i][0] = data.image[i].imageId;
-		imageId [i][1] = i;
+		imageIdinorder [i] = [];
+		imageIdinorder [i][0] = data.image[i].imageId;
+		imageIdinorder [i][1] = i;
 	}
-	imageId.sort(function(x,y){return (y[0]-x[0]);});
-	return imageId;
+	imageIdinorder.sort(function(x,y){return (y[0]-x[0]);});
+	return imageIdinorder;
 }
 
 
@@ -182,37 +200,63 @@ function isLastImage(i,currentPointer,numTotalImage){
 	return (i+currentPointer) == (numTotalImage-1);
 }
 
+function addImageButtonHandler(imageId){
+	$("#imageId"+imageId).find(".commentToggle").click(function(){		
+		$(this).parents('.ui.shape')
+		.shape('setting', {
+			onChange: function(){
+				$('#eventsegment').masonry();
+			},
+			duration:500
+		})
+		.shape('flip over');			
+	});
+}
+
+
 /*********************************************************************************
  * 	The whole HTML part to draw
  */
-function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment,display){
-	html =  "<div class='eventpile' style='display : "+display+";' >" +
+function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment,display,imageId){
+	html =  "<div class='eventpile' id = 'imageId"+imageId+"' style='display : "+display+";' >" +
 		    	"<div class='ui shape'>" +
 		    		"<div class='sides'>" +
 		    			"<div class='active side ui items'>" +
 		    				"<div class='item'>" +    					
 		    					"<div class='image'>\n"+
 		    						"<img src='"+url+"'>"+
-		    							"<a class='ui tiny circular button likebtn'>&ensp;<i class='heart tiny icon'></i></a>"+
-		    					"</div>"+    					
+		    						"\t\t\t\t<div class='imgbtnArea'>\n" +
+		    						"\t\t\t\t\t<div class='ui tiny button likebtn'><i class='heart tiny icon'></i></div>\n"+
+		    						"\t\t\t\t\t<div class='ui tiny red inverted button commentbtn commentToggle'>\n" +
+		    						"\t\t\t\t\t\t<i class='comment icon'></i>"+numOfComment+"</div>\n" +
+		    						"\t\t\t\t</div>\n"+
+		    						"</div>"+    					
 		    					"<div class = 'content'>"+
 		    						"<p class='description'>"+discript+"</p>"+
 		    						"<div class='meta'>"+
 		    							"By <a class='uploader'>"+uploaderName+"</a> "+createDate+
 		    						"</div>"+
 		    					"</div>"+   					
-		    					"<div class='btnArea'>" +
-		    						"<button class='ui tiny red inverted animated button commentToggle'>" +
-		    							"<div class='visible content'>&ensp;<i class='comment icon'></i>&ensp;</div>" +
-		    							"<div class='hidden content'>"+numOfComment+"</div>" +
-		    						"</button>" +
-		    						"<button class='ui tiny basic animated button eventRemove'>" +
-		    							"<div class='visible content'>&ensp;<i class='remove icon'></i>&ensp;</div>" +
-		    							"<div class='hidden content'>删除</div>" +
-		    						"</button>" +
-		    					"</div>" +    					
-		    				"</div>" +
-		    			"</div>" +
+		    					"\t\t\t<div class='btnArea'>\n" +
+		                        "\t\t\t<div class='ui tiny basic animated button rePost'>\n" +
+		                        "\t\t\t\t<div class='visible content'><i class='reply mail icon'></i></div>\n" +
+		                        "\t\t\t\t<div class='hidden content'>返还照片</div>\n" +
+		                        "\t\t\t</div>\n" +
+		                        "\t\t\t<div class='ui tiny basic animated button uploadFor'>\n" +
+		                        "\t\t\t\t<div class='visible content'><i class='cloud upload icon'></i></div>\n" +
+		                        "\t\t\t\t<div class='hidden content'>为其上传</div>\n" +
+		                        "\t\t\t</div>\n" +
+		                        "\t\t\t<div class='ui tiny basic animated button setPortrait'>\n" +
+		                        "\t\t\t\t<div class='visible content'><i class='smile icon'></i></div>\n" +
+		                        "\t\t\t\t<div class='hidden content'>设为头像</div>\n" +
+		                        "\t\t\t</div>\n" +
+		                        "\t\t\t<div class='ui tiny basic animated button eventRemove'>\n" +
+		                        "\t\t\t\t<div class='visible content'><i class='remove icon'></i></div>\n" +
+		                        "\t\t\t\t<div class='hidden content'>删除照片</div>\n" +
+		                        "\t\t\t</div>\n" +
+		                        "\t\t\t</div>\n" +
+		                        "\t\t\t</div>\n" +
+		                        "\t\t</div>\n" +
 		    			
 		    			"<div class='side ui items'>" +
 		    				"<div class='item'>" +
