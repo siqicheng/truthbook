@@ -1,6 +1,6 @@
 package db.mapping.object;
 
-import java.sql.Timestamp;
+import db.mapping.baseDAO.BaseHibernateDAO;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -10,26 +10,24 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * ReadMessage entities. Transaction control of the save(), update() and
+ * ImageComment entities. Transaction control of the save(), update() and
  * delete() operations can directly support Spring container-managed
  * transactions or they can be augmented to handle user-managed Spring
  * transactions. Each of these methods provides additional information for how
  * to configure it for the desired type of transaction control.
  * 
- * @see db.mapping.object.ReadMessage
+ * @see db.mapping.object.ImageComment
  * @author MyEclipse Persistence Tools
  */
 
-public class ReadMessageDAO extends BaseHibernateDAO {
+public class ImageCommentDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory
-			.getLogger(ReadMessageDAO.class);
-	// property constants
-	public static final String MESSAGE_TYPE = "messageType";
-	public static final String USER_ID = "userId";
-	public static final String SOURCE_ID = "sourceId";
+			.getLogger(ImageCommentDAO.class);
 
-	public void save(ReadMessage transientInstance) {
-		log.debug("saving ReadMessage instance");
+	// property constants
+
+	public void save(ImageComment transientInstance) {
+		log.debug("saving ImageComment instance");
 		try {
 			getSession().save(transientInstance);
 			log.debug("save successful");
@@ -39,8 +37,8 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void delete(ReadMessage persistentInstance) {
-		log.debug("deleting ReadMessage instance");
+	public void delete(ImageComment persistentInstance) {
+		log.debug("deleting ImageComment instance");
 		try {
 			getSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -50,11 +48,11 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public ReadMessage findById(java.lang.Integer id) {
-		log.debug("getting ReadMessage instance with id: " + id);
+	public ImageComment findById(java.lang.Integer id) {
+		log.debug("getting ImageComment instance with id: " + id);
 		try {
-			ReadMessage instance = (ReadMessage) getSession().get(
-					"db.mapping.object.ReadMessage", id);
+			ImageComment instance = (ImageComment) getSession().get(
+					"db.mapping.object.ImageComment", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -62,12 +60,12 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByExample(ReadMessage instance) {
-		log.debug("finding ReadMessage instance by example");
+	public List findByExample(ImageComment instance) {
+		log.debug("finding ImageComment instance by example");
 		try {
-			List results = getSession()
-					.createCriteria("db.mapping.object.ReadMessage")
-					.add(Example.create(instance)).list();
+			List results = getSession().createCriteria(
+					"db.mapping.object.ImageComment").add(
+					Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
 			return results;
@@ -78,10 +76,10 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding ReadMessage instance with property: " + propertyName
-				+ ", value: " + value);
+		log.debug("finding ImageComment instance with property: "
+				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from ReadMessage as model where model."
+			String queryString = "from ImageComment as model where model."
 					+ propertyName + "= ?";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
@@ -92,22 +90,10 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByMessageType(Object messageType) {
-		return findByProperty(MESSAGE_TYPE, messageType);
-	}
-
-	public List findByUserId(Object userId) {
-		return findByProperty(USER_ID, userId);
-	}
-
-	public List findBySourceId(Object sourceId) {
-		return findByProperty(SOURCE_ID, sourceId);
-	}
-
 	public List findAll() {
-		log.debug("finding all ReadMessage instances");
+		log.debug("finding all ImageComment instances");
 		try {
-			String queryString = "from ReadMessage";
+			String queryString = "from ImageComment";
 			Query queryObject = getSession().createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -116,10 +102,10 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public ReadMessage merge(ReadMessage detachedInstance) {
-		log.debug("merging ReadMessage instance");
+	public ImageComment merge(ImageComment detachedInstance) {
+		log.debug("merging ImageComment instance");
 		try {
-			ReadMessage result = (ReadMessage) getSession().merge(
+			ImageComment result = (ImageComment) getSession().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -129,8 +115,8 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachDirty(ReadMessage instance) {
-		log.debug("attaching dirty ReadMessage instance");
+	public void attachDirty(ImageComment instance) {
+		log.debug("attaching dirty ImageComment instance");
 		try {
 			getSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -140,8 +126,8 @@ public class ReadMessageDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachClean(ReadMessage instance) {
-		log.debug("attaching clean ReadMessage instance");
+	public void attachClean(ImageComment instance) {
+		log.debug("attaching clean ImageComment instance");
 		try {
 			getSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");

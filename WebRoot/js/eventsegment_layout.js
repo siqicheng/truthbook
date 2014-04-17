@@ -350,13 +350,17 @@ var items = [
               }               
              ];
 
-$(document).ready(function() {
-	itemLayout(items);
-	$('.itemloadBtn').click(function(){
-		$('#eventsegment').masonry('destroy');
-		itemLayout(items);
-	});
-});
+
+//$(document).ready(function() {
+//	items =[];
+//	itemLayout(items);
+//	$('.testitemload').click(function(){
+//		$('#eventsegment').masonry('destroy');
+//		itemLayout(items);	
+//	});
+//
+//});
+
 
 function itemLayout(items){
 	var newitems = itemCreate(items);
@@ -368,17 +372,18 @@ function itemLayout(items){
 
 
 function itemInitialize(){
+	
+	$('#eventsegment').masonry({		
+		itemSelector: '.eventpile',
+		gutter: 11});
+	
 		//shape flip
-	$(".commentToggle").click(function(){		
-		$(this).parents('.ui.shape')
-			.shape('setting', {
-				onChange: function(){
-					$('#eventsegment').masonry();
-				},
-				duration: 500
-			})
-			.shape('flip over');			
-	});
+	
+//	$(".commentToggle").click(function(){		
+//		$(this).parents('.ui.shape').shape('flip over');
+//		$('#eventsegment').masonry();		
+//	});
+
 		
 		//After all images have loaded, rerange the masonry item
 	$('#eventsegment').imagesLoaded( function() {
@@ -409,16 +414,17 @@ function itemInitialize(){
  					src:  $($num_items[i]).attr("src")
 				},
 				type: 'image',
-				image: {
-					verticalFit: false
-				}
+
+//				image: {
+//					verticalFit: false
+//				}
 		}); 
 		};
 	
 	// remove the event item
-	$(".eventRemove").click(function(){
-			eventRemove($(this))
-		});
+//	$(".eventRemove").click(function(){
+//			eventRemove($(this))
+//		});
 }
 
 //item remove function, input is the object of the remove button

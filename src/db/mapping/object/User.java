@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
+
 import db.mapping.object.UserPassword;
 
 
@@ -14,7 +15,7 @@ import db.mapping.object.UserPassword;
  * User entity. @author MyEclipse Persistence Tools
  */
 @XmlRootElement
-@XmlSeeAlso({UserPassword.class,Relationship.class,Message.class,ReadMessage.class})
+@XmlSeeAlso({UserPassword.class,Relationship.class,Message.class})
 public class User  implements java.io.Serializable {
 
 
@@ -31,7 +32,7 @@ public class User  implements java.io.Serializable {
      private Set portraits = new HashSet(0);
      private UserPassword userPassword;
      private Set messages = new HashSet(0);
-     private Set readmessages = new HashSet(0);
+     private Set images = new HashSet(0);
     // Constructors
 
     /** default constructor */
@@ -61,7 +62,15 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
-
+    @XmlTransient
+    public Set getImages(){
+    	return this.images;
+    }
+    
+    public void setImages(Set images){
+    	this.images = images;
+    }
+    
     public Integer getUserId() {
         return this.userId;
     }
@@ -119,17 +128,8 @@ public class User  implements java.io.Serializable {
     	return this.messages;
     }
     
-    @XmlTransient
-    public Set getReadmessages(){
-    	return this.readmessages;
-    }
-    
     public void setMessages(Set messages){
     	this.messages=messages;
-    }
-    
-    public void setReadmessages(Set readmessages){
-    	this.readmessages=readmessages;
     }
     
     public void setComments(Set comments) {
