@@ -62,6 +62,7 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
+    @XmlTransient
     public Set getImages(){
     	return this.images;
     }

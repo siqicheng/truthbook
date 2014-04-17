@@ -165,8 +165,9 @@ public class RestUtil {
          return sb.toString();  
   }  
 	public static Date getCurrentDate(){
-		String  currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date());
-		return new Date(currentDate);
+	//	String  currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date());
+	//	return new Date(currentDate);
+		return new Date(System.currentTimeMillis());
 	}
 	public static boolean isNull(Object input){
 		

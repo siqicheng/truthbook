@@ -1,25 +1,32 @@
 package imageUpload;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.List;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import restful.gateway.RestUtil;
+import db.mapping.object.Image;
+import db.mapping.object.ImageDAO;
+import db.mapping.object.User;
+import db.mapping.object.UserDAO;
 
 public class imageUploadServlet extends HttpServlet {
 	
@@ -93,16 +100,12 @@ public class imageUploadServlet extends HttpServlet {
 		}
 		
 		fileNameBuffer.append(File.separator);
-		fileNameBuffer.append(userName+"_to_"+receiverName+"_at_");
-		fileNameBuffer.append( (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) ));
-		if (fileName.lastIndexOf('.')>-1){
-			
-			fileNameBuffer.append(fileName.substring(fileName.lastIndexOf('.')));
-		}
 		
-		fileName = fileNameBuffer.toString();
+		String ext = (fileName.lastIndexOf('.')>-1)?fileName.substring(fileName.lastIndexOf('.')):"";
+		fileName=userName+"_to_"+receiverName+"_at_"+
+		(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()))+ext;
+		FileOutputStream os = new FileOutputStream(fileNameBuffer.toString()+fileName);
 		
-		FileOutputStream os = new FileOutputStream(fileName);
 		byte[] buffer = new byte[8192];
 		
 		int count = 0;
@@ -114,5 +117,23 @@ public class imageUploadServlet extends HttpServlet {
 		is.close();
 		
 		out.print("true");
+		
+		Session session = new ImageDAO().getSession();
+		Transaction tx = session.beginTransaction();
+		
+		Image image = new Image();
+		image.setApproved(false);
+		image.setContent("");
+		image.setCreateDate(RestUtil.getCurrentDate());
+		image.setDeleted(false);
+		image.setImageUrl("Uploaded"+File.separator+fileName);
+		image.setLastModified(RestUtil.getCurrentDate());
+		image.setUploaderId(userId);
+		User receiver = new UserDAO().findById(receiverId);
+		image.setUser(receiver);
+		
+		session.save(image);
+		tx.commit();
+		session.close();
 	}
 }

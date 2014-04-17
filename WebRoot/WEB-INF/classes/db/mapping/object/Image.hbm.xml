@@ -44,7 +44,7 @@
         </set>
         
         <many-to-one name="user" class="db.mapping.object.User" lazy="false" fetch="select">
-            <column name="userId" not-null="true" />
+            <column name="user_id" not-null="true" />
         </many-to-one>
     </class>
 </hibernate-mapping>

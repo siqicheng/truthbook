@@ -78,6 +78,9 @@ public class Image implements java.io.Serializable {
 	}
 
 	// Property accessors
+	public Integer getUserId(){
+		return this.user.getUserId();
+	}
 
 	public String getContent(){
 		return this.content;
@@ -120,6 +123,7 @@ public class Image implements java.io.Serializable {
 		this.createDate = createDate;
 	}
 
+	@XmlTransient
 	public Date getLastModified() {
 		return this.lastModified;
 	}
