@@ -2,10 +2,10 @@ $(function(){
 	getImagePreCheck();
 	
 	$('.testitemload').click(function(){
-		$('#eventsegment').masonry('destroy');
-		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
-//		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
-		
+//		$('#eventsegment').masonry('destroy');
+//		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+		itemInitialize();
 	});
 	
 });
@@ -50,7 +50,7 @@ function friendRelationCheck(){
 
 function getAllImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
-		$.cookie("truthbook_Page_Image_Json", data);
+//		$.cookie("truthbook_Page_Image_Json", data);
 		if (data != null ){
 			var numTotalImage = imageLengthJson(data);
 			$.cookie("truthbook_Page_Image_Num", numTotalImage);
@@ -58,7 +58,7 @@ function getAllImage(userId){
 				drawOneImage(data);
 			}else{
 				$.cookie("truthbook_Page_Image_Pointer", 0);
-				drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,numTotalImage);
+				drawNextBatchImage(numTotalImage,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
 			}
 			return true;
 		}
@@ -121,13 +121,13 @@ function drawOneImage(imageData){
  * 					Import all images and show partial of them
  * 					ShowMore Button click will call showNextBatchImage()
  */
-function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage){
+function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData){
 	var currentPointer = $.cookie("truthbook_Page_Image_Pointer");
 	if (currentPointer == -1) {
 		itemInitialize();
 		return;
 	}
-	var	imageData = $.cookie("truthbook_Page_Image_Json");
+
 	var	imageIdinorder = imageInOrder(numTotalImage, imageData);
 		
 	for(var i = 0 ; i < numOfNextBatch ; i++){
@@ -147,7 +147,8 @@ function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage){
 		
 		if (isLastImage(i,currentPointer,numTotalImage)){
 			$.cookie("truthbook_Page_Image_Pointer", -1);
-			itemInitialize();			
+			itemInitialize();
+//			disableShowMoreButton();
 			return;	
 		}
 	}
@@ -176,6 +177,7 @@ function imageInOrder(numTotalImage,data){
  * 	Return the number of the image left hidden.
  */
 function showNextBatchImage(numToShow,numTotalImage){
+	var numLeft = numTotalImage;
 	var i = 0;
 	for (;i<numTotalImage;i++){
 		if ($("#eventsegment").children(".eventpile")[i].style.display == "none"){
@@ -186,18 +188,28 @@ function showNextBatchImage(numToShow,numTotalImage){
 	for(;j<numToShow;j++){
 		$("#eventsegment").children(".eventpile")[i+j].style.display = "inline";
 		if (i+j == numTotalImage - 1){
-			return 0;
+			numLeft = 0;
+			break;
 		}
 	}
-	return numTotalImage-i-1-numToShow;
+	if (numTotalImage-i-1-numToShow==0 || numLeft == 0){
+		disableShowMoreButton();
+	}
+	return;
 	
 }
+
+
 
 /*********************************************************************************
  * 	In usage 1, check the cookie pointer position. 
  */
 function isLastImage(i,currentPointer,numTotalImage){
 	return (i+currentPointer) == (numTotalImage-1);
+}
+
+function disableShowMoreButton(){
+	$("#showMoreButton").hide();
 }
 
 function addImageButtonHandler(imageId){
@@ -211,8 +223,17 @@ function addImageButtonHandler(imageId){
 		})
 		.shape('flip over');			
 	});
+	
+	$("#imageId"+imageId).find(".eventRemove").click(function(){
+		eventRemove($(this));
+		$('#eventsegment').masonry();
+	});
 }
 
+function eventRemove($removeBtn) {
+	var rmelement = $removeBtn.parents(".eventpile");
+	$("#eventsegment").masonry( 'remove', rmelement);
+}
 
 /*********************************************************************************
  * 	The whole HTML part to draw

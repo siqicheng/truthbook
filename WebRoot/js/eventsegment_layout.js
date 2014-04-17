@@ -410,16 +410,16 @@ function itemInitialize(){
  					src:  $($num_items[i]).attr("src")
 				},
 				type: 'image',
-				image: {
-					verticalFit: false
-				}
+//				image: {
+//					verticalFit: false
+//				}
 		}); 
 		};
 	
 	// remove the event item
-	$(".eventRemove").click(function(){
-			eventRemove($(this))
-		});
+//	$(".eventRemove").click(function(){
+//			eventRemove($(this))
+//		});
 }
 
 //item remove function, input is the object of the remove button
