@@ -101,16 +101,12 @@ public class imageUploadServlet extends HttpServlet {
 		}
 		
 		fileNameBuffer.append(File.separator);
-		fileNameBuffer.append(userName+"_to_"+receiverName+"_at_");
-		fileNameBuffer.append( (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) ));
-		if (fileName.lastIndexOf('.')>-1){
-			
-			fileNameBuffer.append(fileName.substring(fileName.lastIndexOf('.')));
-		}
 		
-		fileName = fileNameBuffer.toString();
+		String ext = (fileName.lastIndexOf('.')>-1)?fileName.substring(fileName.lastIndexOf('.')):"";
+		fileName=userName+"_to_"+receiverName+"_at_"+
+		(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()))+ext;
+		FileOutputStream os = new FileOutputStream(fileNameBuffer.toString()+fileName);
 		
-		FileOutputStream os = new FileOutputStream(fileName);
 		byte[] buffer = new byte[8192];
 		
 		int count = 0;
@@ -131,7 +127,7 @@ public class imageUploadServlet extends HttpServlet {
 		image.setContent("");
 		image.setCreateDate(RestUtil.getCurrentDate());
 		image.setDeleted(false);
-		image.setImageUrl(fileName);
+		image.setImageUrl("Uploaded"+File.separator+fileName);
 		image.setLastModified(RestUtil.getCurrentDate());
 		image.setUploaderId(userId);
 		User receiver = new UserDAO().findById(receiverId);
