@@ -1,4 +1,4 @@
-package restful.gateway;
+	package restful.gateway;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -73,10 +73,10 @@ public class MsgService {
 		
 		Session session = this.messageDAO.getSession();
 
-		String status = Message.UNSENT_STATUS;
+//		String status = Message.UNSENT_STATUS;
 		
-		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE,MessageDAO.STATUS};
-		Object value[] = {id,type,status};	
+		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
+		Object value[] = {id,type};	
 		
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
@@ -88,7 +88,8 @@ public class MsgService {
 				Transaction tx = session.beginTransaction();
 				
 				for (Object message : Messages){
-					if (message instanceof Message){
+					if (message instanceof Message 
+							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
 						
 						((Message) message).setStatus(Message.SENT_STATUS);
 
@@ -120,19 +121,20 @@ public class MsgService {
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
 		Session session = this.messageDAO.getSession();
-		String status = Message.UNSENT_STATUS ;
-		String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
-		Object value[] = {id,status};	
+	//	String status = Message.UNSENT_STATUS ;
+	//	String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
+	//	Object value[] = {id};	
 		
 		try{
-			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			List Messages=this.messageDAO.findByUserId(id);
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
 			
 				Transaction tx = session.beginTransaction();
 				
 				for (Object message : Messages){
-					if (message instanceof Message){
+					if (message instanceof Message
+							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
 						((Message) message).setStatus(Message.SENT_STATUS);
 						session.update((Message)message);
 						message_list.add(message);
