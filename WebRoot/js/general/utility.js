@@ -236,16 +236,16 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
  */
 
 function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
-	var path = "v1/image/" + userId + "/userId",
-		url = ServerRoot + ServiceType.NOTIFICATION + path,
+	var path = "v1/image/" + userId + "/user",
+		url = ServerRoot + ServiceType.IMAGE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);
 }
 
 //Need to be added
 function getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
-	var path = "v1/image/" + userId + "/userId/one",
-		url = ServerRoot + ServiceType.NOTIFICATION + path,
+	var path = "v1/image/" + userId + "/user/one",
+		url = ServerRoot + ServiceType.IMAGE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }

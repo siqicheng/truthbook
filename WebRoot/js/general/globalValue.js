@@ -26,7 +26,8 @@ ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
 ServiceType = {
     	   LOGIN:"loginService/",
     	   USERPROFILE :"userProfile/",
-    	   NOTIFICATION :"push/"
+    	   NOTIFICATION :"push/",
+    	   IMAGE:"imageService/",
        };
 
 /*********************************************************************************
