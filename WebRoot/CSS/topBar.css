@@ -1,4 +1,27 @@
-#topbar .title.item{
+#topbar .title{
 	padding-top: 0px;
 	padding-bottom: 0px;
+	position:absolute; left:50%; width:165px; margin-left:-83px; 
+	padding-top: 6px; padding-bottom: 7px;
+	display: inline-block;
+	cursor:pointer;
+}
+
+#topbar .item {
+	padding:8px 20px;
+}
+
+#topbar .empty.item {
+	padding:18px 20px;
+}
+#topbar .item .icon {
+	margin-right: 0px;
+}
+
+#topbar .right.menu .item {
+	padding: 8px 10px;
+}
+
+#topbar .right.menu .item .off.icon {
+	margin: 0px;
 }

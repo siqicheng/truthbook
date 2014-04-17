@@ -22,19 +22,11 @@
 </head>
 
 <body style="background-color:#DEDCDE;margin:0px;">
-	<div class="ui fixed transparent main menu" id="topbar" >
+	<div class="ui fixed transparent main small menu" id="topbar" >
 		<div class="left  menu">
 	
 			<div class="ui dropdown item" id="upload_menu">
-				<i class="add icon"></i>传照片
-				
-<!-- 				<div class="ui basic vertical animated button">  -->
-<!-- 		           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div> -->
-<!-- 		           <div class="hidden content">传照片</div> -->
-<!-- 				</div> -->
-				
-				
-				
+				<i class="add large icon"></i>传照片	
 				<div class=" dropdown menu" style="width: 170px;">
 					<div class="item" id="upload_for_new_btn" style="text-align:center;width: 170px;">新建好友档案</div>
 					
@@ -55,22 +47,23 @@
 					</div>
  				</div>
 			</div>
-			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove icon"></i>关闭</a>
+			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
 			
-		</div>		
-		<div class="title item" onclick = "goHomePage();" style="cursor:pointer;">
-	        <img src="img/Truthbook_red.png" width="140px" >
-	    </div>		      
+		</div>			      
 		<a class="active green item">
-			<i class="home  icon"></i>
+			<i class="home  large icon"></i>
 		</a>
 		<a class="blue item">
-	    	<i class="users icon"></i>
+	    	<i class="grid layout large icon"></i>
 		</a>
 		<a class="orange item">
-	    	<i class="setting icon"></i>
+	    	<i class="setting large icon"></i>
 		</a>
-		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
+		<div class="empty item"></div>
+		<a class="open_popup_link item" href="#upload" style="display:none">上传照片（PopUp）</a>
+		<div class="title" onclick = "goHomePage();">
+	        <img src="img/Truthbook_red.png" width="140px" >
+	    </div>	
 		
 		<div class="right menu">
 				<form class="ui form item" onsubmit = "return searchUsers();">
@@ -79,14 +72,9 @@
        				<i class="search link icon" onclick = "searchUsers();"></i>
      				</div>
    				</form>
-   				<div class = "ui animated button icon" id="exitButton"> 
-   					<div class="visible content">
-					    <i class="off icon"></i>
-					</div>
-   					<div class="hidden content">
-					    <i class="sign out icon"></i>
-					</div>
-   				</div>
+   				<a class = "item" id="exitButton"> 
+					    <i class="off large icon"></i>
+   				</a>
  		</div>
  		
 	</div>
@@ -309,9 +297,87 @@
 		</div>
 	</div>
 	
+	<div class="" id="eventsegment">
+<!-- 	<div class="eventpile">
+	<div class="ui shape">
+	<div class="sides">
+	<div class="active side ui items">
+		<div class="item">
+			<div class="image">
+				<img src="http://lorempixel.com/319/542/" style="opacity: 1;">
+				<div class="imgbtnArea">
+				<div class="ui tiny  button likebtn">
+					<i class="heart tiny icon"></i></div>
+				<div class="ui tiny red inverted button commentToggle">
+					<i class="comment icon"></i>12
+				</div>
+				</div>
+			</div>
+			<div class="content">
+				<p class="description">中文显示测试</p>
+				<div class="meta">uploaded by <a href="http://localhost:8080/truthbook/profile_test.html" class="uploader">张三</a> 2014-04-15</div>
+			</div>
+			<div class="btnArea">
+ 				<div class="ui tiny basic animated button rePost">
+					<div class="visible content"><i class="reply mail icon"></i></div>
+					<div class="hidden content">返还照片</div>
+				</div>
+				 <div class="ui tiny basic animated button uploadFor">
+					<div class="visible content"><i class="cloud upload icon"></i></div>
+					<div class="hidden content">为其上传</div>
+				</div>
+ 				<div class="ui tiny basic animated button setPortrait">
+					<div class="visible content"><i class="smile icon"></i></div>
+					<div class="hidden content">作为头像</div>
+				</div>
+ 				<div class="ui tiny basic animated button eventRemove">
+					<div class="visible content"><i class="remove icon"></i></div>
+					<div class="hidden content">删除照片</div>
+				</div>
+			</div>
+			</div>
+	</div>
+	<div class="side ui items">
+		<div class="item">
+			<h2 class="ui header">所有评论</h2>
+			<div class="ui minimal comments">
+			<div class="comment">
+				<a href="http://localhost:8080/truthbook/profile_test.html" class="avatar"><img src="./img/profile_test/247142.jpg"></a>
+				<div class="content">
+					<a href="http://localhost:8080/truthbook/profile_test.html" class="author">张三</a>
+					<div class="metadata"><span class="date">yyyy-mm-dd</span></div>
+					<div class="text">测试长评论暗示法大赛的法师法师的减肥撒哈拉是否会拉的开始发货的萨克雷锋哈伦裤啥地方哈考虑是否还卡了师傅说对啦快递费</div>
+				</div>
+			</div>
+			<div class="comment">
+				<a href="http://localhost:8080/truthbook/profile_test.html" class="avatar"><img src="./img/profile_test/247144.jpg"></a>
+				<div class="content">
+					<a href="http://localhost:8080/truthbook/profile_test.html" class="author">李四</a>
+					<div class="metadata"><span class="date">yyyy-mm-dd</span></div>
+					<div class="text">图不错！</div>
+				</div>
+			</div>
+			<form class="ui reply form">
+				<div class="field"><textarea placeholder="你想说…"></textarea></div>
+				<div class="ui small teal button">添加评论</div>
+			</form>
+			</div>
+			<div class="btnArea">
+			<button class="ui tiny basic animated button commentToggle">
+				<div class="visible content">&ensp;<i class="angle left icon"></i>&ensp;</div>
+				<div class="hidden content">返回</div>
+			</button>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	</div>	 -->
+</div>
+	
+	<div class="ui fluid button testitemload">test</div>
 
-	<div class="ui three items" id="eventsegment"></div>
-		
+
 	<div class="ui dimmer page hidden">	
 	 	<div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
 		    <div class="header">退出 Truthbook</div>
