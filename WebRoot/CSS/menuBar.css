@@ -4,8 +4,8 @@
 }
 
 #menubar .ui.four.column.grid .column {
-	padding-left: 0.5px;
-	padding-right: 0.5px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 #menubar .ui.dropdown.fluid.item .ui.small.label {

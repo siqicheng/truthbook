@@ -1,13 +1,24 @@
-$('#upload_new_sidebar')
+$('#upload')
 	.sidebar({
 		onShow: function(){
+//			selected_num=-1;
 			$("#upload_menu").toggle();
 			$("#close_sidebar_btn").slideDown();
 			},
 		onHide: function(){
+//			selected_bool = false;
+			resetUpload();
 			$("#upload_menu").slideDown();
 			$("#close_sidebar_btn").toggle();
 			}
 		})
-	.sidebar('attach events', '#upload_for_new_btn', 'show')
-	.sidebar('attach events', '#close_sidebar_btn', 'hide');
+	.sidebar('attach events', '#close_sidebar_btn', 'hide')
+	.sidebar('attach events', '.open_popup_link', 'hide');
+
+
+$(".open_popup_link").click(function(){
+	showPopup();
+});
+$("#upload_for_new_btn").click(function(){
+	showSidebar();
+});

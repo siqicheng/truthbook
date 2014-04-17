@@ -1,0 +1,35 @@
+#notifipanel {
+	display: none;
+	position:absolute; z-index:11;
+	width: 245px;
+	background-color: rgb(255, 255, 255); 
+	margin-top: 0px; 
+	margin-left: 1px; 
+	margin-right: 1px;
+	border-radius: 0px 0px 0.1875rem 0.1875rem;
+	-webkit-box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.1);
+  	box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+#notificolumn .ui.red.inverted.fluid.menu {
+	margin-bottom: 0px;
+}
+
+#notifipanel .item .hid_content {
+	display:none;
+}
+
+/* 文字自动换行 */
+#notifipanel {
+	word-wrap: break-word; word-break: normal; 
+}
+
+#notifipanel .item .right.floated.icon {
+	margin: 0px 2px;
+	display: none;
+}
+
+#notifipanel .item.friendreq_news .hid_content .ui.avatar.image {
+	width: 60px;
+	height:60px;
+}

@@ -12,7 +12,7 @@
   	</servlet-class>
   	<init-param>
 		<param-name>com.sun.jersey.config.property.packages</param-name>
-		<param-value>restful.gateway.login;org.codehaus.jackson.jaxrs</param-value>
+		<param-value>restful.gateway;org.codehaus.jackson.jaxrs</param-value>
 	</init-param>
   	<init-param>
 		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
@@ -24,6 +24,25 @@
   	<servlet-name>JAX-RS REST Servlet</servlet-name>
   	<url-pattern>/services/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>imageUploadServlet</servlet-name>
+  	<servlet-class>imageUpload.imageUploadServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>imageUploadServlet</servlet-name>
+  	<url-pattern>/servlet/imageUpload</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>ProgressServlet</servlet-name>
+  	<servlet-class>imageUpload.ProgressServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ProgressServlet</servlet-name>
+  	<url-pattern>/servlet/Progress</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
     <welcome-file>signin_up.html</welcome-file>
   </welcome-file-list>
