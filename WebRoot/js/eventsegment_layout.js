@@ -1,6 +1,6 @@
 var items = [
              {
-            	 imgsrc: "http://lorempixel.com/319/542/",
+            	 imgsrc: "http://lorempixel.com/319/1200/",
             	 descript: "中文显示测试",
             	 meta: "2014-04-15",
             	 uploader: {
@@ -249,7 +249,7 @@ var items = [
             	 like_num: 10  	 
               },
               {
-            	  imgsrc:"http://lorempixel.com/319/549/",
+            	  imgsrc:"http://ww2.sinaimg.cn/large/c67c10d4gw1efhzituoi3j21kw16o7n6.jpg",
             	  descript:"这是一张外网的图",
             	  meta:"2014-04-14",
             	  uploader: {
@@ -352,7 +352,7 @@ var items = [
 
 $(document).ready(function() {
 	itemLayout(items);
-	$('.testitemload').click(function(){
+	$('.itemloadBtn').click(function(){
 		$('#eventsegment').masonry('destroy');
 		itemLayout(items);
 	});
@@ -370,8 +370,14 @@ function itemLayout(items){
 function itemInitialize(){
 		//shape flip
 	$(".commentToggle").click(function(){		
-		$(this).parents('.ui.shape').shape('flip over');
-		$('#eventsegment').masonry();		
+		$(this).parents('.ui.shape')
+			.shape('setting', {
+				onChange: function(){
+					$('#eventsegment').masonry();
+				},
+				duration: 500
+			})
+			.shape('flip over');			
 	});
 		
 		//After all images have loaded, rerange the masonry item
@@ -380,9 +386,9 @@ function itemInitialize(){
 	});
 		
 		//force the mansonry layout run
-	$("#eventsegment").mouseover(function(){
-		$('#eventsegment').masonry();
-	});
+//	$("#eventsegment").mouseover(function(){
+//		$('#eventsegment').masonry();
+//	});
 		
 		
 	//buttons on images show on/off
@@ -402,7 +408,10 @@ function itemInitialize(){
 				items: {
  					src:  $($num_items[i]).attr("src")
 				},
-				type: 'image'
+				type: 'image',
+				image: {
+					verticalFit: false
+				}
 		}); 
 		};
 	
