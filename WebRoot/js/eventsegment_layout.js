@@ -1,6 +1,6 @@
 var items = [
              {
-            	 imgsrc: "http://lorempixel.com/319/542/",
+            	 imgsrc: "http://lorempixel.com/319/1200/",
             	 descript: "中文显示测试",
             	 meta: "2014-04-15",
             	 uploader: {
@@ -249,7 +249,7 @@ var items = [
             	 like_num: 10  	 
               },
               {
-            	  imgsrc:"http://lorempixel.com/319/549/",
+            	  imgsrc:"http://ww2.sinaimg.cn/large/c67c10d4gw1efhzituoi3j21kw16o7n6.jpg",
             	  descript:"这是一张外网的图",
             	  meta:"2014-04-14",
             	  uploader: {
@@ -360,6 +360,7 @@ var items = [
 //
 //});
 
+
 function itemLayout(items){
 	var newitems = itemCreate(items);
 	$('#eventsegment').append(newitems).masonry({		
@@ -376,10 +377,12 @@ function itemInitialize(){
 		gutter: 11});
 	
 		//shape flip
+
 //	$(".commentToggle").click(function(){		
 //		$(this).parents('.ui.shape').shape('flip over');
 //		$('#eventsegment').masonry();		
 //	});
+
 		
 		//After all images have loaded, rerange the masonry item
 	$('#eventsegment').imagesLoaded( function() {
@@ -413,6 +416,7 @@ function itemInitialize(){
 //				image: {
 //					verticalFit: false
 //				}
+
 		}); 
 		};
 	
