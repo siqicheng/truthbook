@@ -1,21 +1,25 @@
 package restful.gateway;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
+import javax.ws.rs.PUT;
+import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 
-import org.hibernate.Session;
+import java.sql.Timestamp;
 import org.hibernate.Transaction;
-
-import db.mapping.object.Message;
-import db.mapping.object.MessageDAO;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
+import db.mapping.object.Message;
+import db.mapping.object.MessageDAO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import sessionFactory.HibernateSessionFactory;
 
 @Path("push")
 public class MsgService {
@@ -69,10 +73,10 @@ public class MsgService {
 		
 		Session session = this.messageDAO.getSession();
 
-		String status = Message.UNSENT_STATUS;
+//		String status = Message.UNSENT_STATUS;
 		
-		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE,MessageDAO.STATUS};
-		Object value[] = {id,type,status};	
+		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
+		Object value[] = {id,type};	
 		
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
@@ -84,7 +88,8 @@ public class MsgService {
 				Transaction tx = session.beginTransaction();
 				
 				for (Object message : Messages){
-					if (message instanceof Message){
+					if (message instanceof Message 
+							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
 						
 						((Message) message).setStatus(Message.SENT_STATUS);
 
@@ -116,19 +121,20 @@ public class MsgService {
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
 		Session session = this.messageDAO.getSession();
-		String status = Message.UNSENT_STATUS ;
-		String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
-		Object value[] = {id,status};	
+	//	String status = Message.UNSENT_STATUS ;
+	//	String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
+	//	Object value[] = {id};	
 		
 		try{
-			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			List Messages=this.messageDAO.findByUserId(id);
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
 			
 				Transaction tx = session.beginTransaction();
 				
 				for (Object message : Messages){
-					if (message instanceof Message){
+					if (message instanceof Message
+							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
 						((Message) message).setStatus(Message.SENT_STATUS);
 						session.update((Message)message);
 						message_list.add(message);
