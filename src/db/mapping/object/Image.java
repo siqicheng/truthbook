@@ -27,7 +27,7 @@ public class Image implements java.io.Serializable {
 	public static final String UPLOADER_ID = "uploaderId";
 	public static final String APPROVED = "approved";
 	public static final String DELETED = "deleted";
-	public static final String USER_ID = "userId";
+	public static final String USER = "user";
 	public static final String CONTENT = "content";
 	
 	
@@ -50,7 +50,7 @@ public class Image implements java.io.Serializable {
 	/** default constructor */
 	public Image() {
 	}
-
+	
 	/** minimal constructor */
 	public Image(String imageUrl, User user, String content, Date createDate, Date lastModified,
 			Boolean approved, Boolean deleted) {
@@ -78,6 +78,7 @@ public class Image implements java.io.Serializable {
 	}
 
 	// Property accessors
+	
 	public Integer getUserId(){
 		return this.user.getUserId();
 	}

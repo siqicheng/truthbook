@@ -33,7 +33,7 @@
         <property name="content" type="java.lang.String">
         	<column name="content" length="255" />
         </property>
-        <set name="imageComments" inverse="true">
+        <set name="imageComments" lazy="false" inverse="true">
             <key>
                 <column name="image_id" not-null="true" />
             </key>
