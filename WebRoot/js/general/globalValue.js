@@ -40,7 +40,8 @@ upload_for_friend = false;
 type_nFriends = 1;
 type_eFriends = 2;
 
-NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 9;
+NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =8;
+NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 20;
 
 /*********************************************************************************
  * 	System Message Object

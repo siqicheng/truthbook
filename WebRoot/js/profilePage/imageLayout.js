@@ -1,13 +1,8 @@
 $(function(){
 	getImagePreCheck();
 	
-	$('.testitemload').click(function(){
-//		$('#eventsegment').masonry('destroy');
-//		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
-		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
-		itemInitialize();
-	});
-	
+	imageButtonHandler();
+
 });
 
 function imageLengthJson(data){
@@ -58,7 +53,7 @@ function getAllImage(userId){
 				drawOneImage(data);
 			}else{
 				$.cookie("truthbook_Page_Image_Pointer", 0);
-				drawNextBatchImage(numTotalImage,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
+				drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
 			}
 			return true;
 		}
@@ -105,9 +100,10 @@ function drawOneImage(imageData){
 		createDate = imageData.image.createDate,
 		numOfComment = "waiting for back end",//imageData.image.numOfComment,
 		imageId = imageData.image.imageId,
+		numLike = imageData.image.numLike,
 		display = "inline";
 	$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,uploaderId,
-											createDate,numOfComment,display,imageId));	
+											createDate,numOfComment,display,imageId,numLike));	
 }
 
 /*********************************************************************************
@@ -138,10 +134,11 @@ function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData){
 			createDate = imageData.image[imageIdinorder[currentPointer+i][1]].createDate,
 			numOfComment = imageData.image[imageIdinorder[currentPointer+i][1]].numOfComment,
 			imageId = imageData.image[imageIdinorder[currentPointer+i][1]].imageId,
+			numLike = imageData.image[imageIdinorder[currentPointer+i][1]].numLike,
 			display = i < numToShow ?"inline":"none";	
 
 		$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,
-								uploaderId,createDate,numOfComment,display,imageId));
+								uploaderId,createDate,numOfComment,display,imageId,numLike));
 		
 		addImageButtonHandler(imageId);
 		
@@ -177,6 +174,7 @@ function imageInOrder(numTotalImage,data){
  * 	Return the number of the image left hidden.
  */
 function showNextBatchImage(numToShow,numTotalImage){
+	showLoadingButton();
 	var numLeft = numTotalImage;
 	var i = 0;
 	for (;i<numTotalImage;i++){
@@ -195,6 +193,7 @@ function showNextBatchImage(numToShow,numTotalImage){
 	if (numTotalImage-i-1-numToShow==0 || numLeft == 0){
 		disableShowMoreButton();
 	}
+	showRefreshButton();
 	return;
 	
 }
@@ -210,6 +209,14 @@ function isLastImage(i,currentPointer,numTotalImage){
 
 function disableShowMoreButton(){
 	$("#showMoreButton").hide();
+}
+
+function showRefreshButton(){
+	$("#showMoreButton").children(".basic.fluid.button").html("<i class=\"double angle down large icon\"></i>");
+}
+
+function showLoadingButton(){
+	$("#showMoreButton").children(".basic.fluid.button").html("<i class=\"loading large icon\"></i>");
 }
 
 function addImageButtonHandler(imageId){
@@ -228,6 +235,34 @@ function addImageButtonHandler(imageId){
 		eventRemove($(this));
 		$('#eventsegment').masonry();
 	});
+	
+	$("#imageId"+imageId).find(".discript.content").click(function(){
+		$(this).parent().children(".btnArea").toggle();
+//		$(this).parent().children('.extra').toggle();
+		$('#eventsegment').masonry();
+	});
+	
+//	$("#imageId"+imageId).find('.icon.link.one')
+//	  .popup({
+//		    on: 'hover',
+//		    content: '分享给发送者'
+//	});
+//	$("#imageId"+imageId).find('.icon.link.two')
+//	  .popup({
+//		    on: 'hover',
+//		    content: '为发送者上传'
+//	});
+//	$("#imageId"+imageId).find('.icon.link.three')
+//	  .popup({
+//		    on: 'hover',
+//		    content: '设置为头像'
+//	});
+//	$("#imageId"+imageId).find('.icon.link.four')
+//	  .popup({
+//		    on: 'hover',
+//		    content: '删除照片'
+//	});
+	
 }
 
 function eventRemove($removeBtn) {
@@ -238,46 +273,55 @@ function eventRemove($removeBtn) {
 /*********************************************************************************
  * 	The whole HTML part to draw
  */
-function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment,display,imageId){
+function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike){
+	
+	displayDate = dateHandle(createDate);
+	
 	html =  "<div class='eventpile' id = 'imageId"+imageId+"' style='display : "+display+";' >" +
 		    	"<div class='ui shape'>" +
 		    		"<div class='sides'>" +
+		    		
 		    			"<div class='active side ui items'>" +
 		    				"<div class='item'>" +    					
-		    					"<div class='image'>\n"+
+		    					
+		    					"<div class='image'>"+
 		    						"<img src='"+url+"'>"+
-		    						"\t\t\t\t<div class='imgbtnArea'>\n" +
-		    						"\t\t\t\t\t<div class='ui tiny button likebtn'><i class='heart tiny icon'></i></div>\n"+
-		    						"\t\t\t\t\t<div class='ui tiny red inverted button commentbtn commentToggle'>\n" +
-		    						"\t\t\t\t\t\t<i class='comment icon'></i>"+numOfComment+"</div>\n" +
-		    						"\t\t\t\t</div>\n"+
-		    						"</div>"+    					
-		    					"<div class = 'content'>"+
+		    						"<div class='imgbtnArea'>" +
+			    						"<div class='ui tiny button likebtn' style='margin-right: 2px'>"+
+			    							"<i class='heart tiny icon'></i>"+
+			    						"</div>"+
+			    						"<div class='ui tiny red inverted button commentbtn commentToggle'>" +
+			    							"<i class='comment icon'></i>"+numOfComment+
+			    						"</div>" +
+			    					"</div>"+
+		    					"</div>"+    					
+		    					"<div class = 'discript content'>"+
 		    						"<p class='description'>"+discript+"</p>"+
 		    						"<div class='meta'>"+
-		    							"By <a class='uploader'>"+uploaderName+"</a> "+createDate+
+		    							"By <a class='uploader'>"+uploaderName+"</a> "+
 		    						"</div>"+
-		    					"</div>"+   					
-		    					"\t\t\t<div class='btnArea'>\n" +
-		                        "\t\t\t<div class='ui tiny basic animated button rePost'>\n" +
-		                        "\t\t\t\t<div class='visible content'><i class='reply mail icon'></i></div>\n" +
-		                        "\t\t\t\t<div class='hidden content'>返还照片</div>\n" +
-		                        "\t\t\t</div>\n" +
-		                        "\t\t\t<div class='ui tiny basic animated button uploadFor'>\n" +
-		                        "\t\t\t\t<div class='visible content'><i class='cloud upload icon'></i></div>\n" +
-		                        "\t\t\t\t<div class='hidden content'>为其上传</div>\n" +
-		                        "\t\t\t</div>\n" +
-		                        "\t\t\t<div class='ui tiny basic animated button setPortrait'>\n" +
-		                        "\t\t\t\t<div class='visible content'><i class='smile icon'></i></div>\n" +
-		                        "\t\t\t\t<div class='hidden content'>设为头像</div>\n" +
-		                        "\t\t\t</div>\n" +
-		                        "\t\t\t<div class='ui tiny basic animated button eventRemove'>\n" +
-		                        "\t\t\t\t<div class='visible content'><i class='remove icon'></i></div>\n" +
-		                        "\t\t\t\t<div class='hidden content'>删除照片</div>\n" +
-		                        "\t\t\t</div>\n" +
-		                        "\t\t\t</div>\n" +
-		                        "\t\t\t</div>\n" +
-		                        "\t\t</div>\n" +
+		    					"</div>"+
+		    					"<div class='btnArea' style='display:none;'>"+
+			                        "<a class='returnToSender' style='padding-right: 17px; padding-left: 17px;margin-left: 8px;'>" +
+			                        	"<i class='share large icon link one'></i>" +
+			                        "</a>" +
+			                        "<a class='uploadFor' style='padding-right: 17px; padding-left: 17px;'>" +
+		                        		"<i class='cloud upload large icon link two'></i>" +
+		                        	"</a>" +
+		                        	"<a class='setPortrait' style='padding-right: 17px; padding-left: 17px;'>" +
+	                        			"<i class='user basic large icon link three'></i>" +
+	                        		"</a>" +
+			                        "<a class='eventRemove' style='padding-right: 17px; padding-left: 17px;'>" +
+		                        		"<i class='remove sign large icon link four'></i>" +
+		                        	"</a>" +
+		                        "</div>" +
+					    		"<div class=\"extra\">"+
+					    			"<span style='float: left;  text-align: left;'>"+numLike+" 赞</span>"+
+					    	        "<span style='float: right;  text-align: right;margin-right: 3%'>"+displayDate+"</span>"
+			    	        	"</div>"+
+		                     
+			    	        "</div>" +
+		                  "</div>" +
 		    			
 		    			"<div class='side ui items'>" +
 		    				"<div class='item'>" +
@@ -295,11 +339,62 @@ function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComm
 		    						"</button>" +
 		    					"</div>" +   				
 		    				"</div>" +
-		    			"</div>" +   			
+		    			"</div>" +
+		    			
 		    		"</div>" +
 		   		"</div>" +
 		   	"</div>";
 	return html;
+}
+
+function dateHandle(createDate){
+	date = new Date();
+	day = date.getDate();
+	month = Number(date.getMonth()+1);if (month < 10) month="0"+Number(date.getMonth()+1);
+	year = date.getFullYear();
+	
+	today = year+"-"+month; 
+	uploadDate = createDate.substr(0,createDate.indexOf("T")-3);
+	defaultUploadDate = createDate.substr(0,createDate.indexOf("T"));
+	defaultDisplayDate = defaultUploadDate.substr(0,4)+"年"+defaultUploadDate.substr(5,2)+"月"+defaultUploadDate.substr(8,2)+"日";
+	if(uploadDate != today){	
+		return defaultDisplayDate;
+	} else {
+		hour = date.getHours();
+		minute = date.getMinutes();
+		second = date.getSeconds();
+		
+		upload_day = createDate.substr(createDate.indexOf("T")-2,2);
+		upload_hour = createDate.substr(createDate.indexOf("T")+1,2);
+		upload_minute = createDate.substr(createDate.indexOf("T")+4,2);
+		upload_second = createDate.substr(createDate.indexOf("T")+7,2);
+
+		if (day>upload_day){
+//			return defaultDisplayDate;
+			return (day - upload_day)+"天前";
+		}
+		if (hour>upload_hour){
+			return (hour - upload_hour)+"小时前";
+		}
+		if (minute>upload_minute){
+			return (minute - upload_minute)+"分钟前";
+		}
+		if (second>upload_second){
+			return (minute - upload_second)+"秒钟前";
+		}
+		return defaultDisplayDate;
+	}
+}
+
+
+function imageButtonHandler(){	
+	$("#showMoreButton").click(function(){
+//		$('#eventsegment').masonry('destroy');
+//		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+		itemInitialize();
+	});
+	
 }
 
 
