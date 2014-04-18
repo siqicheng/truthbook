@@ -317,7 +317,7 @@ function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComm
 		                        "</div>" +
 					    		"<div class=\"extra\">"+
 					    			"<span style='float: left;  text-align: left;'>"+numLike+" 赞</span>"+
-					    	        "<span style='float: right;  text-align: right;margin-right: 3%'>"+displayDate+"</span>"
+					    	        "<span style='float: right;  text-align: right;margin-right: 3%'>"+displayDate+"</span>"+
 			    	        	"</div>"+
 		                     
 			    	        "</div>" +
@@ -330,7 +330,7 @@ function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComm
 		    						"<form class='ui reply form'>"+
 		    							"<div class='field'><textarea placeholder='你想说…'></textarea></div>"+
 		    							"<div class='ui small teal button'>添加评论</div>"+
-		    							"</form>"+
+		    						"</form>"+
 		    					"</div>"+
 		    					"<div class='btnArea'>" +
 		    						"<button class='ui tiny basic animated button commentToggle'>" +
