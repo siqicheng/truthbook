@@ -47,6 +47,7 @@ public class ImageService {
 		map.put("imageId", image.getImageId());
 		map.put("imageUrl", image.getImageUrl());
 		map.put("approved", image.getApproved());
+		map.put("like", image.getLiked());
 		map.put("description", image.getContent());
 		map.put("createDate", image.getCreateDate().toString());
 		map.put("uploaderId", image.getUploaderId());
@@ -191,8 +192,33 @@ public class ImageService {
 		}
 		return null;		
 	}
+	@GET
+	@Path("v1/image/{imageId}/like")
+	@Produces("application/json;charset=utf-8")
+	public Object likeImage(@PathParam("imageId") Integer imageId){
+		Image image =(Image) this.imageDAO.findById(imageId);
+		
+		if (image.getDeleted()){
+			return RestUtil.string2json("false");
+		}
+		Session session = this.imageDAO.getSession();
+		try{
+			image.setLiked(image.getLiked()+1);
+			Transaction tx = session.beginTransaction();
+			session.update(image);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}
+		
+		
+	}
 	
-	@PUT
+	@GET
 	@Path("v1/image/{imageId}/approve")
 	@Produces("application/json;charset=utf-8")
 	public Object approveImage(@PathParam("imageId") Integer imageId) {

@@ -30,6 +30,9 @@
                 <comment>0: not deleted 1:deleted</comment>
             </column>
         </property>
+        <property name="liked" type="java.lang.Integer">
+        	<column name="liked" not-null="true" />
+        </property>
         <property name="content" type="java.lang.String">
         	<column name="content" length="255" />
         </property>
