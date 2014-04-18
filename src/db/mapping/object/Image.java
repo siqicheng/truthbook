@@ -27,9 +27,9 @@ public class Image implements java.io.Serializable {
 	public static final String UPLOADER_ID = "uploaderId";
 	public static final String APPROVED = "approved";
 	public static final String DELETED = "deleted";
-	public static final String USER_ID = "userId";
+	public static final String USER = "user";
 	public static final String CONTENT = "content";
-	
+	public static final String LIKED = "liked";
 	
 	// Fields
 
@@ -42,6 +42,7 @@ public class Image implements java.io.Serializable {
 	private Boolean approved;
 	private Boolean deleted;
 	private String content;
+	private Integer liked;
 	private Set imageComments = new HashSet(0);
 	private Set portraits = new HashSet(0);
 
@@ -50,7 +51,7 @@ public class Image implements java.io.Serializable {
 	/** default constructor */
 	public Image() {
 	}
-
+	
 	/** minimal constructor */
 	public Image(String imageUrl, User user, String content, Date createDate, Date lastModified,
 			Boolean approved, Boolean deleted) {
@@ -78,6 +79,14 @@ public class Image implements java.io.Serializable {
 	}
 
 	// Property accessors
+	public Integer getLiked(){
+		return this.liked;
+	}
+	
+	public void setLiked(Integer liked){
+		this.liked = liked;
+	}
+	
 	public Integer getUserId(){
 		return this.user.getUserId();
 	}
