@@ -22,6 +22,16 @@ function setPortraitImageForThisPage(){
 		if (data != null ){
 			var portraitUrl = data.image.imageUrl;
 			$("#portraitImage").attr("src",portraitUrl);
+		  		$("#portraitImage").magnificPopup({
+					items: {
+	 					src:  $("#portraitImage").attr("src")
+					},
+					type: 'image',
+//					image: {
+//						verticalFit: false
+//					}
+			}); 
+			
 		}else{
 			$("#portraitImage").attr("src",DefaultPortrait);
 		}
@@ -112,21 +122,23 @@ function getGuestImage(userId){
  * 	Use this to draw one segement and do not draw the show more button.
  */
 function drawOneImage(imageData){
-	var url = imageData.imageUrl,
-		description = imageData.description,
-		uploaderName =  imageData.uploaderName,
-		uploaderId = imageData.uploaderId,
-		createDate = imageData.createDate,
-		numOfComment = imageData.commentCnt,
-		imageId = imageData.imageId,
-		numLike = imageData.like,
+	var url = imageData[0].imageUrl,
+		description = imageData[0].description,
+		uploaderName =  imageData[0].uploaderName,
+		uploaderId = imageData[0].uploaderId,
+		createDate = imageData[0].createDate,
+		numOfComment = imageData[0].commentCnt,
+		imageId = imageData[0].imageId,
+		numLike = imageData[0].like,
 		display = "inline";
 	
 	if (numLike=="") numLike = "0";
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
 	$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,
-											createDate,numOfComment,display,imageId,numLike));	
+											createDate,numOfComment,display,imageId,numLike));
+	addImageButtonHandler(imageId);
+	itemInitialize();
 }
 
 /*********************************************************************************
@@ -341,7 +353,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		                        		"<i class='cloud upload large icon'></i>" +
 		                        	"</a>" +
 		                        	"<a class='setPortrait' style='padding-right: 17px; padding-left: 17px;'>" +
-	                        			"<i class='user basic large icon'></i>" +
+	                        			"<i class='user large icon'></i>" +
 	                        		"</a>" +
 			                        "<a class='eventRemove' style='padding-right: 17px; padding-left: 17px;'>" +
 		                        		"<i class='remove sign large icon'></i>" +
