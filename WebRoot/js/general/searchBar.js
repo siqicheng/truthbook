@@ -7,7 +7,7 @@ function searchUsers(){
 //	$("#testSearch").html("");
 	var userFullName = $("#searchFullName").val();
 	if (userFullName != ""){
-		var html = "<div class=\"ui fluid menu transition visible\" id=\"searchbarDropdown\">";
+		var html = "<div class=\"ui fluid menu list transition visible\" id=\"searchbarDropdown\">";
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
 //				$("#testSearch").append("Ooooops,找不到对象");
@@ -57,7 +57,7 @@ function searchUsers(){
 };
 
 function searchUsersAPI(userFullName, onSuccess, onError){
-	var path = "v1/prefix/";
+	var path = "v1/fullName/";
 	var action = "/verify";
 	var url=ServerRoot+ServiceType.LOGIN+path + userFullName + action;
 	var ajax_obj = getAjaxObj(url,"GET","json",onSuccess,onError);
