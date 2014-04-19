@@ -4,12 +4,14 @@
  */
 
 function searchUsers(){
-	$("#testSearch").html("");
+//	$("#testSearch").html("");
 	var userFullName = $("#searchFullName").val();
 	if (userFullName != ""){
+		var html = "<div class=\"ui fluid menu transition visible\" id=\"searchbarDropdown\">";
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
-				$("#testSearch").append("Ooooops,找不到对象");
+//				$("#testSearch").append("Ooooops,找不到对象");
+				$("#searchbarDropdown").remove();
 				return false;
 			}
 			else{		
@@ -20,10 +22,11 @@ function searchUsers(){
 					school = data.user.school;
 					entryTime = data.user.entryTime;
 					email = data.user.email;
-					$("#testSearch").append("<div class=\"item\" onclick = \"goOthersPage(" + userId + ")\"><img class=\"ui avatar image\" src=\"" + 
+//					$("#testSearch").append("<div class=\"item\" onclick = \"goOthersPage(" + userId + ")\"><img class=\"ui avatar image\" src=\"" +
+					html = html + "<div class=\"item\" onclick = \"goOthersPage(" + userId + ")\"><img class=\"ui avatar image\" src=\"" +
 											 DefaultImg + "\">  <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+
 											 userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime +
-											 "\t" + email + "</div></div></div>");
+											 "\t" + email + "</div></div></div>";
 
 				} else if (length > 1){
 					for(i = 0;i<length;++i){
@@ -32,12 +35,15 @@ function searchUsers(){
 						school = data.user[i].school;
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
-						$("#testSearch").append("<div class=\"item\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" + 
+//						$("#testSearch").append("<div class=\"item\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
+						html = html + "<div class=\"item\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
 												 DefaultImg + "\"> <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ 
 												 userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "\t" + 
-												 email + "</div></div></div>");
+												 email + "</div></div></div>";
 					}
 				}
+				html = html + "</div>";
+				$("#searchbar").append(html);
 				return true;
 			}
 		};
@@ -51,7 +57,7 @@ function searchUsers(){
 };
 
 function searchUsersAPI(userFullName, onSuccess, onError){
-	var path = "v1/fullName/";
+	var path = "v1/prefix/";
 	var action = "/verify";
 	var url=ServerRoot+ServiceType.LOGIN+path + userFullName + action;
 	var ajax_obj = getAjaxObj(url,"GET","json",onSuccess,onError);
