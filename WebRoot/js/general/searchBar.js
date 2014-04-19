@@ -5,14 +5,14 @@
 
 function searchUsers(){
 	$("#searchbarDropdown").remove();
-	var userFullName = $("#searchFullName").val();
-	if (userFullName != ""){
+	var input = $("#searchFullName").val();
+	if (input != ""){
 		var html = "<div class=\"ui fluid menu list transition visible\" id=\"searchbarDropdown\">";
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
 				return false;
 			}
-			else{		
+			else{
 				length = userLengthJson(data);
 				if (length == 1){
 					userId = data.user.userId;
@@ -21,25 +21,35 @@ function searchUsers(){
 					entryTime = data.user.entryTime;
 					email = data.user.email;
 					html = html + "<div class=\"item\" onclick = \"goOthersPage(" + userId + ")\"><img class=\"ui avatar image\" src=\"" +
-											 DefaultImg + "\">  <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+
-											 userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime +
-											 "\t" + email + "</div></div></div>";
+											 DefaultImg + "\">  <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 
-				} else if (length > 1){
-					for(i = 0;i<length;++i){
+				} else if (length < 4){
+					for(var i = 0;i<length;++i){
 						userId = data.user[i].userId;
 						fullName = data.user[i].fullName;
 						school = data.user[i].school;
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
 						html = html + "<div class=\"item\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
-												 DefaultImg + "\"> <div class=\"content\"> <a class=\"header\" onclick = \"goOthersPage("+ 
-												 userId + ")\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "\t" + 
-												 email + "</div></div></div>";
+												 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 					}
+				} else {
+					for(var i = 0;i<2;++i){
+						userId = data.user[i].userId;
+						fullName = data.user[i].fullName;
+						school = data.user[i].school;
+						entryTime = data.user[i].entryTime;
+						email = data.user[i].email;
+						html = html + "<div class=\"item\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
+												 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
+					}
+					html = html + "<div class=\"item\" id = \"getMoreSearchResult\"> <div class=\"content\">加载更多<div class=\"description\">搜索更多结果</div></div></div>";
 				}
 				html = html + "</div>";
 				$("#searchbar").append(html);
+				$("#getMoreSearchResult").click(function() {
+					getMoreSearchResult(data, length);
+				});
 				return true;
 			}
 		};
@@ -47,10 +57,72 @@ function searchUsers(){
 			alert("Error: " + error);
 			return false;
 		};
-		searchUsersByPrefixAPI(userFullName, onAjaxSuccess, onAjaxError);
+		searchUsersByPrefixAPI(input, onAjaxSuccess, onAjaxError);
 	};
 	return false;
 };
+
+function getMoreSearchResult(data, length) {
+	$("#searchbarDropdown").remove();
+	var html = "<div class=\"ui fluid menu list transition visible\" id=\"searchbarDropdown\">";
+	for(var i=0; i<length; i++) {
+		userId = data.user[i].userId;
+		fullName = data.user[i].fullName;
+		school = data.user[i].school;
+		entryTime = data.user[i].entryTime;
+		email = data.user[i].email;
+		html = html + "<div class=\"item\" style=\"display:none\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
+								 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
+	}
+	html = html + "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
+							"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+							"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+								"<a class=\"prevpage\">" +
+									"<i class=\"left arrow icon\"></i>" +
+								"</a>"+
+								"<a class=\"nextpage\">"+
+									"<i class=\"right arrow icon\"></i>"+
+								"</a>"+
+							"</div></div>";
+	html = html + "</div>";
+	$("#searchbar").append(html);
+	showSearchResultPage(1, length);
+}
+
+function showSearchResultPage(page, num) {
+	var min=(page-1)*5,
+	max = page*5-1;
+	if(max>num) {max=num;};
+	$("#searchbarDropdown .item").each(function() {
+		if(($(this).index()<min) || ($(this).index()>max)) {
+			$(this).hide();
+		} else {
+			$(this).show();
+		}
+	});
+	var pagination = $("#searchbarDropdown .item").last();
+	if(num<5) {
+		return false;
+	} else {
+		pagination.show();
+	}
+	pagination.children(".content").html("Page "+page);
+	var prev=page-1,
+		next=page+1;
+	pagination.children().children(".prevpage").attr("onclick","showSearchResultPage("+prev+","+num+")");
+	if(page-1<1){
+		pagination.children().children(".prevpage").hide();
+	} else {
+		pagination.children().children(".prevpage").show();
+	}
+	pagination.children().children(".nextpage").attr("onclick","showSearchResultPage("+next+","+num+")");
+	if(page>num/5){
+		pagination.children().children(".nextpage").hide();
+	} else {
+		pagination.children().children(".nextpage").show();
+	}
+	pagination.show();
+}
 
 function searchUsersByPrefixAPI(prefix, onSuccess, onError){
 	var path = "v1/prefix/";
