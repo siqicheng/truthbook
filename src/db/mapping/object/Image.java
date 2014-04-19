@@ -50,6 +50,7 @@ public class Image implements java.io.Serializable {
 
 	/** default constructor */
 	public Image() {
+		this.liked = 0;
 	}
 	
 	/** minimal constructor */

@@ -253,8 +253,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.User;
 import db.mapping.object.UserPassword;
@@ -307,12 +310,10 @@ public class LoginService {
 	@GET
 	@Path("v1/prefix/{prefix}/verify")
 	@Produces("application/json;charset=utf-8")
-	public Object findUserByPartOfName(@PathParam("prefix") String part) {
-		String table = userDAO.TABLE;
-		String queryString = "select * from " + table + " as model where "+
-				"model.full_name like '"+part+"%'";
-		
-		return RestUtil.list2json(this.userDAO.getSession().createSQLQuery(queryString).list());
+	public List<User> findUserByPartOfName(@PathParam("prefix") String part) {
+		Criteria criteria = this.userDAO.getSession().createCriteria(User.class);
+		criteria.add(Restrictions.like(UserDAO.FULL_NAME, part , MatchMode.START));
+		return criteria.list();
 	}
 	
 	@POST
