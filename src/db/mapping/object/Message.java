@@ -62,7 +62,7 @@ public class Message implements java.io.Serializable {
 		this.readTime=readTime;
 	}
 	
-	@XmlTransient
+//	@XmlTransient
 	public String getStatus(){
 	//	if (this.content.containsKey("status")){
 	//		return this.content.get("status");

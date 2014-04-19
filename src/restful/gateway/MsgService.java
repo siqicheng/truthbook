@@ -1,4 +1,4 @@
-	package restful.gateway;
+package restful.gateway;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

@@ -7,7 +7,7 @@
 
 }
 
-#eventsegment .eventpile .item .image a{
+#eventsegment .eventpile .item .image .imgbtnArea {
 	position:absolute;
 	left:15px;
 	top:15px;
@@ -15,12 +15,20 @@
 	display:none;
 }
 
+#eventsegment .eventpile .item .image .imgbtnArea .likebtn .heart.icon{
+	margin:0px;
+}
+
 #eventsegment .eventpile .item .ui.header{
 	margin:15px 10px;
 }
 
 #eventsegment .eventpile .item .btnArea{
-	margin:15px;
+	display:inline-block;
+	padding:12px 13px 12px 15px;
+}
+#eventsegment .eventpile .item .btnArea .button{
+	padding-right: 24px; padding-left: 24px;
 }
 
 #eventsegment .eventpile .item {
@@ -38,7 +46,7 @@
 
 #eventsegment .eventpile .item .content .description{
 	padding: 0 10px;
-	margin-bottom: 30px;
+	margin-bottom: 20px;
 }
 #eventsegment .eventpile .item .content .meta a{
 	font-size: 13px;
@@ -57,4 +65,9 @@
 
 #eventsegment .eventpile .item .ui.minimal.comments .ui.reply.form {
 	padding-left: 70px; width: 229px;
+}
+
+.itemloadBtn {
+	 margin:0 auto;
+	width:1018px;
 }
