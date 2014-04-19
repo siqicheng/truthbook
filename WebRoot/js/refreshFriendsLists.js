@@ -59,53 +59,8 @@ function getUserEFriendsLists(id) {
 };
 
 function refreshTopbarLists(id) {
-	var pre = "#topbar ";
-
-	var num = userFriendsLists.nFriends.length;
-
-	var html = "<div class=\"item\">" +
-					"<div class=\"content\">" +
-					"	你现在还没有真·友哦 " +
-					"</div>" +
-					"</div>";
-	if(num > 0) {
-		html = "";
-		for(var i=0; i<num; i++) {
-			if(userFriendsLists.nFriends[i]["isActivated"] == "false") {
-				img = QuoteImg;
-			} else {
-				img = DefaultImg;
-			};
-			html= html + "<div class=\"item \">"+
-				"<img class=\"ui avatar image\" src=\""
-				+ img+ "\">" + 
-					"<div class=\"content frienditem\">" +
-					userFriendsLists.nFriends[i]["fullName"] +
-					"</div></div>";
-		};
-	};
-	$(pre + ".nFriendsList").html(html);
-
-	num = userFriendsLists.eFriends.length;
-
-	var html = "<div class=\"item\">" +
-					"<div class=\"content\">" +
-					"	你现在还没有极·友哦 " +
-					"</div>" +
-					"</div>";
-	if(num > 0) {
-		html = "";
-		for(var i=0; i<num; i++) {
-			html= html + "<div class=\"item \">"+
-				"<img class=\"ui avatar image\" src=\""
-				+ DefaultImg+ "\">" + 
-					"<div class=\"content frienditem\">" +
-					userFriendsLists.eFriends[i]["fullName"] +
-					"</div></div>";
-		}
-	}
-	$(pre + ".eFriendsList").html(html);
-
+	drawFriendsList(id, "topbar", "nFriends");
+	drawFriendsList(id, "topbar", "eFriends");
 	addTopbarClickFunction();
 }
 
@@ -188,88 +143,111 @@ function getPageownerEFriendsLists(id) {
 
 function refreshMenubarLists(id) {
 	var pre = "#menubar ";
+	drawFriendsList(id, "menubar", "nFriends");
+	drawFriendsList(id, "menubar", "eFriends");
+	addButton();
+	addMenubarClickFunction();
+}
 
-	var num = pageownerFriendsLists.nFriends.length;
-	$("#nFriends_num").html(num);
-
+function drawFriendsList(id, barType, friendsType) {
+	if(barType == "topbar"){
+		var friendsArray = userFriendsLists;
+	} else {
+		var friendsArray = pageownerFriendsLists;
+	}
+	var num = friendsArray[friendsType].length;
+	if(barType == "menubar") {
+		$("#"+friendsType+"_num").html(num);
+	}
+	
+	if(friendsType == "nFriends") {
+		var friendsTypeInChinese = "真·友";
+	} else {
+		var friendsTypeInChinese = "极·友";
+	}
 	var html = "<div class=\"item\">" +
 					"<div class=\"content\">" +
-					"	你现在还没有真·友哦 " +
+					"你现在还没有"+friendsTypeInChinese+"哦 " +
 					"</div>" +
 					"</div>";
 	if(num > 0) {
 		html = "";
 		var img;
 		for(var i=0; i<num; i++) {
-			if(pageownerFriendsLists.nFriends[i]["isActivated"] == "false") {
+			if(friendsArray[friendsType][i]["isActivated"] == "false") {
 				img = QuoteImg;
 			} else {
 				img = DefaultImg;
 			};
-			html= html + "<div class=\"ui item\">"+
+			html= html + "<div class=\"ui friend item\" style=\"display:none\">"+
 				"<img class=\"ui avatar image\" src=\""
 				+ img + "\">" + 
 					"<div class=\"content frienditem\">" +
-					pageownerFriendsLists.nFriends[i]["fullName"] +
+					friendsArray[friendsType][i]["fullName"] +
 					"</div></div>";
 		};
-		if(id == $.cookie("truthbook").userId) {
-			$("#nFriendsList").addClass("needicon");
+		if((id == $.cookie("truthbook").userId)&&(barType == "menubar")) {
+			$("#"+friendsType+"List").addClass("needicon");
 		};
 	} else if(id != $.cookie("truthbook").userId) {
 		html = "<div class=\"item\">" +
 			"<div class=\"content\">" +
-			"	他现在还没有真·友哦 " +
+			"他现在还没有"+friendsTypeInChinese+"哦 " +
 			"</div>" +
 			"</div>";
 	};
-	$(pre + ".nFriendsList").html(html);
+	if(num>5) {
+		html = html + "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
+		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+			"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+				"<a class=\"prevpage\">" +
+					"<i class=\"left arrow icon\"></i>" +
+				"</a>"+
+				"<a class=\"nextpage\">"+
+					"<i class=\"right arrow icon\"></i>"+
+				"</a>"+
+			"</div></div>";
+	}
+	$("#"+barType + " ."+friendsType+"List").html(html);
+	showPage(barType, friendsType, 1, num);
+}
 
-	num = pageownerFriendsLists.eFriends.length;
-	$("#eFriends_num").html(num);
-
-	var html = "<div class=\"item\" >" +
-					"<div class=\"content\">" +
-					"	你现在还没有极·友哦 " +
-					"</div>" +
-					"</div>";
-	if(num > 0) {
-		html = "";
-		for(var i=0; i<num; i++) {
-			html= html + "<div class=\"item \">"+
-				"<img class=\"ui avatar image\" src=\""
-				+ DefaultImg+ "\">" + 
-					"<div class=\"content frienditem\">" +
-					pageownerFriendsLists.eFriends[i]["fullName"] +
-					"</div></div>";
-		};
-		if(id == $.cookie("truthbook").userId) {
-			$("#eFriendsList").addClass("needicon");
-		};
-	} else if(id != $.cookie("truthbook").userId) {
-			html = "<div class=\"item\">" +
-			"<div class=\"content\">" +
-			"	他现在还没有极·友哦 " +
-			"</div>" +
-			"</div>";
-	};
-	$(pre + ".eFriendsList").html(html);
-
-	addButton();
-	addMenubarClickFunction();
+function showPage(barType, friendsType, page, num) {
+	var min=(page-1)*5,
+		max = page*5-1;
+	if(max>num) {max=num;};
+	$("#"+barType+" ."+friendsType+"List .item").each(function() {
+		if(($(this).index()<min) || ($(this).index()>max)) {
+			$(this).hide();
+		} else {
+			$(this).show();
+		}
+	});
+	var pagination = $("#"+barType+" ."+friendsType+"List .item").last();
+	if(num<5) {
+		return false;
+	} else {
+		pagination.show();
+	}
+	pagination.children(".content").html("Page "+page);
+	var prev=page-1,
+		next=page+1;
+	pagination.children().children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
+	if(page-1<1){
+		pagination.children().children(".prevpage").hide();
+	} else {
+		pagination.children().children(".prevpage").show();
+	}
+	pagination.children().children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
+	if(page>num/5){
+		pagination.children().children(".nextpage").hide();
+	} else {
+		pagination.children().children(".nextpage").show();
+	}
+	pagination.show();
 }
 
 function addMenubarClickFunction() {
-//	$("#menubar .eFriendsList.upload_for_fri .item").click(function() {
-//		var towhom = pageownerFriendsLists.eFriends[$(this).index()];
-//		upload_choosepic(towhom);
-//	});
-//	
-//	$("#menubar .nFriendsList.upload_for_fri .item").click(function() {
-//		var towhom = pageownerFriendsLists.nFriends[$(this).index()];
-//		upload_choosepic(towhom);
-//	});
-
 	$("#menubar .eFriendsList.goto_fri_page .frienditem").click(function() {
 		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()];
 		goOthersPage(towhom["userId"]);
@@ -288,7 +266,7 @@ function addButton() {
 	"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
 	"<a class=\"degrade_fri_btn\"><i class=\"" + degrade + " large icon\"></i></a>" +
 	"</div>";
-	$(".list.menu.nFriendsList.needicon .item").prepend(html);
+	$(".list.menu.nFriendsList.needicon .friend.item").prepend(html);
 	
 	degrade = "level down";
 	var html = "<div class=\"right floated\" style=\"padding-top:5px;width:100px;margin:0;display:none;\">" +

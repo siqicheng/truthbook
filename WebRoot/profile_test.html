@@ -73,12 +73,22 @@
 		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
 		
 		<div class="right menu">
-				<form class="ui form item" autocomplete="off" onsubmit="return false" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px;">
-     				<div class="ui dropdown" id="searchbar">
-     					<div class="ui mini input icon">
+				<form class="ui form item" autocomplete="off" onsubmit="return false" style="padding-top: 0px;padding-left: 0px;padding-bottom: 0px;">
+     				<div class="ui fluid dropdown" id="searchbar">
+     					<div class="ui small input icon">
 		       				<input type="text" id = "searchFullName" onkeyup="searchUsers()" placeholder="Search..." >
 		       				<i class="search link icon" onclick = "searchUsers();"></i>
 		       			</div>
+<!-- 		       			<div class="ui list menu"> -->
+<!-- 		       				<div class = "ui item"> -->
+<!-- 		       					<div class="ui pagination menu"> -->
+<!-- 			       					<a class="icon item"> -->
+<!-- 			       						<i class="left arrow icon"></i> -->
+<!-- 			       					</a> -->
+<!-- 			       					<a class="item">1</a> -->
+<!-- 			       				</div> -->
+<!-- 		       				</div> -->
+<!-- 		       			</div> -->
      				</div>
    				</form>
    				<div class = "ui animated button icon" id="exitButton"> 
@@ -234,14 +244,6 @@
 					  <div class="ui segment">
 					    	<span id="testCookie"></span>
 					  </div>
-				  </div>
-				  
-				  <div class="column">
-<!-- 					  <div class="ui inverted segment" >  -->
-					  	<div class="ui selection animated list" id="testSearch">
-
-						</div>	
-<!-- 					  </div> -->
 				  </div>
 			</div>
 
