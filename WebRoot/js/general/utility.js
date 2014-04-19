@@ -227,7 +227,7 @@ function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjax
 function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 	var path = "v1/message/"+messageId+"/read",
 		url = ServerRoot + ServiceType.NOTIFICATION + path,
-		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }
 

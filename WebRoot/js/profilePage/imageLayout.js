@@ -46,8 +46,8 @@ function friendRelationCheck(){
 function getAllImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 //		$.cookie("truthbook_Page_Image_Json", data);
-		if (data != null ){
-			var numTotalImage = data.length;
+		var numTotalImage = data.length;
+		if (numTotalImage != 0 ){	
 			$.cookie("truthbook_Page_Image_Num", numTotalImage);
 			if(numTotalImage==1){
 				drawOneImage(data);
@@ -72,7 +72,8 @@ function getAllImage(userId){
 
 function getGuestImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
-		if (data != null ){
+		var numTotalImage = data.length;
+		if (numTotalImage != 0 ){
 			drawOneImage(data);
 			return true;
 		}

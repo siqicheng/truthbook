@@ -85,7 +85,7 @@ function isSentFriendRequestMessage(friendId,ownId){
 				}
 			} else {
 				for (var i = 0;i<numMessage;i++){
-					if (ownId == data.message[i].friend.userId){
+					if (ownId == data.message[i].friend.userId && data.message[0].status != MESSAGESTATUS.READ){
 						hasSent = 1;
 						break;
 					} 
