@@ -16,6 +16,24 @@ $(function(){
 //	}
 //}
 
+function setPortraitImageForThisPage(){
+	var userId = $.cookie("truthbook_PageOwner_userId").userId
+	var onAjaxSuccess = function(data,textStatus){
+		if (data != null ){
+			var portraitUrl = data.image.imageUrl;
+			$("#portraitImage").attr("src",portraitUrl);
+		}else{
+			$("#portraitImage").attr("src",DefaultPortrait);
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		$("#portraitImage").attr("src",DefaultPortrait);
+		drawConfirmPopUp("获取头像请求发送失败 Error: " + error);
+		return false;
+	};
+	getDefaultPortraitAPI(userId,onAjaxSuccess,onAjaxError)
+}
+
 function getImagePreCheck(){
 	if($.cookie("truthbook").userId == $.cookie("truthbook_PageOwner_userId").userId){
 		getAllImage($.cookie("truthbook_PageOwner_userId").userId);
@@ -229,15 +247,13 @@ function showLoadingButton(){
 }
 
 function addImageButtonHandler(imageId){
-	$("#imageId"+imageId).find(".commentToggle").click(function(){		
-		$(this).parents('.ui.shape')
-		.shape('setting', {
-			onChange: function(){
-				$('#eventsegment').masonry();
-			},
-			duration:500
-		})
-		.shape('flip over');			
+	
+	$("#imageId"+imageId).find(".likebtn").click(function(){
+		likeThisImage($(this),imageId);
+	});
+	
+	$("#imageId"+imageId).find(".commentToggle").click(function(){	
+		showReply($(this));
 	});
 	
 	$("#imageId"+imageId).find(".discript.content").click(function(){
@@ -246,38 +262,39 @@ function addImageButtonHandler(imageId){
 		$('#eventsegment').masonry();
 	});
 	
-	$("#imageId"+imageId).find('.returnToSender')
-	  .popup({
-		    on: 'hover',
-		    content: '分享给发送者'
-	});
-	$("#imageId"+imageId).find('.uploadFor')
-	  .popup({
-		    on: 'hover',
-		    content: '为发送者上传'
-	});
-	$("#imageId"+imageId).find('.setPortrait')
-	  .popup({
-		    on: 'hover',
-		    content: '设置为头像'
-	});
-	$("#imageId"+imageId).find('.eventRemove')
-	  .popup({
-		    on: 'hover',
-		    content: '删除照片'
+	addImageControlButtonPopup("returnToSender","分享给发送者",imageId);
+	addImageControlButtonPopup("uploadFor","为发送者上传",imageId);
+	addImageControlButtonPopup("setPortrait","设置为头像",imageId);
+	addImageControlButtonPopup("eventRemove","删除照片",imageId);
+	
+	$("#imageId"+imageId).find(".returnToSender").click(function(){
+		returnToSender($(this));
+	});	
+	
+	$("#imageId"+imageId).find(".uploadFor").click(function(){
+		uploadFor($(this));
+	});	
+	
+	$("#imageId"+imageId).find(".setPortrait").click(function(){
+		setPortrait($(this));
 	});
 	
 	$("#imageId"+imageId).find(".eventRemove").click(function(){
 		removeImage($(this));
 	});
 	
-	$("#imageId"+imageId).find(".likebtn").click(function(){
-		likeThisImage($(this),imageId);
-	});
+
 
 
 }
 
+function addImageControlButtonPopup(className,displayContent,imageId){
+	$("#imageId"+imageId).find("."+ className)
+	  .popup({
+		    on: 'hover',
+		    content: displayContent
+	});
+}
 
 
 
@@ -287,8 +304,11 @@ function addImageButtonHandler(imageId){
 function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike){
 	
 	displayDate = dateHandle(createDate);
+	userId = $.cookie("truthbook").userId;
 	
 	html =  "<div class='eventpile' id = 'imageId"+imageId+"' style='display : "+display+";' >" +
+				"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
+				"<span class = 'userId_span' style='display:none;'>"+userId+"</span>"+
 		    	"<div class='ui shape'>" +
 		    		"<div class='sides'>" +
 		    		
@@ -309,11 +329,9 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    					"<div class = 'discript content'>"+
 		    						"<p class='description' style = 'display:"+descriptionDisplay+"'>"+description+"</p>"+
 		    						"<div class='meta' style = 'display:block' >"+
-		    							"By <a class='uploader'>"+uploaderName+"</a> "+
+		    							"By <a class='uploader'>"+uploaderName+"</a>" + 
+		    							"<span class='uploaderId' style='display:none;'>" + uploaderId + "</span> "+
 		    						"</div>"+
-//		    						"<div class='' style = 'display:block'>"+
-//		    							"<i class='angle down icon'></i>"+
-//		    						"</div>"+
 		    					"</div>"+
 		    					"<div class='btnArea' style='display:none;'>"+
 			                        "<a class='returnToSender' style='padding-right: 17px; padding-left: 17px;margin-left: 8px;'>" +

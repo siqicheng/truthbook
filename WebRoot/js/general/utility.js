@@ -265,6 +265,34 @@ function setDislikedByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
 }
 
 
+/*********************************************************************************
+ * Portrait Service API
+ */
+
+function addPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/portrait/add",
+		url = ServerRoot + ServiceType.PORTRAIT +path,
+		data ="userId=" + userId + "&imageId=" + imageId,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function setPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/portrait/set",
+		url = ServerRoot + ServiceType.PORTRAIT +path,
+		data ="userId=" + userId + "&imageId=" + imageId,
+		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+function getDefaultPortraitAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/portrait/"+userId+"/default",
+		url = ServerRoot + ServiceType.PORTRAIT +path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);		
+}
+
 
 
 

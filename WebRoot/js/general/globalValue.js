@@ -28,7 +28,9 @@ ServiceType = {
     	   USERPROFILE :"userProfile/",
     	   NOTIFICATION :"push/",
     	   IMAGE:"imageService/",
+    	   PORTRAIT:"portraitService/",
        };
+DefaultPortrait="img\profile_test\247144.jpg";
 
 /*********************************************************************************
  * 	Global Numbers
