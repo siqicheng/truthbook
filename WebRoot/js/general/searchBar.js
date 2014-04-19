@@ -23,7 +23,7 @@ function searchUsers(){
 					html = html + "<div class=\"item\" onclick = \"goOthersPage(" + userId + ")\"><img class=\"ui avatar image\" src=\"" +
 											 DefaultImg + "\">  <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 
-				} else if (length < 4){
+				} else if (length < 6){
 					for(var i = 0;i<length;++i){
 						userId = data.user[i].userId;
 						fullName = data.user[i].fullName;
@@ -34,7 +34,7 @@ function searchUsers(){
 												 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 					}
 				} else {
-					for(var i = 0;i<2;++i){
+					for(var i = 0;i<3;++i){
 						userId = data.user[i].userId;
 						fullName = data.user[i].fullName;
 						school = data.user[i].school;
@@ -86,12 +86,12 @@ function getMoreSearchResult(data, length) {
 							"</div></div>";
 	html = html + "</div>";
 	$("#searchbar").append(html);
-	showSearchResultPage(1, length);
+	showSearchResultPage(0, length);
 }
 
 function showSearchResultPage(page, num) {
-	var min=(page-1)*5,
-	max = page*5-1;
+	var min=(page)*5,
+	max = (page+1)*5-1;
 	if(max>num) {max=num;};
 	$("#searchbarDropdown .item").each(function() {
 		if(($(this).index()<min) || ($(this).index()>max)) {
@@ -100,27 +100,25 @@ function showSearchResultPage(page, num) {
 			$(this).show();
 		}
 	});
+	var maxpage = Math.floor(num/5)+1;
 	var pagination = $("#searchbarDropdown .item").last();
-	if(num<5) {
-		return false;
-	} else {
-		pagination.show();
-	}
-	pagination.children(".content").html("Page "+page);
-	var prev=page-1,
-		next=page+1;
+	pagination.children(".content").html("Page "+(page+1));
+	var prev=(page-1)%(maxpage),
+		next=(page+1)%(maxpage);
+
+	pagination.children(".content").attr("onclick","showSearchResultPage("+next+","+num+")");
 	pagination.children().children(".prevpage").attr("onclick","showSearchResultPage("+prev+","+num+")");
-	if(page-1<1){
-		pagination.children().children(".prevpage").hide();
-	} else {
-		pagination.children().children(".prevpage").show();
-	}
+//	if(page-1<1){
+//		pagination.children().children(".prevpage").hide();
+//	} else {
+//		pagination.children().children(".prevpage").show();
+//	}
 	pagination.children().children(".nextpage").attr("onclick","showSearchResultPage("+next+","+num+")");
-	if(page>num/5){
-		pagination.children().children(".nextpage").hide();
-	} else {
-		pagination.children().children(".nextpage").show();
-	}
+//	if(page>num/5){
+//		pagination.children().children(".nextpage").hide();
+//	} else {
+//		pagination.children().children(".nextpage").show();
+//	}
 	pagination.show();
 }
 

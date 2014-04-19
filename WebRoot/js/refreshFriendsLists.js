@@ -209,12 +209,12 @@ function drawFriendsList(id, barType, friendsType) {
 			"</div></div>";
 	}
 	$("#"+barType + " ."+friendsType+"List").html(html);
-	showPage(barType, friendsType, 1, num);
+	showPage(barType, friendsType, 0, num);
 }
 
 function showPage(barType, friendsType, page, num) {
-	var min=(page-1)*5,
-		max = page*5-1;
+	var min=(page)*5,
+		max = (page+1)*5-1;
 	if(max>num) {max=num;};
 	$("#"+barType+" ."+friendsType+"List .item").each(function() {
 		if(($(this).index()<min) || ($(this).index()>max)) {
@@ -229,22 +229,23 @@ function showPage(barType, friendsType, page, num) {
 	} else {
 		pagination.show();
 	}
-	pagination.children(".content").html("Page "+page);
-	var prev=page-1,
-		next=page+1;
+	var maxpage = Math.floor(num/5)+1;
+	pagination.children(".content").html("Page "+(page+1));
+	var prev=(page-1)%(maxpage),
+		next=(page+1)%(maxpage);
 	pagination.children().children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
-	if(page-1<1){
-		pagination.children().children(".prevpage").hide();
-	} else {
-		pagination.children().children(".prevpage").show();
-	}
+//	if(page-1<1){
+//		pagination.children().children(".prevpage").hide();
+//	} else {
+//		pagination.children().children(".prevpage").show();
+//	}
 	pagination.children().children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
-	if(page>num/5){
-		pagination.children().children(".nextpage").hide();
-	} else {
-		pagination.children().children(".nextpage").show();
-	}
-	pagination.show();
+	pagination.children(".content").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
+//	if(page>num/5){
+//		pagination.children().children(".nextpage").hide();
+//	} else {
+//		pagination.children().children(".nextpage").show();
+//	}
 }
 
 function addMenubarClickFunction() {
