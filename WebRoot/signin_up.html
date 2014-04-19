@@ -169,6 +169,7 @@
 					$("#errorMessageLogin").hide();
                 }
 			});
+			
 			$(function() {
 				
 				cookieAvailableCheck();
@@ -176,7 +177,6 @@
 				cleanUserInfoCookie();
 			});
 
-	
 		$('.ui.form.login-form')
 			.submit(function(){			
 				var isValidLoginForm = $('.ui.form.login-form').form('validate form');
@@ -223,5 +223,6 @@
 			$("#errorMessageLogin").show();
 		});
 	</script>
+
 </body>
 </html>
