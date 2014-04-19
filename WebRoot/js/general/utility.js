@@ -227,7 +227,7 @@ function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjax
 function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 	var path = "v1/message/"+messageId+"/read",
 		url = ServerRoot + ServiceType.NOTIFICATION + path,
-		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }
 
@@ -236,22 +236,62 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
  */
 
 function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
-	var path = "v1/image/" + userId + "/userId",
-		url = ServerRoot + ServiceType.NOTIFICATION + path,
+	var path = "v1/image/" + userId + "/user",
+		url = ServerRoot + ServiceType.IMAGE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);
 }
 
 //Need to be added
 function getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
-	var path = "v1/image/" + userId + "/userId/one",
-		url = ServerRoot + ServiceType.NOTIFICATION + path,
+	var path = "v1/image/" + userId + "/latest",
+		url = ServerRoot + ServiceType.IMAGE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }
 
+function setLikedByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + imageId + "/like",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+function setDislikedByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + imageId + "/dislike",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
 
+/*********************************************************************************
+ * Portrait Service API
+ */
+
+function addPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/portrait/add",
+		url = ServerRoot + ServiceType.PORTRAIT +path,
+		data ="userId=" + userId + "&imageId=" + imageId,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function setPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/portrait/set",
+		url = ServerRoot + ServiceType.PORTRAIT +path,
+		data ="userId=" + userId + "&imageId=" + imageId,
+		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+function getDefaultPortraitAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/portrait/"+userId+"/default",
+		url = ServerRoot + ServiceType.PORTRAIT +path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);		
+}
 
 
 

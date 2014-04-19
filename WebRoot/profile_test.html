@@ -22,19 +22,11 @@
 </head>
 
 <body style="background-color:#DEDCDE;margin:0px;">
-	<div class="ui fixed transparent main menu" id="topbar" >
+	<div class="ui fixed transparent main small menu" id="topbar" >
 		<div class="left  menu">
 	
 			<div class="ui dropdown item" id="upload_menu">
-				<i class="add icon"></i>上传照片
-				
-<!-- 				<div class="ui basic vertical animated button">  -->
-<!-- 		           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div> -->
-<!-- 		           <div class="hidden content">传照片</div> -->
-<!-- 				</div> -->
-				
-				
-				
+				<i class="add large icon"></i>传照片	
 				<div class=" dropdown menu" style="width: 170px;">
 					<div class="item" id="upload_for_new_btn" style="text-align:center;width: 170px;">新建好友档案</div>
 					
@@ -55,22 +47,23 @@
 					</div>
  				</div>
 			</div>
-			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove icon"></i>关闭</a>
+			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
 			
-		</div>		
-		<div class="title item" onclick = "goHomePage();" style="cursor:pointer;">
-	        <img src="img/Truthbook_red.png" width="140px" >
-	    </div>		      
+		</div>			      
 		<a class="active green item">
-			<i class="home  icon"></i>
+			<i class="home  large icon"></i>
 		</a>
 		<a class="blue item">
-	    	<i class="users icon"></i>
+	    	<i class="grid layout large icon"></i>
 		</a>
 		<a class="orange item">
-	    	<i class="setting icon"></i>
+	    	<i class="setting large icon"></i>
 		</a>
-		<a class="open_popup_link item" href="#upload">上传照片（PopUp）</a>
+		<div class="empty item"></div>
+		<a class="open_popup_link item" href="#upload" style="display:none">上传照片（PopUp）</a>
+		<div class="title" onclick = "goHomePage();">
+	        <img src="img/Truthbook_red.png" width="140px" >
+	    </div>	
 		
 		<div class="right menu">
 				<form class="ui form item" onsubmit = "return searchUsers();">
@@ -79,14 +72,9 @@
        				<i class="search link icon" onclick = "searchUsers();"></i>
      				</div>
    				</form>
-   				<div class = "ui animated button icon" id="exitButton"> 
-   					<div class="visible content">
-					    <i class="off icon"></i>
-					</div>
-   					<div class="hidden content">
-					    <i class="sign out icon"></i>
-					</div>
-   				</div>
+   				<a class = "item" id="exitButton"> 
+					    <i class="off large icon"></i>
+   				</a>
  		</div>
  		
 	</div>
@@ -197,7 +185,7 @@
 					  					    	
 						<div class="ui item" align="center" style="height:220px;">
 							<div class="ui icon header" id = "headicon">
-							<img class="rounded ui image icon" src="http://lorempixel.com/319/391/" style="width:110px; height: 110px;">
+							<img class="rounded ui image icon" src="" id="portraitImage" style="width:110px; height: 110px;">
 							  <div class=" header" id = "user_name"></div>
 							  <div class="sub header" id = "user_school"></div>
 							  <div class="sub header" id = "user_entryTime"></div>
@@ -286,7 +274,7 @@
 				<div class="ui red inverted fluid menu"> 						
 					<div class="ui dropdown fluid item" id="notifiBtn">
 						<i class="mail small icon"></i> 消息通知
-						<div class="floating ui circular green label" id="unreadMessageNum" style="display:none;">00</div>					
+						<div class="floating ui circular green label" id="unreadMessageNum" style="display:none">00</div>
 						<div class="ui divided list vertical menu message" >
 							<div id="inviteToUpload_MessageMenu"></div>
 							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
@@ -294,7 +282,7 @@
 							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
 							<div id="acceptFriendRequest_MessageMenu"></div>
 							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-<!-- 							<div id="friendRequest_MessageMenu"></div> -->
+							<div id="takeQuote_MessageMenu"></div>
 							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
 <!-- 							<div id="friendRequest_MessageMenu"></div> -->
 							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
@@ -309,9 +297,11 @@
 		</div>
 	</div>
 	
+	<div class="" id="eventsegment"></div>
+	
 
-	<div class="ui three items" id="eventsegment"></div>
-		
+	<div class="itemloadBtn" id = "showMoreButton"><div class="ui basic fluid icon button"><i class="double angle down large icon"></i></div></div>
+
 	<div class="ui dimmer page hidden">	
 	 	<div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
 		    <div class="header">退出 Truthbook</div>
@@ -398,17 +388,21 @@
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
 	
-<!-- 	<script src="./js/friends.js"></script> -->
+	
 	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	
 	<script src="./js/friendRelationButtonHandler.js"></script>
 	<script src="./js/userAndPageInfo.js"></script>
 	<script src="./js/general/searchBar.js"></script>
+	<script src="./js/message/messageBarButtonClick.js"></script>
 	<script src="./js/message/messageBarController.js"></script>	
 	<script src="./js/eventsegment_layout.js"></script>
+	<script src="./js/profilePage/imageLayout.js"></script>
+	<script src="./js/profilePage/imageButtonFunction.js"></script>
 	<script src="./js/notification.js"></script>
 
 	<script type="text/javascript">
 	$(function() {
+		setPortraitImageForThisPage();
 		handleLogoutPopUp();
 		testFunction_Cookie();
 		addFriendButtonCheck();
@@ -429,7 +423,6 @@
 		  .accordion()
 		;	
 	});
-	
 
 	</script>
 

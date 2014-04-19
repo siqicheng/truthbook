@@ -241,7 +241,6 @@
 
 package restful.gateway;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -251,16 +250,15 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import db.mapping.object.User;
+import db.mapping.object.UserDAO;
 import db.mapping.object.UserPassword;
 import db.mapping.object.UserPasswordDAO;
 import db.mapping.object.UserPasswordId;
-import db.mapping.object.UserDAO;
 
 @Path("loginService")
 public class LoginService {
@@ -302,6 +300,17 @@ public class LoginService {
 	public List<User> findUserByFullName(@PathParam("fullName") String fullName) {
 		List<User> fullName_list = this.userDAO.findByFullName(fullName);
 		return fullName_list;
+	}
+	
+	@GET
+	@Path("v1/prefix/{prefix}/verify")
+	@Produces("application/json;charset=utf-8")
+	public Object findUserByPartOfName(@PathParam("prefix") String part) {
+		String table = userDAO.TABLE;
+		String queryString = "select * from " + table + " as model where "+
+				"model.full_name like '"+part+"%'";
+		
+		return RestUtil.list2json(this.userDAO.getSession().createSQLQuery(queryString).list());
 	}
 	
 	@POST
@@ -417,6 +426,7 @@ public class LoginService {
 			this.userPassword = new UserPassword(new UserPasswordId(email,password),this.user);
 			this.user.setUserPassword(userPassword);
 			this.user.setIsActivated(true);						
+//			userDAO.update(this.user);
 			session.update(this.user);
 			session.save(this.userPassword);
 			tx.commit();

@@ -195,6 +195,7 @@ public class UserProfile {
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.close();
+			return RestUtil.string2json("false");
 		}
 
 		return RestUtil.string2json("false");
@@ -293,6 +294,7 @@ public class UserProfile {
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.close();
+			return RestUtil.string2json("false");
 		}
 
 		return RestUtil.string2json("false");
