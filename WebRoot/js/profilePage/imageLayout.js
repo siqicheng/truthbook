@@ -5,16 +5,16 @@ $(function(){
 
 });
 
-function imageLengthJson(data){
-	if(data == null){
-		return -1;
-	}
-	if (data.image.length != undefined){
-		return data.image.length;
-	} else if (data != null) {
-		return 1;
-	}
-}
+//function imageLengthJson(data){
+//	if(data == null){
+//		return -1;
+//	}
+//	if (data.image.length != undefined){
+//		return data.image.length;
+//	} else if (data != null) {
+//		return 1;
+//	}
+//}
 
 function getImagePreCheck(){
 	if($.cookie("truthbook").userId == $.cookie("truthbook_PageOwner_userId").userId){
@@ -47,7 +47,7 @@ function getAllImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 //		$.cookie("truthbook_Page_Image_Json", data);
 		if (data != null ){
-			var numTotalImage = imageLengthJson(data);
+			var numTotalImage = data.length;
 			$.cookie("truthbook_Page_Image_Num", numTotalImage);
 			if(numTotalImage==1){
 				drawOneImage(data);
@@ -93,16 +93,20 @@ function getGuestImage(userId){
  * 	Use this to draw one segement and do not draw the show more button.
  */
 function drawOneImage(imageData){
-	var url = imageData.image.imageUrl,
-		discript = "waiting for back end",//imageData.image.discript,
-		uploaderName =  "waiting for back end",//imageData.image.uploaderName,
-		uploaderId = imageData.image.uploaderId,
-		createDate = imageData.image.createDate,
-		numOfComment = "waiting for back end",//imageData.image.numOfComment,
-		imageId = imageData.image.imageId,
-		numLike = imageData.image.numLike,
+	var url = imageData.imageUrl,
+		description = imageData.description,
+		uploaderName =  imageData.uploaderName,
+		uploaderId = imageData.uploaderId,
+		createDate = imageData.createDate,
+		numOfComment = imageData.commentCnt,
+		imageId = imageData.imageId,
+		numLike = imageData.like,
 		display = "inline";
-	$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,uploaderId,
+	
+	if (numLike=="") numLike = "0";
+	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
+	
+	$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,
 											createDate,numOfComment,display,imageId,numLike));	
 }
 
@@ -127,17 +131,21 @@ function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData){
 	var	imageIdinorder = imageInOrder(numTotalImage, imageData);
 		
 	for(var i = 0 ; i < numOfNextBatch ; i++){
-		var url = imageData.image[imageIdinorder[i+currentPointer][1]].imageUrl;
-			discript = imageData.image[imageIdinorder[i+currentPointer][1]].discript,
-			uploaderName =  imageData.image[imageIdinorder[currentPointer+i][1]].uploaderName,
-			uploaderId = imageData.image[imageIdinorder[currentPointer+i][1]].uploaderId,
-			createDate = imageData.image[imageIdinorder[currentPointer+i][1]].createDate,
-			numOfComment = imageData.image[imageIdinorder[currentPointer+i][1]].numOfComment,
-			imageId = imageData.image[imageIdinorder[currentPointer+i][1]].imageId,
-			numLike = imageData.image[imageIdinorder[currentPointer+i][1]].numLike,
+		var url = imageData[imageIdinorder[i+currentPointer][1]].imageUrl;
+			description = imageData[imageIdinorder[i+currentPointer][1]].description,
+			uploaderName =  imageData[imageIdinorder[currentPointer+i][1]].uploaderName,
+			uploaderId = imageData[imageIdinorder[currentPointer+i][1]].uploaderId,
+			createDate = imageData[imageIdinorder[currentPointer+i][1]].createDate,
+			numOfComment = imageData[imageIdinorder[currentPointer+i][1]].commentCnt,
+			imageId = imageData[imageIdinorder[currentPointer+i][1]].imageId,
+			numLike = imageData[imageIdinorder[currentPointer+i][1]].like,
 			display = i < numToShow ?"inline":"none";	
-
-		$("#eventsegment").append(thisImageHTML(url,discript,uploaderName,
+		
+			
+		if (numLike=="") numLike = "0";
+		description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
+		
+		$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,
 								uploaderId,createDate,numOfComment,display,imageId,numLike));
 		
 		addImageButtonHandler(imageId);
@@ -160,7 +168,7 @@ function imageInOrder(numTotalImage,data){
 	var imageIdinorder = [];
 	for (var i = 0 ; i < numTotalImage;i++){
 		imageIdinorder [i] = [];
-		imageIdinorder [i][0] = data.image[i].imageId;
+		imageIdinorder [i][0] = data[i].imageId;
 		imageIdinorder [i][1] = i;
 	}
 	imageIdinorder.sort(function(x,y){return (y[0]-x[0]);});
@@ -231,49 +239,51 @@ function addImageButtonHandler(imageId){
 		.shape('flip over');			
 	});
 	
-	$("#imageId"+imageId).find(".eventRemove").click(function(){
-		eventRemove($(this));
-		$('#eventsegment').masonry();
-	});
-	
 	$("#imageId"+imageId).find(".discript.content").click(function(){
 		$(this).parent().children(".btnArea").toggle();
 //		$(this).parent().children('.extra').toggle();
 		$('#eventsegment').masonry();
 	});
 	
-//	$("#imageId"+imageId).find('.icon.link.one')
-//	  .popup({
-//		    on: 'hover',
-//		    content: '分享给发送者'
-//	});
-//	$("#imageId"+imageId).find('.icon.link.two')
-//	  .popup({
-//		    on: 'hover',
-//		    content: '为发送者上传'
-//	});
-//	$("#imageId"+imageId).find('.icon.link.three')
-//	  .popup({
-//		    on: 'hover',
-//		    content: '设置为头像'
-//	});
-//	$("#imageId"+imageId).find('.icon.link.four')
-//	  .popup({
-//		    on: 'hover',
-//		    content: '删除照片'
-//	});
+	$("#imageId"+imageId).find('.returnToSender')
+	  .popup({
+		    on: 'hover',
+		    content: '分享给发送者'
+	});
+	$("#imageId"+imageId).find('.uploadFor')
+	  .popup({
+		    on: 'hover',
+		    content: '为发送者上传'
+	});
+	$("#imageId"+imageId).find('.setPortrait')
+	  .popup({
+		    on: 'hover',
+		    content: '设置为头像'
+	});
+	$("#imageId"+imageId).find('.eventRemove')
+	  .popup({
+		    on: 'hover',
+		    content: '删除照片'
+	});
 	
+	$("#imageId"+imageId).find(".eventRemove").click(function(){
+		removeImage($(this));
+	});
+	
+	$("#imageId"+imageId).find(".likebtn").click(function(){
+		likeThisImage($(this),imageId);
+	});
+
+
 }
 
-function eventRemove($removeBtn) {
-	var rmelement = $removeBtn.parents(".eventpile");
-	$("#eventsegment").masonry( 'remove', rmelement);
-}
+
+
 
 /*********************************************************************************
  * 	The whole HTML part to draw
  */
-function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike){
+function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike){
 	
 	displayDate = dateHandle(createDate);
 	
@@ -290,33 +300,36 @@ function thisImageHTML(url,discript,uploaderName,uploaderId,createDate,numOfComm
 			    						"<div class='ui tiny button likebtn' style='margin-right: 2px'>"+
 			    							"<i class='heart tiny icon'></i>"+
 			    						"</div>"+
-			    						"<div class='ui tiny red inverted button commentbtn commentToggle'>" +
+			    						"<div class='ui tiny green inverted button commentbtn commentToggle'>" +
 			    							"<i class='comment icon'></i>"+numOfComment+
 			    						"</div>" +
 			    					"</div>"+
 		    					"</div>"+    					
 		    					"<div class = 'discript content'>"+
-		    						"<p class='description'>"+discript+"</p>"+
-		    						"<div class='meta'>"+
+		    						"<p class='description' style = 'display:"+descriptionDisplay+"'>"+description+"</p>"+
+		    						"<div class='meta' style = 'display:block' >"+
 		    							"By <a class='uploader'>"+uploaderName+"</a> "+
 		    						"</div>"+
+//		    						"<div class='' style = 'display:block'>"+
+//		    							"<i class='angle down icon'></i>"+
+//		    						"</div>"+
 		    					"</div>"+
 		    					"<div class='btnArea' style='display:none;'>"+
 			                        "<a class='returnToSender' style='padding-right: 17px; padding-left: 17px;margin-left: 8px;'>" +
-			                        	"<i class='share large icon link one'></i>" +
+			                        	"<i class='share large icon'></i>" +
 			                        "</a>" +
 			                        "<a class='uploadFor' style='padding-right: 17px; padding-left: 17px;'>" +
-		                        		"<i class='cloud upload large icon link two'></i>" +
+		                        		"<i class='cloud upload large icon'></i>" +
 		                        	"</a>" +
 		                        	"<a class='setPortrait' style='padding-right: 17px; padding-left: 17px;'>" +
-	                        			"<i class='user basic large icon link three'></i>" +
+	                        			"<i class='user basic large icon'></i>" +
 	                        		"</a>" +
 			                        "<a class='eventRemove' style='padding-right: 17px; padding-left: 17px;'>" +
-		                        		"<i class='remove sign large icon link four'></i>" +
+		                        		"<i class='remove sign large icon'></i>" +
 		                        	"</a>" +
 		                        "</div>" +
 					    		"<div class=\"extra\">"+
-					    			"<span style='float: left;  text-align: left;'>"+numLike+" 赞</span>"+
+					    			"<span class='numLikeSpan' style='float: left;  text-align: left;'>"+numLike+"</span><span>个赞</span>"+
 					    	        "<span style='float: right;  text-align: right;margin-right: 3%'>"+displayDate+"</span>"+
 			    	        	"</div>"+
 		                     
@@ -354,8 +367,8 @@ function dateHandle(createDate){
 	year = date.getFullYear();
 	
 	today = year+"-"+month; 
-	uploadDate = createDate.substr(0,createDate.indexOf("T")-3);
-	defaultUploadDate = createDate.substr(0,createDate.indexOf("T"));
+	uploadDate = createDate.substr(0,createDate.indexOf(" ")-3);
+	defaultUploadDate = createDate.substr(0,createDate.indexOf(" "));
 	defaultDisplayDate = defaultUploadDate.substr(0,4)+"年"+defaultUploadDate.substr(5,2)+"月"+defaultUploadDate.substr(8,2)+"日";
 	if(uploadDate != today){	
 		return defaultDisplayDate;
@@ -364,10 +377,10 @@ function dateHandle(createDate){
 		minute = date.getMinutes();
 		second = date.getSeconds();
 		
-		upload_day = createDate.substr(createDate.indexOf("T")-2,2);
-		upload_hour = createDate.substr(createDate.indexOf("T")+1,2);
-		upload_minute = createDate.substr(createDate.indexOf("T")+4,2);
-		upload_second = createDate.substr(createDate.indexOf("T")+7,2);
+		upload_day = createDate.substr(createDate.indexOf(" ")-2,2);
+		upload_hour = createDate.substr(createDate.indexOf(" ")+1,2);
+		upload_minute = createDate.substr(createDate.indexOf(" ")+4,2);
+		upload_second = createDate.substr(createDate.indexOf(" ")+7,2);
 
 		if (day>upload_day){
 //			return defaultDisplayDate;

@@ -244,13 +244,25 @@ function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
 
 //Need to be added
 function getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
-	var path = "v1/image/" + userId + "/user/one",
+	var path = "v1/image/" + userId + "/latest",
 		url = ServerRoot + ServiceType.IMAGE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }
 
+function setLikedByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + imageId + "/like",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
+function setDislikedByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + imageId + "/dislike",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
 
 
