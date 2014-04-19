@@ -30,7 +30,13 @@
                 <comment>0: not deleted 1:deleted</comment>
             </column>
         </property>
-        <set name="imageComments" inverse="true">
+        <property name="liked" type="java.lang.Integer">
+        	<column name="liked" not-null="true" />
+        </property>
+        <property name="content" type="java.lang.String">
+        	<column name="content" length="255" />
+        </property>
+        <set name="imageComments" lazy="false" inverse="true">
             <key>
                 <column name="image_id" not-null="true" />
             </key>

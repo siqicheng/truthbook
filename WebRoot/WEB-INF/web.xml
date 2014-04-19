@@ -43,6 +43,16 @@
   	<url-pattern>/servlet/Progress</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>upload</servlet-name>            
+  	<servlet-class>fileupload.FileUploadServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>upload</servlet-name>
+  	<url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
     <welcome-file>signin_up.html</welcome-file>
   </welcome-file-list>
