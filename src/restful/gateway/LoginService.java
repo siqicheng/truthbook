@@ -311,9 +311,8 @@ public class LoginService {
 	@Path("v1/prefix/{prefix}/verify")
 	@Produces("application/json;charset=utf-8")
 	public List<User> findUserByPartOfName(@PathParam("prefix") String part) {
-		String table = userDAO.TABLE;
 		Criteria criteria = this.userDAO.getSession().createCriteria(User.class);
-		criteria.add(Restrictions.like(UserDAO.FULL_NAME, part, MatchMode.START)); 
+		criteria.add(Restrictions.like(UserDAO.FULL_NAME, part , MatchMode.START));
 		return criteria.list();
 	}
 	
