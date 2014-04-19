@@ -78,7 +78,10 @@ function getAllImage(userId){
 		if (numTotalImage != 0 ){	
 			$.cookie("truthbook_Page_Image_Num", numTotalImage);
 			if(numTotalImage==1){
-				drawOneImage(data);
+				$.cookie("truthbook_Page_Image_Pointer", 0);
+				drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
+
+//				drawOneImage(data);
 			}else{
 				$.cookie("truthbook_Page_Image_Pointer", 0);
 				drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
@@ -86,6 +89,7 @@ function getAllImage(userId){
 			return true;
 		}
 		else{
+			disableShowMoreButton();
 			drawConfirmPopUp("木有照片");
 			return true;
 		}
@@ -100,9 +104,9 @@ function getAllImage(userId){
 
 function getGuestImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
-		var numTotalImage = data.length;
-		if (numTotalImage != 0 ){
-			drawOneImage(data);
+		disableShowMoreButton();
+		if (data.imageUrl != undefined ){
+			drawGuestOneImage(data);
 			return true;
 		}
 		else{
@@ -121,15 +125,15 @@ function getGuestImage(userId){
  * 	When the user only have one image or only allowed to see one image,
  * 	Use this to draw one segement and do not draw the show more button.
  */
-function drawOneImage(imageData){
-	var url = imageData[0].imageUrl,
-		description = imageData[0].description,
-		uploaderName =  imageData[0].uploaderName,
-		uploaderId = imageData[0].uploaderId,
-		createDate = imageData[0].createDate,
-		numOfComment = imageData[0].commentCnt,
-		imageId = imageData[0].imageId,
-		numLike = imageData[0].like,
+function drawGuestOneImage(imageData){
+	var url = imageData.imageUrl,
+		description = imageData.description,
+		uploaderName =  imageData.uploaderName,
+		uploaderId = imageData.uploaderId,
+		createDate = imageData.createDate,
+		numOfComment = imageData.commentCnt,
+		imageId = imageData.imageId,
+		numLike = imageData.like,
 		display = "inline";
 	
 	if (numLike=="") numLike = "0";
@@ -221,7 +225,12 @@ function showNextBatchImage(numToShow,numTotalImage){
 			break;
 		}
 	}
-	var j = 0
+	var j = 0;
+	if(i==numTotalImage){
+		disableShowMoreButton();
+		return;
+	}
+	
 	for(;j<numToShow;j++){
 		$("#eventsegment").children(".eventpile")[i+j].style.display = "inline";
 		if (i+j == numTotalImage - 1){
@@ -268,6 +277,10 @@ function addImageButtonHandler(imageId){
 		showReply($(this));
 	});
 	
+	$("#imageId"+imageId).find(".uploaderName").click(function(){
+		goOthersPage($(this).parent().find(".uploaderId").html());
+	});
+	
 	$("#imageId"+imageId).find(".discript.content").click(function(){
 		$(this).parent().children(".btnArea").toggle();
 //		$(this).parent().children('.extra').toggle();
@@ -294,9 +307,6 @@ function addImageButtonHandler(imageId){
 	$("#imageId"+imageId).find(".eventRemove").click(function(){
 		removeImage($(this));
 	});
-	
-
-
 
 }
 
@@ -341,7 +351,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    					"<div class = 'discript content'>"+
 		    						"<p class='description' style = 'display:"+descriptionDisplay+"'>"+description+"</p>"+
 		    						"<div class='meta' style = 'display:block' >"+
-		    							"By <a class='uploader'>"+uploaderName+"</a>" + 
+		    							"By <a class='uploaderName'>"+uploaderName+"</a>" + 
 		    							"<span class='uploaderId' style='display:none;'>" + uploaderId + "</span> "+
 		    						"</div>"+
 		    					"</div>"+

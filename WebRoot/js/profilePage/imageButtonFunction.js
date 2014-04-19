@@ -126,8 +126,6 @@ function setPortrait(thisElem){
 		drawConfirmPopUp("设置头像请求发送失败 Error: "+error);
 	};
 	
-	
-	
 	addPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError);
 	
 }
