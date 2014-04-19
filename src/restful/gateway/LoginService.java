@@ -304,6 +304,17 @@ public class LoginService {
 		return fullName_list;
 	}
 	
+	@GET
+	@Path("v1/prefix/{prefix}/verify")
+	@Produces("application/json;charset=utf-8")
+	public Object findUserByPartOfName(@PathParam("prefix") String part) {
+		String table = userDAO.TABLE;
+		String queryString = "select * from " + table + " as model where "+
+				"model.full_name like '"+part+"%'";
+		
+		return RestUtil.list2json(this.userDAO.getSession().createSQLQuery(queryString).list());
+	}
+	
 	@POST
 	@Path("v1/user/verify")
 	@Produces("application/json;charset=utf-8")
