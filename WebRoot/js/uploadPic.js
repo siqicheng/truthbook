@@ -106,8 +106,19 @@ $(function() {
 		}
 	});
 
+	$("#picInput").fileupload({
+		url: "upload",
+		dataType: "json",
+		add: function(e, data) {
+			picData=data;
+		},
+		done: function(e, data) {
+			alert("upload success");
+		}
+	});
+	
 	$("#nextstep3").click(function() {
-		/*TODO: uploading picture unfinished*/
+		/*TODO: 未选择图片不能进入下一步*/
 		gotoConfirm();
 	});
 
@@ -115,19 +126,17 @@ $(function() {
 		if(picReceiver == NEW_QUOTE) {
 			var data = $("#choosePeople").serialize(),
 				onSuccess = function(data, textStatus) {
+					picReceiver = data;
 					var userId = $.cookie("truthbook").userId,
 						onSuccess = function() {
 							drawConfirmPopUp("新建词条完成！赶快去通知好友来玩吧！");
-
-							$.magnificPopup.close();
-							$(".sidebar").sidebar("hide");
 							refreshTopbarFriendsLists($.cookie("truthbook").userId);
 							refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 							console.log("Add friend success");
 						};
 					addFriendAPI(data.userId, userId, type_nFriends, "true");
 					addFriendAPI(userId, data.userId, type_nFriends, "false", onSuccess);
-					//TODO: 上传照片
+					uploadPic();
 				},
 				onError = function(xhr, status, error) {
 					console.log("Register new quote failed with error: " + error);
@@ -139,19 +148,13 @@ $(function() {
 			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
 					if(data>0) {
-						//TODO: 上传照片
+						uploadPic();
 						drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
-
-						$.magnificPopup.close();
-						$(".sidebar").sidebar("hide");
 					} else {
 						var userId = $.cookie("truthbook").userId,
 							onSuccess = function(data, textStatus) {
-								//TODO: 上传照片
+								uploadPic();
 								drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
-
-								$.magnificPopup.close();
-								$(".sidebar").sidebar("hide");
 							};
 						addFriendAPI(picReceiver.userId, userId, type_nFriends, "true");
 						addFriendAPI(userId, picReceiver.userId, type_nFriends, "false", onSuccess);
@@ -164,7 +167,6 @@ $(function() {
 		} else {
 			console.log("upload pic for " + picReceiver);
 			var userId = $.cookie("truthbook").userId;
-			//TODO: 上传照片
 			uploadPic();
 		};
 	});
@@ -259,28 +261,43 @@ function upload_choosepic(people) {
 }
 
 function uploadPic() {
-	var uploadData = new FormData(),
-		url = "http://localhost:8080/truthbook/servlet/imageUpload",
-		onSuccess = function(data, textStatus) {
-			//TODO: 发通知
-			drawConfirmPopUp("为好友上传照片完成！");
-			$.magnificPopup.close();
-			$(".sidebar").sidebar("hide");
-		},
-		onError = function(xhr, status, error) {
-			console.log("uploadPic failed with error: " + status + "     " + error);
-		};
-	uploadData.append("file", $("#fileElem").val());
-	uploadData.append("username", $.cookie("truthbook").fullName);
-	uploadData.append("userid", $.cookie("truthbook").userId);
-	uploadData.append("receiverid", picReceiver.userId);
-	uploadData.append("receivername", picReceiver.fullName);
-	var ajax_obj = getAjaxObj(url, "post", "json", onSuccess, onError);
-	ajax_obj.data = uploadData;
-	ajax_obj.cache = false;
-	ajax_obj.contentType = false;
-	ajax_obj.processData = false;
-	ajax_call(ajax_obj);
+//	var uploadData = new FormData(),
+//		url = "http://localhost:8080/truthbook/servlet/imageUpload",
+//		onSuccess = function(data, textStatus) {
+//			//TODO: 发通知
+//			drawConfirmPopUp("为好友上传照片完成！");
+//			$.magnificPopup.close();
+//			$(".sidebar").sidebar("hide");
+//		},
+//		onError = function(xhr, status, error) {
+//			console.log("uploadPic failed with error: " + status + "     " + error);
+//		};
+//	uploadData.append("file", $("#fileElem").val());
+//	uploadData.append("username", $.cookie("truthbook").fullName);
+//	uploadData.append("userid", $.cookie("truthbook").userId);
+//	uploadData.append("receiverid", picReceiver.userId);
+//	uploadData.append("receivername", picReceiver.fullName);
+//	var ajax_obj = getAjaxObj(url, "post", "json", onSuccess, onError);
+//	ajax_obj.data = uploadData;
+//	ajax_obj.cache = false;
+//	ajax_obj.contentType = false;
+//	ajax_obj.processData = false;
+//	ajax_call(ajax_obj);
+	var userId=$.cookie("truthbook").userId;
+	picData.formData = [
+	                  {
+	                      name: 'userid',
+	                      value: userId
+	                  },
+	                  {
+	                      name: 'receiverid',
+	                      value: picReceiver.userId
+	                  }
+	              ];
+	picData.submit();
+//	TODO: 发通知
+	$.magnificPopup.close();
+	$(".sidebar").sidebar("hide");
 }
 
 	/*Help functions*/

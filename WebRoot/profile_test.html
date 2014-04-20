@@ -143,7 +143,7 @@
 				
 				<img id="img_prev" src="" alt="your image" ><br>
 				<a href="javascript:;" class="addpic">
-					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片
+					<input type ="file" id="picInput"  onchange="readURL(this);" multiple>选择图片
 				</a>
 				<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
 				<div class="ui black fluid button" id="nextstep3"  >下一步</div>
@@ -386,6 +386,11 @@
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
+	
+	<script src="./js/jquery.iframe-transport.js"></script>
+	<script src="./js/vendor/jquery.ui.widget.js"></script>
+	<script src="./js/jquery.fileupload.js"></script>
+	
 	<script src="./js/uploadPic.js"></script>
 	<script src="./js/refreshFriendsLists.js"></script>
 	<script src="./js/uploadpopup.js"></script>

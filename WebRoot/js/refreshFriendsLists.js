@@ -229,7 +229,7 @@ function showPage(barType, friendsType, page, num) {
 	} else {
 		pagination.show();
 	}
-	var maxpage = Math.floor(num/5)+1;
+	var maxpage = Math.ceil(num/5);
 	pagination.children(".content").html("Page "+(page+1));
 	var prev=(page-1)%(maxpage),
 		next=(page+1)%(maxpage);

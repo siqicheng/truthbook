@@ -1,10 +1,4 @@
 $(function () {
-//	$("#uploadBtn").bind("change", function(e) {
-//	$("#uploadBtn").click(function(e) {
-//		$('#fileupload').fileupload('add', {
-//			fileInput: $(this)
-//		});
-//	});
 	    $('#fileupload').fileupload({
 	    	
 	        dataType: 'json',
@@ -24,11 +18,11 @@ $(function () {
 	        	data.formData = [
 	        	                  {
 	        	                      name: 'userid',
-	        	                      value: "73"
+	        	                      value: 73
 	        	                  },
 	        	                  {
 	        	                      name: 'receiverid',
-	        	                      value: "72"
+	        	                      value: 72
 	        	                  }
 	        	              ];
 	        	console.log(data.formData);
@@ -36,18 +30,7 @@ $(function () {
 	        },
 	        
 	        done: function (e, data) {
-	        	$("tr:has(td)").remove();
-	            $.each(data.result, function (index, file) {
-	                $("#uploaded-files").append(
-	                		$('<tr/>')
-	                		.append($('<td/>').text(file.fileName))
-	                		.append($('<td/>').text(file.fileSize))
-	                		.append($('<td/>').text(file.fileType))
-	                		.append($('<td/>').html("<a href='upload?f="+index+"'>Click</a>"))
-	                		.append($('<td/>').text("@"+file.twitter))
-	
-	                		)//end $("#uploaded-files").append()
-	            }); 
+	        	alert("upload success");
 	        },
 	        
 	        progressall: function (e, data) {
