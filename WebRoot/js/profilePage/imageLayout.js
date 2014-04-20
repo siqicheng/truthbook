@@ -5,16 +5,15 @@ $(function(){
 
 });
 
-//function imageLengthJson(data){
-//	if(data == null){
-//		return -1;
-//	}
-//	if (data.image.length != undefined){
-//		return data.image.length;
-//	} else if (data != null) {
-//		return 1;
-//	}
-//}
+function imageButtonHandler(){	
+	$("#showMoreButton").click(function(){
+//		$('#eventsegment').masonry('destroy');
+//		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
+		itemInitialize();
+	});
+	
+}
 
 function setPortraitImageForThisPage(){
 	var userId = $.cookie("truthbook_PageOwner_userId").userId
@@ -44,6 +43,11 @@ function setPortraitImageForThisPage(){
 	getDefaultPortraitAPI(userId,onAjaxSuccess,onAjaxError)
 }
 
+
+/*********************************************************************************	
+ *	Homepage check
+ */
+
 function getImagePreCheck(){
 	if($.cookie("truthbook").userId == $.cookie("truthbook_PageOwner_userId").userId){
 		getAllImage($.cookie("truthbook_PageOwner_userId").userId);
@@ -51,6 +55,10 @@ function getImagePreCheck(){
 		friendRelationCheck();
 	}
 }
+
+/*********************************************************************************	
+ *	Friend relation check
+ */
 
 function friendRelationCheck(){
 	var onAjaxSuccess = function(data,textStatus){
@@ -68,24 +76,21 @@ function friendRelationCheck(){
 		return false;
 	};
 	
-	checkFriendRelationship($.cookie("truthbook").userId, $.cookie("truthbook_PageOwner_userId").userId, onAjaxSuccess, onAjaxError);
+	checkFriendRelationship($.cookie("truthbook").userId, $.cookie(
+			"truthbook_PageOwner_userId").userId, onAjaxSuccess, onAjaxError);
 }
+
+/*********************************************************************************	
+ *	Get all images when on homepage or friend's page
+ */
 
 function getAllImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
-//		$.cookie("truthbook_Page_Image_Json", data);
 		var numTotalImage = data.length;
 		if (numTotalImage != 0 ){	
 			$.cookie("truthbook_Page_Image_Num", numTotalImage);
-			if(numTotalImage==1){
-				$.cookie("truthbook_Page_Image_Pointer", 0);
-				drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
-
-//				drawOneImage(data);
-			}else{
-				$.cookie("truthbook_Page_Image_Pointer", 0);
-				drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
-			}
+			$.cookie("truthbook_Page_Image_Pointer", 0);
+			drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
 			return true;
 		}
 		else{
@@ -105,8 +110,9 @@ function getAllImage(userId){
 function getGuestImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 		disableShowMoreButton();
-		if (data.imageUrl != undefined ){
-			drawGuestOneImage(data);
+		if (data[0].imageUrl != undefined ){
+			drawNextBatchImage(q,q,q,data);
+//			drawGuestOneImage(data);
 			return true;
 		}
 		else{
@@ -126,14 +132,14 @@ function getGuestImage(userId){
  * 	Use this to draw one segement and do not draw the show more button.
  */
 function drawGuestOneImage(imageData){
-	var url = imageData.imageUrl,
-		description = imageData.description,
-		uploaderName =  imageData.uploaderName,
-		uploaderId = imageData.uploaderId,
-		createDate = imageData.createDate,
-		numOfComment = imageData.commentCnt,
-		imageId = imageData.imageId,
-		numLike = imageData.like,
+	var url = imageData[0].imageUrl,
+		description = imageData[0].description,
+		uploaderName =  imageData[0].uploaderName,
+		uploaderId = imageData[0].uploaderId,
+		createDate = imageData[0].createDate,
+		numOfComment = imageData[0].commentCnt,
+		imageId = imageData[0].imageId,
+		numLike = imageData[0].like,
 		display = "inline";
 	
 	if (numLike=="") numLike = "0";
@@ -281,11 +287,30 @@ function addImageButtonHandler(imageId){
 		goOthersPage($(this).parent().find(".uploaderId").html());
 	});
 	
-	$("#imageId"+imageId).find(".discript.content").click(function(){
-		$(this).parent().children(".btnArea").toggle();
+	$("#imageId"+imageId).find(".discript.content").hover(	
+			function(){	$(this).find(".editBtn").show();
+						$('#eventsegment').masonry();},
+			function(){	$(this).find(".editBtn").hide();
+						$('#eventsegment').masonry();}
+	);
+	
+	$("#imageId"+imageId).find(".editBtn").click(function(){	
+		if($(this).find(".down").attr("class") == undefined){
+			$(this).find(".double").addClass("down");
+			$(this).find(".double").removeClass("up");
+		}else{
+			$(this).find(".double").addClass("up");
+			$(this).find(".double").removeClass("down");
+		}
+		$(this).parent().parent().children(".btnArea").toggle();
 //		$(this).parent().children('.extra').toggle();
 		$('#eventsegment').masonry();
 	});
+	
+	$("#imageId"+imageId).find(".editBtn").hover(	
+			function(){$(this).css("color","#33B2E1");},
+			function(){$(this).css("color","");}
+	);
 	
 	addImageControlButtonPopup("returnToSender","分享给发送者",imageId);
 	addImageControlButtonPopup("uploadFor","为发送者上传",imageId);
@@ -352,10 +377,14 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    					"<div class = 'discript content'>"+
 		    						"<p class='description' style = 'display:"+descriptionDisplay+"'>"+description+"</p>"+
 		    						"<div class='meta' style = 'display:block' >"+
-		    							"By <a class='uploaderName'>"+uploaderName+"</a>" + 
+		    							"By <a class='uploaderName'><font size=\"4px\">"+uploaderName+"</font></a>" + 
 		    							"<span class='uploaderId' style='display:none;'>" + uploaderId + "</span> "+
 		    						"</div>"+
+		    						"<div class='ui editBtn icon' style='display:none; margin-left:10px;cursor:pointer;width:20%'>" +
+		    							"<i class='double angle down icon'></i>"+
+		    						"</div>" +
 		    					"</div>"+
+
 		    					"<div class='btnArea' style='display:none;'>"+
 			                        "<a class='returnToSender' style='padding-right: 17px; padding-left: 17px;margin-left: 8px;'>" +
 			                        	"<i class='share large icon'></i>" +
@@ -442,15 +471,7 @@ function dateHandle(createDate){
 }
 
 
-function imageButtonHandler(){	
-	$("#showMoreButton").click(function(){
-//		$('#eventsegment').masonry('destroy');
-//		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
-		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
-		itemInitialize();
-	});
-	
-}
+
 
 
 

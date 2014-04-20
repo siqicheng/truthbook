@@ -54,7 +54,7 @@ public class ImageService {
 		map.put("uploaderName", new UserDAO().findById(image.getUploaderId()).getFullName());
 		return map;
 	}
-	
+		
 	@GET
 	@Path("v1/image/{userid}/latest")
 	@Produces("application/json;charset=utf-8")
@@ -69,6 +69,11 @@ public class ImageService {
 				}
 			}
 		}
+		
+		Object[] images = new Object[1];
+		
+		images[0] = ProduceMap(latest);
+		
 		return RestUtil.map2json(ProduceMap(latest));
 	}
 	
