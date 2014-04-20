@@ -50,7 +50,7 @@ public class MultipartRequestHandler {
 		return files;
 	}
 	
-	public static List<FileMeta> uploadByApacheFileUpload(HttpServletRequest request) throws IOException, ServletException{
+	public static List<FileMeta> uploadByApacheFileUpload(HttpServletRequest request, String path) throws IOException, ServletException{
 				
 		List<FileMeta> files = new LinkedList<FileMeta>();
 		
@@ -100,6 +100,9 @@ public class MultipartRequestHandler {
 				       
 				    	// 2.7 Create FileMeta object
 				    	temp = new FileMeta();
+				    	temp.setPath(path);
+				    	temp.setUserId(userId);
+				    	temp.setReceiverId(receiverId);
 						temp.setFileName(item.getName());
 						temp.setContent(item.getInputStream());
 						temp.setFileType(item.getContentType());
@@ -112,10 +115,8 @@ public class MultipartRequestHandler {
 				
 				// 2.8 Set "twitter" parameter 
 				for(FileMeta fm:files){
-					fm.SetUserId(userId);
-					fm.setReceiverId(receiverId);
 					fm.write();
-				//	fm.save();
+					fm.save();
 				}
 				
 			} catch (FileUploadException e) {
