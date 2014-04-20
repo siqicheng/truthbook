@@ -16,12 +16,13 @@ import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
+import fileupload.imageUtil;
 
 
 @JsonIgnoreProperties({"content","receivedrId","userId","is"})
 public class FileMeta {
 	
-	private static final String location = "C:\\Users\\WinKaR\\Desktop\\Uploaded";
+	private static final String location = "Uploaded";
 
 	private String fileName;
 	private String fileSize;
@@ -29,8 +30,17 @@ public class FileMeta {
 	private Integer userId;
 	private Integer receiverId; 
 	private InputStream is;
+	private String path;
 	
 	private InputStream content;
+	
+	public String getPath(){
+		return this.path;
+	}
+	
+	public void setPath(String path){
+		this.path = path;
+	}
 	
 	public void setIs(InputStream is){
 		this.is = is;
@@ -60,12 +70,12 @@ public class FileMeta {
 		return fileName;
 	}
 	public void setFileName(String fileName) {
-//		UserDAO userdao =  new UserDAO();
-//		User user = userdao.findById(receiverId);
-//		User uploader = userdao.findById(userId);
-//		String ext = (fileName.lastIndexOf('.')>-1)?fileName.substring(fileName.lastIndexOf('.')):"";
-//		fileName=uploader.getFullName()+"_to_"+user.getFullName()+"_at_"+
-//				(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()))+ext;
+		UserDAO userdao =  new UserDAO();
+		User user = userdao.findById(receiverId);
+		User uploader = userdao.findById(userId);
+		String ext = (fileName.lastIndexOf('.')>-1)?fileName.substring(fileName.lastIndexOf('.')):"";
+		fileName=uploader.getFullName()+"_to_"+user.getFullName()+"_at_"+
+				(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()))+ext;
 		this.fileName = fileName;
 	}
 	public String getFileSize() {
@@ -123,12 +133,14 @@ public class FileMeta {
 	
 	public boolean write(){
 		try{
-			File filePath=new File(this.location);
+			String RealPath = this.path +File.separator +this.location;
+			File filePath=new File(RealPath);
 			if (!filePath.exists() || !filePath.isDirectory()){
 				filePath.mkdir();
 			}
 			
-			FileOutputStream os = new FileOutputStream(this.location+File.separator+this.getFileName());
+			FileOutputStream os = 
+					new FileOutputStream(RealPath+File.separator+this.getFileName());
 			
 			byte[] buffer = new byte[8192];
 			
@@ -138,6 +150,11 @@ public class FileMeta {
 			}
 			
 			os.close();
+			
+			String fullPath =RealPath+ File.separator +this.getFileName();
+			imageUtil.resizeSmall(fullPath);
+			imageUtil.resizeMedium(fullPath);
+			imageUtil.resizeLarge(fullPath);
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();

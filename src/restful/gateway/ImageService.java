@@ -14,11 +14,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import com.sun.org.apache.regexp.internal.RE;
 
 import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
@@ -57,6 +56,41 @@ public class ImageService {
 		return map;
 	}
 	
+//	@GET
+//	@Path("v1/image/{imageid}/{imageSize}/resizedImage")
+//	@Produces("image/jpeg")
+//	public Object getImage(@PathParam("imageid") Integer imageid, 
+//			@PathParam("imageSize") String imageSize){
+//		
+//		try{
+////			String path =new ImageDAO().findById(imageid).getImageUrl();
+//			String path = 
+//					"C:\\Users\\WinKaR\\Workspaces\\MyEclipse Professional\\.metadata\\.me_tcat7\\webapps\\truthbook\\Uploaded\\Koala.jpg";
+////			File image = new File(path);
+//////			return image.;
+////			File file = new File(path);
+////			 
+////			ResponseBuilder response = Response.ok((Object) file);
+////			response.header("Content-Disposition",
+////				"attachment; filename=image_from_server.png");
+////			return response.build();
+//			
+//			BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
+//			ByteArrayOutputStream out =new  ByteArrayOutputStream();
+//			int size=0;
+//			byte[] temp = new byte[1024];        
+//			while ((size = in.read(temp))!=-1){
+//				out.write(temp, 0, size);        
+//			}
+//			in.close();
+//			return Response.ok(out.toByteArray()).build();
+//		} catch (Exception e){
+//			e.printStackTrace();
+//			
+//			return null;
+//		}
+//	}
+	
 	@GET
 	@Path("v1/image/{userid}/latest")
 	@Produces("application/json;charset=utf-8")
@@ -71,7 +105,12 @@ public class ImageService {
 				}
 			}
 		}
-		return RestUtil.map2json(ProduceMap(latest));
+		
+		Object[] images = new Object[1];
+		
+		images[0] = ProduceMap(latest);
+		
+		return RestUtil.array2json(images);
 	}
 	
 	@POST
