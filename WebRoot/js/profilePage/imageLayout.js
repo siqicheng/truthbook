@@ -1,7 +1,7 @@
 $(function(){
 	getImagePreCheck();
 	
-	$('.testitemload').click(function(){
+	$('#showMoreButton').click(function(){
 //		$('#eventsegment').masonry('destroy');
 //		drawNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
 		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE,$.cookie("truthbook_Page_Image_Num"));
