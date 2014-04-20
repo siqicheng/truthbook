@@ -1,12 +1,12 @@
 package restful.gateway;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,15 +14,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
+import org.codehaus.jackson.map.ObjectMapper;
 
 
 @Path("imageService")
@@ -53,6 +51,8 @@ public class ImageService {
 		map.put("userId", image.getUserId());
 		map.put("userName", image.getUser().getFullName());
 		map.put("uploaderName", new UserDAO().findById(image.getUploaderId()).getFullName());
+		
+		
 		return map;
 	}
 	
@@ -118,7 +118,8 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object addImage(@FormParam("imageURL") String imageURL,
 			@FormParam("userId") Integer userId,
-			@FormParam("uploaderId") Integer uploaderId) {
+			@FormParam("uploaderId") Integer uploaderId,
+			@FormParam("description") String content) {
 		
 		Session session = this.imageDAO.getSession();
 		try{
@@ -131,6 +132,7 @@ public class ImageService {
 			image.setImageUrl(imageURL);
 			image.setUploaderId(uploaderId);
 			image.setUser(user);
+			image.setContent(content);
 			
 			Date date = RestUtil.getCurrentDate();
 			

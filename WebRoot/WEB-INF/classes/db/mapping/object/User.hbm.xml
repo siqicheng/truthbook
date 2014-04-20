@@ -27,7 +27,7 @@
         </property>
         
         
-        <set name="relationships" inverse="true">
+        <set name="relationships"  inverse="true">
             <key>
                 <column name="user_id" not-null="true" />
             </key>
