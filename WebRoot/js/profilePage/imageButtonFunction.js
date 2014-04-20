@@ -1,9 +1,18 @@
-
-
-
+/*
+ *	All the buttons' function on an Image Item.
+ *	1.	Like/Dislike :	One can click multiple times when refresh the page	
+ *	2.	Show reply contents on the back
+ *	3.	Return to sender
+ *	4.	Upload image for sender
+ *	5.	Set as portrait
+ *	6.	Remove image 
+ *
+ *
+ */
 
 /*********************************************************************************
- * 	Like this image click function and its help function 
+ *	1.	Like/Dislike 	
+ *	Like this image click function and its help function 
  */
 
 function likeThisImage(thisElem,imageId){
@@ -57,7 +66,8 @@ function setNumOfLike(thisElem,num){
 }
 
 /*********************************************************************************
- * 	Show reply of this image click function and its help function 
+ *	2.	Show reply contents on the back
+ *	Show reply of this image click function and its help function 
  */
 
 function showReply(thisElem){
@@ -72,15 +82,59 @@ function showReply(thisElem){
 }
 
 /*********************************************************************************
- * 	Return to sender click function and its help function 
+ *	3.	Return to sender
+ *	Return to sender click function and its help function 
  */
 
 function returnToSender(thisElem){
 	disableThisPopup("returnToSender");
+	confirmReturnToSenderPopUp(thisElem);
 }
 
+function returnToSenderStart(imageURL,userId,uploaderId,description){
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			drawConfirmPopUp("分享照片成功");
+		}else{
+			drawConfirmPopUp("分享照片失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("分享给用户请求发送失败 Error: "+error);
+	};
+	addImageAPI(imageURL,uploaderId,userId,description,onAjaxSuccess,onAjaxError);
+}
+
+function confirmReturnToSenderPopUp(thisElem){
+	var uploaderId = thisElem.parent().parent().find(".uploaderId").html(),
+		uploaderName = thisElem.parent().parent().find(".uploaderName").html(),
+		description = thisElem.parent().parent().find(".description").html(),
+		userId = thisElem.parent().parent().parent()
+			.parent().parent().parent().find(".userId_span").html(),
+		imageURL = thisElem.parent().parent().parent()
+			.parent().parent().parent().find(".url_span").html();	
+	var header = "确定把照片分享给"+ uploaderName +"？";
+	var content = "等下一个天亮<br>" +
+					"&ensp;&ensp;&ensp;&ensp;把偷拍我看海的照片送我好吗";
+	var negativeBtn = "取消";
+	var negativeBtnHidden = "还是自己一个人纪念";
+	var positiveBtn = "确定";
+	var positiveBtnHidden = "这是我们共同的回忆";
+	var logo="share";
+	approveFunction = function() {
+		returnToSenderStart(imageURL,userId,uploaderId,description);
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, 
+						positiveBtnHidden, approveFunction,onDenyFunction, logo);	
+}
+
+
 /*********************************************************************************
- * 	UploadFor click function and its help function 
+ *	4.	Upload image for sender
+ *	UploadFor click function and its help function 
  */
 
 function uploadFor(thisElem){
@@ -99,11 +153,16 @@ function uploadFor(thisElem){
 	getUserAPI(id, onAjaxSuccess, onAjaxError);
 }
 /*********************************************************************************
- * 	Set Portrait click function and its help function 
+ *	5.	Set as portrait
+ *	Set Portrait click function and its help function 
  */
 
 function setPortrait(thisElem){
 	disableThisPopup("setPortrait");
+	confirmSetPortrait(thisElem);
+}
+
+function setPortraitStart(thisElem){
 	var imageId = thisElem.parent().parent().parent()
 					.parent().parent().parent().find(".imageId_span").html(),
 		userId = thisElem.parent().parent().parent()
@@ -120,6 +179,7 @@ function setPortrait(thisElem){
 			drawConfirmPopUp("设置头像失败");
 		}else{
 			setPortraitImageForThisPage();
+			drawConfirmPopUp("设置头像成功");
 		}
 	};
 	var onSetAjaxError = function(xhr, textStatus, error) {
@@ -130,27 +190,77 @@ function setPortrait(thisElem){
 	
 }
 
-
+function confirmSetPortrait(thisElem){
+	var header = "确定把这张照片设置为头像？";
+	var content = "似木头似石头的话<br>" +
+					"&ensp;&ensp;&ensp;&ensp;得到注意吗";
+	var negativeBtn = "取消";
+	var negativeBtnHidden = "这张还是不够好看";
+	var positiveBtn = "确定";
+	var positiveBtnHidden = "是颜色不一样的花火";
+	var logo="user";
+	approveFunction = function() {
+		setPortraitStart(thisElem);
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, 
+						positiveBtnHidden, approveFunction,onDenyFunction, logo);	
+}
 
 
 /*********************************************************************************
+ *	6.	Remove image 	
  * 	Remove image click function and its help function 
  */
 
 function removeImage(thisElem){
 	disableThisPopup("eventRemove");
-	eventRemove(thisElem);
-	$('#eventsegment').masonry();
+	confirmRemoveImage(thisElem);
 }
 
-function eventRemove($removeBtn) {
-	var rmelement = $removeBtn.parents(".eventpile");
-	$("#eventsegment").masonry( 'remove', rmelement);
+function removeImageStart(thisElem) {
+	var imageId = thisElem.parent().parent().parent()
+					.parent().parent().parent().find(".imageId_span").html(),
+		rmelement = thisElem.parents(".eventpile");
+	
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			$("#eventsegment").masonry( 'remove', rmelement);
+			$('#eventsegment').masonry();
+		}else{
+			drawConfirmPopUp("删除失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("删除请求发送失败 Error: "+error);
+	};
+	deleteImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError);
+}
+
+function confirmRemoveImage(thisElem){
+	var header = "确定要删除这张照片？";
+	var content = "我记得那年生日<br>" +
+					"&ensp;&ensp;&ensp;&ensp;也记得那一首歌";
+	var negativeBtn = "取消";
+	var negativeBtnHidden = "给我再去相信的勇气";
+	var positiveBtn = "确定";
+	var positiveBtnHidden = "真相太赤裸裸";
+	var logo="user";
+	approveFunction = function() {
+		removeImageStart(thisElem);
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, 
+						positiveBtnHidden, approveFunction,onDenyFunction, logo);	
 }
 
 
 /*********************************************************************************
- * 	Remove all the popup after someone click the buttons.
+ * 	Remove all the popup after someone click above buttons.
  */
 
 function disableThisPopup(thisElem){

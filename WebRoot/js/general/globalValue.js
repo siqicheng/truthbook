@@ -16,7 +16,7 @@ $(function (){
  * 	Website and RESTful AJAX URL
  */
 
-//localhost = "172.13.0.47";
+//localhost = "175.186.105.126";
 localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
@@ -30,7 +30,7 @@ ServiceType = {
     	   IMAGE:"imageService/",
     	   PORTRAIT:"portraitService/",
        };
-DefaultPortrait="img\profile_test\247144.jpg";
+DefaultPortrait="img/profile_test/247144.jpg";
 
 /*********************************************************************************
  * 	Global Numbers

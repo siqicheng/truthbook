@@ -331,6 +331,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 	html =  "<div class='eventpile' id = 'imageId"+imageId+"' style='display : "+display+";' >" +
 				"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
 				"<span class = 'userId_span' style='display:none;'>"+userId+"</span>"+
+				"<span class = 'url_span' style='display:none;'>"+url+"</span>"+
 		    	"<div class='ui shape'>" +
 		    		"<div class='sides'>" +
 		    		

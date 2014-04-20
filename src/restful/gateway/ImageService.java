@@ -77,7 +77,8 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object addImage(@FormParam("imageURL") String imageURL,
 			@FormParam("userId") Integer userId,
-			@FormParam("uploaderId") Integer uploaderId) {
+			@FormParam("uploaderId") Integer uploaderId, 
+			@FormParam("description") String description){
 		
 		Session session = this.imageDAO.getSession();
 		try{
@@ -90,6 +91,7 @@ public class ImageService {
 			image.setImageUrl(imageURL);
 			image.setUploaderId(uploaderId);
 			image.setUser(user);
+			image.setContent(description);
 			
 			Date date = RestUtil.getCurrentDate();
 			

@@ -237,6 +237,15 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
  * Image Service API
  */
 
+function addImageAPI(imageURL,userId,uploaderId,description,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/add",
+		url = ServerRoot + ServiceType.IMAGE +path,
+		data ="imageURL="+imageURL+"&userId=" + userId + "&uploaderId=" + uploaderId + "&description=" + description,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
 function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
 	var path = "v1/image/" + userId + "/user",
 		url = ServerRoot + ServiceType.IMAGE + path,
@@ -244,11 +253,17 @@ function getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
 	ajax_call(ajax_obj);
 }
 
-//Need to be added
 function getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
 	var path = "v1/image/" + userId + "/latest",
 		url = ServerRoot + ServiceType.IMAGE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);	
+}
+
+function deleteImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/"+imageId+"/delete",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }
 
