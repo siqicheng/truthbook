@@ -111,7 +111,7 @@ function getGuestImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 		disableShowMoreButton();
 		if (data[0].imageUrl != undefined ){
-			drawNextBatchImage(q,q,q,data);
+			drawNextBatchImage(1,1,1,data);
 //			drawGuestOneImage(data);
 			return true;
 		}
