@@ -152,11 +152,6 @@
 	<script src="./js/eventsegment_layout.js"></script>
 	<script src="./js/notification.js"></script>
     <script type="text/javascript">  	
-      	$('.ui.button').click(function(event){
-      		event.stopPropagation();
-    		$('.ui.shape').shape('flip back');
-    		return false;
-    	}); 
     	$("#eventsegment .eventpile .item .image").hover(function(){
 		    $(this).children(".imgbtnArea").fadeIn("fast");
 		    $(this).children("img").fadeTo("fast",0.9);
@@ -185,13 +180,20 @@
 			}); 
 			};  */
 			
- 		/* $("#eventsegment .eventpile .item .image .img").magnificPopup({ */
+ 		//为启用gallery效果，修改DOM结构，".image"类由<div>变成<a>，以此作为gallery的并列项
+ 		//相应的图片链接写进a标签的href，不再用上面的函数来逐一赋值items选项
 		$("#eventsegment .eventpile .item .image").magnificPopup({
 			type: 'image',
  			gallery:{
 				enabled:true
 			}
 		}); 
+		
+		$('.ui.button').click(function(event){
+      		event.stopPropagation(); //防止event事件冒泡，这样在点击图片上按钮时不会触发图片gallery
+    		$('.ui.shape').shape('flip back');
+    		return false; //同样，return false防止点击按钮时，触发其上层<a class="image"></a>的跳转事件
+    	}); 
 		
 /*  		$('.ui.button').magnificPopup({
 		    items: [
