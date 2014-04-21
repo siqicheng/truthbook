@@ -71,7 +71,7 @@ public class MultipartRequestHandler {
 				
 				// 2.3 Get all uploaded FileItem
 				List<FileItem> items = upload.parseRequest(request);
-				String userName = null, receiverName = null;
+				String userName = null, receiverName = null, description = null;
 				Integer userId = null, receiverId = null; 
 				// 2.4 Go over each FileItem
 				for(FileItem item:items){
@@ -95,6 +95,10 @@ public class MultipartRequestHandler {
 						else if (item.getFieldName().equals("receivername")){
 							receiverName = item.getString("UTF-8");
 						}
+				    	
+						else if (item.getFieldName().equals("description")){
+							description = item.getString("UTF-8");
+						}
 				        
 				    } else {
 				       
@@ -103,6 +107,7 @@ public class MultipartRequestHandler {
 				    	temp.SetUserId(userId);
 						temp.setReceiverId(receiverId);
 				    	temp.setPath(RealPath);
+				    	temp.setDescription(description);
 						temp.setFileName(item.getName());
 						temp.setContent(item.getInputStream());
 						temp.setFileType(item.getContentType());
@@ -115,8 +120,9 @@ public class MultipartRequestHandler {
 				
 				// 2.8 Set "twitter" parameter 
 				for(FileMeta fm:files){
-					fm.write();
-					fm.save();
+					if (fm.write()){
+						fm.save();
+					}
 				}
 				
 			} catch (FileUploadException e) {

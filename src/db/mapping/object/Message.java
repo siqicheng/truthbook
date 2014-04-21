@@ -24,6 +24,8 @@ public class Message implements java.io.Serializable {
 	private String messageType;
 	private Integer userId;
 	private User friend;
+	private String content;
+	
 	private Timestamp createTime;
 	//private Map<String,String> content;
 	private String status;
@@ -53,6 +55,15 @@ public class Message implements java.io.Serializable {
 
 	// Property accessors
 
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	
 	@XmlTransient
 	public Timestamp getReadTime(){
 		return this.readTime;

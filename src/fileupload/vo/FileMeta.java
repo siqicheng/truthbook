@@ -31,7 +31,16 @@ public class FileMeta {
 	private Integer receiverId; 
 	private InputStream is;
 	private String path;
+	private String description;
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	private InputStream content;
 	
 	public String getPath(){
@@ -109,6 +118,7 @@ public class FileMeta {
 			Transaction tx = session.beginTransaction();
 			
 			Image image = new Image();
+			image.setContent(this.description);
 			image.setApproved(false);
 			image.setContent("");
 			image.setCreateDate(RestUtil.getCurrentDate());
@@ -150,7 +160,6 @@ public class FileMeta {
 			}
 			
 			os.close();
-			
 			String fullPath =RealPath+ File.separator +this.getFileName();
 			imageUtil.resizeSmall(fullPath);
 			imageUtil.resizeMedium(fullPath);
