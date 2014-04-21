@@ -11,7 +11,7 @@ $(function(){
 
 function getImagePreCheck(){
 	if($.cookie("truthbook").userId == $.cookie("truthbook_PageOwner_userId").userId){
-		getAllImage($.cookie("truthbook_PageOwner_userId").userId);
+		getAllImage($.cookie("truthbook_PageOwner_userId").userId,CONTROL.Self);
 	}else{
 		friendRelationCheck();
 	}
@@ -24,7 +24,7 @@ function getImagePreCheck(){
 function friendRelationCheck(){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data > 0 ){
-			getAllImage($.cookie("truthbook_PageOwner_userId").userId);
+			getAllImage($.cookie("truthbook_PageOwner_userId").userId,CONTROL.No);
 			return true;
 		}
 		else{
@@ -45,12 +45,12 @@ function friendRelationCheck(){
  *	Get all images when on homepage or friend's page
  */
 
-function getAllImage(userId){
+function getAllImage(userId,Control){
 	var onAjaxSuccess = function(data,textStatus){
 		var numTotalImage = data.length;
 		if (numTotalImage != 0 ){	
 			$.cookie("truthbook_Page_Image_Num", numTotalImage);
-			drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data);
+			drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,data,Control);
 			return true;
 		}
 		else{
@@ -110,7 +110,7 @@ function drawGuestOneImage(imageData){
 	
 	$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,
 											createDate,numOfComment,display,imageId,numLike));
-	addImageButtonHandler(imageId);
+	addImageButtonHandler(imageId,CONTROL.No);
 	itemInitialize();
 }
 
@@ -125,7 +125,7 @@ function drawGuestOneImage(imageData){
  * 					Import all images and show partial of them
  * 					ShowMore Button click will call showNextBatchImage()
  */
-function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData){
+function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData,Control){
 	$.cookie("truthbook_Page_Image_Pointer", numToShow);
 	
 	var	imageIdinorder = imageInOrder(numTotalImage, imageData);
@@ -147,9 +147,9 @@ function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData){
 		$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,
 								uploaderId,createDate,numOfComment,display,imageId,numLike));
 		
-		addImageButtonHandler(imageId);
+		addImageButtonHandler(imageId,Control);
 	}
-		
+	if (numTotalImage<=numToShow)	disableShowMoreButton();
 	itemInitialize();
 	return;
 }
