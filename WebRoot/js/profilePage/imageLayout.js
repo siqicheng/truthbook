@@ -1,6 +1,5 @@
 $(function(){
 	getImagePreCheck();
-	
 	showMoreButtonHandler();
 
 });
@@ -172,7 +171,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    			"<div class='active side ui items'>" +
 		    				"<div class='item'>" +    					
 		    					
-		    					"<div class='image'>"+
+		    					"<a class='image'>"+
 		    						"<img src='"+url+"'>"+
 		    						"<div class='imgbtnArea'>" +
 			    						"<div class='ui tiny button likebtn' style='margin-right: 2px'>"+
@@ -182,7 +181,8 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    							"<i class='comment icon'></i>"+numOfComment+
 			    						"</div>" +
 			    					"</div>"+
-		    					"</div>"+    					
+		    					"</a>"+
+		    					
 		    					"<div class = 'discript content'>"+
 		    						"<p class='description' style = 'display:"+descriptionDisplay+";word-break:break-all;'>"+description+"</p>"+
 		    						"<div class='meta' style = 'display:block' >"+

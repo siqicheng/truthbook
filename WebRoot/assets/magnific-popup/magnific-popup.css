@@ -290,7 +290,7 @@ img.mfp-img {
   padding-right: 36px; }
 
 .mfp-image-holder .mfp-content {
-  max-width: 100%; }
+  max-width: 80%; }
 
 .mfp-gallery .mfp-image-holder .mfp-figure {
   cursor: pointer; }

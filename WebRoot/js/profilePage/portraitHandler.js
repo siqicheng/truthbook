@@ -7,19 +7,20 @@ function setPortraitImageForThisPage(){
 		if (data != null ){
 			var portraitUrl = data.image.imageUrl;
 			$("#portraitImage").attr("src",portraitUrl);
-		  		$("#portraitImage").magnificPopup({
-					items: {
-	 					src:  $("#portraitImage").attr("src")
-					},
-					type: 'image',
-//					image: {
-//						verticalFit: false
-//					}
-			}); 
-			
 		}else{
 			$("#portraitImage").attr("src",DefaultPortrait);
 		}
+		
+  		$("#portraitImage").magnificPopup({
+			items: {
+					src:  $("#portraitImage").attr("src")
+			},
+			type: 'image',
+//			image: {
+//				verticalFit: false
+//			}
+  		});
+  	
 	};
 	var onAjaxError = function(xhr,status,error){
 		$("#portraitImage").attr("src",DefaultPortrait);

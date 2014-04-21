@@ -37,9 +37,9 @@ function itemInitialize(){
  					src:  $($num_items[i]).attr("src")
 				},
 				type: 'image',
-//				image: {
-//					verticalFit: false
-//				}
+				image: {
+					verticalFit: true
+				}
 
 		}); 
 	};
