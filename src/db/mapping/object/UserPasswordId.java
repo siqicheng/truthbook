@@ -1,5 +1,9 @@
 package db.mapping.object;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Random;
+
 
 
 /**
@@ -14,23 +18,51 @@ public class UserPasswordId  implements java.io.Serializable {
      private String email;
      private String password;
 
-
+     public static final String SALT = "noChinese";
+//     public static final Integer SALT_LENGTH = 7;
+//     public static String getRandomString(int length) {
+//    	 String base = "abcdefghijklmnopqrstuvwxyz0123456789";   
+//    	 Random random = new Random();   
+//    	 StringBuffer sb = new StringBuffer();   
+//    	 for (int i = 0; i < length; i++) {   
+//    		 int number = random.nextInt(base.length());   
+//    		 sb.append(base.charAt(number));   
+//    	 }   
+//    	 return sb.toString();   
+//     }  
     // Constructors
 
     /** default constructor */
     public UserPasswordId() {
     }
 
+    private static String bytes2hex(byte bt[]){
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bt) {
+            sb.append(String.format("%02X", b));
+        }
+        return sb.toString();
+    }
     
-    /** full constructor */
-    public UserPasswordId(String email, String password) {
+    /** full constructor 
+     * @throws NoSuchAlgorithmException */
+    public UserPasswordId(String email, String password){
         this.email = email;
         this.password = password;
+       // this.salt = getRandomString();
+        try{
+        	MessageDigest md = MessageDigest.getInstance("SHA-1");
+        	byte[] bt = md.digest((this.password + SALT).getBytes());
+        	this.password = bytes2hex(bt);
+        } catch (Exception e){
+        	e.printStackTrace();
+        }
+       
     }
 
    
     // Property accessors
-
+  	
     public String getEmail() {
         return this.email;
     }

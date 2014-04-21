@@ -342,6 +342,8 @@ public class LoginService {
 		if(user_list.size() == 1){
 			this.user = (User) user_list.get(0);			
 			this.userPassword = this.userPasswordDAO.findById(new UserPasswordId(email,password));
+			
+			
 			if(this.userPassword != null){
 				return this.user;
 			}
