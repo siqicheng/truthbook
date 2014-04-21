@@ -229,6 +229,7 @@ function removeImageStart(thisElem) {
 		if (data == true){
 			$("#eventsegment").masonry( 'remove', rmelement);
 			$('#eventsegment').masonry();
+			$.cookie("truthbook_Page_Image_Num", $.cookie("truthbook_Page_Image_Num")-1);
 		}else{
 			drawConfirmPopUp("删除失败");
 		}

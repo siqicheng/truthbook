@@ -427,10 +427,10 @@ function itemInitialize(){
 }
 
 //item remove function, input is the object of the remove button
-function eventRemove($removeBtn) {
-	var rmelement = $removeBtn.parents(".eventpile");
-	$("#eventsegment").masonry( 'remove', rmelement);
-}
+//function eventRemove($removeBtn) {
+//	var rmelement = $removeBtn.parents(".eventpile");
+//	$("#eventsegment").masonry( 'remove', rmelement);
+//}
 
 function itemCreate(items) {
 	var elems=[];
