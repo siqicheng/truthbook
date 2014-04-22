@@ -75,6 +75,10 @@ $(function() {
 				gotoChoosePic();
 				return;
 			};
+			if(picReceiver.userId == $.cookie("truthbook").userId) {
+				drawConfirmPopUp("不能为自己传照片哦");
+				return;
+			}
 			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
 					if(data>0) {
@@ -193,6 +197,10 @@ $(function() {
 					if(len>1){
 						rechooseMessage = "我们找到了好多<b>"+user+"</b>：";
 					} else {
+						if(data.user.userId == $.cookie("truthbook").userId) {
+							drawConfirmPopUp("不能为自己传照片哦");
+							return;
+						}
 						rechooseMessage = "我们找到了一个<b>"+user+"</b>：";
 					}
 					html = "";
