@@ -1,5 +1,6 @@
 $(function() {
 	/*选人表单验证规则*/
+	resetUpload();
 	$("#choosePeople").form({
 		username:{
 			identifier : "fullName",
@@ -181,7 +182,7 @@ $(function() {
 			gotoChoosePic();
 			return;
 		};
-		if(isValidForm == true) {
+//		if(isValidForm == true) {
 			var user = $("#fullName").val();
 			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
@@ -251,7 +252,7 @@ $(function() {
 			};
 			verifyUserExists(data, onSuccess, onError);
 		};
-	}
+//	}
 });
 
 function upload_choosepic(people) {
@@ -311,11 +312,14 @@ function uploadPic() {
 	/*Help functions*/
 function resetUpload() {
 	picReceiver = null;
+	picData = undefined;
 	upload_for_friend = false;
 	gotoChoosePeople();
 	$("#fullName").val("");
 	$("#school").val("");
 	$("#entryTime").val("");
+	$("#img_prev").attr("src", DefaultPreviewImg);
+	$("#imgPrev").attr("src", DefaultPreviewImg);
 	$("#fullName").removeAttr("disabled");
 	$("#school").removeAttr("disabled");
 	$("#entryTime").removeAttr("disabled");
@@ -339,6 +343,7 @@ function gotoRechoose() {
 function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
+	$('#img_prev').show();
 	$("#step1").attr("class", "ui step");
 	$("#step2").attr("class", "ui active step");
 	$("#step3").attr("class", "ui disabled step");

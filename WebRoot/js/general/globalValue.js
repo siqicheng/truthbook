@@ -31,6 +31,7 @@ ServiceType = {
     	   PORTRAIT:"portraitService/",
        };
 DefaultPortrait="img/profile_test/247144.jpg";
+DefaultPreviewImg="./img/profile_test/247146.jpg";
 
 /*********************************************************************************
  * 	Global Numbers

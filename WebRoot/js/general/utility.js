@@ -122,12 +122,12 @@ function cookieAvailableCheck(){
 
 function showSidebar(){
 	$("#upload").removeClass("mfp-hide white-popup");
-	$("#upload").addClass("ui very wide styled sidebar");
+	$("#upload").addClass("ui wide styled sidebar");
 	$("#upload").sidebar("show");
 }
 
 function showPopup(){
-	$("#upload").removeClass("ui very wide styled sidebar");
+	$("#upload").removeClass("ui wide styled sidebar");
 	$("#upload").addClass("white-popup");
 	$("#upload").show();
 }
