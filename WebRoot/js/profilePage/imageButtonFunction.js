@@ -6,7 +6,8 @@
  *	4.	Upload image for sender
  *	5.	Set as portrait
  *	6.	Remove image 
- *
+ *	7.	Reply someone
+ *	8.	delete message
  *
  */
 
@@ -78,7 +79,9 @@ function showReply(thisElem){
 		},
 		duration:500
 	})
-	.shape('flip over');	
+	.shape('flip over');
+	thisElem.parents('.ui.shape').find(".commentwrap").scrollTop(
+			thisElem.parents('.ui.shape').find(".commentwrap")[0].scrollHeight);
 }
 
 /*********************************************************************************
@@ -229,7 +232,9 @@ function removeImageStart(thisElem) {
 		if (data == true){
 			$("#eventsegment").masonry( 'remove', rmelement);
 			$('#eventsegment').masonry();
+			$.cookie("truthbook_Page_Image_Pointer", $.cookie("truthbook_Page_Image_Pointer")-1);
 			$.cookie("truthbook_Page_Image_Num", $.cookie("truthbook_Page_Image_Num")-1);
+			itemInitialize();
 		}else{
 			drawConfirmPopUp("删除失败");
 		}
@@ -259,6 +264,78 @@ function confirmRemoveImage(thisElem){
 						positiveBtnHidden, approveFunction,onDenyFunction, logo);	
 }
 
+/*********************************************************************************
+ *	7.	Reply someone 	
+ * 	Remove image click function and its help function 
+ */
+
+function replySomeone(imageId,repliedByName){	
+	thisText = $("#imageId"+imageId).find(".textarea");
+	tempInput = thisText.val();
+	if (tempInput.substr(0,2) == "回复"){
+		tempInput = tempInput.substring(tempInput.indexOf("：")+2)		
+	} 
+	thisText.val("回复"+ repliedByName+" ： "+tempInput);
+	
+}
+
+/*********************************************************************************
+ *	8.	delete message 	
+ * 	Remove image click function and its help function 
+ */
+
+function removeComment(imageId,commentId){
+	confirmRemoveComment(imageId,commentId);
+}
+
+function removeCommentStart(imageId,commentId){
+	
+	$("#commentId"+commentId).transition({
+		animation : 'horizontal flip out', 
+		duration  : '0.3s',
+		complete  : function() {
+			$("#commentId"+commentId).hide();
+	}
+	});
+	currComment = Number($("#imageId"+imageId).find(".numOfComment_inline").html());
+	if (currComment != 0){
+		currComment--;
+		$("#imageId"+imageId).find(".numOfComment_inline").html(currComment);
+	}
+	
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			
+		}else{
+			drawConfirmPopUp("删除回复失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("删除回复请求发送失败 Error: "+error);
+	};
+	
+//	deleteCommentByCommentIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError);
+}
+
+
+function confirmRemoveComment(imageId,commentId){
+	var header = "确定要删除这条回复？";
+	var content = "不算什麽<br>&ensp;&ensp;爱错就爱错<br>&ensp;&ensp;&ensp;&ensp;早点认错<br>"+
+					"&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;早一点解脱";
+	var negativeBtn = "取消";
+	var negativeBtnHidden = "不够爆炸";
+	var positiveBtn = "确定";
+	var positiveBtnHidden = "所有错误从我这里落幕";
+	var logo="trash";
+	approveFunction = function() {
+		removeCommentStart(imageId,commentId);
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, 
+						positiveBtnHidden, approveFunction,onDenyFunction, logo);	
+}
 
 /*********************************************************************************
  * 	Remove all the popup after someone click above buttons.

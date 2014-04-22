@@ -39,24 +39,28 @@ function handleLogoutPopUp(){
 	   		onApprove : function() {
 		    	cleanUserInfoCookie();
 		    	goLogin();
-		    }
+		    },
+			onHidden : function(){
+				$("#body").removeClass("dimmable");
+			}
 	   	})
 	   	.modal('show');
 	});
 }
 
-function confirmDeleteFriendPopUp(){
-	$('.basic.modal.deleteFriend')
-   	.modal('setting', {
-   		closable: true,
-   		onApprove : function() {
-			deleteFriendByTmpButton();
-	    }
-   	})
-   	.modal('show');
-}
+//function confirmDeleteFriendPopUp(){
+//	$('.basic.modal.deleteFriend')
+//   	.modal('setting', {
+//   		closable: true,
+//   		onApprove : function() {
+//			deleteFriendByTmpButton();
+//	    }
+//   	})
+//   	.modal('show');
+//}
 
 function testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, onApproveFunction, onDenyFunction, logo){
+	$("#body").addClass("dimmable");
 	$("#modalHeader").html(header);
 	$("#modalContent").html(content);
 	$("#modalNegativeBtn").html(negativeBtn);
@@ -67,7 +71,10 @@ function testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiv
 	$("#testModal").modal("setting", {
 		closable:true,
 		onApprove : onApproveFunction,
-		onDeny : onDenyFunction
+		onDeny : onDenyFunction,
+		onHidden : function(){
+			$("#body").removeClass("dimmable scrolling");
+		}
 	})
 	.modal("show");
 }

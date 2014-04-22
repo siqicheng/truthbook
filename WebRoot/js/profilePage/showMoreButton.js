@@ -30,6 +30,7 @@ function showNextBatchImage(numToShow,numTotalImage){
 		$("#eventsegment").children(".eventpile")[currPointer].style.display = "inline";
 		if(currPointer == numTotalImage - 1){
 			//ToDo: Launch another ajax call
+			$.cookie("truthbook_Page_Image_Pointer", numTotalImage);
 			disableShowMoreButton();
 			return;
 		}

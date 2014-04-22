@@ -1,3 +1,9 @@
+
+function changeImageNum(){
+	numImage = Number($("#photos_num").html()) + $.cookie("truthbook_Page_Image_Num");
+	$("#photos_num").html(numImage);
+}
+
 function imageInOrder(numTotalImage,data){
 	var imageIdinorder = [];
 	for (var i = 0 ; i < numTotalImage;i++){
@@ -30,20 +36,27 @@ function itemInitialize(){
 			}
 		);
 	//遍历所有图片元素后为它们加上magnificPopup插件的初始化选项
-	$num_items = $("#eventsegment").find(".eventpile .item .image img");
-		for(var i=0, len=$num_items.length;i< len;i++){
-	  		$($num_items[i]).magnificPopup({
-				items: {
- 					src:  $($num_items[i]).attr("src")
+	$("#eventsegment").find(".eventpile").slice(0, $.cookie("truthbook_Page_Image_Pointer")).find(".item .image").magnificPopup({
+//				items: {
+// 					src:  $($num_items[i]).attr("src")
+//				},
+				gallery:{
+					enabled:true,
+					preload:[0,2],
 				},
 				type: 'image',
 				image: {
 					verticalFit: true
-				}
-
+				},
+				zoom:{
+					enabled: true,
+					duration: 500, // don't foget to change the duration also in CSS
+					opener: function(element) {
+						return element.find('img');
+						}
+				},
 		}); 
-	};
-}
+	}
 
 
 function dateHandle(createDate){
