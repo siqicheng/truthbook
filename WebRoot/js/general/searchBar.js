@@ -103,7 +103,7 @@ function showSearchResultPage(page, num) {
 	var maxpage = Math.ceil(num/5);
 	var pagination = $("#searchbarDropdown .item").last();
 	pagination.children(".content").html("Page "+(page+1));
-	var prev=(page-1)%(maxpage),
+	var prev=(page+maxpage-1)%(maxpage),
 		next=(page+1)%(maxpage);
 
 	pagination.children(".content").attr("onclick","showSearchResultPage("+next+","+num+")");

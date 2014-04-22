@@ -231,7 +231,7 @@ function showPage(barType, friendsType, page, num) {
 	}
 	var maxpage = Math.ceil(num/5);
 	pagination.children(".content").html("Page "+(page+1));
-	var prev=(page-1)%(maxpage),
+	var prev=(page+maxpage-1)%(maxpage),
 		next=(page+1)%(maxpage);
 	pagination.children().children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
 //	if(page-1<1){
