@@ -1,12 +1,12 @@
 @CHARSET "UTF-8";
 
-#confirm .item .image img {
+#choosePic .item .image img {
 	border-top-left-radius: 0.33em;
 	border-top-right-radius: 0.33em;
 	cursor:zoom-in;
 }
 
-#confirm .item .image .imgbtnArea {
+#choosePic .item .image .imgbtnArea {
 	position:absolute;
 	left:15px;
 	top:15px;

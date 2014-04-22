@@ -132,7 +132,7 @@ $(function() {
 		gotoConfirm();
 	});
 	
-	$("#confirm .item .image").hover(function(){
+	$("#choosePic .item .image").hover(function(){
 	    $(this).children(".imgbtnArea").fadeIn("fast");
 	    $(this).children("img").fadeTo("fast",0.9);
 			},
@@ -143,20 +143,24 @@ $(function() {
 	);
 	
 	$("#submitBtn").click(function() {
+		if($("#imgPrev").attr("src") == DefaultPreviewImg) {
+			drawConfirmPopUp("请选择要上传的图片");
+			return;
+		}
 		if(picReceiver == NEW_QUOTE) {
 			var data = $("#choosePeople").serialize(),
 				onSuccess = function(data, textStatus) {
 					picReceiver = data;
 					var userId = $.cookie("truthbook").userId,
 						onSuccess = function() {
-							drawConfirmPopUp("新建词条完成！赶快去通知好友来玩吧！");
+							completeMessage("新建词条完成！", "赶快去通知好友来玩吧！");
+							uploadPic();
 							refreshTopbarFriendsLists($.cookie("truthbook").userId);
 							refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 							console.log("Add friend success");
 						};
 					addFriendAPI(data.userId, userId, type_nFriends, "true");
 					addFriendAPI(userId, data.userId, type_nFriends, "false", onSuccess);
-					uploadPic();
 				},
 				onError = function(xhr, status, error) {
 					console.log("Register new quote failed with error: " + error);
@@ -167,14 +171,13 @@ $(function() {
 			console.log("Upload pic for " + picReceiver);
 			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
-					if(data>0) {
+					completeMessage("为已有词条上传照片完成！", "这个人太懒了，赶快去叫他/她来玩！");
+					if(data>0) {;
 						uploadPic();
-						drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
 					} else {
 						var userId = $.cookie("truthbook").userId,
 							onSuccess = function(data, textStatus) {
 								uploadPic();
-								drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
 							};
 						addFriendAPI(picReceiver.userId, userId, type_nFriends, "true");
 						addFriendAPI(userId, picReceiver.userId, type_nFriends, "false", onSuccess);
@@ -197,7 +200,7 @@ $(function() {
 			gotoChoosePic();
 			return;
 		};
-		if(isValidForm == true) {
+//		if(isValidForm == true) {
 			var user = $("#fullName").val();
 			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
@@ -258,7 +261,7 @@ $(function() {
 			};
 			verifyUserExists(data, onSuccess, onError);
 		};
-	}
+//	}
 });
 
 function upload_choosepic(people) {
@@ -273,6 +276,12 @@ function upload_choosepic(people) {
 	$("#previewMessage").html("你将传给<b>"+people.fullName+"</b>的照片如下：");
 	gotoChoosePic();
 	showSidebar();
+}
+
+function completeMessage(header, content) {
+	$("#complete .header").html(header);
+	$("#complete p").html(content);
+	
 }
 
 function uploadPic() {
@@ -311,8 +320,9 @@ function uploadPic() {
 	              ];
 	picData.submit();
 //	TODO: 发通知
-	$.magnificPopup.close();
-	$(".sidebar").sidebar("hide");
+	gotoComplete();
+//	$.magnificPopup.close();
+//	$(".sidebar").sidebar("hide");
 }
 
 	/*Help functions*/
@@ -347,6 +357,7 @@ function gotoRechoose() {
 	$("#rechoosePeople").show();
 }
 function gotoChoosePic() {
+	$("#choosePic .item .meta").html("By "+$.cookie("truthbook").fullName);
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$('#img_prev').show();
@@ -356,10 +367,9 @@ function gotoChoosePic() {
 	$(".ui.step").css("cursor", "pointer");
 	$("#step3").css("cursor", "default");
 }
-function gotoConfirm() {
-	$("#confirm .item .meta").html("By "+$.cookie("truthbook").fullName);
+function gotoComplete() {
 	$(".ui.form.uploadForm").hide();
-	$("#confirm").show();
+	$("#complete").show();
 	$(".ui.step").attr("class", "ui step");
 	$("#step3").attr("class", "ui active step");
 	$(".ui.step").css("cursor", "pointer");
