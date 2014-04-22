@@ -42,9 +42,11 @@ function addImageButtonHandler(imageId,control){
 				$(this).find(".double").addClass("up");
 				$(this).find(".double").removeClass("down");
 			}
-			$(this).parent().parent().children(".btnArea").toggle();
+			$(this).parent().parent().children(".btnArea").slideToggle("fast",function(){
+				$('#eventsegment').masonry();
+			});
 	//		$(this).parent().children('.extra').toggle();
-			$('#eventsegment').masonry();
+			
 		});
 		
 		$("#imageId"+imageId).find(".editBtn").hover(	

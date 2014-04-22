@@ -269,13 +269,14 @@ function confirmRemoveImage(thisElem){
  * 	Remove image click function and its help function 
  */
 
-function replySomeone(imageId,repliedByName){	
+function replySomeone(imageId,repliedByName,repliedByCommentId){
+	$("#imageId"+imageId).find(".replyToId").html(repliedByCommentId);
 	thisText = $("#imageId"+imageId).find(".textarea");
 	tempInput = thisText.val();
 	if (tempInput.substr(0,2) == "回复"){
-		tempInput = tempInput.substring(tempInput.indexOf("：")+2)		
+		tempInput = tempInput.substring(tempInput.indexOf("：")+1)		
 	} 
-	thisText.val("回复"+ repliedByName+" ： "+tempInput);
+	thisText.val("回复"+ repliedByName+" ："+tempInput);
 	
 }
 

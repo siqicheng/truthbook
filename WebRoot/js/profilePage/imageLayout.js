@@ -147,9 +147,8 @@ function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData,Con
 								uploaderId,createDate,numOfComment,display,imageId,numLike));
 		
 		addImageButtonHandler(imageId,Control);
-//		getThisComment_All(imageId,Control);
+		getThisComment_All(imageId,Control);
 	}
-	getThisComment_All(47,Control);
 	
 	if (numTotalImage<=numToShow)	disableShowMoreButton();
 	itemInitialize();
@@ -187,13 +186,13 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    					"</a>"+
 		    					
 		    					"<div class = 'discript content'>"+
-		    						"<p class='description' style = 'display:"+descriptionDisplay+";word-break:break-all;'>"+description+"</p>"+
-		    						"<div class='meta' style = 'display:block' >"+
-		    							"By <a class='uploaderName'><font size=\"4px\">"+uploaderName+"</font></a>" + 
+		    						"<p class='description' style = 'display:"+descriptionDisplay+";word-break:break-all;margin-bottom: 10px;'>"+description+"</p>"+
+		    						"<div class='meta' style = 'display:block;margin-top: 18px;' >"+
+		    							"<a class='uploaderName' style='display:block;font-size:14px;margin-bottom:4px;'>By "+uploaderName+"</a>"+
 		    							"<span class='uploaderId' style='display:none;'>" + uploaderId + "</span> "+
 		    						"</div>"+
-		    						"<div class='ui editBtn icon' style='display:none; margin-left:10px;cursor:pointer;width:20%'>" +
-		    							"<i class='double angle down icon'></i>"+
+		    						"<div class='ui editBtn icon' style='display:none; margin:0 auto;cursor:pointer;width:10%'>" +
+		    							"<i class='double angle down large icon'></i>"+
 		    						"</div>" +
 		    					"</div>"+
 
@@ -213,7 +212,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		                        "</div>" +
 					    		"<div class=\"extra\">"+
 					    			"<span class='numLikeSpan' style='float: left;  text-align: left;'>"+numLike+"</span><span>个赞</span>"+
-					    	        "<span style='float: right;  text-align: right;margin-right: 3%'>"+displayDate+"</span>"+
+					    	        "<span style='float: right;  text-align: right;margin-right: 5%'>"+displayDate+"</span>"+
 			    	        	"</div>"+
 		                     
 			    	        "</div>" +
@@ -314,13 +313,14 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    							"<div class='field' >"+
 			    								"<textarea class='textarea' placeholder='你想说…' rows='5' style='resize:none;'></textarea>"+
 			    							"</div>"+
+			    							"<span class = 'replyToId' style='display:none;'></span>"+
 			    							"<div class='ui fluid labeled submit icon teal button'>"+
 			    								"<i class=\"icon edit\"></i>添加评论"+
 			    							"</div>"+
 			    						"</form>"+
 			    					"</div>"+
 //		    					"</div>"+
-		    					
+			    					
 		    				"</div>" +
 		    			"</div>" +
 		    			

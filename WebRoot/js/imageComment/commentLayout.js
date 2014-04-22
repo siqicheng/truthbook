@@ -22,16 +22,22 @@ function getThisComment_All(imageId,Control){
 					repliedByProtrait = data.imageComment.comment.repliedByProtrait,
 					repliedToCommentId = data.imageComment.comment.repliedToCommentId,
 					repliedToName = data.imageComment.comment.repliedToName,
-					commentId = data.imageComment[i].comment.commentId,
+					commentId = data.imageComment.comment.commentId,
 					
 					createDate = data.imageComment.comment.createDate;
 					
-					repliedToCommentId!=null? replyToDisplay = "inline":replyToDisplay = "none";
+				repliedToCommentId!= null ? replyToDisplay = "inline":replyToDisplay = "none";
+				repliedByCommentId != $.cookie("truthbook").userId ? replyDisplay = "inline":replyDisplay = "none";
+				if (Control == CONTROL.Self || repliedByCommentId == $.cookie("truthbook").userId){
+					deleteDisplay = "inline";
+				} else {
+					deleteDisplay = "none";
+				}
 					
 					
 				$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 						repliedByCommentId,repliedByName,repliedByProtrait,
-						repliedToCommentId,repliedToName,createDate,replyToDisplay));
+						repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
 				
 			} else {
 				for (var i=0;i<numTotalComment;i++){
@@ -45,7 +51,8 @@ function getThisComment_All(imageId,Control){
 
 						createDate = data.imageComment[i].comment.createDate;
 					
-					repliedToCommentId!=null? replyToDisplay = "inline":replyToDisplay = "none";
+					repliedToCommentId!=null ? replyToDisplay = "inline":replyToDisplay = "none";
+					repliedByCommentId != $.cookie("truthbook").userId ? replyDisplay = "inline":replyDisplay = "none";
 					if (Control == CONTROL.Self || repliedByCommentId == $.cookie("truthbook").userId){
 						deleteDisplay = "inline";
 					} else {
@@ -54,8 +61,7 @@ function getThisComment_All(imageId,Control){
 					
 					$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 						repliedByCommentId,repliedByName,repliedByProtrait,
-						repliedToCommentId,repliedToName,createDate,replyToDisplay,deleteDisplay));
-					
+						repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
 					
 				}			
 			}
@@ -80,7 +86,8 @@ function getThisComment_All(imageId,Control){
 
 function addCommentButtonHandler(imageId){
 	$("#imageId"+imageId).find(".actions .reply").click(function(){
-		replySomeone(imageId,$(this).parent().parent().parent().find(".repliedByName_span").html());
+		thisComment = $(this).parent().parent().parent();
+		replySomeone(imageId,thisComment.find(".repliedByName_span").html(),thisComment.find(".repliedByCommentId_span").html());
 	});
 	
 	$("#imageId"+imageId).find(".actions .delete").click(function(){
@@ -91,7 +98,7 @@ function addCommentButtonHandler(imageId){
 }
 
 function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,
-							repliedToCommentId,repliedToName,createDate,replyToDisplay){
+							repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){
 	
 	html = 	"<div class=\"comment\" id=\"commentId" + commentId + "\">"+
 				"<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>"+
@@ -110,7 +117,7 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 						commentContent+
 					"</div>"+
 					"<div class=\"actions\" style='display:inline;'>"+
-			              "<a class=\"reply \" style='display:inline;font-size:12px;'>回复</a>"+
+			              "<a class=\"reply \" style='display:"+replyDisplay+";font-size:12px;'>回复</a>"+
 			              "<a class=\"delete \" style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
 		            "</div>"+
 		            "<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + createDate + "</span>"+
