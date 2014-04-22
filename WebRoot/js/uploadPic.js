@@ -65,12 +65,13 @@ $(function() {
 	$("#nextstep1").click(function() {
 		nextstep1Function();
 	});
-
+	
+	$("#nextstep2_for_new_quote").click(function() {
+		picReceiver = NEW_QUOTE;
+		gotoChoosePic();
+	});
+	
 	$("#nextstep2").click(function() {
-		if(picReceiver == NEW_QUOTE) {
-			gotoChoosePic();
-			return;
-		};
 		if(picReceiver != null) {
 			if(picReceiver.isActivated == "false"){
 				gotoChoosePic();
@@ -124,9 +125,23 @@ $(function() {
 	
 	$("#nextstep3").click(function() {
 		/*TODO: 未选择图片不能进入下一步*/
+		if($("#img_prev").attr("src") == DefaultPreviewImg) {
+			drawConfirmPopUp("请选择要上传的图片");
+			return;
+		}
 		gotoConfirm();
 	});
-
+	
+	$("#confirm .item .image").hover(function(){
+	    $(this).children(".imgbtnArea").fadeIn("fast");
+	    $(this).children("img").fadeTo("fast",0.9);
+			},
+		function(){
+	    $(this).children(".imgbtnArea").fadeOut("fast");
+	    $(this).children("img").fadeTo("fast",1);
+		}
+	);
+	
 	$("#submitBtn").click(function() {
 		if(picReceiver == NEW_QUOTE) {
 			var data = $("#choosePeople").serialize(),
@@ -182,7 +197,7 @@ $(function() {
 			gotoChoosePic();
 			return;
 		};
-//		if(isValidForm == true) {
+		if(isValidForm == true) {
 			var user = $("#fullName").val();
 			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
@@ -214,28 +229,19 @@ $(function() {
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
 									"<a class=\"ui corner green label\" style=\"display:none\">" +
 									"<i class=\"checkmark small icon\"></i> </a>" +
-		 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
+		 							"<img class=\"ui avatar image\" src=" + DefaultPortrait +">" + 
 		 							"<div class=\"content\">" +
 		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
 		  							"</div></div>";
 					}
-					html = html + "<div class=\"ui item segment rechooseitem\">" +
-					"<a class=\"ui corner green label\" style=\"display:none\">" +
-					"<i class=\"checkmark small icon\"></i> </a>" +
-						"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
-						"<div class=\"content\">" +
-						"<div class=\"header\">继续新建词条</div>以上都不是？</div></div>";
+//					html = html + "</div>";
 					$("#rechooseMessage").html(rechooseMessage);
 					$("#rechooselist").html(html);
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
-						var selected_num=$(this).next().index()-1;
-						if(selected_num > -2) {
-							picReceiver = uploadCandidates[selected_num];
-						} else {
-							picReceiver = NEW_QUOTE;
-						}
+						var selected_num=$(this).index();
+						picReceiver = uploadCandidates[selected_num];
 						console.log("User choosed picReceiver: ");
 						console.log(picReceiver);
 						$("#rechooseError").hide();
@@ -252,7 +258,7 @@ $(function() {
 			};
 			verifyUserExists(data, onSuccess, onError);
 		};
-//	}
+	}
 });
 
 function upload_choosepic(people) {
@@ -351,6 +357,7 @@ function gotoChoosePic() {
 	$("#step3").css("cursor", "default");
 }
 function gotoConfirm() {
+	$("#confirm .item .meta").html("By "+$.cookie("truthbook").fullName);
 	$(".ui.form.uploadForm").hide();
 	$("#confirm").show();
 	$(".ui.step").attr("class", "ui step");

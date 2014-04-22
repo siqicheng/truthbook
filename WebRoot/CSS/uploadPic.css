@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+#confirm .item .image img {
+	border-top-left-radius: 0.33em;
+	border-top-right-radius: 0.33em;
+	cursor:zoom-in;
+}
+
+#confirm .item .image .imgbtnArea {
+	position:absolute;
+	left:15px;
+	top:15px;
+	z-index:9;
+	display:none;
+}

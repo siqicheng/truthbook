@@ -400,11 +400,11 @@ function itemInitialize(){
 		    $(this).children(".imgbtnArea").fadeIn("fast");
 		    $(this).children("img").fadeTo("fast",0.9);
 				},
-				function(){
+			function(){
 		    $(this).children(".imgbtnArea").fadeOut("fast");
 		    $(this).children("img").fadeTo("fast",1);
 			}
-		);
+	);
 	//遍历所有图片元素后为它们加上magnificPopup插件的初始化选项
 	$num_items = $("#eventsegment").find(".eventpile .item .image img");
 		for(var i=0, len=$num_items.length;i< len;i++){
