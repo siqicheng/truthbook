@@ -15,6 +15,10 @@
             <column name="message_type" length="20" not-null="true" />
         </property>
         
+        <property name="content" type="java.lang.String">
+            <column name="content" length="20" />
+        </property>
+        
         <property name="status" type="java.lang.String">
             <column name="status" />
         </property>

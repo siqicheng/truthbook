@@ -3,6 +3,8 @@ package restful.gateway;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -21,7 +23,7 @@ import java.util.List;
 
 import sessionFactory.HibernateSessionFactory;
 
-@Path("push")
+@Path("notification")
 public class MsgService {
 	private MessageDAO messageDAO;
 
@@ -31,16 +33,13 @@ public class MsgService {
 	
 
 
-	@GET
+	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
 			@PathParam("type") String type) throws Exception {
 		
-	//	if  (!MsgService.assertType(type)) {
-	//		return RestUtil.string2json("false");
-	//	}
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
@@ -64,7 +63,41 @@ public class MsgService {
 			return RestUtil.string2json("false");
 		}	
 	}
+	
+	@POST
+	@Path("v1/message/{id}/{srcid}/{type}/send")
+	@Produces("application/json;charset=utf-8")
+	public Object sendContentMesssage(@FormParam("id") Integer id,
+			@FormParam("srcid") Integer srcid, 
+			@FormParam("type") String type,
+			@FormParam("content") String content) throws Exception {
+		
+		if (id==srcid){
+			return RestUtil.string2json("false");
+		}
+		
+		Session session=this.messageDAO.getSession();
+		try{
+			User src = (new UserDAO()).findById(srcid);
+			
+			Message newinstance = new Message(type, id, src,
+					new Timestamp(System.currentTimeMillis()));
+			newinstance.setContent(content);
+			Transaction tx=session.beginTransaction();
+			session.save(newinstance);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}	
+	}
 
+	
+	
 	@GET
 	@Path("v1/message/{userid}/{type}/get")
 	@Produces("application/json;charset=utf-8")
