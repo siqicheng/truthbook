@@ -65,13 +65,15 @@ public class CommentService {
 					tx.commit();
 				}
 				session.close();
-				return RestUtil.string2json("true");
+			//	return RestUtil.string2json("true");
+				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
 				session.close();
 			}
 
-			return RestUtil.string2json("false");		
+			//return RestUtil.string2json("false");		
+			return null;
 	}
 	
 	@POST
@@ -94,13 +96,15 @@ public class CommentService {
 					tx.commit();
 				}
 				session.close();
-				return RestUtil.string2json("true");
+//				return RestUtil.string2json("true");
+				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
 				session.close();
 			}
 
-			return RestUtil.string2json("false");		
+			//return RestUtil.string2json("false");		
+			return null;
 	}
 	
 	@POST
@@ -125,13 +129,15 @@ public class CommentService {
 					tx.commit();
 				}
 				session.close();
-				return RestUtil.string2json("true");
+//				return RestUtil.string2json("true");
+				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
 				session.close();
 			}
 
-			return RestUtil.string2json("false");		
+//			return RestUtil.string2json("false");		
+			return null;
 	}
 	
 	@POST
@@ -156,13 +162,15 @@ public class CommentService {
 					tx.commit();
 				}
 				session.close();
-				return RestUtil.string2json("true");
+//				return RestUtil.string2json("true");
+				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
 				session.close();
 			}
 
-			return RestUtil.string2json("false");		
+//			return RestUtil.string2json("false");	
+			return null;
 	}
 	
 	@DELETE
