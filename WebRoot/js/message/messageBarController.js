@@ -2,6 +2,10 @@ $(function() {
 	getMessage();
 });
 
+$(window).load(function() {
+	showMessageNumberTransition("#unreadMessageNum");
+});
+
 function messageLengthJson(data){
 	if(data == null){
 		return -1;
@@ -19,24 +23,17 @@ function getMessage(){
 		return;
 	}
 	$("#unreadMessageNum").html("00");
+	
 	getNewMessage(MessageType.INVITETOUPLOAD);
 	getNewMessage(MessageType.ADDFRIEND);
 	getNewMessage(MessageType.ACCEPTFRIEND);
 	getNewMessage(MessageType.TAKEQUOTE);
 	
-	
-	
-	/* 	消息回复
-	 * 	//被点赞
-	 * 	照片拒绝理由
-	 * 	好友升级
-	 * 	新照片
-	 */
-	
-//	getInviteToUploadMessage();
-//	getFriendRequestMessage();
-	
-	
+	getNewMessage(MessageType.REJECTIMAGE);
+	getNewMessage(MessageType.ACCEPTIMAGE);
+	getNewMessage(MessageType.REPLY);
+	getNewMessage(MessageType.UPGRADE);
+
 }
 
 
@@ -66,10 +63,10 @@ function updateNewMessageNum(numOfMessage){
 		$("#unreadMessageNum").html("00");
 		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 	} else if (newNumOfMessage<10){
-		showMessageNumberTransition("#unreadMessageNum");
+//		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html("0" + newNumOfMessage);
 	} else {
-		showMessageNumberTransition("#unreadMessageNum");
+//		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html(newNumOfMessage);
 	}
 }
@@ -126,12 +123,24 @@ function pickIconName(messageTypeName){
 	} else if (messageTypeName == MessageType.TAKEQUOTE.typeName){
 		var iconArray = ["home","remove"];
 		return iconArray;
+	} else if (messageTypeName == MessageType.REJECTIMAGE.typeName){
+		var iconArray = ["cloud upload","remove"];
+		return iconArray;
+	} else if (messageTypeName == MessageType.ACCEPTIMAGE.typeName){
+		var iconArray = ["cloud upload","remove"];
+		return iconArray;
+	} else if (messageTypeName == MessageType.REPLY.typeName){
+		var iconArray = ["comment outline","remove"];
+		return iconArray;
+	} else if (messageTypeName == MessageType.UPGRADE.typeName){
+		var iconArray = ["","remove"];
+		return iconArray;
 	}
 }
 
 function pickHeadIconName(messageTypeName){
 	if(messageTypeName == MessageType.INVITETOUPLOAD.typeName){
-		var iconArray = "cloud";
+		var iconArray = "cloud upload";
 		return iconArray;
 	} else if (messageTypeName == MessageType.ADDFRIEND.typeName){
 		var iconArray = "user";
@@ -142,13 +151,25 @@ function pickHeadIconName(messageTypeName){
 	} else if (messageTypeName == MessageType.TAKEQUOTE.typeName){
 		var iconArray = "road";
 		return iconArray;
+	} else if (messageTypeName == MessageType.REJECTIMAGE.typeName){
+		var iconArray = "shield";
+		return iconArray;
+	} else if (messageTypeName == MessageType.ACCEPTIMAGE.typeName){
+		var iconArray = "archive";
+		return iconArray;
+	} else if (messageTypeName == MessageType.REPLY.typeName){
+		var iconArray = "chat outline";
+		return iconArray;
+	} else if (messageTypeName == MessageType.UPGRADE.typeName){
+		var iconArray = "level up";
+		return iconArray;
 	}
 	
 }
 
 function enableHeaderMenu(numOfMessage,messageType){
 	html = "<div class=\"header item\" id=\""+messageType.typeName+"HeaderMenu\">" + 
-				"<div class=\"pickTheNumber\"><i class=\""+pickHeadIconName(messageType.typeName)+" upload icon\"></i>" + 
+				"<div class=\"pickTheNumber\"><i class=\""+pickHeadIconName(messageType.typeName)+" icon\"></i>" + 
 				"<span class =\"messageNumber head\">" + numOfMessage + "</span>" + messageType.typeHeadMenuName + 
 		   "</div></div>";
 	
@@ -164,10 +185,30 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 			var userId = data.message.friend.userId,
 			messageId = data.message.messageId,
 			fullName = data.message.friend.fullName;
+			var content = data.message.content;
+			var contentDisplay = "none";
+			
+			if(messageType.typeName == MessageType.REJECTIMAGE.typeName	||
+					messageType.typeName == MessageType.ACCEPTIMAGE.typeName){
+				if (content != ""){
+					contentDisplay = "inline";
+				}
+			}
+			
 		}else {
 			var userId = data.message[i].friend.userId,
 			messageId = data.message[i].messageId,
 			fullName = data.message[i].friend.fullName;
+			var content = data.message[i].content;
+			var contentDisplay = "none";
+			
+			if(messageType.typeName == MessageType.REJECTIMAGE.typeName	||
+					messageType.typeName == MessageType.ACCEPTIMAGE.typeName){
+				if (content != ""){
+					contentDisplay = "inline";
+				}
+			}
+			
 		}
 
 		html = html +"<div class=\"item message\" >"+
@@ -177,8 +218,8 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 				"<a class=\""+messageType.typeButtonOneName+"\"><i class=\"" + iconName[0]  + " large icon\"></i></a>" +
 				"<a class=\""+messageType.typeButtonTwoName+"\"><i class=\"" + iconName[1]  + " large icon\"></i></a>" +
 			"</div>" +
-			"<div class=\"content message\" style=\"width: 150px;\">" +
-			fullName +
+			"<div class=\"content message\" style=\"width: 150px;word-break:break-all;\">" +
+			fullName + "<span class='messageContent' style='display:"+contentDisplay+"'>: "+content+"</span>"+
 			"</div></div>";
 	}
 	html = html +"</div>";
@@ -250,13 +291,16 @@ function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
 	case "3"://takeQuote
 		
 		break;
-	case "4":
+	case "4"://rejectImage
 
 		break;
-	case "5":
+	case "5"://acceptImage
 
 		break;
-	case "6":
+	case "6"://reply
+
+		break;
+	case "7"://upgrade
 
 		break;
 	}	
@@ -276,45 +320,56 @@ function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 	case "3"://takeQuote
 		goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
-	case "4":
-
+	case "4"://rejectImage
+		inviteToUploadButtonOneOnclick(thisUserId);	
 		break;
-	case "5":
-
+	case "5"://acceptImage
+		inviteToUploadButtonOneOnclick(thisUserId);	
 		break;
-	case "6":
-
+	case "6"://reply
+		goToThatImage();
+		break;
+	case "7"://upgrade
+		
 		break;
 	}	
 }
 
 function buttonTwoOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
-	switch (messageTypeNumber){
-	case "0"://inviteToUpload
-		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);	
-		break;
-	case "1"://friendRequest
-		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
-	  break;
-	case "2"://acceptFriendRequest
-		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
-		break;
-	case "3"://takeQuote
-		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
-		break;
-	case "4":
-
-		break;
-	case "5":
-
-		break;
-	case "6":
-
-		break;
-	}		
+	
+	deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+	
+//	switch (messageTypeNumber){
+//	case "0"://inviteToUpload
+//		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);	
+//		break;
+//	case "1"://friendRequest
+//		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+//	  break;
+//	case "2"://acceptFriendRequest
+//		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+//		break;
+//	case "3"://takeQuote
+//		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+//		break;
+//	case "4"://rejectImage
+//
+//		break;
+//	case "5"://acceptImage
+//
+//		break;
+//	case "6"://reply
+//
+//		break;
+//	case "7"://upgrade
+//
+//		break;
+//	}	
 }
 
-
+function goToThatImage(){
+	
+}
 
 
 

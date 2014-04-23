@@ -241,6 +241,7 @@
 
 package restful.gateway;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -250,6 +251,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -258,10 +260,10 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.User;
-import db.mapping.object.UserDAO;
 import db.mapping.object.UserPassword;
 import db.mapping.object.UserPasswordDAO;
 import db.mapping.object.UserPasswordId;
+import db.mapping.object.UserDAO;
 
 @Path("loginService")
 public class LoginService {
@@ -340,6 +342,8 @@ public class LoginService {
 		if(user_list.size() == 1){
 			this.user = (User) user_list.get(0);			
 			this.userPassword = this.userPasswordDAO.findById(new UserPasswordId(email,password));
+			
+			
 			if(this.userPassword != null){
 				return this.user;
 			}

@@ -115,4 +115,5 @@ public class HibernateSessionFactory {
 	public static Configuration getConfiguration() {
 		return configuration;
 	}
+
 }

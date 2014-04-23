@@ -113,25 +113,24 @@ function addUnapprovedImageButtonHandler(imageId){
 		flipTheImageCard($(this));
 	});
 	
+	$("#imageId"+imageId).find(".confirmSubmit").click(function(){
+		if ($("#imageId"+imageId).find(".acceptHead .center.aligned.header").html()=="拒绝理由"){
+			rejectComment(imageId,$(this));
+		}	else {
+			acceptComment(imageId,$(this));
+		}	
+	});
+	
 }
 
 function rejectImage(thisElem,imageId){
 	thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("拒绝理由");
 	thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","告诉他/她哪里拍得不好（可选：不填对方将不会收到任何通知）");
-
-	thisElem.parents('.ui.shape').find(".confirmSubmit").click(function(){
-		rejectComment(imageId,thisElem);
-	});
 }
 
 function acceptImage(thisElem,imageId){
 	thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("确认接受");
 	thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","感谢一下吧。。。（可选）");
-	
-	thisElem.parents('.ui.shape').find(".confirmSubmit").click(function(){
-		acceptComment(imageId,thisElem);
-	});
-
 }
 
 function rejectComment(imageId,thisElem){
@@ -140,7 +139,7 @@ function rejectComment(imageId,thisElem){
 	}	
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){
-			hiddenThisImage(thisElem);
+			hiddenThisImage(thisElem,imageId,1);
 		}else{
 			drawConfirmPopUp("拒绝照片失败");
 		}
@@ -149,7 +148,7 @@ function rejectComment(imageId,thisElem){
 		drawConfirmPopUp("拒绝照片请求发送失败 Error: "+error);
 	};
 	
-	unapproveImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError);
+	deleteImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError);
 }
 
 function acceptComment(imageId,thisElem){
@@ -158,7 +157,7 @@ function acceptComment(imageId,thisElem){
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){
 			addImageNum();
-			hiddenThisImage(thisElem);
+			hiddenThisImage(thisElem,imageId,0);
 		}else{
 			drawConfirmPopUp("接受照片失败");
 		}
@@ -175,12 +174,50 @@ function addImageNum(){
 	$("#photos_num").html(numImage);
 }
 
-function hiddenThisImage(thisElem){
+function hiddenThisImage(thisElem,imageId,isDele){
 	rmelement = thisElem.parents(".eventpile");
-	$("#eventsegment").masonry( 'remove', rmelement);
-	$('#eventsegment').masonry();
-}
+	$("#neweventsegment").masonry( 'remove', rmelement);
+	$('#neweventsegment').masonry();
+	
+	var length = unapprovImage.length;
+	var tempData = new Array();
+	for(var i = 0 ; i < length ; i++){
+		if( unapprovImage[i].imageId != imageId){
+			tempData.push(unapprovImage[i]);
+		}else{
+			if(isDele == 0){
+				imageData=[].concat(unapprovImage[i],imageData);
+				numTotalImage = imageData.length;
+				$("#eventsegment").masonry('destroy');
+				$("#eventsegment").html("");
+			}
+		}
+	}
+	unapprovImage = tempData;
+	numUnappImage = unapprovImage.length;
 
+	
+	if(numUnappImage == 0){		
+		hideReturnHomeButton();
+		hideNewImageButton()
+		$("#neweventwrap").transition({
+			animation : 'horizontal flip out', 
+			duration  : '1s',
+			complete  : function() {
+				$("#neweventwrap").hide();
+		}
+		});
+	}
+	
+	if(isDele == 0){
+		var millisecondsToWait = 200;
+		setTimeout(function() {
+			drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,imageData,CONTROL.Self);
+		}, millisecondsToWait);
+		
+	}
+
+}
 
 
 

@@ -49,27 +49,25 @@ function getAllImage(userId,Control){
 		allImageData = approvedImageData(data,data.length);	
 		imageData = allImageData[0];
 		unapprovImage = allImageData[1];
-		var numUnappImage = unapprovImage.length;
-		var numTotalImage = imageData.length;
+		numUnappImage = unapprovImage.length;
+		numTotalImage = imageData.length;
 		
 		if (numUnappImage != 0 && Control == CONTROL.Self){
 			showNewImageButton(numUnappImage);
 			$("#newPhotoButton").click(function(){
 				hideNewImageButton();
 				showReturnHomeButton();
-				$('#eventsegment').masonry('destroy');
-				$("#eventsegment").html("");
+				$("#neweventwrap").show();
 				drawUnapproveImage(numUnappImage,unapprovImage);
 			});
 			$("#approvedPhotoButton").click(function(){
-//				hideReturnHomeButton();
-//				showNewImageButton();
-				
-				goHomePage();
+				hideReturnHomeButton();
+				showNewImageButton(numUnappImage)
+				$('#neweventsegment').masonry('destroy');
+				$("#neweventsegment").html("");
+				$("#neweventwrap").hide();
 			});
-			
 		}
-		
 		
 		$.cookie("truthbook_Page_Image_Num", numTotalImage);
 		changeImageNum();
@@ -91,8 +89,8 @@ function getAllImage(userId,Control){
 }
 
 function approvedImageData(data,numTotalImage){
-	approvedImageData = new Array();
-	unapprovImageData = new Array();
+	var approvedImageData = new Array();
+	var unapprovImageData = new Array();
 	for(var i = 0 ; i < numTotalImage ; i++){
 		if (data[i].approved == "true"){
 			approvedImageData.push(data[i]);
@@ -165,7 +163,8 @@ function drawGuestOneImage(imageData){
 function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData,Control){
 	$.cookie("truthbook_Page_Image_Pointer", numToShow);
 	
-	var	imageIdinorder = imageInOrder(numTotalImage, imageData);	
+	var	imageIdinorder = imageInOrder(numTotalImage, imageData);
+	
 	for(var i = 0 ; i < numOfNextBatch ; i++){
 		var url = imageData[imageIdinorder[i][1]].imageUrl;
 			description = imageData[imageIdinorder[i][1]].description,
@@ -201,17 +200,17 @@ function drawUnapproveImage(numUnappImage,unapprovImage){
 			uploaderId = unapprovImage[imageIdinorder[i][1]].uploaderId,
 			createDate = unapprovImage[imageIdinorder[i][1]].createDate,
 //			numOfComment = unapprovImage[imageIdinorder[i][1]].commentCnt,
-			imageId = unapprovImage[imageIdinorder[i][1]].imageId,
+			imageId = unapprovImage[imageIdinorder[i][1]].imageId;
 //			numLike = unapprovImage[imageIdinorder[i][1]].like,
-			display = i < numUnappImage ?"inline":"none";	
+//			display = i < numUnappImage ?"inline":"none";	
 		
 		description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 		
-		$("#eventsegment").append(thisUnapprovedImageHTML(url,description,descriptionDisplay,uploaderId,createDate,imageId));
+		$("#neweventsegment").append(thisUnapprovedImageHTML(url,description,descriptionDisplay,uploaderId,createDate,imageId));
 		
 		addUnapprovedImageButtonHandler(imageId);
 	}
-	itemInitialize();
+	newitemInitialize();
 }
 
 
@@ -220,7 +219,7 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,uploaderId,c
 	
 	displayDate = dateHandle(createDate);
 	
-	html =  "<div class='eventpile' id = 'imageId"+imageId+"' style='display : "+display+";' >" +
+	html =  "<div class='eventpile' id = 'imageId"+imageId+"' >" +
 	"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
 	"<span class = 'url_span' style='display:none;'>"+url+"</span>"+
 	"<div class='ui shape'>" +
@@ -272,8 +271,8 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,uploaderId,c
 					"</div>"+
 					"<div class='ui minimal comments' style='padding-top: 10px;'>"+
 						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
-							"<div class='field' style='height: 80px;'>"+
-								"<textarea class='textarea' placeholder='你想说…' rows='8' style='resize:none;height: 80px;'></textarea>"+
+							"<div class='field'>"+
+								"<textarea class='textarea' placeholder='你想说…' rows='8' style='resize:none;height:50px'></textarea>"+
 							"</div>"+
 							"<button class='ui fluid icon teal confirmSubmit button'>"+
 								"确定"+
@@ -386,76 +385,6 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    					"<div class='ui minimal comments' style='padding-top: 10px;'>"+
 			    						"<div class='commentwrap' style='max-height:450px;overflow-y:auto;width:102%;overflow-x:hidden;'>"+
 			    						
-//			    						"<div class=\"comment\">"+
-//				    			        	"<a class=\"avatar tiny\">"+
-//				    			        		"<img src=\"http://localhost:8080/truthbook/Uploaded/csq_to_siqicheng_at_2014-04-22_13-50-36.jpg\""+
-//				    			        		"style='width:35px;height:35px;'>"+
-//				    			        	"</a>"+
-//				    			        	"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
-//				    			        		"<a class=\"author\" style='font-weight:bold;'>李开复</a>"+
-//				    			        		"<div class=\"metadata\">"+
-//				    			        			"<span class=\"date\">2 days ago</span>"+
-//				    			        		"</div>"+
-//				    			        		"<div class=\"text\" style='margin-bottom: 4px; margin-top: 4px;font-size:13px;'>"+
-//				    			        			"我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字"+
-//				    			        		"</div>"+
-//				    			        	"</div>"+
-//				    			        "</div>"+
-//				    			        			        
-//				    
-//			    						"<div class=\"comment\">"+
-//				    			        	"<a class=\"avatar tiny\">"+
-//				    			        		"<img src=\""+DefaultImg+"\" style='width:35px;height:35px;'>"+
-//				    			        	"</a>"+
-//				    			        	"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
-//				    			        		"<a class=\"author\" style='font-weight:bold;'>薛蛮子</a>"+
-//				    			        		"<div class='metadata' style='display:inline;margin-left: 4px;font-size:12px;'><span class='date'>to</span></div>"+
-//				    							"<a class='to author' style='display:inline;font-weight:bold;'>李开复</a>"+
-//				    			        		
-//				    			        		"<div class=\"metadata\">"+
-//				    			        			"<span class=\"date\">2 days ago</span>"+
-//				    			        		"</div>"+
-//				    			        		"<div class=\"text\" style='margin-bottom: 4px; margin-top: 4px;font-size:13px;'>"+
-//				    			        			"我放出来了才四十个字我放出来了才四十个字我放出来了才四十个字我放出来了才四十个字"+
-//				    			        		"</div>"+
-//				    			        	"</div>"+
-//			    			        	"</div>"+
-//			    			        	
-//			    						"<div class=\"comment\">"+
-//			    			        	"<a class=\"avatar tiny\">"+
-//			    			        		"<img src=\""+DefaultImg+"\" style='width:35px;height:35px;'>"+
-//			    			        	"</a>"+
-//			    			        	"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
-//			    			        		"<a class=\"author\" style='font-weight:bold;color:#4C7A9F;font-size:10px;'>薛蛮子</a>"+
-//			    			        		"<div class='metadata' style='display:inline;margin-left: 4px;font-size:12px;'><span class='date'>to</span></div>"+
-//			    							"<a class='to author' style='display:inline;font-weight:bold;color:#4C7A9F;font-size:10px;'>李开复</a>"+
-//			    			        		
-//			    			        		"<div class=\"metadata\">"+
-//			    			        			"<span class=\"date\">2 days ago</span>"+
-//			    			        		"</div>"+
-//			    			        		"<div class=\"text\" style='margin-bottom: 4px; margin-top: 4px;font-size:13px;'>"+
-//			    			        			"我放出来了才四十个字我放出来了才四十个字我放出来了才四十个字我放出来了才四十个字"+
-//			    			        		"</div>"+
-//			    			        	"</div>"+
-//		    			        	"</div>"+
-//		    						"<div class=\"comment\">"+
-//		    			        	"<a class=\"avatar tiny\">"+
-//		    			        		"<img src=\""+DefaultImg+"\" style='width:35px;height:35px;'>"+
-//		    			        	"</a>"+
-//		    			        	"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
-//		    			        		"<a class=\"author\" style='font-weight:bold;'>薛蛮子</a>"+
-//		    			        		"<div class='metadata' style='display:inline;margin-left: 4px;font-size:12px;'><span class='date'>to</span></div>"+
-//		    							"<a class='to author' style='display:inline;font-weight:bold;'>李开复</a>"+
-//		    			        		
-//		    			        		"<div class=\"metadata\">"+
-//		    			        			"<span class=\"date\">2 days ago</span>"+
-//		    			        		"</div>"+
-//		    			        		"<div class=\"text\" style='margin-bottom: 4px; margin-top: 4px;font-size:13px;'>"+
-//		    			        			"我放出来了才四十个字我放出来了才四十个字我放出来了才四十个字我放出来了才四十个字"+
-//		    			        		"</div>"+
-//		    			        	"</div>"+
-//	    			        	"</div>"+
-			    			    
 			    						"</div>"+
 			    						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
 			    							"<div class='field' >"+

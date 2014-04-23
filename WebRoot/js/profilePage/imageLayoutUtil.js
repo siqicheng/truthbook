@@ -41,6 +41,39 @@ function imageInOrder(numTotalImage,data){
 	return imageIdinorder;
 }
 
+function newitemInitialize(){
+	
+	$('#neweventsegment').masonry({		
+		itemSelector: '.eventpile',
+		gutter: 11});
+
+	$('#neweventsegment').imagesLoaded( function() {
+		$('#neweventsegment').masonry();
+	});
+
+	$("#neweventsegment").find(".eventpile .item .image").magnificPopup({
+//				items: {
+// 					src:  $($num_items[i]).attr("src")
+//				},
+				gallery:{
+					enabled:true,
+					preload:[0,2],
+				},
+				type: 'image',
+				image: {
+					verticalFit: true
+				},
+				zoom:{
+					enabled: true,
+					duration: 500, // don't forget to change the duration also in CSS
+					opener: function(element) {
+						return element.find('img');
+						}
+				},
+		}); 
+}
+
+
 function itemInitialize(){
 	
 	$('#eventsegment').masonry({		

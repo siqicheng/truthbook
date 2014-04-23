@@ -26,7 +26,7 @@ ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
 ServiceType = {
     	   LOGIN:"loginService/",
     	   USERPROFILE :"userProfile/",
-    	   NOTIFICATION :"push/",
+    	   NOTIFICATION :"notification/",
     	   IMAGE:"imageService/",
     	   PORTRAIT:"portraitService/",
     	   COMMENT:"commentService/",
@@ -95,17 +95,32 @@ MessageType = {
 		   typeButtonTwoName : "delete_message_btn_3",
 		   typeHeadMenuName : "位好友认领了你新建的词条"
 	   },
-//	   ADDFRIEND :{
-//	       number : "2",
-//		   typeName : "friendRequest",
-//		   typeButtonOneName : "add_fri_btn",
-//		   typeButtonTwoName : "later_fri_btn",
-//		   typeHeadMenuName : "条好友请求"
-//	   },
-//	   ADDFRIEND :{
-//		   typeName : "friendRequest",
-//		   typeButtonOneName : "add_fri_btn",
-//		   typeButtonTwoName : "later_fri_btn",
-//		   typeHeadMenuName : "条好友请求"
-//	   }
+	   REJECTIMAGE :{
+		   number : "4",
+		   typeName : "rejectImage",
+		   typeButtonOneName : "upload_for_fri_btn_4",
+		   typeButtonTwoName : "delete_message_btn_4",
+		   typeHeadMenuName : "张照片的拒绝原因"
+	   },
+	   ACCEPTIMAGE :{
+		   number : "5",
+		   typeName : "acceptImage",
+		   typeButtonOneName : "upload_for_fri_btn_5",
+		   typeButtonTwoName : "delete_message_btn_5",
+		   typeHeadMenuName : "张照片被接受"
+	   },
+	   REPLY :{
+		   number : "6",
+		   typeName : "reply",
+		   typeButtonOneName : "go_fri_btn_6",
+		   typeButtonTwoName : "delete_message_btn_6",
+		   typeHeadMenuName : "条回复"
+	   },
+	   UPGRADE :{
+		   number : "7",
+		   typeName : "upgrade",
+		   typeButtonOneName : "no_btn_7",
+		   typeButtonTwoName : "delete_message_btn_7",
+		   typeHeadMenuName : "位好友升级了"
+	   },
 };

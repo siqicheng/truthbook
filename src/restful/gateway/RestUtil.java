@@ -174,5 +174,4 @@ public class RestUtil {
 		boolean ret = (input !=null && !"".equals(input))?false:true;
 		return ret;
 	}
-
 }  

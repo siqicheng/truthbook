@@ -222,7 +222,7 @@ function getMessageAPI(receiver,messageTypeName,onAjaxSuccess, onAjaxError){
 function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjaxError){
 	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName + "/send",
 		url=ServerRoot+ServiceType.NOTIFICATION + path,
-		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
 	ajax_call(ajax_obj);	
 }
 

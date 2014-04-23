@@ -33,8 +33,8 @@ public class FileUploadServlet extends HttpServlet {
 		// 1. Upload File Using Java Servlet API
 		//files.addAll(MultipartRequestHandler.uploadByJavaServletAPI(request));			
 		// 1. Upload File Using Apache FileUpload
-		String path = this.getServletContext().getRealPath("/");
-		files.addAll(MultipartRequestHandler.uploadByApacheFileUpload(request,path));
+		files.addAll(MultipartRequestHandler.uploadByApacheFileUpload(request , 
+				this.getServletContext().getRealPath("/")));
 		
 		// Remove some files
 		while(files.size() > 20)

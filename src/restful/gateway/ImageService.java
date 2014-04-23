@@ -1,12 +1,12 @@
 package restful.gateway;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,14 +14,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
+import org.codehaus.jackson.map.ObjectMapper;
 
 
 @Path("imageService")
@@ -52,9 +51,46 @@ public class ImageService {
 		map.put("userId", image.getUserId());
 		map.put("userName", image.getUser().getFullName());
 		map.put("uploaderName", new UserDAO().findById(image.getUploaderId()).getFullName());
+		
+		
 		return map;
 	}
-		
+	
+//	@GET
+//	@Path("v1/image/{imageid}/{imageSize}/resizedImage")
+//	@Produces("image/jpeg")
+//	public Object getImage(@PathParam("imageid") Integer imageid, 
+//			@PathParam("imageSize") String imageSize){
+//		
+//		try{
+////			String path =new ImageDAO().findById(imageid).getImageUrl();
+//			String path = 
+//					"C:\\Users\\WinKaR\\Workspaces\\MyEclipse Professional\\.metadata\\.me_tcat7\\webapps\\truthbook\\Uploaded\\Koala.jpg";
+////			File image = new File(path);
+//////			return image.;
+////			File file = new File(path);
+////			 
+////			ResponseBuilder response = Response.ok((Object) file);
+////			response.header("Content-Disposition",
+////				"attachment; filename=image_from_server.png");
+////			return response.build();
+//			
+//			BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
+//			ByteArrayOutputStream out =new  ByteArrayOutputStream();
+//			int size=0;
+//			byte[] temp = new byte[1024];        
+//			while ((size = in.read(temp))!=-1){
+//				out.write(temp, 0, size);        
+//			}
+//			in.close();
+//			return Response.ok(out.toByteArray()).build();
+//		} catch (Exception e){
+//			e.printStackTrace();
+//			
+//			return null;
+//		}
+//	}
+	
 	@GET
 	@Path("v1/image/{userid}/latest")
 	@Produces("application/json;charset=utf-8")
@@ -63,7 +99,7 @@ public class ImageService {
 		Set set = user.getImages();
 		Image latest = null;
 		for (Object image : set){
-			if (image instanceof Image){
+			if (image instanceof Image && !((Image) image).getDeleted()){
 				if (latest==null || ((Image)image).getLastModified().after(latest.getLastModified())){
 					latest = (Image) image;
 				}
@@ -73,6 +109,7 @@ public class ImageService {
 		Object[] images = new Object[1];
 		
 		images[0] = ProduceMap(latest);
+		
 		return RestUtil.array2json(images);
 	}
 	
@@ -81,8 +118,8 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object addImage(@FormParam("imageURL") String imageURL,
 			@FormParam("userId") Integer userId,
-			@FormParam("uploaderId") Integer uploaderId, 
-			@FormParam("description") String description){
+			@FormParam("uploaderId") Integer uploaderId,
+			@FormParam("description") String content) {
 		
 		Session session = this.imageDAO.getSession();
 		try{
@@ -95,7 +132,7 @@ public class ImageService {
 			image.setImageUrl(imageURL);
 			image.setUploaderId(uploaderId);
 			image.setUser(user);
-			image.setContent(description);
+			image.setContent(content);
 			
 			Date date = RestUtil.getCurrentDate();
 			
@@ -139,7 +176,7 @@ public class ImageService {
 		
 		List image_list = new ArrayList();
 		for (Object image : set){
-			if (image instanceof Image){
+			if (image instanceof Image && !((Image) image).getDeleted() ){
 				image_list.add(image);
 			}
 		}
@@ -173,7 +210,7 @@ public class ImageService {
 		if (images.size() > 0){
 			List image_list = new ArrayList();
 			for (Object image : images){
-				if (image instanceof Image){
+				if (image instanceof Image && !((Image) image).getDeleted()){
 					if (image!= null){
 						image_list.add(image);
 					}					
@@ -219,10 +256,11 @@ public class ImageService {
 			return RestUtil.string2json("false");
 		}	
 	}
+	
 	@GET
 	@Path("v1/image/{imageId}/dislike")
 	@Produces("application/json;charset=utf-8")
-	public Object disLikeImage(@PathParam("imageId") Integer imageId){
+	public Object dislikeImage(@PathParam("imageId") Integer imageId){
 		Image image =(Image) this.imageDAO.findById(imageId);
 		
 		if (image.getDeleted()){

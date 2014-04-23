@@ -34,9 +34,14 @@ public class Comment implements java.io.Serializable {
 	private User user;
 	private String commentContent;
 	private Integer repliedToCommentId;
+//	private String repliedToCommentName;
+
 	private Integer repliedByCommentId;
+//	private String repliedByCommentName;
+//	private Portrait repliedByCommentPortrait;
 	private Date createDate;
 	private Set imageComments = new HashSet(0);
+	
 
 	// Constructors
 
@@ -63,6 +68,29 @@ public class Comment implements java.io.Serializable {
 	}
 
 	// Property accessors
+	public String getRepliedToCommentName() {
+		return new UserDAO().findById(this.repliedToCommentId).getFullName();
+	}
+
+//	public void setRepliedToCommentName(String repliedToCommentName) {
+//		this.repliedToCommentName = repliedToCommentName;
+//	}
+
+	public String getRepliedByCommentName() {
+		return new UserDAO().findById(this.repliedByCommentId).getFullName();
+	}
+
+//	public void setRepliedByCommentName(String repliedByCommentName) {
+//		this.repliedByCommentName = repliedByCommentName;
+//	}
+
+//	public String getRepliedByCommentPortrait() {
+//		return new UserDAO().findById(repliedByCommentId).getDefaultPortrait();
+//	}
+
+//	public void setRepliedByCommentPortrait(Portrait repliedByCommentPortrait) {
+//		this.repliedByCommentPortrait = repliedByCommentPortrait;
+//	}
 
 	public Integer getCommentId() {
 		return this.commentId;
