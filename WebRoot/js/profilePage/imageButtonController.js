@@ -1,12 +1,26 @@
 function addImageButtonHandler(imageId,control){
 	
-	$("#imageId"+imageId).find(".likebtn").click(function(){
+	$("#imageId"+imageId).find(".likebtn").click(function(event){
+		event.stopPropagation();
+		
 		likeThisImage($(this),imageId);
+		
+		return false;
 	});
 	
-	$("#imageId"+imageId).find(".commentToggle").click(function(){	
+	$("#imageId"+imageId).find(".commentToggle").click(function(event){	
+		event.stopPropagation();
+		
 		showReply($(this));
+		
+		return false;
 	});
+	
+	$("#imageId"+imageId).find(".commentReturn").hover(	
+			function(){$(this).css("color","#33B2E1");},
+			function(){$(this).css("color","");}
+	);
+	
 	
 	$("#imageId"+imageId).find(".uploaderName").click(function(){
 		goOthersPage($(this).parent().find(".uploaderId").html());
@@ -59,6 +73,8 @@ function addImageButtonHandler(imageId,control){
 			removeImage($(this));
 		});
 	}
+	
+	
 
 }
 

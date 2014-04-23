@@ -303,12 +303,52 @@ function setPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError){
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
+
 function getDefaultPortraitAPI(userId,onAjaxSuccess,onAjaxError){
 	var path = "v1/portrait/"+userId+"/default",
 		url = ServerRoot + ServiceType.PORTRAIT +path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);		
 }
+
+/*********************************************************************************
+ * Comment Service API
+ */
+
+function fullCommentAPI(userId,content,repliedToId,repliedById,onAjaxSuccess,onAjaxError){
+	var path = "v1/comment/add/full",
+		url = ServerRoot + ServiceType.COMMENT +path,
+		data ="userId=" + userId + "&content=" + content + 
+				"&repliedToId=" + repliedToId + "&repliedById=" + repliedById,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+
+
+function getAllCommentAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/imageComment/"+imageId,
+		url = ServerRoot + ServiceType.COMMENT +path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+function deleteCommentByCommentIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError){
+	var path = "v1/imageComment/"+imageId+"/"+commentId+"/delete",
+		url = ServerRoot + ServiceType.COMMENT +path,
+		ajax_obj = getAjaxObj(url, "DELETE", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+
+
+
+
+
+
+
+
 
 
 

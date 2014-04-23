@@ -22,7 +22,7 @@
 
 </head>
 
-<body style="background-color:#DEDCDE;margin:0px;">
+<body style="background-color:#DEDCDE;margin:0px;" id = "body">
 	<div class="ui fixed transparent main small menu" id="topbar" >
 		<div class="left  menu">
 	
@@ -181,7 +181,7 @@
 					<div class="row">
 					<div class="middle aligned column">
 					    <div>
-					    	<img class="ui medium image" src="img\profile_test\247144.jpg">
+					    	<img class="ui medium image" src="img/profile_test/247144.jpg">
 				    	</div>
 				    </div>
 				    </div>
@@ -278,8 +278,8 @@
 			<div class="column">
 				<div class="ui red inverted fluid menu">
 					<div class="ui dropdown fluid item">
-						<i class="users small icon"></i> 来访
-						<div class="ui small label" style="float:right">153</div>
+						<i class="photo small icon"></i>照片
+						<div class="ui small label" id="photos_num" style="float:right">0</div>
 						<div class="menu">
 <!--      						<a class="item">张三</a> -->
 <!--      						<a class="item">李四</a> -->
@@ -319,8 +319,8 @@
 	
 
 	<div class="itemloadBtn" id = "showMoreButton"><div class="ui basic fluid icon button"><i class="double angle down large icon"></i></div></div>
-
-	<div class="ui dimmer page hidden">	
+	
+	<div class="ui dimmer page hidden">
 	 	<div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
 		    <div class="header">退出 Truthbook</div>
 	    	<div class="content">
@@ -424,6 +424,7 @@
 	<script src="./js/profilePage/imageLayoutUtil.js"></script>
 	<script src="./js/profilePage/imageButtonController.js"></script>
 	<script src="./js/profilePage/imageButtonFunction.js"></script>
+	<script src="./js/imageComment/commentLayout.js"></script>
 	<script src="./js/notification.js"></script>
 
 	<script type="text/javascript">
@@ -433,7 +434,7 @@
 		testFunction_Cookie();
 		addFriendButtonCheck();
 	});
-	
+
 
 	</script>
 	

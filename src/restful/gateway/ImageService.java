@@ -73,8 +73,7 @@ public class ImageService {
 		Object[] images = new Object[1];
 		
 		images[0] = ProduceMap(latest);
-		
-		return RestUtil.map2json(ProduceMap(latest));
+		return RestUtil.array2json(images);
 	}
 	
 	@POST
