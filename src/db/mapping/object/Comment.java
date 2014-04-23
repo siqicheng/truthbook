@@ -38,7 +38,7 @@ public class Comment implements java.io.Serializable {
 
 	private Integer repliedByCommentId;
 	private String repliedByCommentName;
-	private Portrait repliedByCommentPortrait;
+	private String repliedByCommentPortrait;
 	private Date createDate;
 	private Set imageComments = new HashSet(0);
 	
@@ -68,27 +68,34 @@ public class Comment implements java.io.Serializable {
 	}
 
 	// Property accessors
+	
+	@XmlTransient
 	public String getRepliedToCommentName() {
 		return new UserDAO().findById(this.repliedToCommentId).getFullName();
 	}
+	
+	@XmlTransient
+	public String getRepliedByCommentName() {
+		return new UserDAO().findById(this.repliedByCommentId).getFullName();
+	}
+	
+	@XmlTransient
+	public String getRepliedByCommentPortrait() {
+		return new UserDAO().findById(repliedByCommentId).getDefaultPortrait();
+	}
+
 
 	public void setRepliedToCommentName(String repliedToCommentName) {
 		this.repliedToCommentName = repliedToCommentName;
 	}
 
-	public String getRepliedByCommentName() {
-		return new UserDAO().findById(this.repliedByCommentId).getFullName();
-	}
-
+	
 	public void setRepliedByCommentName(String repliedByCommentName) {
 		this.repliedByCommentName = repliedByCommentName;
 	}
 
-	public String getRepliedByCommentPortrait() {
-		return new UserDAO().findById(repliedByCommentId).getDefaultPortrait();
-	}
-
-	public void setRepliedByCommentPortrait(Portrait repliedByCommentPortrait) {
+	
+	public void setRepliedByCommentPortrait(String repliedByCommentPortrait) {
 		this.repliedByCommentPortrait = repliedByCommentPortrait;
 	}
 

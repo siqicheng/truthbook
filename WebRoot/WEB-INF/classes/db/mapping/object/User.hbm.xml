@@ -16,6 +16,9 @@
         <property name="token" type="java.lang.String">
         	<column name="token"/>
         </property>
+         <property name="defaultPortrait" type="java.lang.String">
+        	<column name="defaultPortrait" length="255" />
+        </property>
         <property name="email" type="java.lang.String">
             <column name="email" length="40" unique="true" />
         </property>
