@@ -99,7 +99,7 @@ public class ImageService {
 		Set set = user.getImages();
 		Image latest = null;
 		for (Object image : set){
-			if (image instanceof Image){
+			if (image instanceof Image && !((Image) image).getDeleted()){
 				if (latest==null || ((Image)image).getLastModified().after(latest.getLastModified())){
 					latest = (Image) image;
 				}
@@ -176,7 +176,7 @@ public class ImageService {
 		
 		List image_list = new ArrayList();
 		for (Object image : set){
-			if (image instanceof Image){
+			if (image instanceof Image && !((Image) image).getDeleted() ){
 				image_list.add(image);
 			}
 		}
@@ -210,7 +210,7 @@ public class ImageService {
 		if (images.size() > 0){
 			List image_list = new ArrayList();
 			for (Object image : images){
-				if (image instanceof Image){
+				if (image instanceof Image && !((Image) image).getDeleted()){
 					if (image!= null){
 						image_list.add(image);
 					}					
