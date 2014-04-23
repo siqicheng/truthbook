@@ -1,4 +1,4 @@
-function addImageButtonHandler(imageId,control){
+function addImageButtonHandler(imageId,control,comment){
 	
 	$("#imageId"+imageId).find(".likebtn").click(function(event){
 		event.stopPropagation();
@@ -75,7 +75,16 @@ function addImageButtonHandler(imageId,control){
 			removeImage($(this));
 		});
 	}
-	
+	if(comment == COMMENT.Yes){
+		$("#imageId"+imageId).find(".commentSubmit").click(function(){
+			submitComment(imageId);
+		});
+	} else {
+		$("#imageId"+imageId).find(".commentSubmit").click(function(){
+			promptAddFriend(imageId);
+		});
+	}
+
 	
 
 }

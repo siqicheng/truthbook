@@ -109,7 +109,8 @@ function drawGuestOneImage(imageData){
 	
 	$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,
 											createDate,numOfComment,display,imageId,numLike));
-	addImageButtonHandler(imageId,CONTROL.No);
+	addImageButtonHandler(imageId,CONTROL.No,COMMENT.No);
+	strangerHandler(imageId);
 	itemInitialize();
 }
 
@@ -146,7 +147,7 @@ function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData,Con
 		$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,
 								uploaderId,createDate,numOfComment,display,imageId,numLike));
 		
-		addImageButtonHandler(imageId,Control);
+		addImageButtonHandler(imageId,Control,COMMENT.Yes);
 		getThisComment_All(imageId,Control);
 	}
 	
@@ -309,16 +310,17 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 //	    			        	"</div>"+
 			    			    
 			    			        "</div>"+
-			    						"<form class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
+			    						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
 			    							"<div class='field' >"+
 			    								"<textarea class='textarea' placeholder='你想说…' rows='5' style='resize:none;'></textarea>"+
 			    							"</div>"+
 			    							"<span class = 'replyToId' style='display:none;'></span>"+
-			    							"<div class='ui fluid labeled submit icon teal button'>"+
+			    							"<span class = 'replyToName' style='display:none;'></span>"+
+			    							"<button class='ui fluid labeled icon teal commentSubmit button'>"+
 			    								"<i class=\"icon edit\"></i>添加评论"+
-			    							"</div>"+
-			    						"</form>"+
-			    					"</div>"+
+			    							"</button>"+
+			    						"</div>"+
+			    				"</div>"+
 //		    					"</div>"+
 			    					
 		    				"</div>" +

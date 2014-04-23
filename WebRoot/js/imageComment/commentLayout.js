@@ -95,6 +95,7 @@ function addCommentButtonHandler(imageId){
 	});
 	
 	
+	
 }
 
 function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,
@@ -118,7 +119,7 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 					"</div>"+
 					"<div class=\"actions\" style='display:inline;'>"+
 			              "<a class=\"reply \" style='display:"+replyDisplay+";font-size:12px;'>回复</a>"+
-			              "<a class=\"delete \" style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
+			              "<a class=\"delete \" id='delete"+commentId+"' style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
 		            "</div>"+
 		            "<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + createDate + "</span>"+
 				"</div>"+

@@ -271,14 +271,15 @@ function confirmRemoveImage(thisElem){
 
 function replySomeone(imageId,repliedByName,repliedByCommentId){
 	$("#imageId"+imageId).find(".replyToId").html(repliedByCommentId);
+	$("#imageId"+imageId).find(".replyToName").html(repliedByName);
 	thisText = $("#imageId"+imageId).find(".textarea");
 	tempInput = thisText.val();
 	if (tempInput.substr(0,2) == "回复"){
 		tempInput = tempInput.substring(tempInput.indexOf("：")+1)		
 	} 
-	thisText.val("回复"+ repliedByName+" ："+tempInput);
-	
+	thisText.val("").focus().val("回复"+ repliedByName+" ："+tempInput);
 }
+
 
 /*********************************************************************************
  *	8.	delete message 	
@@ -339,6 +340,60 @@ function confirmRemoveComment(imageId,commentId){
 }
 
 /*********************************************************************************
+ *	9.	add message 	
+ * 	submit comment click function and its help function 
+ */
+function submitComment(imageId){
+	thisText = $("#imageId"+imageId).find(".textarea");
+	thisReplyForm = thisText.parent().parent();
+	if (thisText.val() != ""){
+		
+		var commentId = Math.round(Math.random()*100000000);
+		var	commentContent = thisText.val();
+		var	repliedByCommentId = $.cookie("truthbook").userId;
+		var	repliedByName = $.cookie("truthbook").fullName;
+		var	repliedByProtrait = $.cookie("truthbook").Protrait;
+		var	repliedToCommentId = thisReplyForm.children(".replyToId").html();
+		var	repliedToName = thisReplyForm.children(".replyToName").html();
+		var	createDate = new Date();
+		var	createDate = createDate.toLocaleDateString();
+			
+		repliedToCommentId!="" ?  replyToDisplay = "inline": replyToDisplay = "none";
+		var	replyDisplay = "none",
+			deleteDisplay = "inline";
+		
+		$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
+				repliedByCommentId,repliedByName,repliedByProtrait,
+				repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
+		
+		thisText.val("");
+		thisText.attr("placeholder","你想说...");
+		$('#eventsegment').masonry();
+		
+		$("#delete"+commentId).click(function(){
+			removeComment(imageId,commentId);
+		});
+		
+		currComment = Number($("#imageId"+imageId).find(".numOfComment_inline").html());
+		if (currComment != 0){
+			currComment++;
+			$("#imageId"+imageId).find(".numOfComment_inline").html(currComment);
+		}
+		
+		thisReplyForm.children(".replyToId").html("");
+		thisReplyForm.children(".replyToName").html("");
+	} else {
+		thisReplyForm.children(".replyToId").html("");
+		thisReplyForm.children(".replyToName").html("");
+		thisText.attr("placeholder","有些话不知道要怎么说出来...");
+		thisText.focus();
+	}
+	return false;
+}
+
+
+
+/*********************************************************************************
  * 	Remove all the popup after someone click above buttons.
  */
 
@@ -348,9 +403,20 @@ function disableThisPopup(thisElem){
 	;
 }
 
+/*********************************************************************************
+ * 	Stranger cannot send message cannot see comment
+ */
+function strangerHandler(imageId){
+	$("#imageId"+imageId).find(".commentwrap").html(
+		"<h3 class='ui center aligned header' style='color:#999999'>加为好友才能看到评论哦</h3>");
 
+}
 
-
-
+function promptAddFriend(imageId){
+	thisText = $("#imageId"+imageId).find(".textarea");
+	thisText.val("");
+	thisText.attr("placeholder","加为好友才能留言哦...");
+	thisText.focus();
+}
 
 
