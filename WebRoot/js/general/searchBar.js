@@ -4,10 +4,12 @@
  */
 
 function searchUsers(){
+	var existedBool = $("#searchbar").dropdown("is visible") == true;
 	$("#searchbarDropdown").remove();
+	$("#searchbar").dropdown("destroy");
 	var input = $("#searchFullName").val();
 	if (input != ""){
-		var html = "<div class=\"ui fluid menu list transition visible\" id=\"searchbarDropdown\">";
+		var html = "<div class=\"ui fluid menu list\" id=\"searchbarDropdown\">";
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
 				return false;
@@ -47,6 +49,11 @@ function searchUsers(){
 				}
 				html = html + "</div>";
 				$("#searchbar").append(html);
+				if(! existedBool) {
+					$("#searchbar").dropdown("show");
+				} else {
+					$("#searchbar").dropdown();
+				}
 				$("#getMoreSearchResult").click(function() {
 					getMoreSearchResult(data, length);
 				});
@@ -108,17 +115,7 @@ function showSearchResultPage(page, num) {
 
 	pagination.children(".content").attr("onclick","showSearchResultPage("+next+","+num+")");
 	pagination.children().children(".prevpage").attr("onclick","showSearchResultPage("+prev+","+num+")");
-//	if(page-1<1){
-//		pagination.children().children(".prevpage").hide();
-//	} else {
-//		pagination.children().children(".prevpage").show();
-//	}
 	pagination.children().children(".nextpage").attr("onclick","showSearchResultPage("+next+","+num+")");
-//	if(page>num/5){
-//		pagination.children().children(".nextpage").hide();
-//	} else {
-//		pagination.children().children(".nextpage").show();
-//	}
 	pagination.show();
 }
 
