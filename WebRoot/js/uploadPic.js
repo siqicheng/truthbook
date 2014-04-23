@@ -119,17 +119,13 @@ $(function() {
 			picData=data;
 		},
 		done: function(e, data) {
-			alert("upload success");
+			gotoComplete();
 		}
 	});
 	
-	$("#nextstep3").click(function() {
-		/*TODO: 未选择图片不能进入下一步*/
-		if($("#img_prev").attr("src") == DefaultPreviewImg) {
-			drawConfirmPopUp("请选择要上传的图片");
-			return;
-		}
-		gotoConfirm();
+	$("#complete .black.button").click( function() {
+		$.magnificPopup.close();
+		$(".sidebar").sidebar("hide");
 	});
 	
 	$("#choosePic .item .image").hover(function(){
@@ -320,7 +316,6 @@ function uploadPic() {
 	              ];
 	picData.submit();
 //	TODO: 发通知
-	gotoComplete();
 //	$.magnificPopup.close();
 //	$(".sidebar").sidebar("hide");
 }
