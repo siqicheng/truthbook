@@ -1,4 +1,30 @@
 
+function showNewImageButton(numUnappImage){
+	$("#newPhotoButton").removeClass(" hidden");
+	$("#newPhotoButton").addClass(" visible");
+	$("#numOfUnapprovedImage").html(numUnappImage);
+	addFriendTransition("#newPhotoButton");
+}
+
+function hideNewImageButton(){
+	$("#newPhotoButton").removeClass(" visible ");
+	$("#newPhotoButton").addClass(" hidden ");
+}
+
+function showReturnHomeButton(){
+	$("#approvedPhotoButton").removeClass(" hidden");
+	$("#approvedPhotoButton").addClass(" visible");
+	addFriendTransition("#approvedPhotoButton");	
+}
+
+function hideReturnHomeButton(){
+	$("#approvedPhotoButton").removeClass(" visible ");
+	$("#approvedPhotoButton").addClass(" hidden ");
+}
+
+
+
+
 function changeImageNum(){
 	numImage = Number($("#photos_num").html()) + $.cookie("truthbook_Page_Image_Num");
 	$("#photos_num").html(numImage);

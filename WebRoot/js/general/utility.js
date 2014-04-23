@@ -281,6 +281,19 @@ function setDislikedByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
 	ajax_call(ajax_obj);
 }
 
+function approveImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + imageId + "/approve",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+function unapproveImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + imageId + "/unapprove",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
 /*********************************************************************************
  * Portrait Service API
@@ -324,8 +337,6 @@ function fullCommentAPI(userId,content,repliedToId,repliedById,onAjaxSuccess,onA
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
-
-
 
 function getAllCommentAPI(imageId,onAjaxSuccess,onAjaxError){
 	var path = "v1/imageComment/"+imageId,

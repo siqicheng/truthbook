@@ -23,6 +23,16 @@ function getMessage(){
 	getNewMessage(MessageType.ADDFRIEND);
 	getNewMessage(MessageType.ACCEPTFRIEND);
 	getNewMessage(MessageType.TAKEQUOTE);
+	
+	
+	
+	/* 	消息回复
+	 * 	//被点赞
+	 * 	照片拒绝理由
+	 * 	好友升级
+	 * 	新照片
+	 */
+	
 //	getInviteToUploadMessage();
 //	getFriendRequestMessage();
 	

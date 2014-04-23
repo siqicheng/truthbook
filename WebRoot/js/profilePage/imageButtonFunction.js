@@ -8,6 +8,7 @@
  *	6.	Remove image 
  *	7.	Reply someone
  *	8.	delete message
+ *	9.	add message
  *
  */
 
@@ -72,6 +73,11 @@ function setNumOfLike(thisElem,num){
  */
 
 function showReply(thisElem){
+	flipTheImageCard(thisElem);
+	moveDownScroll(thisElem.parents('.ui.shape').find(".commentwrap"));
+}
+
+function flipTheImageCard(thisElem){
 	thisElem.parents('.ui.shape')
 	.shape('setting', {
 		onChange: function(){
@@ -80,8 +86,6 @@ function showReply(thisElem){
 		duration:500
 	})
 	.shape('flip over');
-	thisElem.parents('.ui.shape').find(".commentwrap").scrollTop(
-			thisElem.parents('.ui.shape').find(".commentwrap")[0].scrollHeight);
 }
 
 /*********************************************************************************
@@ -291,23 +295,17 @@ function removeComment(imageId,commentId){
 }
 
 function removeCommentStart(imageId,commentId){
-	
-	$("#commentId"+commentId).transition({
-		animation : 'horizontal flip out', 
-		duration  : '0.3s',
-		complete  : function() {
-			$("#commentId"+commentId).hide();
-	}
-	});
-	currComment = Number($("#imageId"+imageId).find(".numOfComment_inline").html());
-	if (currComment != 0){
-		currComment--;
-		$("#imageId"+imageId).find(".numOfComment_inline").html(currComment);
-	}
-	
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){
+			$("#commentId"+commentId).transition({
+				animation : 'horizontal flip out', 
+				duration  : '0.3s',
+				complete  : function() {
+					$("#commentId"+commentId).hide();
+			}
+			});
 			
+			changeTheTotalCommentNumber($("#imageId"+imageId).find(".numOfComment_inline"),-1);
 		}else{
 			drawConfirmPopUp("删除回复失败");
 		}
@@ -316,7 +314,7 @@ function removeCommentStart(imageId,commentId){
 		drawConfirmPopUp("删除回复请求发送失败 Error: "+error);
 	};
 	
-//	deleteCommentByCommentIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError);
+	deleteCommentByCommentIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError);
 }
 
 
@@ -343,55 +341,91 @@ function confirmRemoveComment(imageId,commentId){
  *	9.	add message 	
  * 	submit comment click function and its help function 
  */
+
 function submitComment(imageId){
-	thisText = $("#imageId"+imageId).find(".textarea");
-	thisReplyForm = thisText.parent().parent();
+	var thisText = $("#imageId"+imageId).find(".textarea");
+	var thisReplyForm = thisText.parent().parent();
 	if (thisText.val() != ""){
+		var userId = $.cookie("truthbook_PageOwner_userId").userId,
+			content = thisText.val(),
+			repliedToId	= thisReplyForm.children(".replyToId").html(),
+			repliedById = $.cookie("truthbook").userId;
 		
-		var commentId = Math.round(Math.random()*100000000);
-		var	commentContent = thisText.val();
-		var	repliedByCommentId = $.cookie("truthbook").userId;
-		var	repliedByName = $.cookie("truthbook").fullName;
-		var	repliedByProtrait = $.cookie("truthbook").Protrait;
-		var	repliedToCommentId = thisReplyForm.children(".replyToId").html();
-		var	repliedToName = thisReplyForm.children(".replyToName").html();
-		var	createDate = new Date();
-		var	createDate = createDate.toLocaleDateString();
-			
-		repliedToCommentId!="" ?  replyToDisplay = "inline": replyToDisplay = "none";
-		var	replyDisplay = "none",
-			deleteDisplay = "inline";
+		submitCommentStart(imageId,thisText,thisReplyForm);
 		
-		$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
-				repliedByCommentId,repliedByName,repliedByProtrait,
-				repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
-		
-		thisText.val("");
-		thisText.attr("placeholder","你想说...");
-		$('#eventsegment').masonry();
-		
-		$("#delete"+commentId).click(function(){
-			removeComment(imageId,commentId);
-		});
-		
-		currComment = Number($("#imageId"+imageId).find(".numOfComment_inline").html());
-		if (currComment != 0){
-			currComment++;
-			$("#imageId"+imageId).find(".numOfComment_inline").html(currComment);
-		}
-		
-		thisReplyForm.children(".replyToId").html("");
-		thisReplyForm.children(".replyToName").html("");
+		var onAjaxSuccess = function(data, textStatus) {
+			if (data == true){
+				submitCommentStart(imageId,thisText,thisReplyForm);
+			}else{
+				drawConfirmPopUp("回复失败");
+			}
+		};
+		var onAjaxError = function(xhr, textStatus, error) {
+			drawConfirmPopUp("添加回复请求发送失败 Error: "+error);
+		};
+//		fullCommentAPI(userId,content,repliedToId,repliedById,onAjaxSuccess,onAjaxError);
 	} else {
-		thisReplyForm.children(".replyToId").html("");
-		thisReplyForm.children(".replyToName").html("");
+		cleanTheTempVar(thisReplyForm);
 		thisText.attr("placeholder","有些话不知道要怎么说出来...");
 		thisText.focus();
 	}
-	return false;
 }
 
+function submitCommentStart(imageId,thisText,thisReplyForm){	
+	var commentId = Math.round(Math.random()*100000000);
+	var	commentContent = thisText.val();
+	var	repliedByCommentId = $.cookie("truthbook").userId;
+	var	repliedByName = $.cookie("truthbook").fullName;
+	var	repliedByProtrait = $.cookie("truthbook").Protrait;
+	var	repliedToCommentId = thisReplyForm.children(".replyToId").html();
+	var	repliedToName = thisReplyForm.children(".replyToName").html();
+	var	createDate = new Date();
+//	var	createDate = createDate.toLocaleDateString();
+		createDate = "just now";
+	repliedToCommentId!="" ?  replyToDisplay = "inline": replyToDisplay = "none";
+	var	replyDisplay = "none",
+		deleteDisplay = "inline";
+	
+	$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
+			repliedByCommentId,repliedByName,repliedByProtrait,
+			repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
+	
+	//Add delete handler
+	$("#delete"+commentId).click(function(){
+		removeComment(imageId,commentId);
+	});
+	
+	resetTextarea(thisText);
+	$('#eventsegment').masonry();
+	changeTheTotalCommentNumber($("#imageId"+imageId).find(".numOfComment_inline"),1);
+	cleanTheTempVar(thisReplyForm);
+	moveDownScroll($("#imageId"+imageId).find(".commentwrap"));
 
+}
+
+function resetTextarea(thisText){
+	thisText.val("");
+	thisText.attr("placeholder","你想说...");
+}
+
+function changeTheTotalCommentNumber(thisElem,num){
+	currComment = Number(thisElem.html());
+	currComment = currComment +num;
+	if (currComment >= 0){
+		thisElem.html(currComment);
+	} else {
+		thisElem.html(0);
+	}
+}
+
+function cleanTheTempVar(thisReplyForm){
+	thisReplyForm.children(".replyToId").html("");
+	thisReplyForm.children(".replyToName").html("");
+}
+
+function moveDownScroll(thisElem){
+	thisElem.scrollTop(thisElem[0].scrollHeight);
+}
 
 /*********************************************************************************
  * 	Remove all the popup after someone click above buttons.

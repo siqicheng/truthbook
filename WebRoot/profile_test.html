@@ -219,12 +219,22 @@
 						 	    style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
 						           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div>
 						           <div class="hidden content">传照片</div>
-						       </button>
-						       <button class="ui black vertical animated button transition hidden" id="disabeFriendButton"
-						       style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+						       	</button>
+						       	<button class="ui black vertical animated button transition hidden" id="disabeFriendButton"
+						       	style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
 						           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
 						           <div class="hidden content">变路人</div>
-						       </button>
+						       	</button>
+								<button class="ui teal vertical animated button transition hidden" id="newPhotoButton"
+					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+					        		<div class="hidden content"><i class="briefcase icon"></i><span id="numOfUnapprovedImage"></span></div>
+					        		<div class="visible content">待通过照片</div>
+					   			 </button>
+					   			 <button class="ui orange vertical animated button transition hidden" id="approvedPhotoButton"
+					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+					        		<div class="visible content">&ensp;&ensp;<i class="home icon"></i>&ensp;&ensp;</div>
+					        		<div class="hidden content">回到主页</div>
+					   			 </button>
 							</div>
 						</div>
 				  </div>
@@ -232,6 +242,9 @@
 					  <div class="ui segment">
 					    	<span id="testCookie"></span>
 					  </div>
+				  </div>
+				  <div class="column">
+
 				  </div>
 			</div>
 
@@ -280,18 +293,19 @@
 						<i class="mail small icon"></i> 消息通知
 						<div class="floating ui circular green label" id="unreadMessageNum" style="display:none">00</div>
 						<div class="ui divided list vertical menu message" >
-							<div id="inviteToUpload_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-							<div id="friendRequest_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-							<div id="acceptFriendRequest_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-							<div id="takeQuote_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
+							<div id="inviteToUpload_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							
+<!-- 							<hr size="0.1" width="100%" align="center" color="gray" style="display:none; margin-bottom: 0px; margin-top: 0px;"> -->
+							<div id="friendRequest_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+<!-- 							<hr size="0.1" width="100%" align="center" color="gray" style="display:none; margin-bottom: 0px; margin-top: 0px;"> -->
+							<div id="acceptFriendRequest_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+<!-- 							<hr size="0.1" width="100%" align="center" color="gray" style="display:none; margin-bottom: 0px; margin-top: 0px;"> -->
+							<div id="takeQuote_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+<!-- 							<hr size="0.1" width="100%" align="center" color="gray" style="display:none; margin-bottom: 0px; margin-top: 0px;"> -->
 <!-- 							<div id="friendRequest_MessageMenu"></div> -->
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
+<!-- 							<hr size="0.1" width="100%" align="center" color="gray" style="display:none; margin-bottom: 0px; margin-top: 0px;"> -->
 <!-- 							<div id="friendRequest_MessageMenu"></div> -->
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
+<!-- 							<hr size="0.1" width="100%" align="center" color="gray" style="display:none; margin-bottom: 0px; margin-top: 0px;"> -->
 <!-- 							<div id="friendRequest_MessageMenu"></div> -->
 														
    						</div>

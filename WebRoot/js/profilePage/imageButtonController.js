@@ -2,17 +2,13 @@ function addImageButtonHandler(imageId,control,comment){
 	
 	$("#imageId"+imageId).find(".likebtn").click(function(event){
 		event.stopPropagation();
-		
 		likeThisImage($(this),imageId);
-		
 		return false;
 	});
 	
 	$("#imageId"+imageId).find(".commentToggle").click(function(event){	
 		event.stopPropagation();
-		
 		showReply($(this));
-		
 		return false;
 	});
 	
@@ -96,4 +92,106 @@ function addImageControlButtonPopup(className,displayContent,imageId){
 		    content: displayContent
 	});
 }
+
+
+function addUnapprovedImageButtonHandler(imageId){
+	$("#imageId"+imageId).find(".confirmBtn .negative").click(function(){
+		flipTheImageCard($(this));
+		rejectImage($(this),imageId);
+	});
+	
+	$("#imageId"+imageId).find(".confirmBtn .positive").click(function(){
+		flipTheImageCard($(this));
+		acceptImage($(this),imageId);
+	});
+	
+	$("#imageId"+imageId).find(".acceptImageReturn").hover(	
+			function(){$(this).css("color","#33B2E1");},
+			function(){$(this).css("color","");}
+	);
+	$("#imageId"+imageId).find(".acceptImageReturn").click(function(){
+		flipTheImageCard($(this));
+	});
+	
+}
+
+function rejectImage(thisElem,imageId){
+	thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("拒绝理由");
+	thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","告诉他/她哪里拍得不好（可选：不填对方将不会收到任何通知）");
+
+	thisElem.parents('.ui.shape').find(".confirmSubmit").click(function(){
+		rejectComment(imageId,thisElem);
+	});
+}
+
+function acceptImage(thisElem,imageId){
+	thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("确认接受");
+	thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","感谢一下吧。。。（可选）");
+	
+	thisElem.parents('.ui.shape').find(".confirmSubmit").click(function(){
+		acceptComment(imageId,thisElem);
+	});
+
+}
+
+function rejectComment(imageId,thisElem){
+	if(thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").val() != ""){
+		//Todo:send why reject Message
+	}	
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			hiddenThisImage(thisElem);
+		}else{
+			drawConfirmPopUp("拒绝照片失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("拒绝照片请求发送失败 Error: "+error);
+	};
+	
+	unapproveImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError);
+}
+
+function acceptComment(imageId,thisElem){
+	//Todo:send acceptMessage
+	
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			addImageNum();
+			hiddenThisImage(thisElem);
+		}else{
+			drawConfirmPopUp("接受照片失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("接受照片请求发送失败 Error: "+error);
+	};
+	
+	approveImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError);
+}
+
+function addImageNum(){
+	numImage = Number($("#photos_num").html()) + 1;
+	$("#photos_num").html(numImage);
+}
+
+function hiddenThisImage(thisElem){
+	rmelement = thisElem.parents(".eventpile");
+	$("#eventsegment").masonry( 'remove', rmelement);
+	$('#eventsegment').masonry();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
