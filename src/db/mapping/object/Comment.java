@@ -84,7 +84,7 @@ public class Comment implements java.io.Serializable {
 		this.repliedByCommentName = repliedByCommentName;
 	}
 
-	public Portrait getRepliedByCommentPortrait() {
+	public String getRepliedByCommentPortrait() {
 		return new UserDAO().findById(repliedByCommentId).getDefaultPortrait();
 	}
 

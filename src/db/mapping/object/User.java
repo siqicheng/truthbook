@@ -2,7 +2,10 @@ package db.mapping.object;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import javax.sound.sampled.Line;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
@@ -30,7 +33,7 @@ public class User  implements java.io.Serializable {
      private Set comments = new HashSet(0);
      private Set relationships = new HashSet(0);
      private Set portraits = new HashSet(0);
-     private Portrait defaultPortrait;
+     private String defaultPortrait;
      private UserPassword userPassword;
      private Set messages = new HashSet(0);
      private Set images = new HashSet(0);
@@ -64,13 +67,17 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
-    public Portrait getDefaultPortrait(){
-    	//return this.defaultPortrait;
-    	return new restful.gateway.PortraitService().getDefaultPortrait(this.userId);
-//    	return 12345;
+//    @XmlTransient
+    public String getDefaultPortrait(){
+    	for (Object ptt : this.portraits){
+    		if (ptt instanceof Portrait &&((Portrait) ptt).getDefaultImage()){
+    			return ((Portrait)ptt).getImage().getImageUrl();
+    		}
+    	}
+    	return null;
     }
     
-    public void setDefaultPortrait(Portrait defaultPortrait){
+    public void setDefaultPortrait(String defaultPortrait){
     	this.defaultPortrait = defaultPortrait;
     }
     

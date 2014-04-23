@@ -25,7 +25,6 @@ public class Message implements java.io.Serializable {
 	private Integer userId;
 	private User friend;
 	private String content;
-	
 	private Timestamp createTime;
 	//private Map<String,String> content;
 	private String status;
@@ -59,6 +58,7 @@ public class Message implements java.io.Serializable {
 		return content;
 	}
 
+	
 	public void setContent(String content) {
 		this.content = content;
 	}
