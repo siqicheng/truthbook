@@ -30,9 +30,11 @@ public class User  implements java.io.Serializable {
      private Set comments = new HashSet(0);
      private Set relationships = new HashSet(0);
      private Set portraits = new HashSet(0);
+     private Portrait defaultPortrait;
      private UserPassword userPassword;
      private Set messages = new HashSet(0);
      private Set images = new HashSet(0);
+     private String token;
     // Constructors
 
     /** default constructor */
@@ -62,6 +64,24 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
+    public Portrait getDefaultPortrait(){
+    	//return this.defaultPortrait;
+    	return new restful.gateway.PortraitService().getDefaultPortrait(this.userId);
+//    	return 12345;
+    }
+    
+    public void setDefaultPortrait(Portrait defaultPortrait){
+    	this.defaultPortrait = defaultPortrait;
+    }
+    
+    public String getToken(){
+    	return this.token;
+    }
+    
+    public void setToken(String token){
+    	this.token = token;
+    }
+    
     @XmlTransient
     public Set getImages(){
     	return this.images;

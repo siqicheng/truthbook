@@ -13,6 +13,9 @@
         <property name="fullName" type="java.lang.String">
             <column name="full_name" length="40" not-null="true" />
         </property>
+        <property name="token" type="java.lang.String">
+        	<column name="token"/>
+        </property>
         <property name="email" type="java.lang.String">
             <column name="email" length="40" unique="true" />
         </property>
