@@ -46,33 +46,22 @@ function friendRelationCheck(){
 
 function getAllImage(userId,Control){
 	var onAjaxSuccess = function(data,textStatus){
-		allImageData = approvedImageData(data,data.length);	
-		imageData = allImageData[0];
-		unapprovImage = allImageData[1];
-		numUnappImage = unapprovImage.length;
-		numTotalImage = imageData.length;
 		
-		if (numUnappImage != 0 && Control == CONTROL.Self){
-			showNewImageButton(numUnappImage);
-			$("#newPhotoButton").click(function(){
-				hideNewImageButton();
-				showReturnHomeButton();
-				$("#neweventwrap").show();
-				drawUnapproveImage(numUnappImage,unapprovImage);
-			});
-			$("#approvedPhotoButton").click(function(){
-				hideReturnHomeButton();
-				showNewImageButton(numUnappImage)
-				$('#neweventsegment').masonry('destroy');
-				$("#neweventsegment").html("");
-				$("#neweventwrap").hide();
-			});
+		var allImageData = approvedImageData(data,data.length);
+		
+		numApprovedImage = allImageData[0].length;
+		numUnapprovImage = allImageData[1].length;
+		
+		approvedImage = imageInOrder(numApprovedImage, allImageData[0]);
+		unapprovImage = imageInOrder(numUnapprovImage, allImageData[1]);
+		
+		//Has new image and on home page
+		if (numUnapprovImage != 0 && Control == CONTROL.Self){		
+			handleNewImageButton();
 		}
-		
-		$.cookie("truthbook_Page_Image_Num", numTotalImage);
-		changeImageNum();
-		if (numTotalImage != 0 ){
-			drawNextBatchImage(numTotalImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,numTotalImage,imageData,Control);
+		modifiedImageNum(numApprovedImage);
+		if (numApprovedImage != 0 ){
+			drawNextBatchImage(numApprovedImage,NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE,approvedImage,Control);
 			return true;
 		}
 		else{
@@ -105,14 +94,14 @@ function getGuestImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 		disableShowMoreButton();
 		if (data[0].imageUrl != undefined ){
-			$.cookie("truthbook_Page_Image_Num", 1);
-			changeImageNum();
+			numApprovedImage = 1;
+			modifiedImageNum(numApprovedImage);
 			drawGuestOneImage(data);
 			return true;
 		}
 		else{
-			$.cookie("truthbook_Page_Image_Num", 0);
-			changeImageNum();
+			numApprovedImage = 0;
+			modifiedImageNum(numApprovedImage);
 			disableShowMoreButton();
 			return true;
 		}
@@ -129,24 +118,9 @@ function getGuestImage(userId){
  * 	Use this to draw one segement and do not draw the show more button.
  */
 function drawGuestOneImage(imageData){
-	var url = imageData[0].imageUrl,
-		description = imageData[0].description,
-		uploaderName =  imageData[0].uploaderName,
-		uploaderId = imageData[0].uploaderId,
-		createDate = imageData[0].createDate,
-		numOfComment = imageData[0].commentCnt,
-		imageId = imageData[0].imageId,
-		numLike = imageData[0].like,
-		display = "inline";
-	
-	if (numLike=="") numLike = "0";
-	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
-	
-	$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,
-											createDate,numOfComment,display,imageId,numLike));
-	addImageButtonHandler(imageId,CONTROL.No,COMMENT.No);
-	strangerHandler(imageId);
-	itemInitialize();
+	$.cookie("truthbook_Page_Image_Pointer", 1);
+	prepareElement(imageData[0],true,CONTROL.No,COMMENT.No);
+	itemInitialize("#eventsegment");
 }
 
 /*********************************************************************************
@@ -160,66 +134,30 @@ function drawGuestOneImage(imageData){
  * 					Import all images and show partial of them
  * 					ShowMore Button click will call showNextBatchImage()
  */
-function drawNextBatchImage(numOfNextBatch,numToShow,numTotalImage,imageData,Control){
+function drawNextBatchImage(numOfImage,numToShow,imageData,Control){
 	$.cookie("truthbook_Page_Image_Pointer", numToShow);
-	
-	var	imageIdinorder = imageInOrder(numTotalImage, imageData);
-	
-	for(var i = 0 ; i < numOfNextBatch ; i++){
-		var url = imageData[imageIdinorder[i][1]].imageUrl;
-			description = imageData[imageIdinorder[i][1]].description,
-			uploaderName =  imageData[imageIdinorder[i][1]].uploaderName,
-			uploaderId = imageData[imageIdinorder[i][1]].uploaderId,
-			createDate = imageData[imageIdinorder[i][1]].createDate,
-			numOfComment = imageData[imageIdinorder[i][1]].commentCnt,
-			imageId = imageData[imageIdinorder[i][1]].imageId,
-			numLike = imageData[imageIdinorder[i][1]].like,
-			display = i < numToShow ?"inline":"none";	
-		
-		if (numLike=="") numLike = "0";
-		description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
-		
-		$("#eventsegment").append(thisImageHTML(url,description,descriptionDisplay,uploaderName,
-								uploaderId,createDate,numOfComment,display,imageId,numLike));
-		
-		addImageButtonHandler(imageId,Control,COMMENT.Yes);
-		getThisComment_All(imageId,Control);
+	var numToDraw = returnSmaller(numToShow,numOfImage);
+	for(var i = 0 ; i < numToDraw ; i++){
+		prepareElement(imageData[i],true,Control,COMMENT.Yes);
 	}
-	
-	if (numTotalImage<=numToShow)	disableShowMoreButton();
-	itemInitialize();
+	if (numOfImage<=numToShow)	disableShowMoreButton();
+	itemInitialize("#eventsegment");
 	return;
 }
 
-function drawUnapproveImage(numUnappImage,unapprovImage){
-	var	imageIdinorder = imageInOrder(numUnappImage, unapprovImage);	
-	for(var i = 0 ; i < numUnappImage ; i++){
-		var url = unapprovImage[imageIdinorder[i][1]].imageUrl;
-			description = unapprovImage[imageIdinorder[i][1]].description,
-//			uploaderName =  unapprovImage[imageIdinorder[i][1]].uploaderName,
-			uploaderId = unapprovImage[imageIdinorder[i][1]].uploaderId,
-			createDate = unapprovImage[imageIdinorder[i][1]].createDate,
-//			numOfComment = unapprovImage[imageIdinorder[i][1]].commentCnt,
-			imageId = unapprovImage[imageIdinorder[i][1]].imageId;
-//			numLike = unapprovImage[imageIdinorder[i][1]].like,
-//			display = i < numUnappImage ?"inline":"none";	
-		
-		description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
-		
-		$("#neweventsegment").append(thisUnapprovedImageHTML(url,description,descriptionDisplay,uploaderId,createDate,imageId));
-		
-		addUnapprovedImageButtonHandler(imageId);
+function drawUnapproveImage(numOfImage,imageData){
+	for(var i = 0 ; i < numOfImage ; i++){
+		prepareUnapprovedElement(imageData[i],true);
 	}
-	newitemInitialize();
+	itemInitialize("#neweventsegment");
 }
 
 
-
-function thisUnapprovedImageHTML(url,description,descriptionDisplay,uploaderId,createDate,imageId){
+function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId){
 	
 	displayDate = dateHandle(createDate);
 	
-	html =  "<div class='eventpile' id = 'imageId"+imageId+"' >" +
+	html =  "<div class='eventpile' id = 'un_imageId"+imageId+"' >" +
 	"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
 	"<span class = 'url_span' style='display:none;'>"+url+"</span>"+
 	"<div class='ui shape'>" +
@@ -251,25 +189,19 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,uploaderId,c
                  
     	        "</div>" +
               "</div>" +
-					                  
-   
-              
+	        
 			"<div class='side ui items'>" +
 				"<div class='item'>" +
 				
 					"<div class='ui segment acceptHead' style='margin-bottom: 0px; padding: 0px; height: 45px;border-bottom-right-radius:0px;border-bottom-left-radius:0px;box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.1);'>" +
-    					"<div class=\"ui tiny right floated aligned header\">"+
-    					"</div>"+
-    					"<div class=\"ui tiny left floated aligned header acceptImageReturn\">"+
-    						"<div class='ui commentToggle' style='cursor:pointer;'>" +
-    							"<i class='angle left icon'></i>返回"+
-    						"</div>" +
-    					"</div>"+
-    					"<div class=\"ui small floated center aligned header\" style='margin-left: 45px;'>"+
+    					"<div class=\"ui center aligned header\" style='cursor:auto'>"+
     						""+
     					"</div>"+
 					"</div>"+
 					"<div class='ui minimal comments' style='padding-top: 10px;'>"+
+						"<div class=\"ui tiny center aligned header\" style='cursor:auto;'>"+
+							"上传者：<span class=\"uploaderName\" style='color:#4C7A9F;'></span>"+
+						"</div>"+
 						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
 							"<div class='field'>"+
 								"<textarea class='textarea' placeholder='你想说…' rows='8' style='resize:none;height:50px'></textarea>"+

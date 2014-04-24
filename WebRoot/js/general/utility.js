@@ -295,6 +295,13 @@ function unapproveImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
 	ajax_call(ajax_obj);
 }
 
+function getImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + imageId + "/id",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
+
 /*********************************************************************************
  * Portrait Service API
  */

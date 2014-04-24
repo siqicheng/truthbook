@@ -10,6 +10,8 @@
  *	8.	delete message
  *	9.	add message
  *
+ *	Stranger handler
+ *
  */
 
 /*********************************************************************************
@@ -235,10 +237,11 @@ function removeImageStart(thisElem) {
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){
 			$("#eventsegment").masonry( 'remove', rmelement);
-			$('#eventsegment').masonry();
-			$.cookie("truthbook_Page_Image_Pointer", $.cookie("truthbook_Page_Image_Pointer")-1);
-			$.cookie("truthbook_Page_Image_Num", $.cookie("truthbook_Page_Image_Num")-1);
-			itemInitialize();
+			$("#eventsegment").masonry('on', 'removeComplete', function( msnryInstance, rmelement ) {
+				$('#eventsegment').masonry();
+				deleteThisImageFromApprovedList(imageId);
+				itemInitialize("#eventsegment");
+			} )
 		}else{
 			drawConfirmPopUp("删除失败");
 		}
