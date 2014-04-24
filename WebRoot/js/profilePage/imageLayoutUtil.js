@@ -66,14 +66,24 @@ function handleNewImageButton(){
 	$("#newPhotoButton").click(function(){
 		hideNewImageButton();
 		showReturnHomeButton();
-		$("#neweventwrap").show();
+		$("#neweventwrap").slideToggle("slow",function(){
+		});	
 		drawUnapproveImage(numUnapprovImage,unapprovImage);
+		
 	});
 	$("#approvedPhotoButton").click(function(){
 		hideReturnHomeButton();
 		showNewImageButton(numUnapprovImage);
+		$("#neweventwrap").slideToggle("slow");
+		
+		$("#neweventsegment").masonry( 'destroy');
+		$("#neweventsegment").html("");
 	});
 }
+
+
+
+
 
 function showNewImageButton(numUnapprovImage){
 	$("#newPhotoButton").removeClass(" hidden");
