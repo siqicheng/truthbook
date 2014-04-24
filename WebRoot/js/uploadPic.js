@@ -173,6 +173,8 @@ $(function() {
 					} else {
 						var userId = $.cookie("truthbook").userId,
 							onSuccess = function(data, textStatus) {
+								refreshTopbarFriendsLists($.cookie("truthbook").userId);
+								refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 								uploadPic();
 							};
 						addFriendAPI(picReceiver.userId, userId, type_nFriends, "true");
