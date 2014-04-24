@@ -1,0 +1,66 @@
+body {
+	/* background-color:#DEDCDE; */
+	background:#edeeef url(../img/noisebg-2.png);
+	margin:0px;
+}
+
+a,
+a:visited {
+	text-decoration:none;
+	color:#1AB8F3;
+	/* #D95C5C  red  #1AB8F3 blue #00B5AD teal*/
+}
+
+.white-popup {
+	background: #FFF;
+	padding: 20px 30px;
+	text-align: left;
+	width: 650px;
+	margin: 40px auto;
+	position: relative;
+}
+
+.footer {
+	clear: both;
+	text-align: right;
+}
+
+.footer,
+.footer a {
+    color: #999999;
+    font-size: 13px;
+}
+
+.footer .zg-wrap {
+    border-top: 1px solid #CCCCCC;
+    padding: 20px 15px;
+}
+.zg-wrap {
+    margin: 0 auto;
+    width: 960px;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.footer .copy {
+    float: left;
+}
+
+.footer ul, .footer li {
+    display: inline;
+    margin: 0;padding: 0;
+}
+
+.footer li {
+    list-style: none outside none;
+}
+.footer li + li:before {
+    color: #BBBBBB;
+    content: "•";
+    display: inline-block;
+    font-family: Arial;
+    margin-right: 3px;
+    padding: 0 3px;
+}
