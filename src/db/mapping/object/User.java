@@ -2,17 +2,10 @@ package db.mapping.object;
 
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import javax.sound.sampled.Line;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
-
-import com.sun.xml.internal.ws.wsdl.writer.document.Port;
-
-
 import db.mapping.object.UserPassword;
 
 

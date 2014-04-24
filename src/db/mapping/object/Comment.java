@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.Session;
+
 /**
  * Comment entity. @author MyEclipse Persistence Tools
  */
@@ -69,17 +71,17 @@ public class Comment implements java.io.Serializable {
 
 	// Property accessors
 	
-	@XmlTransient
+	//@XmlTransient
 	public String getRepliedToCommentName() {
 		return new UserDAO().findById(this.repliedToCommentId).getFullName();
 	}
 	
-	@XmlTransient
+	//@XmlTransient
 	public String getRepliedByCommentName() {
 		return new UserDAO().findById(this.repliedByCommentId).getFullName();
 	}
 	
-	@XmlTransient
+	//@XmlTransient
 	public String getRepliedByCommentPortrait() {
 		return new UserDAO().findById(repliedByCommentId).getDefaultPortrait();
 	}

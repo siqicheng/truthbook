@@ -1,6 +1,5 @@
 package restful.gateway;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
-import org.codehaus.jackson.map.ObjectMapper;
 
 
 @Path("imageService")

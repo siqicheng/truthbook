@@ -1,6 +1,5 @@
 package restful.gateway;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -19,7 +18,6 @@ import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
 import db.mapping.object.Portrait;
 import db.mapping.object.PortraitDAO;
-import db.mapping.object.Relationship;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
 
