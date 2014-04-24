@@ -55,7 +55,7 @@ function readURL(input) {
     if (input.files && input.files[0]) {
     	$('#img_prev').show();
         var reader = new FileReader();
-        reader.onload = function (e) { $('#img_prev').attr('src', e.target.result).css({"max-width":"650px"}); };
+        reader.onload = function (e) { $('#img_prev').attr('src', e.target.result); $("#imgPrev").attr("src", e.target.result); };
         reader.readAsDataURL(input.files[0]);
         $('#submitBtn').removeClass("disabled");
     } else {

@@ -32,6 +32,7 @@ ServiceType = {
     	   COMMENT:"commentService/",
        };
 DefaultPortrait="img/profile_test/247144.jpg";
+DefaultPreviewImg="./img/profile_test/247146.jpg";
 
 /*********************************************************************************
  * 	Global Numbers
@@ -64,36 +65,36 @@ MESSAGESTATUS = {
 		READ : "read",
 		SENT : "sent",
 		UNSEND : "unsend"
-}
+};
 
 MessageType = {
- 	   INVITETOUPLOAD:{
- 		   number : "0",
- 		   typeName : "inviteToUpload",
- 		   typeButtonOneName : "upload_for_fri_btn_0",
- 		   typeButtonTwoName : "delete_message_btn_0",
- 		   typeHeadMenuName : "条上传照片邀请"
- 	   },
+	     INVITETOUPLOAD:{
+	     number : "0",
+	     typeName : "inviteToUpload",
+	     typeButtonOneName : "upload_for_fri_btn_0",
+	     typeButtonTwoName : "delete_message_btn_0",
+	     typeHeadMenuName : "条上传照片邀请"
+	     },
 	   ADDFRIEND :{
-		   number : "1",
-		   typeName : "friendRequest",
-		   typeButtonOneName : "add_fri_btn_1",
-		   typeButtonTwoName : "later_fri_btn_1",
-		   typeHeadMenuName : "条好友请求"
+	   number : "1",
+	   typeName : "friendRequest",
+	   typeButtonOneName : "add_fri_btn_1",
+	   typeButtonTwoName : "later_fri_btn_1",
+	   typeHeadMenuName : "条好友请求"
 	   },
 	   ACCEPTFRIEND :{
-		   number : "2",
-		   typeName : "acceptFriendRequest",
-		   typeButtonOneName : "no_btn_2",
-		   typeButtonTwoName : "delete_message_btn_2",
-		   typeHeadMenuName : "位好友接受好友请求"
+	   number : "2",
+	   typeName : "acceptFriendRequest",
+	   typeButtonOneName : "no_btn_2",
+	   typeButtonTwoName : "delete_message_btn_2",
+	   typeHeadMenuName : "位好友接受好友请求"
 	   },
 	   TAKEQUOTE :{
-		   number : "3",
-		   typeName : "takeQuote",
-		   typeButtonOneName : "go_fri_btn_3",
-		   typeButtonTwoName : "delete_message_btn_3",
-		   typeHeadMenuName : "位好友认领了你新建的词条"
+	   number : "3",
+	   typeName : "takeQuote",
+	   typeButtonOneName : "go_fri_btn_3",
+	   typeButtonTwoName : "delete_message_btn_3",
+	   typeHeadMenuName : "位好友认领了你新建的词条"
 	   },
 	   REJECTIMAGE :{
 		   number : "4",

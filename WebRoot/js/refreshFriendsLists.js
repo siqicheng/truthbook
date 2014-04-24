@@ -66,23 +66,13 @@ function refreshTopbarLists(id) {
 
 function addTopbarClickFunction() {
 	$("#topbar .eFriendsList.upload_for_fri .item").click(function() {
-		var towhom = userFriendsLists.eFriends[$(this).index()];
+		var towhom = userFriendsLists.eFriends[$(this).index()-1];
 		upload_choosepic(towhom);
 	});
 	
 	$("#topbar .nFriendsList.upload_for_fri .item").click(function() {
-		var towhom = userFriendsLists.nFriends[$(this).index()];
+		var towhom = userFriendsLists.nFriends[$(this).index()-1];
 		upload_choosepic(towhom);
-	});
-
-	$("#topbar .eFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = userFriendsLists.eFriends[$(this).parent().index()];
-		goOthersPage(towhom["userId"]);
-	});
-	
-	$("#topbar .nFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = userFriendsLists.nFriends[$(this).parent().index()];
-		goOthersPage(towhom["userId"]);
 	});
 }
 
@@ -171,7 +161,16 @@ function drawFriendsList(id, barType, friendsType) {
 					"</div>" +
 					"</div>";
 	if(num > 0) {
-		html = "";
+		html = "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
+		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+			"<a class=\"prevpage\">" +
+				"<i class=\"left arrow icon\"></i>" +
+			"</a>"+
+			"<a class=\"nextpage\">"+
+				"<i class=\"right arrow icon\"></i>"+
+			"</a>"+
+		"</div></div>";
 		var img;
 		for(var i=0; i<num; i++) {
 			if(friendsArray[friendsType][i]["isActivated"] == "false") {
@@ -196,18 +195,6 @@ function drawFriendsList(id, barType, friendsType) {
 			"</div>" +
 			"</div>";
 	};
-	if(num>5) {
-		html = html + "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
-		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
-			"<div class=\"right floated\" style=\"padding-top:0px;\">" +
-				"<a class=\"prevpage\">" +
-					"<i class=\"left arrow icon\"></i>" +
-				"</a>"+
-				"<a class=\"nextpage\">"+
-					"<i class=\"right arrow icon\"></i>"+
-				"</a>"+
-			"</div></div>";
-	}
 	$("#"+barType + " ."+friendsType+"List").html(html);
 	showPage(barType, friendsType, 0, num);
 }
@@ -223,39 +210,30 @@ function showPage(barType, friendsType, page, num) {
 			$(this).show();
 		}
 	});
-	var pagination = $("#"+barType+" ."+friendsType+"List .item").last();
+	var pagination = $("#"+barType+" ."+friendsType+"List .item").first();
 	if(num<5) {
+		pagination.hide();
 		return false;
 	} else {
 		pagination.show();
 	}
 	var maxpage = Math.ceil(num/5);
 	pagination.children(".content").html("Page "+(page+1));
-	var prev=(page-1)%(maxpage),
+	var prev=(page+maxpage-1)%(maxpage),
 		next=(page+1)%(maxpage);
 	pagination.children().children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
-//	if(page-1<1){
-//		pagination.children().children(".prevpage").hide();
-//	} else {
-//		pagination.children().children(".prevpage").show();
-//	}
 	pagination.children().children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
 	pagination.children(".content").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
-//	if(page>num/5){
-//		pagination.children().children(".nextpage").hide();
-//	} else {
-//		pagination.children().children(".nextpage").show();
-//	}
 }
 
 function addMenubarClickFunction() {
 	$("#menubar .eFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()-1];
 		goOthersPage(towhom["userId"]);
 	});
 	
 	$("#menubar .nFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().index()-1];
 		goOthersPage(towhom["userId"]);
 	});
 }
@@ -284,32 +262,32 @@ function addButton() {
 	);
 	
 	$(".eFriendsList .invite_upload_btn").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()-1];
 		confirmInviteFriendUploadPopUp(towhom);
 	});
 	
 	$(".nFriendsList .invite_upload_btn").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()-1];
 		confirmInviteFriendUploadPopUp(towhom);
 	});
 	
 	$(".eFriendsList .upload_for_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()-1];
 		upload_choosepic(towhom);
 	});
 	
 	$(".nFriendsList .upload_for_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()-1];
 		upload_choosepic(towhom);
 	});
 
 	$(".eFriendsList .degrade_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()-1];
 		confirmDegradeFriendPopUp(towhom);
 	});
 	
 	$(".nFriendsList .degrade_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()-1];
 		confirmDeleteFriendPopUp(towhom);
 	});
 }

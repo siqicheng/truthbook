@@ -1,5 +1,6 @@
 $(function() {
 	/*选人表单验证规则*/
+	resetUpload();
 	$("#choosePeople").form({
 		username:{
 			identifier : "fullName",
@@ -64,17 +65,22 @@ $(function() {
 	$("#nextstep1").click(function() {
 		nextstep1Function();
 	});
-
+	
+	$("#nextstep2_for_new_quote").click(function() {
+		picReceiver = NEW_QUOTE;
+		gotoChoosePic();
+	});
+	
 	$("#nextstep2").click(function() {
-		if(picReceiver == NEW_QUOTE) {
-			gotoChoosePic();
-			return;
-		};
 		if(picReceiver != null) {
 			if(picReceiver.isActivated == "false"){
 				gotoChoosePic();
 				return;
 			};
+			if(picReceiver.userId == $.cookie("truthbook").userId) {
+				drawConfirmPopUp("不能为自己传照片哦");
+				return;
+			}
 			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
 					if(data>0) {
@@ -113,30 +119,44 @@ $(function() {
 			picData=data;
 		},
 		done: function(e, data) {
-			alert("upload success");
+			gotoComplete();
 		}
 	});
 	
-	$("#nextstep3").click(function() {
-		/*TODO: 未选择图片不能进入下一步*/
-		gotoConfirm();
+	$("#complete .black.button").click( function() {
+		$.magnificPopup.close();
+		$(".sidebar").sidebar("hide");
 	});
-
+	
+	$("#choosePic .item .image").hover(function(){
+	    $(this).children(".imgbtnArea").fadeIn("fast");
+	    $(this).children("img").fadeTo("fast",0.9);
+			},
+		function(){
+	    $(this).children(".imgbtnArea").fadeOut("fast");
+	    $(this).children("img").fadeTo("fast",1);
+		}
+	);
+	
 	$("#submitBtn").click(function() {
+		if($("#imgPrev").attr("src") == DefaultPreviewImg) {
+			drawConfirmPopUp("请选择要上传的图片");
+			return;
+		}
 		if(picReceiver == NEW_QUOTE) {
 			var data = $("#choosePeople").serialize(),
 				onSuccess = function(data, textStatus) {
 					picReceiver = data;
 					var userId = $.cookie("truthbook").userId,
 						onSuccess = function() {
-							drawConfirmPopUp("新建词条完成！赶快去通知好友来玩吧！");
+							completeMessage("新建词条完成！", "赶快去通知好友来玩吧！");
+							uploadPic();
 							refreshTopbarFriendsLists($.cookie("truthbook").userId);
 							refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 							console.log("Add friend success");
 						};
 					addFriendAPI(data.userId, userId, type_nFriends, "true");
 					addFriendAPI(userId, data.userId, type_nFriends, "false", onSuccess);
-					uploadPic();
 				},
 				onError = function(xhr, status, error) {
 					console.log("Register new quote failed with error: " + error);
@@ -147,14 +167,15 @@ $(function() {
 			console.log("Upload pic for " + picReceiver);
 			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
-					if(data>0) {
+					completeMessage("为已有词条上传照片完成！", "这个人太懒了，赶快去叫他/她来玩！");
+					if(data>0) {;
 						uploadPic();
-						drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
 					} else {
 						var userId = $.cookie("truthbook").userId,
 							onSuccess = function(data, textStatus) {
+								refreshTopbarFriendsLists($.cookie("truthbook").userId);
+								refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 								uploadPic();
-								drawConfirmPopUp("为已有词条上传照片完成！这个人太懒了，赶快去叫他/她来玩！");
 							};
 						addFriendAPI(picReceiver.userId, userId, type_nFriends, "true");
 						addFriendAPI(userId, picReceiver.userId, type_nFriends, "false", onSuccess);
@@ -193,6 +214,10 @@ $(function() {
 					if(len>1){
 						rechooseMessage = "我们找到了好多<b>"+user+"</b>：";
 					} else {
+						if(data.user.userId == $.cookie("truthbook").userId) {
+							drawConfirmPopUp("不能为自己传照片哦");
+							return;
+						}
 						rechooseMessage = "我们找到了一个<b>"+user+"</b>：";
 					}
 					html = "";
@@ -202,31 +227,48 @@ $(function() {
 						} else {
 							uploadCandidates[i]=data.user;
 						}
+						var content = "uploaded by: ";
+						var portrait = DefaultPortrait;
+						if(uploadCandidates[i].isActivated == "false"){
+							portrait = DefaultPortrait; //TODO: 改成词条专用头像src
+							
+							onSuccess = function(data, textStatus) {
+								var num = userLengthJson(data);
+								if(num>1) {
+									for(var i=0; i<3; i++) {
+										if(data.user[i] == undefined){
+											break;
+										};
+										content += data.user[i].fullName + "     ";
+									}
+								} else {
+									content += data.user.fullName;
+								}
+							};
+							onError = function(xhr, error, status) {
+								console.log("Get uploader name failed with error: " + error);
+							};
+							getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
+						} else {
+							portrait = DefaultPortrait; //TODO: 改成用户头像url
+							content = uploadCandidates[i].school + " " + uploadCandidates[i].entryTime;
+						};
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
 									"<a class=\"ui corner green label\" style=\"display:none\">" +
 									"<i class=\"checkmark small icon\"></i> </a>" +
-		 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
+		 							"<img class=\"ui avatar image\" src=" + portrait +">" + 
 		 							"<div class=\"content\">" +
-		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
+		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
 					}
-					html = html + "<div class=\"ui item segment rechooseitem\">" +
-					"<a class=\"ui corner green label\" style=\"display:none\">" +
-					"<i class=\"checkmark small icon\"></i> </a>" +
-						"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
-						"<div class=\"content\">" +
-						"<div class=\"header\">继续新建词条</div>以上都不是？</div></div>";
+//					html = html + "</div>";
 					$("#rechooseMessage").html(rechooseMessage);
 					$("#rechooselist").html(html);
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
-						var selected_num=$(this).next().index()-1;
-						if(selected_num > -2) {
-							picReceiver = uploadCandidates[selected_num];
-						} else {
-							picReceiver = NEW_QUOTE;
-						}
+						var selected_num=$(this).index();
+						picReceiver = uploadCandidates[selected_num];
 						console.log("User choosed picReceiver: ");
 						console.log(picReceiver);
 						$("#rechooseError").hide();
@@ -260,11 +302,16 @@ function upload_choosepic(people) {
 	showSidebar();
 }
 
+function completeMessage(header, content) {
+	$("#complete .header").html(header);
+	$("#complete p").html(content);
+	
+}
+
 function uploadPic() {
 //	var uploadData = new FormData(),
 //		url = "http://localhost:8080/truthbook/servlet/imageUpload",
 //		onSuccess = function(data, textStatus) {
-//			//TODO: 发通知
 //			drawConfirmPopUp("为好友上传照片完成！");
 //			$.magnificPopup.close();
 //			$(".sidebar").sidebar("hide");
@@ -295,19 +342,21 @@ function uploadPic() {
 	                  }
 	              ];
 	picData.submit();
-//	TODO: 发通知
-	$.magnificPopup.close();
-	$(".sidebar").sidebar("hide");
+//	$.magnificPopup.close();
+//	$(".sidebar").sidebar("hide");
 }
 
 	/*Help functions*/
 function resetUpload() {
 	picReceiver = null;
+	picData = undefined;
 	upload_for_friend = false;
 	gotoChoosePeople();
 	$("#fullName").val("");
 	$("#school").val("");
 	$("#entryTime").val("");
+	$("#img_prev").attr("src", DefaultPreviewImg);
+	$("#imgPrev").attr("src", DefaultPreviewImg);
 	$("#fullName").removeAttr("disabled");
 	$("#school").removeAttr("disabled");
 	$("#entryTime").removeAttr("disabled");
@@ -320,6 +369,8 @@ function gotoChoosePeople() {
 	$("#step1").attr("class", "ui active step");
 	$("#step1").css("cursor", "pointer");
 	$(".ui.form.uploadForm").hide();
+	$("#choosePeople .message").hide();
+	$("#choosePeople .field").removeClass("error");
 	$("#choosePeople").show();
 };
 function gotoRechoose() {
@@ -329,17 +380,19 @@ function gotoRechoose() {
 	$("#rechoosePeople").show();
 }
 function gotoChoosePic() {
+	$("#choosePic .item .meta").html("By "+$.cookie("truthbook").fullName);
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
+	$('#img_prev').show();
 	$("#step1").attr("class", "ui step");
 	$("#step2").attr("class", "ui active step");
 	$("#step3").attr("class", "ui disabled step");
 	$(".ui.step").css("cursor", "pointer");
 	$("#step3").css("cursor", "default");
 }
-function gotoConfirm() {
+function gotoComplete() {
 	$(".ui.form.uploadForm").hide();
-	$("#confirm").show();
+	$("#complete").show();
 	$(".ui.step").attr("class", "ui step");
 	$("#step3").attr("class", "ui active step");
 	$(".ui.step").css("cursor", "pointer");

@@ -8,6 +8,7 @@
    	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
    	<link href="./CSS/position.css" rel="stylesheet">
    	<link href="./CSS/addpicBtn.css" rel="stylesheet">
+   	<link href="./CSS/uploadPic.css" rel="stylesheet">
    	<link href="./CSS/topBar.css" rel="stylesheet">
    	<link href="./CSS/menuBar.css" rel="stylesheet">
    	<link href="./CSS/eventSegment.css" rel="stylesheet">
@@ -67,19 +68,17 @@
 		
 		<div class="right menu">
 				<form class="ui form item" autocomplete="off" onsubmit="return false" style="padding-top: 0px;padding-left: 0px;padding-bottom: 0px;">
-     				<div class="ui fluid dropdown" id="searchbar">
+     				<div class="ui dropdown" id="searchbar">
      					<div class="ui small input icon">
 		       				<input type="text" id = "searchFullName" onkeyup="searchUsers()" placeholder="Search..." >
 		       				<i class="search link icon" onclick = "searchUsers();"></i>
 		       			</div>
-<!-- 		       			<div class="ui list menu"> -->
-<!-- 		       				<div class = "ui item"> -->
-<!-- 		       					<div class="ui pagination menu"> -->
-<!-- 			       					<a class="icon item"> -->
-<!-- 			       						<i class="left arrow icon"></i> -->
-<!-- 			       					</a> -->
-<!-- 			       					<a class="item">1</a> -->
-<!-- 			       				</div> -->
+<!-- 		       			<div class="ui fluid list menu"> -->
+<!-- 		       				<div class="item"> -->
+		       				
+<!-- 		       				</div> -->
+<!-- 		       				<div class="item"> -->
+		       				
 <!-- 		       				</div> -->
 <!-- 		       			</div> -->
      				</div>
@@ -97,10 +96,10 @@
 	<div id="upload" class="white-popup  mfp-hide">
 		<h3 class="ui header">上传照片</h3>
 		
-		<div class="ui three small steps">
-			<div class="ui active step" id="step1" style="cursor: pointer;">选人</div>
-			<div class="ui disabled step" id="step2" style="cursor: default">选照片</div>
-			<div class="ui disabled step" id="step3" style="cursor: default">完成</div>
+		<div class="ui three steps" >
+			<div class="ui active step" id="step1" style="font-size: 10px;cursor: pointer;">选人</div>
+			<div class="ui disabled step" id="step2" style="font-size: 10px;cursor: default">选图</div>
+			<div class="ui disabled step" id="step3" style="font-size: 10px;cursor: default">完成</div>
    		</div>
    			
    		<div class="ui divider"></div>
@@ -134,56 +133,63 @@
 		</form>
  				
  			<div class="ui form uploadForm" id="choosePic" style="display:none">
-    			<div class="ui field">
-    				<label>照片描述</label>
-    				<textarea></textarea>
-    			</div>
-
-<!-- 				<div class="ui divider"></div> -->
-				
-				<img id="img_prev" src="" alt="your image" ><br>
-				<a href="javascript:;" class="addpic">
-					<input type ="file" id="picInput"  onchange="readURL(this);" multiple>选择图片
-				</a>
-				<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
-				<div class="ui black fluid button" id="nextstep3"  >下一步</div>
- 			</div>
- 				
- 			<div class="ui form uploadForm" id="confirm" style="display:none">
-				<!-- 预览效果 -->
-				<div class="ui message" id="previewMessage"></div>
+<!--  				<div class="ui message" id="previewMessage"></div> -->
 				<div class="ui items">
-					<div class="item">
-						<div class="image">
-							<img src="./img/profile_test/247146.jpg">
+					<div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;">
+						<div class="ui image">
+							<img id="imgPrev" >
 						</div>
 						<div class="content">
-							<div class="name">
-								图片预览
-							</div>
-							<p class="description">图片描述</p>
+							<textarea class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
+						</div>
+						<div class="meta">
 						</div>
 					</div>
 				</div>
-<!-- 				<div class="ui divider"></div> -->
-				<div class="ui black fluid button" id="submitBtn"  >确定上传</div>
+				<div class="ui fluid two buttons">
+					<div class="addpic button">
+						<input type ="file" id="picInput"  onchange="readURL(this);" multiple>选择图片
+					</div>	
+					<div class="ui black button" id="submitBtn"  >确定上传</div>
+				</div>
+ 			</div>
+ 				
+ 			<div class="ui form uploadForm" id="complete" style="display:none">
+ 				<div class="ui success message">
+<!--  					<i class="ui small cloud upload icon"></i> -->
+ 					<div class="content">
+	 					<div class="header"></div>
+	 					<p></p>
+ 					</div>
+ 				</div>
+ 				<div class="ui fluid two buttons">
+	 				<div class="ui white button" onclick="resetUpload()")>继续上传</div>
+	 				<div class="ui black button">完成</div>
+ 				</div>
  			</div>
  				
 			<div class="ui form uploadForm" id="rechoosePeople" style="display:none"> <!-- 重名选人 -->
-				<div class="ui two column divided grid">
-					<div class="middle aligned column">
-						<div class="ui attached message" id="rechooseMessage"></div>
-						<div class="ui selection list" id="rechooselist"></div>
-						<div class="ui red bottom attached message segment"  id="rechooseError" style="display:none">请选择要发给的对象</div>
-					</div>
+				<div class="ui two column vertically divided grid">
+					<div class="row">
 					<div class="middle aligned column">
 					    <div>
 					    	<img class="ui medium image" src="img/profile_test/247144.jpg">
 				    	</div>
 				    </div>
+				    </div>
+					<div class="row">
+					<div class="middle aligned column">
+						<div class="ui attached message" id="rechooseMessage"></div>
+						<div class="ui selection list" id="rechooselist"></div>
+						<div class="ui red bottom attached message segment"  id="rechooseError" style="display:none">请选择要发给的对象</div>
+					</div>
+					</div>
 				</div>
 				<div class="ui divider"></div>
-				<div class="ui black fluid button" id="nextstep2" >下一步</div>
+				<div class="ui fluid two buttons">
+					<div class="ui red button" id="nextstep2_for_new_quote">以上都不是</div>
+					<div class="ui black button" id="nextstep2" >下一步</div>
+				</div>
 			</div>
 	</div>
 	<div id="profile-segment">

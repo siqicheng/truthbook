@@ -24,6 +24,7 @@ function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete,c
  */		
 function ajax_call(ajax_obj){
 	$.ajax({
+		async: ajax_obj.async,
 		url: ajax_obj.url,
 		type: ajax_obj.type,
 		data: ajax_obj.data,
@@ -122,12 +123,12 @@ function cookieAvailableCheck(){
 
 function showSidebar(){
 	$("#upload").removeClass("mfp-hide white-popup");
-	$("#upload").addClass("ui very wide styled sidebar");
+	$("#upload").addClass("ui wide styled sidebar");
 	$("#upload").sidebar("show");
 }
 
 function showPopup(){
-	$("#upload").removeClass("ui very wide styled sidebar");
+	$("#upload").removeClass("ui wide styled sidebar");
 	$("#upload").addClass("white-popup");
 	$("#upload").show();
 }
@@ -200,6 +201,14 @@ function getFriends(id, type, onSuccess, onError) {
 	var path = "v1/friends/" + id + "/" + type,
 		url = ServerRoot + ServiceType.USERPROFILE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_call(ajax_obj);
+}
+
+function getFriendsSync(id, type, onSuccess, onError) {
+	var path = "v1/friends/" + id + "/" + type,
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_obj.async = false;
 	ajax_call(ajax_obj);
 }
 
