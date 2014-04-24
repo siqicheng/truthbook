@@ -126,7 +126,7 @@
 }
 .timelineCenter .item .ui.minimal.comments .commentwrap .comment {
 	padding:0px 15px;
-	display:none;
+ 	display:none;
 }
 .timelineCenter .item .ui.minimal.comments .commentwrap .comment.newcomment,
 .timelineCenter .item .ui.minimal.comments .commentwrap .comment.loadAllComments {
@@ -139,6 +139,7 @@
 	font-weight: bolder;
 	cursor: pointer;
 	padding-top: 8px;
+	width:120px;
 }
 
 .timelineCenter .item .ui.minimal.comments .commentwrap .comment .avatar {
