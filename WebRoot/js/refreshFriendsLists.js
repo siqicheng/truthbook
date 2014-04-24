@@ -161,20 +161,16 @@ function drawFriendsList(id, barType, friendsType) {
 					"</div>" +
 					"</div>";
 	if(num > 0) {
-		if(num>5) {
-			html = "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
-			"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
-			"<div class=\"right floated\" style=\"padding-top:0px;\">" +
-				"<a class=\"prevpage\">" +
-					"<i class=\"left arrow icon\"></i>" +
-				"</a>"+
-				"<a class=\"nextpage\">"+
-					"<i class=\"right arrow icon\"></i>"+
-				"</a>"+
-			"</div></div>";
-		} else {
-			html = "";
-		}
+		html = "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
+		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+			"<a class=\"prevpage\">" +
+				"<i class=\"left arrow icon\"></i>" +
+			"</a>"+
+			"<a class=\"nextpage\">"+
+				"<i class=\"right arrow icon\"></i>"+
+			"</a>"+
+		"</div></div>";
 		var img;
 		for(var i=0; i<num; i++) {
 			if(friendsArray[friendsType][i]["isActivated"] == "false") {
@@ -216,6 +212,7 @@ function showPage(barType, friendsType, page, num) {
 	});
 	var pagination = $("#"+barType+" ."+friendsType+"List .item").first();
 	if(num<5) {
+		pagination.hide();
 		return false;
 	} else {
 		pagination.show();
