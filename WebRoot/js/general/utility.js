@@ -24,6 +24,7 @@ function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete,c
  */		
 function ajax_call(ajax_obj){
 	$.ajax({
+		async: ajax_obj.async,
 		url: ajax_obj.url,
 		type: ajax_obj.type,
 		data: ajax_obj.data,
@@ -200,6 +201,14 @@ function getFriends(id, type, onSuccess, onError) {
 	var path = "v1/friends/" + id + "/" + type,
 		url = ServerRoot + ServiceType.USERPROFILE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_call(ajax_obj);
+}
+
+function getFriendsSync(id, type, onSuccess, onError) {
+	var path = "v1/friends/" + id + "/" + type,
+		url = ServerRoot + ServiceType.USERPROFILE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_obj.async = false;
 	ajax_call(ajax_obj);
 }
 

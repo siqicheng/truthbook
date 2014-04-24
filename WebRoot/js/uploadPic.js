@@ -225,12 +225,38 @@ $(function() {
 						} else {
 							uploadCandidates[i]=data.user;
 						}
+						var content = "uploaded by: ";
+						var portrait = DefaultPortrait;
+						if(uploadCandidates[i].isActivated == "false"){
+							portrait = DefaultPortrait; //TODO: 改成词条专用头像src
+							
+							onSuccess = function(data, textStatus) {
+								var num = userLengthJson(data);
+								if(num>1) {
+									for(var i=0; i<3; i++) {
+										if(data.user[i] == undefined){
+											break;
+										};
+										content += data.user[i].fullName + "     ";
+									}
+								} else {
+									content += data.user.fullName;
+								}
+							};
+							onError = function(xhr, error, status) {
+								console.log("Get uploader name failed with error: " + error);
+							};
+							getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
+						} else {
+							portrait = DefaultPortrait; //TODO: 改成用户头像url
+							content = uploadCandidates[i].school + " " + uploadCandidates[i].entryTime;
+						};
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
 									"<a class=\"ui corner green label\" style=\"display:none\">" +
 									"<i class=\"checkmark small icon\"></i> </a>" +
-		 							"<img class=\"ui avatar image\" src=" + DefaultPortrait +">" + 
+		 							"<img class=\"ui avatar image\" src=" + portrait +">" + 
 		 							"<div class=\"content\">" +
-		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
+		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
 					}
 //					html = html + "</div>";

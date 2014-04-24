@@ -132,15 +132,33 @@ $('.ui.form.register-form')
 					}
 					html = "";
 					for(i=0;i<=num;i++){
+						var content = "uploaded by: ";
+						onSuccess = function(data, textStatus) {
+							var num = userLengthJson(data);
+							if(num>1) {
+								for(var i=0; i<3; i++) {
+									if(data.user[i] == undefined){
+										break;
+									};
+									content += data.user[i].fullName + "     ";
+								}
+							} else {
+								content += data.user.fullName;
+							}
+						};
+						onError = function(xhr, error, status) {
+							console.log("Get uploader name failed with error: " + error);
+						};
+						getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
 									"<a class=\"ui corner green label\" style=\"display:none\">" +
 									"<i class=\"checkmark small icon\"></i> </a>" +
 		 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
 		 							"<div class=\"content\">" +
-		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
+		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
 					}
-					html = html + "<div class=\"ui item segment rechooseitem\">" +
+					html = html + "<div class=\"ui item segment\"  id='newQuote'>" +
 					"<a class=\"ui corner green label\" style=\"display:none\">" +
 					"<i class=\"checkmark small icon\"></i> </a>" +
 						"<img class=\"ui avatar image\" src=" +  DefaultImg +">" + 
@@ -152,8 +170,29 @@ $('.ui.form.register-form')
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
 						selected_num=$(this).next().index()-1;
-						console.log(selected_num);
+//						console.log(selected_num);
 						$("#rechooseerror").hide();
+						
+						var onSuccess = function(data, textStatus) {
+							$("#imgPrev").attr("src", data[0].imageUrl);
+						},
+							onError = function(xhr,status,error){
+								drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
+								return false;
+						};
+						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
+						
+						$("#checkinput").attr("placeholder", "你觉得是谁帮你上传了这张图片呢？");
+						$("#checkinput").removeAttr("disabled");
+					});
+					$("#newQuote").click(function() {
+						$(this).siblings().children(".label").hide();
+						$(this).children(".label").show();
+						selected_num=$(this).next().index()-1;
+//						console.log(selected_num);
+						$("#rechooseerror").hide();
+						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
+						$("#checkinput").attr("disabled", "true");
 					});
 					$("#confirmbtn").click(function() {
 						if(selected_num == -1) {

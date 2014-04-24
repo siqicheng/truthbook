@@ -5,11 +5,3 @@
 	border-top-right-radius: 0.33em;
 	cursor:zoom-in;
 }
-
-#choosePic .item .image .imgbtnArea {
-	position:absolute;
-	left:15px;
-	top:15px;
-	z-index:9;
-	display:none;
-}
