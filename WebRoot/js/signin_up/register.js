@@ -136,14 +136,16 @@ $('.ui.form.register-form')
 						onSuccess = function(data, textStatus) {
 							var num = userLengthJson(data);
 							if(num>1) {
-								for(var i=0; i<3; i++) {
-									if(data.user[i] == undefined){
-										break;
-									};
-									content += data.user[i].fullName + "     ";
-								}
+								var name = data.user[i].fullName;
 							} else {
-								content += data.user.fullName;
+								var name = data.user.fullName;
+							}
+							if(name.length > 3) {
+								content += name.slice(2);
+								ans = name.slice(0,1);
+							} else {
+								content += name.slice(1);
+								ans = name.charAt(0);
 							}
 						};
 						onError = function(xhr, error, status) {
@@ -182,7 +184,11 @@ $('.ui.form.register-form')
 						};
 						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
 						
-						$("#checkinput").attr("placeholder", "你觉得是谁帮你上传了这张图片呢？");
+						if(ans.length==2) {
+							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？（两个字）");
+						} else {
+							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？");
+						}
 						$("#checkinput").removeAttr("disabled");
 					});
 					$("#newQuote").click(function() {
@@ -285,32 +291,39 @@ function take_quote(id, register_info) {
 }
 
 function checkInviterName(id, inviterName) {
-	var path = "v1/friends/" + id +"/1",
-		url = ServerRoot + ServiceType.USERPROFILE + path,
-		onAjaxSuccess = function(data, textStatus) {
-			var num = userLengthJson(data);
-			var name;
-			var inputName = $("#checkinput").val();
-			for(var i=0;i<num;i++) {
-				if(num>1) {
-					name = data.user[i]["fullName"];
-				} else {
-					name = data.user["fullName"];
-				};
-				if(name == inputName) {
-					take_quote(id, $('.ui.form.register-form').serializeArray());
-					return true;
-				}
-			}
-			$("#checkinput").val("");
-			$("#checkinput").attr("placeholder","好像不是他/她哦");
-			return false;
-		},
-		onAjaxError = function(xhr, status, error) {
-			console.log("Get inviter json failed with error: " + error);
-		};
-		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-		ajax_call(ajax_obj);
+//	var path = "v1/friends/" + id +"/1",
+//		url = ServerRoot + ServiceType.USERPROFILE + path,
+//		onAjaxSuccess = function(data, textStatus) {
+//			var num = userLengthJson(data);
+//			var name;
+//			var inputName = $("#checkinput").val();
+//			for(var i=0;i<num;i++) {
+//				if(num>1) {
+//					name = data.user[i]["fullName"];
+//				} else {
+//					name = data.user["fullName"];
+//				};
+//				if(name == inputName) {
+//					take_quote(id, $('.ui.form.register-form').serializeArray());
+//					return true;
+//				}
+//			}
+//			$("#checkinput").val("");
+//			$("#checkinput").attr("placeholder","好像不是他/她哦");
+//			return false;
+//		},
+//		onAjaxError = function(xhr, status, error) {
+//			console.log("Get inviter json failed with error: " + error);
+//		};
+//		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+//		ajax_call(ajax_obj);
+	var inputName = $("#checkinput").val();
+	if(inputName == ans) {
+		take_quote(id, $('.ui.form.register-form').serializeArray());
+	} else {
+		$("#checkinput").val("");
+		$("#checkinput").attr("placeholder","好像不是这个哦");
+	}
 }
  
  
