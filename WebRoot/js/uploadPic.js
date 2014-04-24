@@ -196,7 +196,7 @@ $(function() {
 			gotoChoosePic();
 			return;
 		};
-//		if(isValidForm == true) {
+		if(isValidForm == true) {
 			var user = $("#fullName").val();
 			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
@@ -283,7 +283,7 @@ $(function() {
 			};
 			verifyUserExists(data, onSuccess, onError);
 		};
-//	}
+	}
 });
 
 function upload_choosepic(people) {
@@ -310,7 +310,6 @@ function uploadPic() {
 //	var uploadData = new FormData(),
 //		url = "http://localhost:8080/truthbook/servlet/imageUpload",
 //		onSuccess = function(data, textStatus) {
-//			//TODO: 发通知
 //			drawConfirmPopUp("为好友上传照片完成！");
 //			$.magnificPopup.close();
 //			$(".sidebar").sidebar("hide");
@@ -341,7 +340,6 @@ function uploadPic() {
 	                  }
 	              ];
 	picData.submit();
-//	TODO: 发通知
 //	$.magnificPopup.close();
 //	$(".sidebar").sidebar("hide");
 }

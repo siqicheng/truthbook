@@ -105,22 +105,23 @@
 		<form class="ui form" id="rechooseform"> 
 			<h3 class="ui header">发现重名</h3>
 			<div class="ui two column divided grid">
-					<div class="middle aligned column">
+					<div class="column">
 						<div class="ui attached message" id="rechoosemessage"></div>
 						<div class="ui selection list" id="rechooselist"></div>
-					</div>						
+						
+			<div class="ui action input">
+  				<input type="text"  id="checkinput" disabled placeholder="请选择">
+  				<div class="ui blue button" id="confirmbtn">确认</div>
+			</div>
+					</div>
 					<div class="middle aligned column">
 					    <div>
-					    	<img class="ui medium image" id="imgPrev" src="img\profile_test\247144.jpg">
+					    	<img class="ui fluid image" id="imgPrev" src="img\profile_test\247144.jpg">
 				    	</div>
 				    </div>
 				</div>
 			<div class="ui red bottom attached message"  id="rechooseerror" style="display:none">请选择</div>
 			<div class="ui divider"></div>
-			<div class="ui action input">
-  				<input type="text"  id="checkinput" disabled placeholder="请选择">
-  				<div class="ui blue button" id="confirmbtn">确认</div>
-			</div>
  		</form>
 	</div>
     </div>
