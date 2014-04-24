@@ -2,13 +2,10 @@ package db.mapping.object;
 
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
-
-
 import db.mapping.object.UserPassword;
 
 
@@ -31,6 +28,7 @@ public class User  implements java.io.Serializable {
      private Set comments = new HashSet(0);
      private Set relationships = new HashSet(0);
      private Set portraits = new HashSet(0);
+     private String defaultPortrait;
 //     private String defaultPortrait;
      private UserPassword userPassword;
      private Set messages = new HashSet(0);
@@ -65,25 +63,13 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
+    public String getDefaultPortrait(){
+    	return this.defaultPortrait;
+    }
     
-//    public String getDefaultPortrait(){    
-//    	try{
-//    		String[] properties = {Portrait.USER_ID, Portrait.DEFAULT_IMAGE};
-//        	Object value[] = {this,true};
-//    		List portrait_list = new PortraitDAO().findByProperties(properties, value, Portrait.TABLE);
-//    		if (portrait_list.size()>0){
-//    			return ((Portrait)(portrait_list.get(0))).getImage().getImageUrl();
-//    		}
-//    	}catch (Exception e){
-//    		e.printStackTrace();
-//    	}
-
-//    	return null;
-//    } 
-    
-//    public void setDefaultPortrait(String defaultPortrait){
-//    	this.defaultPortrait = defaultPortrait;
-//    }
+    public void setDefaultPortrait(String defaultPortrait){
+    	this.defaultPortrait = defaultPortrait;
+    }
     
     public String getToken(){
     	return this.token;

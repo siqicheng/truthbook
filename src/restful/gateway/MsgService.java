@@ -1,8 +1,6 @@
 	package restful.gateway;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -20,9 +18,6 @@ import db.mapping.object.MessageDAO;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import sessionFactory.HibernateSessionFactory;
-
 @Path("notification")
 public class MsgService {
 	private MessageDAO messageDAO;
@@ -33,7 +28,7 @@ public class MsgService {
 	
 
 
-	@GET
+	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendMesssage(@PathParam("id") Integer id,

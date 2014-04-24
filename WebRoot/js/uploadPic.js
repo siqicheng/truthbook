@@ -198,7 +198,7 @@ $(function() {
 			gotoChoosePic();
 			return;
 		};
-		if(isValidForm == true) {
+//		if(isValidForm == true) {
 			var user = $("#fullName").val();
 			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
@@ -285,7 +285,7 @@ $(function() {
 			};
 			verifyUserExists(data, onSuccess, onError);
 		};
-	}
+//	}
 });
 
 function upload_choosepic(people) {

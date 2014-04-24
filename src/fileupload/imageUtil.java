@@ -68,4 +68,3 @@ public class imageUtil {
 		return resize(src, dist ,1024 ,1024);
 	}
 }
-
