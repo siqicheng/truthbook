@@ -258,6 +258,32 @@ public class ImageService {
 	}
 	
 	@GET
+	@Path("v1/image/{imageId}/dislike")
+	@Produces("application/json;charset=utf-8")
+	public Object dislikeImage(@PathParam("imageId") Integer imageId){
+		Image image =(Image) this.imageDAO.findById(imageId);
+		
+		if (image.getDeleted()){
+			return RestUtil.string2json("false");
+		}
+		Session session = this.imageDAO.getSession();
+		try{
+			image.setLiked(image.getLiked()-1);
+			Transaction tx = session.beginTransaction();
+			session.update(image);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}
+		
+		
+	}
+	
+	@GET
 	@Path("v1/image/{imageId}/approve")
 	@Produces("application/json;charset=utf-8")
 	public Object approveImage(@PathParam("imageId") Integer imageId) {
