@@ -1,23 +1,24 @@
-package restful.gateway;
+	package restful.gateway;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.hibernate.Session;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 
-import org.hibernate.Session;
+import java.sql.Timestamp;
 import org.hibernate.Transaction;
-
-import db.mapping.object.Message;
-import db.mapping.object.MessageDAO;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
+import db.mapping.object.Message;
+import db.mapping.object.MessageDAO;
 
-@Path("push")
+import java.util.ArrayList;
+import java.util.List;
+@Path("notification")
 public class MsgService {
 	private MessageDAO messageDAO;
 
@@ -27,16 +28,13 @@ public class MsgService {
 	
 
 
-	@GET
+	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
 			@PathParam("type") String type) throws Exception {
 		
-	//	if  (!MsgService.assertType(type)) {
-	//		return RestUtil.string2json("false");
-	//	}
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
@@ -60,7 +58,41 @@ public class MsgService {
 			return RestUtil.string2json("false");
 		}	
 	}
+	
+	@POST
+	@Path("v1/message/{id}/{srcid}/{type}/send")
+	@Produces("application/json;charset=utf-8")
+	public Object sendContentMesssage(@FormParam("id") Integer id,
+			@FormParam("srcid") Integer srcid, 
+			@FormParam("type") String type,
+			@FormParam("content") String content) throws Exception {
+		
+		if (id==srcid){
+			return RestUtil.string2json("false");
+		}
+		
+		Session session=this.messageDAO.getSession();
+		try{
+			User src = (new UserDAO()).findById(srcid);
+			
+			Message newinstance = new Message(type, id, src,
+					new Timestamp(System.currentTimeMillis()));
+			newinstance.setContent(content);
+			Transaction tx=session.beginTransaction();
+			session.save(newinstance);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}	
+	}
 
+	
+	
 	@GET
 	@Path("v1/message/{userid}/{type}/get")
 	@Produces("application/json;charset=utf-8")
@@ -69,10 +101,10 @@ public class MsgService {
 		
 		Session session = this.messageDAO.getSession();
 
-		String status = Message.UNSENT_STATUS;
+//		String status = Message.UNSENT_STATUS;
 		
-		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE,MessageDAO.STATUS};
-		Object value[] = {id,type,status};	
+		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
+		Object value[] = {id,type};	
 		
 		try{
 			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
@@ -84,7 +116,8 @@ public class MsgService {
 				Transaction tx = session.beginTransaction();
 				
 				for (Object message : Messages){
-					if (message instanceof Message){
+					if (message instanceof Message 
+							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
 						
 						((Message) message).setStatus(Message.SENT_STATUS);
 
@@ -116,19 +149,20 @@ public class MsgService {
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
 		Session session = this.messageDAO.getSession();
-		String status = Message.UNSENT_STATUS ;
-		String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
-		Object value[] = {id,status};	
+	//	String status = Message.UNSENT_STATUS ;
+	//	String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
+	//	Object value[] = {id};	
 		
 		try{
-			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			List Messages=this.messageDAO.findByUserId(id);
 			if (Messages.size()>0){
 				List message_list = new ArrayList();
 			
 				Transaction tx = session.beginTransaction();
 				
 				for (Object message : Messages){
-					if (message instanceof Message){
+					if (message instanceof Message
+							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
 						((Message) message).setStatus(Message.SENT_STATUS);
 						session.update((Message)message);
 						message_list.add(message);

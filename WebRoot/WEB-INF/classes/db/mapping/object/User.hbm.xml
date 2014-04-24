@@ -13,6 +13,12 @@
         <property name="fullName" type="java.lang.String">
             <column name="full_name" length="40" not-null="true" />
         </property>
+        <property name="token" type="java.lang.String">
+        	<column name="token"/>
+        </property>
+         <property name="defaultPortrait" type="java.lang.String">
+        	<column name="defaultPortrait" length="255" />
+        </property>
         <property name="email" type="java.lang.String">
             <column name="email" length="40" unique="true" />
         </property>
@@ -27,7 +33,7 @@
         </property>
         
         
-        <set name="relationships" inverse="true">
+        <set name="relationships"  inverse="true">
             <key>
                 <column name="user_id" not-null="true" />
             </key>

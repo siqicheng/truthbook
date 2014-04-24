@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.Session;
+
 /**
  * Comment entity. @author MyEclipse Persistence Tools
  */
@@ -34,9 +36,14 @@ public class Comment implements java.io.Serializable {
 	private User user;
 	private String commentContent;
 	private Integer repliedToCommentId;
+	private String repliedToCommentName;
+
 	private Integer repliedByCommentId;
+	private String repliedByCommentName;
+	private String repliedByCommentPortrait;
 	private Date createDate;
 	private Set imageComments = new HashSet(0);
+	
 
 	// Constructors
 
@@ -63,6 +70,36 @@ public class Comment implements java.io.Serializable {
 	}
 
 	// Property accessors
+	
+	//@XmlTransient
+	public String getRepliedToCommentName() {
+		return new UserDAO().findById(this.repliedToCommentId).getFullName();
+	}
+	
+	//@XmlTransient
+	public String getRepliedByCommentName() {
+		return new UserDAO().findById(this.repliedByCommentId).getFullName();
+	}
+	
+	//@XmlTransient
+	public String getRepliedByCommentPortrait() {
+		return new UserDAO().findById(repliedByCommentId).getDefaultPortrait();
+	}
+
+
+	public void setRepliedToCommentName(String repliedToCommentName) {
+		this.repliedToCommentName = repliedToCommentName;
+	}
+
+	
+	public void setRepliedByCommentName(String repliedByCommentName) {
+		this.repliedByCommentName = repliedByCommentName;
+	}
+
+	
+	public void setRepliedByCommentPortrait(String repliedByCommentPortrait) {
+		this.repliedByCommentPortrait = repliedByCommentPortrait;
+	}
 
 	public Integer getCommentId() {
 		return this.commentId;

@@ -132,15 +132,35 @@ $('.ui.form.register-form')
 					}
 					html = "";
 					for(i=0;i<=num;i++){
+						var content = "uploaded by: ";
+						onSuccess = function(data, textStatus) {
+							var num = userLengthJson(data);
+							if(num>1) {
+								var name = data.user[i].fullName;
+							} else {
+								var name = data.user.fullName;
+							}
+							if(name.length > 3) {
+								content += name.slice(2);
+								ans = name.slice(0,1);
+							} else {
+								content += name.slice(1);
+								ans = name.charAt(0);
+							}
+						};
+						onError = function(xhr, error, status) {
+							console.log("Get uploader name failed with error: " + error);
+						};
+						getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
 									"<a class=\"ui corner green label\" style=\"display:none\">" +
 									"<i class=\"checkmark small icon\"></i> </a>" +
 		 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
 		 							"<div class=\"content\">" +
-		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + uploadCandidates[i]["school"] + "\t" + uploadCandidates[i]["entryTime"] +
+		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
 					}
-					html = html + "<div class=\"ui item segment rechooseitem\">" +
+					html = html + "<div class=\"ui item segment\"  id='newQuote'>" +
 					"<a class=\"ui corner green label\" style=\"display:none\">" +
 					"<i class=\"checkmark small icon\"></i> </a>" +
 						"<img class=\"ui avatar image\" src=" +  DefaultImg +">" + 
@@ -152,8 +172,33 @@ $('.ui.form.register-form')
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
 						selected_num=$(this).next().index()-1;
-						console.log(selected_num);
+//						console.log(selected_num);
 						$("#rechooseerror").hide();
+						
+						var onSuccess = function(data, textStatus) {
+							$("#imgPrev").attr("src", data[0].imageUrl);
+						},
+							onError = function(xhr,status,error){
+								drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
+								return false;
+						};
+						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
+						
+						if(ans.length==2) {
+							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？（两个字）");
+						} else {
+							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？");
+						}
+						$("#checkinput").removeAttr("disabled");
+					});
+					$("#newQuote").click(function() {
+						$(this).siblings().children(".label").hide();
+						$(this).children(".label").show();
+						selected_num=$(this).next().index()-1;
+//						console.log(selected_num);
+						$("#rechooseerror").hide();
+						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
+						$("#checkinput").attr("disabled", "true");
 					});
 					$("#confirmbtn").click(function() {
 						if(selected_num == -1) {
@@ -229,9 +274,34 @@ function take_quote(id, register_info) {
 		if(data == false){
 			alert("take quote failed");
 		} else {
+			var onSuccess = function(data, textStatus) {
+				var num = userLengthJson(data);
+				for(var i=0; i<num-1; i++) {
+					var id = data.user[i].userId;
+					sendMessageAPI(id, uploadCandidates[selected_num].userId, MessageType.TAKEQUOTE.typeName);
+				}
+				var onSuccess = function(data, textStatus) {
+					console.log("send messages success");
+					goHomePage();
+				};
+				var onError = function(xhr, error, status) {
+					alert(error);
+				};
+				if(num>1) {
+					var id = data.user[num-1].userId;
+				} else {
+					var id = data.user.userId;
+				};
+				sendMessageAPI(id, uploadCandidates[selected_num].userId, MessageType.TAKEQUOTE.typeName, onSuccess, onError);
+			};
+			onError = function(xhr, error, status) {
+				console.log("Get uploader name failed with error: " + error);
+			};
+			getFriendsSync(data.userId, 1, onSuccess, onError);
+			
 			setUserInfoCookie(data);
-			goHomePage();
 			console.log("take quote success");
+			
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
@@ -246,32 +316,39 @@ function take_quote(id, register_info) {
 }
 
 function checkInviterName(id, inviterName) {
-	var path = "v1/friends/" + id +"/1",
-		url = ServerRoot + ServiceType.USERPROFILE + path,
-		onAjaxSuccess = function(data, textStatus) {
-			var num = userLengthJson(data);
-			var name;
-			var inputName = $("#checkinput").val();
-			for(var i=0;i<num;i++) {
-				if(num>1) {
-					name = data.user[i]["fullName"];
-				} else {
-					name = data.user["fullName"];
-				};
-				if(name == inputName) {
-					take_quote(id, $('.ui.form.register-form').serializeArray());
-					return true;
-				}
-			}
-			$("#checkinput").val("");
-			$("#checkinput").attr("placeholder","好像不是他/她哦");
-			return false;
-		},
-		onAjaxError = function(xhr, status, error) {
-			console.log("Get inviter json failed with error: " + error);
-		};
-		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-		ajax_call(ajax_obj);
+//	var path = "v1/friends/" + id +"/1",
+//		url = ServerRoot + ServiceType.USERPROFILE + path,
+//		onAjaxSuccess = function(data, textStatus) {
+//			var num = userLengthJson(data);
+//			var name;
+//			var inputName = $("#checkinput").val();
+//			for(var i=0;i<num;i++) {
+//				if(num>1) {
+//					name = data.user[i]["fullName"];
+//				} else {
+//					name = data.user["fullName"];
+//				};
+//				if(name == inputName) {
+//					take_quote(id, $('.ui.form.register-form').serializeArray());
+//					return true;
+//				}
+//			}
+//			$("#checkinput").val("");
+//			$("#checkinput").attr("placeholder","好像不是他/她哦");
+//			return false;
+//		},
+//		onAjaxError = function(xhr, status, error) {
+//			console.log("Get inviter json failed with error: " + error);
+//		};
+//		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+//		ajax_call(ajax_obj);
+	var inputName = $("#checkinput").val();
+	if(inputName == ans) {
+		take_quote(id, $('.ui.form.register-form').serializeArray());
+	} else {
+		$("#checkinput").val("");
+		$("#checkinput").attr("placeholder","好像不是这个哦");
+	}
 }
  
  

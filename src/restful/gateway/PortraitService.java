@@ -1,6 +1,5 @@
 package restful.gateway;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -19,7 +18,6 @@ import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
 import db.mapping.object.Portrait;
 import db.mapping.object.PortraitDAO;
-import db.mapping.object.Relationship;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
 
@@ -220,30 +218,38 @@ public class PortraitService {
 	}
 	
 		
-	@PUT
+	@POST
 	@Path("v1/portrait/set")
 	@Produces("application/json")
 	public Object setDefaultPortrait(@FormParam("userId") Integer userId,@FormParam("imageId") Integer imageId){
-		
 		this.refinePortrait(userId, imageId);		
-		
 		Session session = this.portraitDAO.getSession();
 		Transaction tx = session.beginTransaction();			
 		
 		try{
 			
-			List portraits = this.findPortrait(userId, imageId, false);
+//			List portraits = this.findPortrait(userId, imageId, false);
+//			
+//			if (portraits.size()==1){
+//				this.portrait = (Portrait)portraits.get(0);
+//				this.portrait.setUser(user);
+//				this.portrait.setImage(image);
+//				this.portrait.setDefaultImage(true);
+//				session.update(this.portrait);	
+//				tx.commit();
+//				session.close();
+//				return RestUtil.string2json("true");
+//			}
+			this.user.setDefaultPortrait(this.image.getImageUrl());
+			this.portrait.setUser(user);
+			this.portrait.setImage(image);
+			this.portrait.setDefaultImage(true);
+			session.saveOrUpdate(this.portrait);	
+			session.update(this.user);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
 			
-			if (portraits.size()==1){
-				this.portrait = (Portrait)portraits.get(0);
-				this.portrait.setUser(user);
-				this.portrait.setImage(image);
-				this.portrait.setDefaultImage(true);
-				session.update(this.portrait);	
-				tx.commit();
-				session.close();
-				return RestUtil.string2json("true");
-			}
 		}catch (Exception e){
 			e.printStackTrace();						
 		}

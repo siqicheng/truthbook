@@ -6,8 +6,6 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
-
-
 import db.mapping.object.UserPassword;
 
 
@@ -30,9 +28,12 @@ public class User  implements java.io.Serializable {
      private Set comments = new HashSet(0);
      private Set relationships = new HashSet(0);
      private Set portraits = new HashSet(0);
+     private String defaultPortrait;
+//     private String defaultPortrait;
      private UserPassword userPassword;
      private Set messages = new HashSet(0);
      private Set images = new HashSet(0);
+     private String token;
     // Constructors
 
     /** default constructor */
@@ -62,6 +63,22 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
+    public String getDefaultPortrait(){
+    	return this.defaultPortrait;
+    }
+    
+    public void setDefaultPortrait(String defaultPortrait){
+    	this.defaultPortrait = defaultPortrait;
+    }
+    
+    public String getToken(){
+    	return this.token;
+    }
+    
+    public void setToken(String token){
+    	this.token = token;
+    }
+    
     @XmlTransient
     public Set getImages(){
     	return this.images;
