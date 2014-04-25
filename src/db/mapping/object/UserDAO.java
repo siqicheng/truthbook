@@ -2,6 +2,8 @@ package db.mapping.object;
 
 
 import db.mapping.baseDAO.BaseHibernateDAO;
+
+import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -40,6 +42,8 @@ public class UserDAO extends BaseHibernateDAO  {
 			if(password !=null){
 				UserPasswordDAO password_dao = new UserPasswordDAO();
 				password_dao.getSession().save(password);
+				UserFetchDAO userFetchdao = new UserFetchDAO();
+				userFetchdao.save(new UserFetch(transientInstance, new Timestamp(System.currentTimeMillis())));
 			}
 			log.debug("save successful");
 		} catch (RuntimeException re) {

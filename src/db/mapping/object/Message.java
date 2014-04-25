@@ -26,6 +26,7 @@ public class Message implements java.io.Serializable {
 	private User friend;
 	private String content;
 	private Timestamp createTime;
+	private Integer ImageId;
 	//private Map<String,String> content;
 	private String status;
 	private Timestamp readTime;
@@ -60,9 +61,17 @@ public class Message implements java.io.Serializable {
 		return content;
 	}
 
-	
+	@XmlTransient
 	public Image getImage() {
 		return image;
+	}
+
+	public Integer getImageId() {
+		return ImageId;
+	}
+
+	public void setImageId(Integer imageId) {
+		ImageId = imageId;
 	}
 
 	public void setImage(Image image) {

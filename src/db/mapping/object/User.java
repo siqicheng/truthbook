@@ -63,11 +63,13 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
+    
     public String getDefaultPortrait(){
     	return this.defaultPortrait;
     }
     
-    public void setDefaultPortrait(String defaultPortrait){
+
+	public void setDefaultPortrait(String defaultPortrait){
     	this.defaultPortrait = defaultPortrait;
     }
     
