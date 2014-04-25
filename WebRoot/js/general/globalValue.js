@@ -16,8 +16,8 @@ $(function (){
  * 	Website and RESTful AJAX URL
  */
 
-//localhost = "175.186.105.126";
-localhost = "localhost";
+localhost = "175.186.105.228";
+//localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
 DefaultImg = "img/logo_red.ico";
@@ -57,6 +57,18 @@ CONTROL = {
 COMMENT = {
 		No:0,
 		Yes:1
+};
+MAX_MesssageToSend = 100;
+
+/*********************************************************************************
+ * 	Image style
+ */
+
+ImageType = {
+		Large : "Large",
+		Medium : "Medium",
+		Small : "Small",
+		Origin : ""
 };
 
 /*********************************************************************************

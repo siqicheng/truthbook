@@ -42,7 +42,7 @@ public class CommentService {
 
 	@POST
 	@Path("v1/comment/add/full")
-	@Produces("application/json")	
+	@Produces("application/json;charset=utf-8")	
 	public Object addFullComment(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
@@ -77,7 +77,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/comment/add/simple")
-	@Produces("application/json")	
+	@Produces("application/json;charset=utf-8")	
 	public Object addSimpleComment(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content) {
@@ -108,7 +108,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/comment/add/replyTo")
-	@Produces("application/json")	
+	@Produces("application/json;charset=utf-8")	
 	public Object addCommentWithReplyTo(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
@@ -141,7 +141,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/comment/add/replyBy")
-	@Produces("application/json")	
+	@Produces("application/json;charset=utf-8")	
 	public Object addCommentWithReplyBy(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
@@ -174,7 +174,7 @@ public class CommentService {
 	
 	@DELETE
 	@Path("v1/comment/{commentId}/delete")
-	@Produces("application/json")	
+	@Produces("application/json;charset=utf-8")	
 	public Object deleteComment(@PathParam("commentId") Integer commentId) {
 		
 		session = this.commentDAO.getSession();
@@ -197,7 +197,7 @@ public class CommentService {
 	
 	@GET
 	@Path("v1/comment/{commentId}")
-	@Produces("application/json")	
+	@Produces("application/json;charset=utf-8")	
 	public Comment getComment(@PathParam("commentId") Integer commentId) {
 		this.comment = this.commentDAO.findById(commentId);
 		return this.comment;
@@ -205,7 +205,7 @@ public class CommentService {
 	
 	@GET
 	@Path("v1/comment/{userId}/user")
-	@Produces("application/json")	
+	@Produces("application/json;charset=utf-8")	
 	public Comment[] getCommentByUser(@PathParam("userId") Integer userId) {
 		Comment comment[] = null;
 		this.user = this.userDAO.findById(userId);
@@ -223,7 +223,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/imageComment/add")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object addImageComment(@FormParam("imageId") Integer imageId,@FormParam("commentId") Integer commentId){
 		
 		this.image = this.imageDAO.findById(imageId);
@@ -248,7 +248,7 @@ public class CommentService {
 	
 	@DELETE
 	@Path("v1/imageComment/{imageId}/{commentId}/delete")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object deleteImageComment(@PathParam("imageId") Integer imageId,@PathParam("commentId") Integer commentId){
 		
 		this.image = this.imageDAO.findById(imageId);
@@ -282,7 +282,7 @@ public class CommentService {
 	
 	@GET
 	@Path("v1/imageComment/{imageId}")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public ImageComment[] getImageComment(@PathParam("imageId") Integer imageId){
 		ImageComment[] imageComment = null;
 		this.image = this.imageDAO.findById(imageId);

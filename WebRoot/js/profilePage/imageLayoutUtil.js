@@ -138,16 +138,7 @@ function itemInitialize(id){
 }
 
 function addGallery(id){
-//	if (id == "#eventsegment"){
-//		
-//	}else{
-//		
-//	}
 	$(id).find(".eventpile .item .image").magnificPopup({
-//	$(id).find(".eventpile").slice(0, $.cookie("truthbook_Page_Image_Pointer")).find(".item .image").magnificPopup({
-//		items: {
-//				src:  $($num_items[i]).attr("src")
-//		},
 		gallery:{
 			enabled:true,
 			preload:[0,2],
