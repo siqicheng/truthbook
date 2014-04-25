@@ -133,7 +133,8 @@ $(function() {
 			$("#uploadProgress").show();
 		}
 //		disableImageMetaDataSave: true,
-//		imageOrientation: true
+//		imageOrientation: true,
+//		previewOrientation: 0
 	});
 	
 	$("#complete .black.button").click( function() {

@@ -157,7 +157,7 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,i
 	
 	var displayDate = dateHandle(createDate);
 	var urlLarge = getImageUrl(url,ImageType.Large);
-	var	urlMedium = getImageUrl(url,ImageType.Medium);
+	var urlMedium = getImageUrl(url,ImageType.Medium);
 	
 	html =  "<div class='eventpile' id = 'un_imageId"+imageId+"' >" +
 	"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
