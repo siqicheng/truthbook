@@ -120,6 +120,13 @@ $(function() {
 		},
 		done: function(e, data) {
 			gotoComplete();
+		},
+		progress: function(e, data) {
+			var progress = parseInt(data.loaded / data.total * 100, 10);
+			$("#uploadProgress .bar").css(
+				"width",
+				progress + "%"
+			);
 		}
 	});
 	
@@ -187,6 +194,7 @@ $(function() {
 			checkFriendRelationship(picReceiver.userId, userId, onSuccess, onError);
 		} else {
 			console.log("upload pic for " + picReceiver);
+			completeMessage("为好友上传完成！", "赶快去通知好友来看吧！");
 			var userId = $.cookie("truthbook").userId;
 			uploadPic();
 		};

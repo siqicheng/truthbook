@@ -161,7 +161,7 @@ function drawFriendsList(id, barType, friendsType) {
 					"</div>" +
 					"</div>";
 	if(num > 0) {
-		html = "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
+		html = "<div class=\"ui item pagination\" style=\"display:none\" id=\"pageNum\">" +
 		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
 		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
 			"<a class=\"prevpage\">" +
@@ -197,11 +197,16 @@ function drawFriendsList(id, barType, friendsType) {
 	};
 	$("#"+barType + " ."+friendsType+"List").html(html);
 	showPage(barType, friendsType, 0, num);
+	$("#"+barType + " ."+friendsType+"List" + " .item.pagination").hover(function(){
+		$(this).children(".right.floated").fadeIn(50);},
+		function(){
+		$(this).children(".right.floated").fadeOut(50);}
+	);
 }
 
 function showPage(barType, friendsType, page, num) {
-	var min=(page)*5,
-		max = (page+1)*5-1;
+	var min=(page)*5+1,
+		max = (page+1)*5;
 	if(max>num) {max=num;};
 	$("#"+barType+" ."+friendsType+"List .item").each(function() {
 		if(($(this).index()<min) || ($(this).index()>max)) {
@@ -211,8 +216,11 @@ function showPage(barType, friendsType, page, num) {
 		}
 	});
 	var pagination = $("#"+barType+" ."+friendsType+"List .item").first();
+	if( num ==0 ) {
+		pagination.show();
+		return false;
+	};
 	if(num<5) {
-		pagination.hide();
 		return false;
 	} else {
 		pagination.show();
