@@ -155,7 +155,9 @@ function drawUnapproveImage(numOfImage,imageData){
 
 function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId){
 	
-	displayDate = dateHandle(createDate);
+	var displayDate = dateHandle(createDate);
+	var urlLarge = getImageUrl(url,ImageType.Large);
+	var	urlMedium = getImageUrl(url,ImageType.Medium);
 	
 	html =  "<div class='eventpile' id = 'un_imageId"+imageId+"' >" +
 	"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
@@ -166,8 +168,8 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,i
 			"<div class='active side ui items'>" +
 				"<div class='item'>" +    					
 					
-					"<a class='image' href='"+url+"'>"+
-						"<img src='"+url+"'>"+
+					"<a class='image' href='"+urlLarge+"'>"+
+						"<img src='"+urlMedium+"'>"+
 					"</a>"+
 					
 					"<div class = 'discript content'>"+
@@ -239,8 +241,11 @@ return html;
  */
 function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike){
 	
-	displayDate = dateHandle(createDate);
-	userId = $.cookie("truthbook").userId;
+	var displayDate = dateHandle(createDate);
+	var userId = $.cookie("truthbook").userId;
+	
+	var urlLarge = getImageUrl(url,ImageType.Large);
+	var	urlMedium = getImageUrl(url,ImageType.Medium);
 	
 	html =  "<div class='eventpile' id = 'imageId"+imageId+"' style='display : "+display+";' >" +
 				"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
@@ -252,8 +257,8 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    			"<div class='active side ui items'>" +
 		    				"<div class='item'>" +    					
 		    					
-		    					"<a class='image' href='"+url+"'>"+
-		    						"<img src='"+url+"'>"+
+		    					"<a class='image' href='"+urlLarge+"'>"+
+		    						"<img src='"+urlMedium+"'>"+
 		    						"<div class='imgbtnArea'>" +
 			    						"<div class='ui tiny button likebtn' style='margin-right: 2px'>"+
 			    							"<i class='heart tiny icon'></i>"+

@@ -177,12 +177,14 @@ function setPortraitStart(thisElem){
 		userId = thisElem.parent().parent().parent()
 					.parent().parent().parent().find(".userId_span").html();
 	
-	var onAjaxSuccess = function(data, textStatus) {
-		setPortraitAPI(userId,imageId,onSetAjaxSuccess,onSetAjaxError);
-	};
-	var onAjaxError = function(xhr, textStatus, error) {
-		drawConfirmPopUp("添加头像请求发送失败 Error: "+error);
-	};
+//	var onAjaxSuccess = function(data, textStatus) {
+//		setPortraitAPI(userId,imageId,onSetAjaxSuccess,onSetAjaxError);
+//	};
+//	var onAjaxError = function(xhr, textStatus, error) {
+//		drawConfirmPopUp("添加头像请求发送失败 Error: "+error);
+//	};
+	
+	
 	var onSetAjaxSuccess = function(data, textStatus) {
 		if (data == false){
 			drawConfirmPopUp("设置头像失败");
@@ -195,7 +197,9 @@ function setPortraitStart(thisElem){
 		drawConfirmPopUp("设置头像请求发送失败 Error: "+error);
 	};
 	
-	addPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError);
+	setPortraitAPI(userId,imageId,onSetAjaxSuccess,onSetAjaxError);
+	
+//	addPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError);
 	
 }
 
@@ -393,11 +397,10 @@ function submitComment(imageId){
 }
 
 function submitCommentStart(commentId,imageId,thisText,thisReplyForm){	
-//	var commentId = Math.round(Math.random()*100000000);
 	var	commentContent = thisText.val();
 	var	repliedByCommentId = $.cookie("truthbook").userId;
 	var	repliedByName = $.cookie("truthbook").fullName;
-	var	repliedByProtrait = $.cookie("truthbook").Protrait;
+	var	repliedByProtrait = $.cookie("truthbook").defaultPortrait;
 	var	repliedToCommentId = thisReplyForm.children(".replyToId").html();
 	var	repliedToName = thisReplyForm.children(".replyToName").html();
 	var	createDate = new Date();
@@ -411,6 +414,12 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	}
 	var	replyDisplay = "none",
 		deleteDisplay = "inline";
+	
+	if(repliedByProtrait==undefined){
+		repliedByProtrait = DefaultPortrait;
+	}else{
+		repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+	}
 	
 	$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 			repliedByCommentId,repliedByName,repliedByProtrait,

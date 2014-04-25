@@ -19,7 +19,7 @@ function getThisComment_All(imageId,Control){
 				var commentContent = data.imageComment.comment.commentContent,
 					repliedByCommentId = data.imageComment.comment.repliedByCommentId,
 					repliedByName = data.imageComment.comment.repliedByCommentName,
-					repliedByProtrait = data.imageComment.comment.repliedByProtrait,
+					repliedByProtrait = data.imageComment.comment.repliedByCommentPortrait,
 					repliedToCommentId = data.imageComment.comment.repliedToCommentId,
 					repliedToName = data.imageComment.comment.repliedToCommentName,
 					commentId = data.imageComment.comment.commentId,
@@ -33,6 +33,11 @@ function getThisComment_All(imageId,Control){
 				} else {
 					deleteDisplay = "none";
 				}
+				if(repliedByProtrait==undefined){
+					repliedByProtrait = DefaultPortrait;
+				}else{
+					repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+				}
 					
 					
 				$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
@@ -44,7 +49,7 @@ function getThisComment_All(imageId,Control){
 					var commentContent = data.imageComment[i].comment.commentContent,
 						repliedByCommentId = data.imageComment[i].comment.repliedByCommentId,
 						repliedByName = data.imageComment[i].comment.repliedByCommentName,
-						repliedByProtrait = data.imageComment[i].comment.repliedByProtrait,
+						repliedByProtrait = data.imageComment[i].comment.repliedByCommentPortrait,
 						repliedToCommentId = data.imageComment[i].comment.repliedToCommentId,
 						repliedToName = data.imageComment[i].comment.repliedToCommentName,
 						commentId = data.imageComment[i].comment.commentId,
@@ -57,6 +62,11 @@ function getThisComment_All(imageId,Control){
 						deleteDisplay = "inline";
 					} else {
 						deleteDisplay = "none";
+					}
+					if(repliedByProtrait==undefined){
+						repliedByProtrait = DefaultPortrait;
+					}else{
+						repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
 					}
 					
 					$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
@@ -107,7 +117,7 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 				"<span class = 'repliedToCommentId_span' style='display:none;'>"+repliedToCommentId+"</span>"+
 				"<span class = 'commentId_span' style='display:none;'>"+commentId+"</span>"+
 				"<a class=\"avatar tiny\" style=\"padding-top: 6px;\">"+
-					"<img src=\""+DefaultImg+"\" style='width:35px;height:35px;'>"+
+					"<img src=\""+repliedByProtrait+"\" style='width:35px;height:35px;'>"+
 				"</a>"+
 				"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
 					"<a class=\"author\" style='font-weight:bold;color:#4C7A9F;font-size:12px;'>" + repliedByName + "</a>"+

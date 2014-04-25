@@ -147,6 +147,12 @@ function getRelationship(friendId) {
 	return 0;
 }
 
+function getImageUrl(url,style){
+	return url.substring(0,url.lastIndexOf("/")+1)+style+url.substring(url.lastIndexOf("/")+1);
+}
+
+
+
 /*Api helper functions*/
 
 function addFriendAPI(id, friend_id, type, is_invitee,  onSuccess, onError) {
@@ -328,7 +334,7 @@ function setPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError){
 	var path = "v1/portrait/set",
 		url = ServerRoot + ServiceType.PORTRAIT +path,
 		data ="userId=" + userId + "&imageId=" + imageId,
-		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
