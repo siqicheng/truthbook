@@ -71,7 +71,7 @@ function isFriendCheck(friendId){
 		return false;
 	};
 	
-	checkFriendRelationship($.cookie("truthbook").userId, friendId, onAjaxSuccess, onAjaxError)
+	checkFriendRelationship($.cookie("truthbook").userId, friendId, onAjaxSuccess, onAjaxError);
 }
 
 function isSentFriendRequestMessage(friendId,ownId){
@@ -85,7 +85,7 @@ function isSentFriendRequestMessage(friendId,ownId){
 				}
 			} else {
 				for (var i = 0;i<numMessage;i++){
-					if (ownId == data.message[i].friend.userId){
+					if (ownId == data.message[i].friend.userId && data.message[0].status != MESSAGESTATUS.READ){
 						hasSent = 1;
 						break;
 					} 

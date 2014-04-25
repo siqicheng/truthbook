@@ -29,9 +29,11 @@ public class Message implements java.io.Serializable {
 	//private Map<String,String> content;
 	private String status;
 	private Timestamp readTime;
+	private Image image;
 	public static final String READ_STATUS = "read";
 	public static final String SENT_STATUS = "sent";
 	public static final String UNSENT_STATUS = "unsent";
+	public static final String REPLY_TYPE = "reply";
 	// Constructors
 
 	/** default constructor */
@@ -59,6 +61,14 @@ public class Message implements java.io.Serializable {
 	}
 
 	
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}

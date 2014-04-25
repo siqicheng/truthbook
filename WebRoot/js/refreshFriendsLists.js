@@ -59,75 +59,20 @@ function getUserEFriendsLists(id) {
 };
 
 function refreshTopbarLists(id) {
-	var pre = "#topbar ";
-
-	var num = userFriendsLists.nFriends.length;
-
-	var html = "<div class=\"item\">" +
-					"<div class=\"content\">" +
-					"	你现在还没有真·友哦 " +
-					"</div>" +
-					"</div>";
-	if(num > 0) {
-		html = "";
-		for(var i=0; i<num; i++) {
-			if(userFriendsLists.nFriends[i]["isActivated"] == "false") {
-				img = QuoteImg;
-			} else {
-				img = DefaultImg;
-			};
-			html= html + "<div class=\"item \">"+
-				"<img class=\"ui avatar image\" src=\""
-				+ img+ "\">" + 
-					"<div class=\"content frienditem\">" +
-					userFriendsLists.nFriends[i]["fullName"] +
-					"</div></div>";
-		};
-	};
-	$(pre + ".nFriendsList").html(html);
-
-	num = userFriendsLists.eFriends.length;
-
-	var html = "<div class=\"item\">" +
-					"<div class=\"content\">" +
-					"	你现在还没有极·友哦 " +
-					"</div>" +
-					"</div>";
-	if(num > 0) {
-		html = "";
-		for(var i=0; i<num; i++) {
-			html= html + "<div class=\"item \">"+
-				"<img class=\"ui avatar image\" src=\""
-				+ DefaultImg+ "\">" + 
-					"<div class=\"content frienditem\">" +
-					userFriendsLists.eFriends[i]["fullName"] +
-					"</div></div>";
-		}
-	}
-	$(pre + ".eFriendsList").html(html);
-
+	drawFriendsList(id, "topbar", "nFriends");
+	drawFriendsList(id, "topbar", "eFriends");
 	addTopbarClickFunction();
 }
 
 function addTopbarClickFunction() {
 	$("#topbar .eFriendsList.upload_for_fri .item").click(function() {
-		var towhom = userFriendsLists.eFriends[$(this).index()];
+		var towhom = userFriendsLists.eFriends[$(this).index()-1];
 		upload_choosepic(towhom);
 	});
 	
 	$("#topbar .nFriendsList.upload_for_fri .item").click(function() {
-		var towhom = userFriendsLists.nFriends[$(this).index()];
+		var towhom = userFriendsLists.nFriends[$(this).index()-1];
 		upload_choosepic(towhom);
-	});
-
-	$("#topbar .eFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = userFriendsLists.eFriends[$(this).parent().index()];
-		goOthersPage(towhom["userId"]);
-	});
-	
-	$("#topbar .nFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = userFriendsLists.nFriends[$(this).parent().index()];
-		goOthersPage(towhom["userId"]);
 	});
 }
 
@@ -188,95 +133,107 @@ function getPageownerEFriendsLists(id) {
 
 function refreshMenubarLists(id) {
 	var pre = "#menubar ";
-
-	var num = pageownerFriendsLists.nFriends.length;
-	$("#nFriends_num").html(num);
-
-	var html = "<div class=\"item\">" +
-					"<div class=\"content\">" +
-					"	你现在还没有真·友哦 " +
-					"</div>" +
-					"</div>";
-	if(num > 0) {
-		html = "";
-		var img;
-		for(var i=0; i<num; i++) {
-			if(pageownerFriendsLists.nFriends[i]["isActivated"] == "false") {
-				img = QuoteImg;
-			} else {
-				img = DefaultImg;
-			};
-			html= html + "<div class=\"ui item\">"+
-				"<img class=\"ui avatar image\" src=\""
-				+ img + "\">" + 
-					"<div class=\"content frienditem\">" +
-					pageownerFriendsLists.nFriends[i]["fullName"] +
-					"</div></div>";
-		};
-		if(id == $.cookie("truthbook").userId) {
-			$("#nFriendsList").addClass("needicon");
-		};
-	} else if(id != $.cookie("truthbook").userId) {
-		html = "<div class=\"item\">" +
-			"<div class=\"content\">" +
-			"	他现在还没有真·友哦 " +
-			"</div>" +
-			"</div>";
-	};
-	$(pre + ".nFriendsList").html(html);
-
-	num = pageownerFriendsLists.eFriends.length;
-	$("#eFriends_num").html(num);
-
-	var html = "<div class=\"item\">" +
-					"<div class=\"content\">" +
-					"	你现在还没有极·友哦 " +
-					"</div>" +
-					"</div>";
-	if(num > 0) {
-		html = "";
-		for(var i=0; i<num; i++) {
-			html= html + "<div class=\"item \">"+
-				"<img class=\"ui avatar image\" src=\""
-				+ DefaultImg+ "\">" + 
-					"<div class=\"content frienditem\">" +
-					pageownerFriendsLists.eFriends[i]["fullName"] +
-					"</div></div>";
-		};
-		if(id == $.cookie("truthbook").userId) {
-			$("#eFriendsList").addClass("needicon");
-		};
-	} else if(id != $.cookie("truthbook").userId) {
-			html = "<div class=\"item\">" +
-			"<div class=\"content\">" +
-			"	他现在还没有极·友哦 " +
-			"</div>" +
-			"</div>";
-	};
-	$(pre + ".eFriendsList").html(html);
-
+	drawFriendsList(id, "menubar", "nFriends");
+	drawFriendsList(id, "menubar", "eFriends");
 	addButton();
 	addMenubarClickFunction();
 }
 
-function addMenubarClickFunction() {
-//	$("#menubar .eFriendsList.upload_for_fri .item").click(function() {
-//		var towhom = pageownerFriendsLists.eFriends[$(this).index()];
-//		upload_choosepic(towhom);
-//	});
-//	
-//	$("#menubar .nFriendsList.upload_for_fri .item").click(function() {
-//		var towhom = pageownerFriendsLists.nFriends[$(this).index()];
-//		upload_choosepic(towhom);
-//	});
+function drawFriendsList(id, barType, friendsType) {
+	if(barType == "topbar"){
+		var friendsArray = userFriendsLists;
+	} else {
+		var friendsArray = pageownerFriendsLists;
+	}
+	var num = friendsArray[friendsType].length;
+	if(barType == "menubar") {
+		$("#"+friendsType+"_num").html(num);
+	}
+	
+	if(friendsType == "nFriends") {
+		var friendsTypeInChinese = "真·友";
+	} else {
+		var friendsTypeInChinese = "极·友";
+	}
+	var html = "<div class=\"item\">" +
+					"<div class=\"content\">" +
+					"你现在还没有"+friendsTypeInChinese+"哦 " +
+					"</div>" +
+					"</div>";
+	if(num > 0) {
+		html = "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
+		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+			"<a class=\"prevpage\">" +
+				"<i class=\"left arrow icon\"></i>" +
+			"</a>"+
+			"<a class=\"nextpage\">"+
+				"<i class=\"right arrow icon\"></i>"+
+			"</a>"+
+		"</div></div>";
+		var img;
+		for(var i=0; i<num; i++) {
+			if(friendsArray[friendsType][i]["isActivated"] == "false") {
+				img = QuoteImg;
+			} else {
+				img = DefaultImg;
+			};
+			html= html + "<div class=\"ui friend item\" style=\"display:none\">"+
+				"<img class=\"ui avatar image\" src=\""
+				+ img + "\">" + 
+					"<div class=\"content frienditem\">" +
+					friendsArray[friendsType][i]["fullName"] +
+					"</div></div>";
+		};
+		if((id == $.cookie("truthbook").userId)&&(barType == "menubar")) {
+			$("#"+friendsType+"List").addClass("needicon");
+		};
+	} else if(id != $.cookie("truthbook").userId) {
+		html = "<div class=\"item\">" +
+			"<div class=\"content\">" +
+			"他现在还没有"+friendsTypeInChinese+"哦 " +
+			"</div>" +
+			"</div>";
+	};
+	$("#"+barType + " ."+friendsType+"List").html(html);
+	showPage(barType, friendsType, 0, num);
+}
 
+function showPage(barType, friendsType, page, num) {
+	var min=(page)*5,
+		max = (page+1)*5-1;
+	if(max>num) {max=num;};
+	$("#"+barType+" ."+friendsType+"List .item").each(function() {
+		if(($(this).index()<min) || ($(this).index()>max)) {
+			$(this).hide();
+		} else {
+			$(this).show();
+		}
+	});
+	var pagination = $("#"+barType+" ."+friendsType+"List .item").first();
+	if(num<5) {
+		pagination.hide();
+		return false;
+	} else {
+		pagination.show();
+	}
+	var maxpage = Math.ceil(num/5);
+	pagination.children(".content").html("Page "+(page+1));
+	var prev=(page+maxpage-1)%(maxpage),
+		next=(page+1)%(maxpage);
+	pagination.children().children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
+	pagination.children().children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
+	pagination.children(".content").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
+}
+
+function addMenubarClickFunction() {
 	$("#menubar .eFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().index()-1];
 		goOthersPage(towhom["userId"]);
 	});
 	
 	$("#menubar .nFriendsList.goto_fri_page .frienditem").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().index()-1];
 		goOthersPage(towhom["userId"]);
 	});
 }
@@ -288,7 +245,7 @@ function addButton() {
 	"<a class=\"upload_for_fri_btn\"><i class=\"cloud upload large icon\"></i></a>" +
 	"<a class=\"degrade_fri_btn\"><i class=\"" + degrade + " large icon\"></i></a>" +
 	"</div>";
-	$(".list.menu.nFriendsList.needicon .item").prepend(html);
+	$(".list.menu.nFriendsList.needicon .friend.item").prepend(html);
 	
 	degrade = "level down";
 	var html = "<div class=\"right floated\" style=\"padding-top:5px;width:100px;margin:0;display:none;\">" +
@@ -305,32 +262,32 @@ function addButton() {
 	);
 	
 	$(".eFriendsList .invite_upload_btn").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()-1];
 		confirmInviteFriendUploadPopUp(towhom);
 	});
 	
 	$(".nFriendsList .invite_upload_btn").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()-1];
 		confirmInviteFriendUploadPopUp(towhom);
 	});
 	
 	$(".eFriendsList .upload_for_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()-1];
 		upload_choosepic(towhom);
 	});
 	
 	$(".nFriendsList .upload_for_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()-1];
 		upload_choosepic(towhom);
 	});
 
 	$(".eFriendsList .degrade_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.eFriends[$(this).parent().parent().index()-1];
 		confirmDegradeFriendPopUp(towhom);
 	});
 	
 	$(".nFriendsList .degrade_fri_btn").click(function() {
-		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()];
+		var towhom = pageownerFriendsLists.nFriends[$(this).parent().parent().index()-1];
 		confirmDeleteFriendPopUp(towhom);
 	});
 }

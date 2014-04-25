@@ -3,39 +3,71 @@
 	width: 1018px;
 }
 
-#eventsegment .item .image a {
+#eventsegment .eventpile {
+
+}
+
+#eventsegment .eventpile .item .image .imgbtnArea {
 	position:absolute;
-	left:10px;
-	top:10px;
+	left:15px;
+	top:15px;
 	z-index:9;
 	display:none;
 }
 
-#eventsegment .item {
-	padding: 0px;
-	cursor:auto; /*change cursor to default  */
+#eventsegment .eventpile .item .image .imgbtnArea .likebtn .heart.icon{
+	margin:0px;
 }
 
-#eventsegment .item .image img {
+#eventsegment .eventpile .item .ui.header{
+	margin:15px 10px;
+}
+
+#eventsegment .eventpile .item .btnArea{
+	display:inline-block;
+	padding:12px 13px 12px 15px;
+}
+#eventsegment .eventpile .item .btnArea .button{
+	padding-right: 24px; padding-left: 24px;
+}
+
+#eventsegment .eventpile .item {
+	padding: 0px;
+	cursor:auto; /*change cursor to default  */
+ 	margin-bottom: 20px;
+	min-height: 150px; 
+}
+
+#eventsegment .eventpile .item .image img {
 	border-top-left-radius: 0.33em;
 	border-top-right-radius: 0.33em;
 	cursor:zoom-in;
 }
 
-#eventsegment .item .content .meta a{
+#eventsegment .eventpile .item .content .description{
+	padding: 0 10px;
+	margin-bottom: 20px;
+}
+#eventsegment .eventpile .item .content .meta a{
 	font-size: 13px;
 	font-style: italic;
 }
 
-#eventsegment .item .ui.minimal.comments {
+#eventsegment .eventpile .item .ui.minimal.comments {
 	padding: 0px 10px 10px;
 }
 
-#eventsegment .item .ui.minimal.comments .ui.reply.form .field textarea {
-	height: 44px; 
+#eventsegment .eventpile .item .ui.minimal.comments .ui.reply.form .field textarea {
+	height: 60px; 
 	min-height:10px;
+	resize: none;
 }
 
-#eventsegment .item .ui.minimal.comments .ui.reply.form {
+#eventsegment .eventpile .item .ui.minimal.comments .ui.reply.form {
 	padding-left: 70px; width: 229px;
+}
+
+.itemloadBtn {
+	 margin:0 auto;
+	width:1018px;
 }
