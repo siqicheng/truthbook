@@ -18,10 +18,10 @@ function getThisComment_All(imageId,Control){
 			if (numTotalComment == 1){
 				var commentContent = data.imageComment.comment.commentContent,
 					repliedByCommentId = data.imageComment.comment.repliedByCommentId,
-					repliedByName = data.imageComment.comment.repliedByName,
+					repliedByName = data.imageComment.comment.repliedByCommentName,
 					repliedByProtrait = data.imageComment.comment.repliedByProtrait,
 					repliedToCommentId = data.imageComment.comment.repliedToCommentId,
-					repliedToName = data.imageComment.comment.repliedToName,
+					repliedToName = data.imageComment.comment.repliedToCommentName,
 					commentId = data.imageComment.comment.commentId,
 					
 					createDate = data.imageComment.comment.createDate;
@@ -43,10 +43,10 @@ function getThisComment_All(imageId,Control){
 				for (var i=0;i<numTotalComment;i++){
 					var commentContent = data.imageComment[i].comment.commentContent,
 						repliedByCommentId = data.imageComment[i].comment.repliedByCommentId,
-						repliedByName = data.imageComment[i].comment.repliedByName,
+						repliedByName = data.imageComment[i].comment.repliedByCommentName,
 						repliedByProtrait = data.imageComment[i].comment.repliedByProtrait,
 						repliedToCommentId = data.imageComment[i].comment.repliedToCommentId,
-						repliedToName = data.imageComment[i].comment.repliedToName,
+						repliedToName = data.imageComment[i].comment.repliedToCommentName,
 						commentId = data.imageComment[i].comment.commentId,
 
 						createDate = data.imageComment[i].comment.createDate;
@@ -113,7 +113,7 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 					"<a class=\"author\" style='font-weight:bold;color:#4C7A9F;font-size:12px;'>" + repliedByName + "</a>"+
 					
 					"<div class='metadata' style='display:"+replyToDisplay+";margin-left: 4px;font-size:12px;'><span class='date'>to</span></div>"+
-					"<a class='to author' style='display:"+replyToDisplay+";font-weight:bold;color:#4C7A9F;font-size:12px;'>"+repliedToName+"</a>"+
+						"<a class='to author' style='display:"+replyToDisplay+";font-weight:bold;color:#4C7A9F;font-size:12px;'>"+repliedToName+"</a><span style='font-size:12px;'> :</span>"+
 					"<div class=\"text\" style='margin-bottom: 0px; margin-top: 0px;font-size:14px;'>"+
 						commentContent+
 					"</div>"+

@@ -58,6 +58,13 @@ function goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,t
 	getUserAPI(thisUserId, onAjaxSuccess, onAjaxError);
 }
 
+function goToThatImage(thisUserId,thisMessageId,messageTypeNumber,thisItem){
+	
+	
+//	deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+}
+
+
 function deleteMessageButtonOnclick(messageId,messageTypeNumber,thisItem){
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){

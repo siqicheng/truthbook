@@ -354,6 +354,25 @@ function fullCommentAPI(userId,content,repliedToId,repliedById,onAjaxSuccess,onA
 	ajax_call(ajax_obj);
 }
 
+function simpleCommentAPI(userId,content,repliedById,onAjaxSuccess,onAjaxError){
+	var path = "v1/comment/add/replyBy",
+		url = ServerRoot + ServiceType.COMMENT +path,
+		data ="userId=" + userId + "&content=" + content + 
+				"&repliedById=" + repliedById,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function addCommentToImageByImageIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError){
+	var path = "v1/imageComment/add",
+		url = ServerRoot + ServiceType.COMMENT +path,
+		data ="imageId=" + imageId + "&commentId=" + commentId,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
 function getAllCommentAPI(imageId,onAjaxSuccess,onAjaxError){
 	var path = "v1/imageComment/"+imageId,
 		url = ServerRoot + ServiceType.COMMENT +path,
