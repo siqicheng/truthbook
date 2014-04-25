@@ -108,39 +108,37 @@
 			<div class="field" id="fullNameTest">
             	<label>姓名</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="fullName" placeholder="姓名" name="fullName" >
+                	<input tabindex="1" type="text" id="fullName" placeholder="姓名" name="fullName" >
                 	<i class="user icon"></i>
                 </div>
        		</div>
 			<div class="field" id="schoolTest">
 				<label>学校</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
+                	<input tabindex="2" type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
                   	<i class="book icon"></i>
                	</div>
       		</div>
 			<div class="field" id="entryTimeTest">
 				<label>入学年份</label>
            		<div class="ui left labeled icon input">
-  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
+  					<input tabindex="3" type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
 					<i class="align justify icon"></i>
         		</div>
      		</div>
             <div class="ui error message"></div>
-<!-- 			<div class="ui divider"></div> -->
-			<div class="ui black fluid button" id="nextstep1" >下一步</div>
+			<input tabindex="4" class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
 <!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
 		</form>
  				
  			<div class="ui form uploadForm" id="choosePic" style="display:none">
-<!--  				<div class="ui message" id="previewMessage"></div> -->
 				<div class="ui items">
 					<div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;">
 						<div class="ui image">
 							<img id="imgPrev" >
 						</div>
 						<div class="content">
-							<textarea class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
+							<textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
 						</div>
 						<div class="meta">
 						</div>
@@ -152,7 +150,7 @@
 					</div>	
 					<div class="ui black button" id="submitBtn"  >确定上传</div>
 				</div>
-				<div class="ui progress" id="uploadProgress">
+				<div class="ui successful progress" id="uploadProgress" style="display:none">
 					<div class="bar"></div>
 				</div>
  			</div>
