@@ -10,8 +10,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 
 import db.mapping.object.*;
 
@@ -296,5 +298,34 @@ public class CommentService {
 		}
 		return imageComment;
 	}
-
+	
+	@GET
+	@Path("v1/imageComment/{imageId}/{commentNumber}")
+	@Produces("application/json")
+	public ImageComment[] getLatestImageComment(@PathParam("imageId") Integer imageId,
+			@PathParam("commentNumber") Integer commentNumber){
+		ImageComment[] imageComment = new ImageComment[commentNumber];
+		this.image = this.imageDAO.findById(imageId);
+		
+//		List imageComments = this.imageCommentDAO.findByProperty(ImageComment.IMAGE, this.image);
+//		if(imageComments.size()>0){
+//			imageComment = new ImageComment[imageComments.size()];
+//			for (int i=0; i<imageComments.size();i++){
+//				imageComment[i] = (ImageComment) imageComments.get(i);
+//			}
+//		}
+		Session session = this.imageDAO.getSession();
+		Criteria criteria = session.createCriteria(ImageComment.class);
+		criteria.addOrder(Order.asc(ImageComment.ID));
+		criteria.setFirstResult(2);
+		
+		List<ImageComment> icl = criteria.list();
+		
+		for (int i=0; i<icl.size(); i++){
+			imageComment[i] = icl.get(i);
+		}
+		
+		return imageComment;
+	}
+	
 }

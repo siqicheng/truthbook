@@ -125,6 +125,7 @@ public class Comment implements java.io.Serializable {
 		this.commentId = commentId;
 	}
 
+	@XmlTransient
 	public User getUser() {
 		return this.user;
 	}

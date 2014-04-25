@@ -64,7 +64,7 @@ public class MsgService {
 		}	
 	}
 	
-	@GET
+	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/{imageid}/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendImageMesssage(@PathParam("id") Integer id,
