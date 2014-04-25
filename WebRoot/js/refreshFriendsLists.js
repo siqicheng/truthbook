@@ -172,17 +172,14 @@ function drawFriendsList(id, barType, friendsType) {
 //			"</a>"+
 //		"</div></div>";
 		html ="<div class='ui thin item pagination'  id='pageNum' style='text-align:center;' >" +
-								"<div class='prevpage' style='display:inline; padding-top:0; padding-right: 40px;'>" +
-									"<a>"+
+								"<div class='prevpage changePage' style='display:inline; padding-top:0; padding-right: 40px;'>" +
 										"<i class='left arrow icon' style='margin-right:0px;'></i>"+
-									"</a>上一页"+
+									"上一页"+
 								"</div>"+
 								"<span>1</span>"+
-								"<div class='nextpage' style='display:inline; padding-top:0; padding-left: 40px;'>"+
+								"<div class='nextpage changePage' style='display:inline; padding-top:0; padding-left: 40px;'>"+
 									"下一页"+
-									"<a>"+
 										"<i class='right arrow icon' style='margin-right: 0px;'></i>"+
-									"</a>"+
 								"</div></div>";
 		var img;
 		for(var i=0; i<num; i++) {
@@ -215,11 +212,15 @@ function drawFriendsList(id, barType, friendsType) {
 		function(){
 		$(this).children(".right.floated").fadeOut(50);}
 	);
+	$("#"+barType + " ."+friendsType+"List").children().children('.changePage').hover(	
+			function(){$(this).css("color","#33B2E1");},
+			function(){$(this).css("color","");}
+	);
 }
 
 function showPage(barType, friendsType, page, num) {
-	var min=(page)*5+1,
-		max = (page+1)*5;
+	var min=(page)*maxItemNum+1,
+		max = (page+1)*maxItemNum;
 	if(max>num) {max=num;};
 	$("#"+barType+" ."+friendsType+"List .item").each(function() {
 		if(($(this).index()<min) || ($(this).index()>max)) {
@@ -233,12 +234,12 @@ function showPage(barType, friendsType, page, num) {
 		pagination.show();
 		return false;
 	};
-	if(num<5) {
+	if(num<maxItemNum) {
 		return false;
 	} else {
 		pagination.show();
 	}
-	var maxpage = Math.ceil(num/5);
+	var maxpage = Math.ceil(num/maxItemNum);
 	pagination.children('span').text(page+1);
 	var prev=(page+maxpage-1)%(maxpage),
 		next=(page+1)%(maxpage);

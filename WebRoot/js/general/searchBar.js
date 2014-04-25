@@ -110,8 +110,8 @@ function getMoreSearchResult(data, length) {
 }
 
 function showSearchResultPage(page, num) {
-	var min=(page)*5,
-	max = (page+1)*5-1;
+	var min=(page)*maxItemNum,
+	max = (page+1)*maxItemNum-1;
 	if(max>num) {max=num;};
 	$("#searchbarDropdown .item").each(function() {
 		if(($(this).index()<min) || ($(this).index()>max)) {
@@ -120,7 +120,7 @@ function showSearchResultPage(page, num) {
 			$(this).show();
 		}
 	});
-	var maxpage = Math.ceil(num/5);
+	var maxpage = Math.ceil(num/maxItemNum);
 	var pagination = $("#searchbarDropdown .item").last();
 	pagination.children("span").html(page+1);
 	var prev=(page+maxpage-1)%(maxpage),
