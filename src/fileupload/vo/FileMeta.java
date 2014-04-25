@@ -123,7 +123,7 @@ public class FileMeta {
 //			image.setContent("");
 			image.setCreateDate(RestUtil.getCurrentDate());
 			image.setDeleted(false);
-			image.setImageUrl(this.location+File.separator+fileName);
+			image.setImageUrl(this.location+'/'+fileName);
 			image.setLastModified(RestUtil.getCurrentDate());
 			image.setUploaderId(userId);
 			User receiver = new UserDAO().findById(receiverId);
@@ -160,7 +160,7 @@ public class FileMeta {
 			}
 			
 			os.close();
-			String fullPath =RealPath+ File.separator +this.getFileName();
+			String fullPath =RealPath+ File.separator+this.getFileName();
 			imageUtil.resizeSmall(fullPath);
 			imageUtil.resizeMedium(fullPath);
 			imageUtil.resizeLarge(fullPath);

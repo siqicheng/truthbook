@@ -161,16 +161,29 @@ function drawFriendsList(id, barType, friendsType) {
 					"</div>" +
 					"</div>";
 	if(num > 0) {
-		html = "<div class=\"ui item pagination\" style=\"display:none\" id=\"pageNum\">" +
-		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
-		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
-			"<a class=\"prevpage\">" +
-				"<i class=\"left arrow icon\"></i>" +
-			"</a>"+
-			"<a class=\"nextpage\">"+
-				"<i class=\"right arrow icon\"></i>"+
-			"</a>"+
-		"</div></div>";
+//		html = "<div class=\"ui item pagination\" style=\"display:none\" id=\"pageNum\">" +
+//		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+//		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+//			"<a class=\"prevpage\">" +
+//				"<i class=\"left arrow icon\"></i>" +
+//			"</a>"+
+//			"<a class=\"nextpage\">"+
+//				"<i class=\"right arrow icon\"></i>"+
+//			"</a>"+
+//		"</div></div>";
+		html ="<div class='ui thin item pagination'  id='pageNum' style='text-align:center;' >" +
+								"<div class='prevpage' style='display:inline; padding-top:0; padding-right: 40px;'>" +
+									"<a>"+
+										"<i class='left arrow icon' style='margin-right:0px;'></i>"+
+									"</a>上一页"+
+								"</div>"+
+								"<span>1</span>"+
+								"<div class='nextpage' style='display:inline; padding-top:0; padding-left: 40px;'>"+
+									"下一页"+
+									"<a>"+
+										"<i class='right arrow icon' style='margin-right: 0px;'></i>"+
+									"</a>"+
+								"</div></div>";
 		var img;
 		for(var i=0; i<num; i++) {
 			if(friendsArray[friendsType][i]["isActivated"] == "false") {
@@ -226,11 +239,11 @@ function showPage(barType, friendsType, page, num) {
 		pagination.show();
 	}
 	var maxpage = Math.ceil(num/5);
-	pagination.children(".content").html("Page "+(page+1));
+	pagination.children('span').text(page+1);
 	var prev=(page+maxpage-1)%(maxpage),
 		next=(page+1)%(maxpage);
-	pagination.children().children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
-	pagination.children().children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
+	pagination.children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
+	pagination.children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
 	pagination.children(".content").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
 }
 

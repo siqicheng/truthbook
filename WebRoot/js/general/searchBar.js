@@ -81,14 +81,27 @@ function getMoreSearchResult(data, length) {
 		html = html + "<div class=\"item\" style=\"display:none\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
 								 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 	}
-	html = html + "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
-							"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
-							"<div class=\"right floated\" style=\"padding-top:0px;\">" +
-								"<a class=\"prevpage\">" +
-									"<i class=\"left arrow icon\"></i>" +
-								"</a>"+
-								"<a class=\"nextpage\">"+
-									"<i class=\"right arrow icon\"></i>"+
+//	html = html + "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
+//							"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+//							"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+//								"<a class=\"prevpage\">" +
+//									"<i class=\"left arrow icon\"></i>" +
+//								"</a>"+
+//								"<a class=\"nextpage\">"+
+//									"<i class=\"right arrow icon\"></i>"+
+//								"</a>"+
+//							"</div></div>";
+	html = html + "<div class='ui thin item pagination'  id='pageNum' style='text-align:center;' >" +
+								"<div class='prevpage' style='display:inline; padding-top:0; padding-right:20px;'>" +
+								"<a>"+
+									"<i class='left arrow icon' style='margin-right:0px;'></i>"+
+								"</a>上一页"+
+							"</div>"+
+							"<span>1</span>"+
+							"<div class='nextpage' style='display:inline; padding-top:0; padding-left:20px;'>"+
+								"下一页"+
+								"<a>"+
+									"<i class='right arrow icon' style='margin-right: 0px;'></i>"+
 								"</a>"+
 							"</div></div>";
 	html = html + "</div>";
@@ -109,13 +122,13 @@ function showSearchResultPage(page, num) {
 	});
 	var maxpage = Math.ceil(num/5);
 	var pagination = $("#searchbarDropdown .item").last();
-	pagination.children(".content").html("Page "+(page+1));
+	pagination.children("span").html(page+1);
 	var prev=(page+maxpage-1)%(maxpage),
 		next=(page+1)%(maxpage);
 
 	pagination.children(".content").attr("onclick","showSearchResultPage("+next+","+num+")");
-	pagination.children().children(".prevpage").attr("onclick","showSearchResultPage("+prev+","+num+")");
-	pagination.children().children(".nextpage").attr("onclick","showSearchResultPage("+next+","+num+")");
+	pagination.children(".prevpage").attr("onclick","showSearchResultPage("+prev+","+num+")");
+	pagination.children(".nextpage").attr("onclick","showSearchResultPage("+next+","+num+")");
 	pagination.show();
 }
 

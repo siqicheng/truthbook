@@ -132,6 +132,8 @@ $(function() {
 			$("#choosePic .two.buttons").hide();
 			$("#uploadProgress").show();
 		}
+//		disableImageMetaDataSave: true,
+//		imageOrientation: true
 	});
 	
 	$("#complete .black.button").click( function() {
