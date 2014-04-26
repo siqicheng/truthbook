@@ -60,5 +60,6 @@
             </key>
             <one-to-many class="db.mapping.object.Portrait" />
         </set>
+        
     </class>
 </hibernate-mapping>

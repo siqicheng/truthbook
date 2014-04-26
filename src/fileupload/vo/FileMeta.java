@@ -120,7 +120,7 @@ public class FileMeta {
 			Image image = new Image();
 			image.setContent(this.description);
 			image.setApproved(false);
-//			image.setContent("");
+			image.setContent("");
 			image.setCreateDate(RestUtil.getCurrentDate());
 			image.setDeleted(false);
 			image.setImageUrl(this.location+'/'+fileName);
@@ -160,7 +160,7 @@ public class FileMeta {
 			}
 			
 			os.close();
-			String fullPath =RealPath+ File.separator+this.getFileName();
+			String fullPath =RealPath+ File.separator +this.getFileName();
 			imageUtil.resizeSmall(fullPath);
 			imageUtil.resizeMedium(fullPath);
 			imageUtil.resizeLarge(fullPath);
