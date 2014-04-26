@@ -3,7 +3,9 @@ $(function() {
 });
 
 $(window).load(function() {
-	showMessageNumberTransition("#unreadMessageNum");
+	if($("#unreadMessageNum").html() != "00"){
+		showMessageNumberTransition("#unreadMessageNum");
+	}
 });
 
 function messageLengthJson(data){

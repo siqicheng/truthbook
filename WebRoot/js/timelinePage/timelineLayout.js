@@ -56,10 +56,10 @@ function thistimelineItemHTML(url,discription,uploaderName,uploaderId,createDate
 								// 		<div class="actions" style='display:inline;'>
 								//         	<a class="reply" style='display:inline;'>回复</a>
 								//         	<a class="delete" id='delete1' style='display:inline;'>删除</a>
-							 //            </div>
+							 //         </div>
 							 //            <span class="date">1天前</span>
 								// 	</div>
-								// </div>
+							// </div>
 			"\t\t\t\t\t</div>\n" +
 			"\t\t\t\t</div>\n" +
 			"\t\t\t\t<div class='ui reply form'>\n"+
