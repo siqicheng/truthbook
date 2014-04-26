@@ -112,30 +112,32 @@ $(function() {
 		}
 	});
 
-	$("#picInput").fileupload({
-		url: "upload",
-		dataType: "json",
-		add: function(e, data) {
-			picData=data;
-		},
-		done: function(e, data) {
-			gotoComplete();
-		},
-		progressall: function(e, data) {
-			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$("#uploadProgress .bar").css(
-				"width",
-				progress + "%"
-			);
-		},
-		submit: function(e, data) {
-			$("#choosePic .two.buttons").hide();
-			$("#uploadProgress").show();
+	$("#picInput").fileupload(
+		{
+			url: "upload",
+			dataType: "json",
+			add: function(e, data) {
+				picData=data;
+			},
+			done: function(e, data) {
+				gotoComplete();
+			},
+			progressall: function(e, data) {
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$("#uploadProgress .bar").css(
+					"width",
+					progress + "%"
+				);
+			},
+			submit: function(e, data) {
+				$("#choosePic .two.buttons").hide();
+				$("#uploadProgress").show();
+			},
+			disableImageMetaDataSave: true,
+			imageOrientation: true,
+			previewOrientation: 0
 		}
-//		disableImageMetaDataSave: true,
-//		imageOrientation: true,
-//		previewOrientation: 0
-	});
+	);
 	
 	$("#complete .black.button").click( function() {
 		$.magnificPopup.close();
@@ -266,7 +268,7 @@ $(function() {
 							};
 							getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
 						} else {
-							portrait = DefaultPortrait; //TODO: 改成用户头像url
+							portrait = uploadCandidates[i].defaultPortrait; //TODO: 改成用户头像url
 							content = uploadCandidates[i].school + " " + uploadCandidates[i].entryTime;
 						};
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
@@ -283,6 +285,8 @@ $(function() {
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
+						var mediumPortrait = getImageUrl(portrait, ImageType.Medium);
+						$("#peoplePrev").attr('src', mediumPortrait);
 						var selected_num=$(this).index();
 						picReceiver = uploadCandidates[selected_num];
 						console.log("User choosed picReceiver: ");
@@ -307,13 +311,13 @@ $(function() {
 function upload_choosepic(people) {
 	picReceiver = people;
 	upload_for_friend = true;
-	$("#fullName").attr("value",people["fullName"]);
-	$("#school").attr("value",people["school"]);
-	$("#entryTime").attr("value",people["entryTime"]);
+	$("#fullName").val(people["fullName"]);
+	$("#school").val(people["school"]);
+	$("#entryTime").val(people["entryTime"]);
 	$("#fullName").attr("disabled", "disabled");
 	$("#school").attr("disabled", "disabled");
 	$("#entryTime").attr("disabled", "disabled");
-	$("#previewMessage").html("你将传给<b>"+people.fullName+"</b>的照片如下：");
+//	$("#previewMessage").html("你将传给<b>"+people.fullName+"</b>的照片如下：");
 	gotoChoosePic();
 	showSidebar();
 }
@@ -396,6 +400,7 @@ function gotoChoosePeople() {
 function gotoRechoose() {
 	$(".ui.step").attr("class", "ui disabled step");
 	$("#step1").attr("class", "ui active step");
+	$("#peoplePrev").attr('src', DefaultPortrait); //TODO: 改成默认重选提示图片
 	$(".ui.form.uploadForm").hide();
 	$("#rechoosePeople").show();
 }
@@ -404,6 +409,7 @@ function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$('#img_prev').show();
+	$('#picDescription').val("");
 	$("#choosePic .two.buttons").show();
 	$("#uploadProgress").hide();
 	$("#step1").attr("class", "ui step");
