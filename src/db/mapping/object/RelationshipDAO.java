@@ -27,6 +27,7 @@ public class RelationshipDAO extends BaseHibernateDAO {
 	public static final String FRIEND_ID = "friendId";
 	public static final String RELATIONSHIP = "relationship";
 	public static final String IS_INVITEE = "isInvitee";
+	public static final String USER = "user";
 
 	public void save(Relationship transientInstance) {
 		log.debug("saving Relationship instance");
@@ -94,6 +95,10 @@ public class RelationshipDAO extends BaseHibernateDAO {
 
 	public List findByFriendId(Object friendId) {
 		return findByProperty(FRIEND_ID, friendId);
+	}
+	
+	public List findByUser(Object user) {
+		return findByProperty(USER, user);
 	}
 
 	public List findByRelationship(Object relationship) {

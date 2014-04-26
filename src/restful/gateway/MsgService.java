@@ -11,6 +11,9 @@ import javax.ws.rs.PathParam;
 
 import java.sql.Timestamp;
 import org.hibernate.Transaction;
+
+import db.mapping.object.Image;
+import db.mapping.object.ImageDAO;
 import db.mapping.object.User;
 import db.mapping.object.UserDAO;
 import db.mapping.object.Message;
@@ -21,9 +24,11 @@ import java.util.List;
 @Path("notification")
 public class MsgService {
 	private MessageDAO messageDAO;
+	private ImageDAO imageDAO;
 
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
+		this.imageDAO = new ImageDAO();
 	}
 	
 
@@ -45,6 +50,51 @@ public class MsgService {
 			
 			Message newinstance = new Message(type, id, src,
 					new Timestamp(System.currentTimeMillis()));
+			
+			Transaction tx=session.beginTransaction();
+			session.save(newinstance);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}	
+	}
+	
+	@PUT
+	@Path("v1/message/{id}/{srcid}/{type}/{imageid}/send")
+	@Produces("application/json;charset=utf-8")
+	public Object sendImageMesssage(@PathParam("id") Integer id,
+			@PathParam("srcid") Integer srcid, 
+			@PathParam("type") String type,
+			@PathParam("imageid") Integer imageid) throws Exception {
+		
+		if (id==srcid){
+			return RestUtil.string2json("false");
+		}
+		
+		Session session=this.messageDAO.getSession();
+		try{
+			User src = (new UserDAO()).findById(srcid);
+			
+			Message newinstance = new Message(type, id, src,
+					new Timestamp(System.currentTimeMillis()));
+			Image image= this.imageDAO.findById(imageid);
+			newinstance.setImage(image);
+			String[] property = {MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
+			Object[] value = {Message.REPLY_TYPE, image};
+			
+			List<Message> message_list = this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			
+			for (Message message : message_list){
+				if (!message.getStatus().equals(Message.READ_STATUS)){
+					session.close();
+					return RestUtil.string2json("true");
+				}
+			}
 			
 			Transaction tx=session.beginTransaction();
 			session.save(newinstance);

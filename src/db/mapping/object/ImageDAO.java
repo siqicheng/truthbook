@@ -29,6 +29,7 @@ public class ImageDAO extends BaseHibernateDAO {
 	public static final String UPLOADER_ID = "uploaderId";
 	public static final String APPROVED = "approved";
 	public static final String DETELED = "deteled";
+	public static final String USER = "user";
 
 	public void save(Image transientInstance) {
 		log.debug("saving Image instance");
@@ -93,7 +94,12 @@ public class ImageDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+	public List findByUser(Object user) {
+		return findByProperty(USER, user);
+	}
 
+	
 	public List findByImageUrl(Object imageUrl) {
 		return findByProperty(IMAGE_URL, imageUrl);
 	}
