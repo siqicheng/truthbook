@@ -1,6 +1,7 @@
 $(function() {
-	/*选人表单验证规则*/
 	resetUpload();
+	
+	/*  选人表单验证规则&初始化  */
 	$("#choosePeople").form({
 		username:{
 			identifier : "fullName",
@@ -61,16 +62,54 @@ $(function() {
 		}
 	});
 
-	/*upload 下一步功能定义*/
+	/*选择图片fileupload插件初始化*/
+	$("#picInput").fileupload(
+		{
+			url: "upload",
+			dataType: "json",
+			add: function(e, data) {
+				picData=data;
+			},
+			done: function(e, data) {
+				gotoComplete();
+			},
+			progressall: function(e, data) {
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$("#uploadProgress .bar").css(
+					"width",
+					progress + "%"
+				);
+			},
+			submit: function(e, data) {
+				$("#choosePic .two.buttons").hide();
+				$("#uploadProgress").show();
+			},
+			disableImageMetaDataSave: true,
+			imageOrientation: true,
+			previewOrientation: 0
+		}
+	);
+
+	/*完成按钮初始化*/
+	$("#complete .black.button").click(function() {
+		$.magnificPopup.close();
+		$(".sidebar").sidebar("hide");
+	});
+
+	/*选人form下一步功能定义*/
 	$("#nextstep1").click(function() {
 		nextstep1Function();
 	});
 	
+
+	/*重选词条按钮：以上都不是*/
 	$("#nextstep2_for_new_quote").click(function() {
 		picReceiver = NEW_QUOTE;
 		gotoChoosePic();
 	});
 	
+
+	/*重选词条按钮：下一步*/
 	$("#nextstep2").click(function() {
 		if(picReceiver != null) {
 			if(picReceiver.isActivated == "false"){
@@ -111,33 +150,8 @@ $(function() {
 			$("#rechooseError").show();
 		}
 	});
-
-	$("#picInput").fileupload({
-		url: "upload",
-		dataType: "json",
-		add: function(e, data) {
-			picData=data;
-		},
-		done: function(e, data) {
-			gotoComplete();
-		}
-	});
 	
-	$("#complete .black.button").click( function() {
-		$.magnificPopup.close();
-		$(".sidebar").sidebar("hide");
-	});
-	
-	$("#choosePic .item .image").hover(function(){
-	    $(this).children(".imgbtnArea").fadeIn("fast");
-	    $(this).children("img").fadeTo("fast",0.9);
-			},
-		function(){
-	    $(this).children(".imgbtnArea").fadeOut("fast");
-	    $(this).children("img").fadeTo("fast",1);
-		}
-	);
-	
+	/*确认上传按钮*/
 	$("#submitBtn").click(function() {
 		if($("#imgPrev").attr("src") == DefaultPreviewImg) {
 			drawConfirmPopUp("请选择要上传的图片");
@@ -187,6 +201,7 @@ $(function() {
 			checkFriendRelationship(picReceiver.userId, userId, onSuccess, onError);
 		} else {
 			console.log("upload pic for " + picReceiver);
+			completeMessage("为好友上传完成！", "赶快去通知好友来看吧！");
 			var userId = $.cookie("truthbook").userId;
 			uploadPic();
 		};
@@ -194,13 +209,14 @@ $(function() {
 
 	function nextstep1Function() {
 		var isValidForm = $("#choosePeople").form("validate form");
+		$("#choosePeople .message").show();
 		if(picReceiver != null) {
 			gotoChoosePic();
 			return;
 		};
-//		if(isValidForm == true) {
+		if(isValidForm == true) {
 			var user = $("#fullName").val();
-			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
+//			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
 			console.log("choose people form data : " + data);
 	//		Verify user quote: (fullName,school,entryTime) exist
@@ -250,7 +266,7 @@ $(function() {
 							};
 							getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
 						} else {
-							portrait = DefaultPortrait; //TODO: 改成用户头像url
+							portrait = uploadCandidates[i].defaultPortrait; //TODO: 改成用户头像url
 							content = uploadCandidates[i].school + " " + uploadCandidates[i].entryTime;
 						};
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
@@ -267,6 +283,8 @@ $(function() {
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
+						var mediumPortrait = getImageUrl(portrait, ImageType.Medium);
+						$("#peoplePrev").attr('src', mediumPortrait);
 						var selected_num=$(this).index();
 						picReceiver = uploadCandidates[selected_num];
 						console.log("User choosed picReceiver: ");
@@ -285,19 +303,19 @@ $(function() {
 			};
 			verifyUserExists(data, onSuccess, onError);
 		};
-//	}
+	}
 });
 
 function upload_choosepic(people) {
 	picReceiver = people;
 	upload_for_friend = true;
-	$("#fullName").attr("value",people["fullName"]);
-	$("#school").attr("value",people["school"]);
-	$("#entryTime").attr("value",people["entryTime"]);
+	$("#fullName").val(people["fullName"]);
+	$("#school").val(people["school"]);
+	$("#entryTime").val(people["entryTime"]);
 	$("#fullName").attr("disabled", "disabled");
 	$("#school").attr("disabled", "disabled");
 	$("#entryTime").attr("disabled", "disabled");
-	$("#previewMessage").html("你将传给<b>"+people.fullName+"</b>的照片如下：");
+//	$("#previewMessage").html("你将传给<b>"+people.fullName+"</b>的照片如下：");
 	gotoChoosePic();
 	showSidebar();
 }
@@ -339,6 +357,10 @@ function uploadPic() {
 	                  {
 	                      name: 'receiverid',
 	                      value: picReceiver.userId
+	                  },
+	                  {
+	                	  name: 'description',
+	                	  value: $("#picDescription").val()
 	                  }
 	              ];
 	picData.submit();
@@ -376,6 +398,7 @@ function gotoChoosePeople() {
 function gotoRechoose() {
 	$(".ui.step").attr("class", "ui disabled step");
 	$("#step1").attr("class", "ui active step");
+	$("#peoplePrev").attr('src', DefaultPortrait); //TODO: 改成默认重选提示图片
 	$(".ui.form.uploadForm").hide();
 	$("#rechoosePeople").show();
 }
@@ -384,6 +407,9 @@ function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$('#img_prev').show();
+	$('#picDescription').val("");
+	$("#choosePic .two.buttons").show();
+	$("#uploadProgress").hide();
 	$("#step1").attr("class", "ui step");
 	$("#step2").attr("class", "ui active step");
 	$("#step3").attr("class", "ui disabled step");

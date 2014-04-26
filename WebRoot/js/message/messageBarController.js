@@ -3,7 +3,6 @@ $(function() {
 });
 
 
-
 function messageLengthJson(data){
 	if(data == null){
 		return -1;

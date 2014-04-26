@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   	<meta charset="utf-8">
+   	<title>新鲜事 | Truthbook</title>
+
+   	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
+   	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
+   	<link href="./CSS/general.css" rel="stylesheet">
+   	<link href="./CSS/topBar.css" rel="stylesheet">
+   	<link href="./CSS/timeline.css" rel="stylesheet">
+   	<link rel="shortcut icon" href="img/logo_red.ico"/>
+   	
+</head>
+
+<body>
+	<div class="ui fixed transparent main small menu" id="topbar" >
+		<div class="left  menu">
+	
+			<div class="ui dropdown item" id="upload_menu">
+				<i class="add large icon"></i>传照片	
+				<div class=" dropdown menu" style="width: 170px;">
+					<div class="item" id="upload_for_new_btn" style="text-align:center;width: 170px;">新建好友档案</div>
+					
+					<div class="ui dropdown item" id="upload_for_fri_btn" style="text-align:center;width: 170px;">
+						为已有好友上传
+						<div class="menu">
+							<div class="ui dropdown item" style="width: 170px;">
+								<div><i class="star small icon"></i>极·友<i class="dropdown icon"></i></div>
+								<div class="list menu eFriendsList upload_for_fri">
+								</div>
+							</div>
+							<div class="ui dropdown item" style="width: 170px;">
+								<div><i class="half empty star small icon"></i>真·友<i class="dropdown icon"></i></div>
+								<div class="list menu nFriendsList upload_for_fri">
+								</div>
+							</div>
+						</div>
+					</div>
+ 				</div>
+			</div>
+			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
+			
+		</div>			      
+		<a class="green item">
+			<i class="home  large icon"></i>
+		</a>
+		<a class="active blue item">
+	    	<i class="grid layout large icon"></i>
+		</a>
+		<a class="orange item">
+	    	<i class="setting large icon"></i>
+		</a>
+		<div class="empty item"></div>
+		<a class="open_popup_link item" href="#upload" style="display:none">上传照片（PopUp）</a>
+		<div class="title" onclick = "goHomePage();">
+	        <img src="img/Truthbook_red.png" width="140px" >
+	    </div>	
+		
+		<div class="right menu">
+				<form class="ui form item" onsubmit = "return searchUsers();">
+     				<div class="ui icon input">
+       				<input type="text" id = "searchFullName" placeholder="Search..." >
+       				<i class="search link icon" onclick = "searchUsers();"></i>
+     				</div>
+   				</form>
+   				<a class = "item" id="exitButton"> 
+					    <i class="off large icon"></i>
+   				</a>
+ 		</div>
+ 		
+	</div>
+	
+	<div id="upload" class="white-popup  mfp-hide">
+		<h3 class="ui header">上传照片</h3>
+		
+		<div class="ui three small steps">
+			<div class="ui active step" id="step1" style="cursor: pointer;">选人</div>
+			<div class="ui disabled step" id="step2" style="cursor: default">选照片</div>
+			<div class="ui disabled step" id="step3" style="cursor: default">完成</div>
+   		</div>
+   			
+   		<div class="ui divider"></div>
+   			
+		<form class="ui form uploadForm" id="choosePeople" onSubmit="return validateUploadFormOne()">
+			<div class="field" id="fullNameTest">
+            	<label>姓名</label>
+                <div class="ui left labeled icon input">
+                	<input type="text" id="fullName" placeholder="姓名" name="fullName" >
+                	<i class="user icon"></i>
+                </div>
+       		</div>
+			<div class="field" id="schoolTest">
+				<label>学校</label>
+                <div class="ui left labeled icon input">
+                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
+                  	<i class="book icon"></i>
+               	</div>
+      		</div>
+			<div class="field" id="entryTimeTest">
+				<label>入学年份</label>
+           		<div class="ui left labeled icon input">
+  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
+					<i class="align justify icon"></i>
+        		</div>
+     		</div>
+            <div class="ui error message"></div>
+<!-- 			<div class="ui divider"></div> -->
+			<div class="ui black fluid button" id="nextstep1" >下一步</div>
+<!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
+		</form>
+ 				
+ 			<div class="ui form uploadForm" id="choosePic" style="display:none">
+    			<div class="ui field">
+    				<label>照片描述</label>
+    				<textarea></textarea>
+    			</div>
+
+<!-- 				<div class="ui divider"></div> -->
+				
+				<img id="img_prev" src="" alt="your image" ><br>
+				<a href="javascript:;" class="addpic">
+					<input type ="file" id="fileElem"  onchange="readURL(this);">选择图片
+				</a>
+				<!-- <button class="ui fluid blue button" id="fileSelect">选择文件</button> -->
+				<div class="ui black fluid button" id="nextstep3"  >下一步</div>
+ 			</div>
+ 				
+ 			<div class="ui form uploadForm" id="confirm" style="display:none">
+				<!-- 预览效果 -->
+				<div class="ui message" id="previewmessage"></div>
+				<div class="ui items">
+					<div class="item">
+						<div class="image">
+							<img src="./img/profile_test/247146.jpg">
+						</div>
+						<div class="content">
+							<div class="name">
+								图片预览
+							</div>
+							<p class="description">图片描述</p>
+						</div>
+					</div>
+				</div>
+<!-- 				<div class="ui divider"></div> -->
+				<div class="ui black fluid button" id="submitBtn"  >确定上传</div>
+ 			</div>
+ 				
+			<div class="ui form uploadForm" id="rechoosePeople" style="display:none"> <!-- 重名选人 -->
+				<div class="ui two column divided grid">
+					<div class="middle aligned column">
+						<div class="ui attached message" id="rechooseMessage"></div>
+						<div class="ui selection list" id="rechooselist"></div>
+						<div class="ui red bottom attached message segment"  id="rechooseError" style="display:none">请选择要发给的对象</div>
+					</div>
+					<div class="middle aligned column">
+					    <div>
+					    	<img class="ui medium image" src="img\profile_test\247144.jpg">
+				    	</div>
+				    </div>
+				</div>
+				<div class="ui divider"></div>
+				<div class="ui black fluid button" id="nextstep2" >下一步</div>
+			</div>
+	</div>
+
+	<div class="ui dimmer page hidden">	
+	 	<div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
+		    <div class="header">退出 Truthbook</div>
+	    	<div class="content">
+		    	<div class="left"><i class="home icon"></i></div>
+	      		<div class="right"><p>确定一定以及肯定要下线并且   <b>注销登录</b>   了吗?</p></div>
+	   		</div>
+	    	<div class="actions">
+	      		<div class="two fluid ui buttons">
+	        		<div class="ui negative fade animated left labeled icon button ">
+	          			<i class="remove icon"></i>
+	          			<div class="visible content">取消</div>
+	          			<div class="hidden content">对不起，是我点错了</div>
+	        		</div>
+	        		<div class="ui positive fade animated right labeled icon button">
+	        			<div class="visible content">退出</div>
+	          			<div class="hidden content">谁都别拦着我</div>
+	          			<i class="checkmark icon"></i>
+	        		</div>
+	      		</div>
+	    	</div>
+	    </div>
+	</div>
+
+	
+	<div class="timelineContainer">
+		<div class="timelineItem timelineFirst">
+			<div class="timelineSider">
+				<div class="timelineBookmark">
+					<div class="timelineBookmarkInfo">
+						<a href="" class="timelineBookmarkInfoUsername">JoeWu就是路人</a>
+						<span class="timelineBookmarkInfoTimestamp">2天前</span>
+					</div>
+					<div class="timelineBookmarkAvatar">
+						<img class="ui avatar image" src="Uploaded/wzy_to_csq_at_2014-04-17_23-37-53.jpeg">
+					</div>
+				</div>
+			</div>
+			<div class="timelineCenter">
+				<div class="ui items">
+					<div class="item">
+						<a class="image" href="Uploaded/wzy_to_csq_at_2014-04-17_23-36-30.JPG">
+							<img class="img1" src="Uploaded/wzy_to_csq_at_2014-04-17_23-36-30.JPG">
+							<div class="imgbtnArea" >
+								<div class="ui tiny button likebtn"><i class="heart tiny icon"></i></div>
+<!-- 								<div class="ui tiny red inverted button commentbtn commentToggle">
+									<i class="comment icon"></i>undefined</div> -->
+							</div>
+						</a>
+						<div class = 'discript content'>
+		    				<p class='description'>这是一张有描述的图片这是一张有描述的图片这是一张有描述的图片
+		    					这是一张有描述的图片这是一张有描述的图片这是一张有描述的图片这是一张有描述的图片这是一张有描述的图片这是一张有描述的图片这是一张有</p>
+		    				<div class='meta'>
+		    					<a class='uploaderName'>By uploaderName</a>
+		    					<span class='uploaderId' style='display:none;'> uploaderId</span>
+		    				</div>
+		    			</div>
+		    			<div class='ui minimal comments'>
+			    			<div class='commentwrap'>
+			    				<div class="comment loadAllComments">
+			    					<div class="content">
+			    						<div class="text">显示剩余6条评论</div>
+			    					</div>
+			    				</div>
+			    				<div class="comment" id="commentId1">
+									<a class="avatar tiny" href="">
+										<img src="img/logo.ico">
+									</a>
+									<div class="content">
+										<a class="author">repliedByName</a>
+										<div class='metadata' style='display:inline;'><span>to</span></div>
+										<a class='to author' style='display:inline;'>repliedToName</a>
+										<div class="text">
+											我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字
+										</div>
+										<div class="actions" style='display:inline;'>
+								        	<a class="reply" style='display:inline;'>回复</a>
+								        	<a class="delete" id='delete1' style='display:inline;'>删除</a>
+							            </div>
+							            <span class="date">1天前</span>
+									</div>
+								</div>
+			    				<div class="comment" id="commentId2">
+									<a class="avatar tiny" href="">
+										<img src="img/logo.ico">
+									</a>
+									<div class="content">
+										<a class="author">repliedByName</a>
+										<div class='metadata' style='display:inline;'><span>to</span></div>
+										<a class='to author' style='display:inline;'>repliedToName</a>
+										<div class="text">
+											我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字
+										</div>
+										<div class="actions" style='display:inline;'>
+								        	<a class="reply" style='display:inline;'>回复</a>
+								        	<a class="delete" id='delete1' style='display:inline;'>删除</a>
+							            </div>
+							            <span class="date">1天前</span>
+									</div>
+								</div>
+			    				<div class="comment" id="commentId3">
+									<a class="avatar tiny" href="">
+										<img src="img/logo.ico">
+									</a>
+									<div class="content">
+										<a class="author">repliedByName</a>
+										<div class='metadata' style='display:inline;'><span>to</span></div>
+										<a class='to author' style='display:inline;'>repliedToName</a>
+										<div class="text">
+											我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字
+										</div>
+										<div class="actions" style='display:inline;'>
+								        	<a class="reply" style='display:inline;'>回复</a>
+								        	<a class="delete" id='delete1' style='display:inline;'>删除</a>
+							            </div>
+							            <span class="date">1天前</span>
+									</div>
+								</div>
+			    				<div class="comment" id="commentId4">
+									<a class="avatar tiny" href="">
+										<img src="img/logo.ico">
+									</a>
+									<div class="content">
+										<a class="author">repliedByName</a>
+										<div class='metadata' style='display:inline;'><span>to</span></div>
+										<a class='to author' style='display:inline;'>repliedToName</a>
+										<div class="text">
+											我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字
+										</div>
+										<div class="actions" style='display:inline;'>
+								        	<a class="reply" style='display:inline;'>回复</a>
+								        	<a class="delete" id='delete1' style='display:inline;'>删除</a>
+							            </div>
+							            <span class="date">1天前</span>
+									</div>
+								</div>
+			    				<div class="comment newcomment" id="commentId5">
+									<a class="avatar tiny" href="">
+										<img src="img/logo.ico">
+									</a>
+									<div class="content">
+										<a class="author">repliedByName</a>
+										<div class='metadata' style='display:inline;'><span>to</span></div>
+										<a class='to author' style='display:inline;'>repliedToName</a>
+										<div class="text">
+											我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。
+										</div>
+										<div class="actions" style='display:inline;'>
+								        	<a class="reply" style='display:inline;'>回复</a>
+								        	<a class="delete" id='delete1' style='display:inline;'>删除</a>
+							            </div>
+							            <span class="date">1天前</span>
+									</div>
+								</div>
+			    				<div class="comment newcomment" id="commentId6">
+									<a class="avatar tiny" href="">
+										<img src="img/logo.ico">
+									</a>
+									<div class="content">
+										<a class="author">repliedByName</a>
+										<div class='metadata' style='display:inline;'><span>to</span></div>
+										<a class='to author' style='display:inline;'>repliedToName</a>
+										<div class="text">
+											我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。
+										</div>
+										<div class="actions" style='display:inline;'>
+								        	<a class="reply" style='display:inline;'>回复</a>
+								        	<a class="delete" id='delete1' style='display:inline;'>删除</a>
+							            </div>
+							            <span class="date">1天前</span>
+									</div>
+								</div>							
+			    			</div>
+			    		</div>
+			    		<div class='ui reply form'>
+		    				<div class='field' >
+		    					<textarea class='textarea' placeholder='你想说…' wrap="off" rows="1"></textarea>
+		    				</div>
+		    				<span class = 'replyToId' style='display:none;'></span>
+		    				<span class = 'replyToName' style='display:none;'></span>
+		    				<button class='ui fluid labeled icon teal commentSubmit button'>
+		    					<i class="icon edit"></i>添加评论
+		    				</button>
+		    			</div>
+		    			<div class="extra">
+		    				<span class='numLikeSpan'>2</span><span>个赞</span>
+		    			</div>		    		
+			    	</div>
+				</div>
+			</div>			
+		</div>
+		
+		<div class="timelineItem">
+			<div class="timelineSider">
+				<div class="timelineBookmark">
+					<div class="timelineBookmarkInfo">
+						<a href="" class="timelineBookmarkInfoUsername">JoeWu就是路人</a>
+						<span class="timelineBookmarkInfoTimestamp">3天前</span>
+					</div>
+					<div class="timelineBookmarkAvatar">
+						<img class="ui avatar image" src="Uploaded/wzy_to_csq_at_2014-04-17_23-37-53.jpeg">
+					</div>
+				</div>
+			</div>
+			<div class="timelineCenter">
+				<div class="ui items">
+					<div class="item"></div>
+				</div>			
+			</div>
+		</div>
+		<div class="timelineItem">
+			<div class="timelineSider">
+				<div class="timelineBookmark">
+					<div class="timelineBookmarkInfo">
+						<a href="" class="timelineBookmarkInfoUsername">JoeWu就是路人</a>
+						<span class="timelineBookmarkInfoTimestamp">3天前</span>
+					</div>
+					<div class="timelineBookmarkAvatar">
+						<img class="ui avatar image" src="Uploaded/wzy_to_csq_at_2014-04-17_23-37-53.jpeg">
+					</div>
+				</div>
+			</div>
+			<div class="timelineCenter">
+				<div class="ui items">
+					<div class="item"></div>
+				</div>			
+			</div>
+		</div>
+		
+		<div class="timelineItem timelineLast">
+			<div class="timelineSider"></div>
+			<div class="timelineCenter">
+				<div class="ui basic fluid button">加载更多</div>		
+			</div>
+		</div>
+	</div>
+	
+	<iframe frameborder=0 marginwidth=0 marginheight=0 scrolling=no width=100% src="./footer.html"></iframe>
+	
+	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<script src="./assets/jquery/jquery.cookie.js"></script>
+	<script src="./assets/semantic/javascript/semantic.js"></script>
+	<script src="./assets/masonry.pkgd.min.js"></script>
+	<script src="./assets/imagesloaded.pkgd.min.js"></script>
+	<script src="./assets/magnific-popup/magnific-popup.js"></script>
+	<script src="./js/general/globalValue.js"></script>
+	<script src="./js/general/utility.js"></script>
+
+	<script src="./js/jquery.iframe-transport.js"></script>
+	<script src="./js/vendor/jquery.ui.widget.js"></script>
+	<script src="./js/jquery.fileupload.js"></script>
+
+	<script src="./js/uploadPic.js"></script>
+	<script src="./js/refreshFriendsLists.js"></script>
+	<script src="./js/uploadpopup.js"></script>
+	<script src="./js/sidebar_toggle.js"></script>
+	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	
+	<script src="./js/friendRelationButtonHandler.js"></script>
+	<script src="./js/userAndPageInfo.js"></script>
+	<script src="./js/general/searchBar.js"></script>
+	<script src="./js/timelinePage/timelineLayout.js"></script>
+	
+	<script type="text/javascript">
+	$(function() {
+		handleLogoutPopUp();
+		testFunction_Cookie();
+		addFriendButtonCheck();
+	});
+	
+
+	</script>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+			//semantic dropdown intialization
+		$('.ui.dropdown')
+ 				.dropdown(
+ 					{on: 'click'
+ 					}
+ 				);
+ 		$('.ui.accordion')
+		  .accordion()
+		;	
+	});
+	
+
+	</script>
+
+	<script>
+	$(function(){
+		$(".open_popup_link").magnificPopup({
+			type:"inline",
+			midClick: true,
+			callbacks: {
+				afterClose: function() {
+					resetUpload();
+// 					selected_num=-1;
+				}
+			}
+		});
+	});
+	</script>
+
+	<script>
+	$(function() {
+		$("#upload_for_fri_btn").dropdown( {
+			on: "hover"
+		});
+	});
+	</script>
+</body>
+</html>
