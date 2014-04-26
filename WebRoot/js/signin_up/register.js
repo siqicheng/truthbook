@@ -176,7 +176,7 @@ $('.ui.form.register-form')
 						$("#rechooseerror").hide();
 						
 						var onSuccess = function(data, textStatus) {
-							$("#imgPrev").attr("src", data[0].imageUrl);
+							$("#imgPrev").attr("src", getImageUrl(data[0].imageUrl, ImageType.Medium));
 						},
 							onError = function(xhr,status,error){
 								drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
@@ -199,6 +199,7 @@ $('.ui.form.register-form')
 						$("#rechooseerror").hide();
 						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
 						$("#checkinput").attr("disabled", "true");
+						$("#imgPrev").attr("src", DefaultPortrait);//TODO： 新建词条专用图片
 					});
 					$("#confirmbtn").click(function() {
 						if(selected_num == -1) {
@@ -225,6 +226,7 @@ $('.ui.form.register-form')
 					$("#rechooseform")
 					.modal("show").modal('setting', 'onHidden', function() {
 						selected_num = -1;
+						$("#imgPrev").attr("src", DefaultPortrait); //TODO：改成选人专用图片
 						$("#checkinput").val("");
 						$("#checkinput").attr("placeholder", "请选择");
 					});
