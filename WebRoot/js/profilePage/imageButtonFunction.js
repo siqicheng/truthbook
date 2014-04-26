@@ -176,15 +176,7 @@ function setPortraitStart(thisElem){
 					.parent().parent().parent().find(".imageId_span").html(),
 		userId = thisElem.parent().parent().parent()
 					.parent().parent().parent().find(".userId_span").html();
-	
-//	var onAjaxSuccess = function(data, textStatus) {
-//		setPortraitAPI(userId,imageId,onSetAjaxSuccess,onSetAjaxError);
-//	};
-//	var onAjaxError = function(xhr, textStatus, error) {
-//		drawConfirmPopUp("添加头像请求发送失败 Error: "+error);
-//	};
-	
-	
+
 	var onSetAjaxSuccess = function(data, textStatus) {
 		if (data == false){
 			drawConfirmPopUp("设置头像失败");
@@ -198,9 +190,6 @@ function setPortraitStart(thisElem){
 	};
 	
 	setPortraitAPI(userId,imageId,onSetAjaxSuccess,onSetAjaxError);
-	
-//	addPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError);
-	
 }
 
 function confirmSetPortrait(thisElem){
@@ -358,9 +347,7 @@ function submitComment(imageId){
 			content = thisText.val(),
 			repliedToId	= thisReplyForm.children(".replyToId").html(),
 			repliedById = $.cookie("truthbook").userId;
-		
-//		submitCommentStart(data,imageId,thisText,thisReplyForm);
-	
+
 		var onAjaxSuccess = function(data, textStatus) {
 			if (data != null){
 				var commentId = data;

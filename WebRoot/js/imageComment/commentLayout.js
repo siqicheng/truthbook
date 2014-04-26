@@ -34,12 +34,6 @@ function getThisComment_All(imageId,Control){
 					deleteDisplay = "none";
 				}
 				repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-//				if(repliedByProtrait==undefined){
-//					repliedByProtrait = DefaultPortrait;
-//				}else{
-//					repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-//				}
-					
 					
 				$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 						repliedByCommentId,repliedByName,repliedByProtrait,
@@ -65,12 +59,7 @@ function getThisComment_All(imageId,Control){
 						deleteDisplay = "none";
 					}
 					repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-//					if(repliedByProtrait==undefined){
-//						repliedByProtrait = DefaultPortrait;
-//					}else{
-//						repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-//					}
-					
+
 					$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 						repliedByCommentId,repliedByName,repliedByProtrait,
 						repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
@@ -113,6 +102,8 @@ function addCommentButtonHandler(imageId){
 function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,
 							repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){
 	
+	
+	
 	html = 	"<div class=\"comment\" id=\"commentId" + commentId + "\">"+
 				"<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>"+
 				"<span class = 'repliedByName_span' style='display:none;'>"+repliedByName+"</span>"+
@@ -138,4 +129,6 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 			"</div>";
 	return html;
 }
+
+
 

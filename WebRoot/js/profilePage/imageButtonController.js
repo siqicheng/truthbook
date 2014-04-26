@@ -102,13 +102,3 @@ function addImageControlButtonPopup(className,displayContent,imageId){
 		    content: displayContent
 	});
 }
-
-
-
-
-
-
-
-
-
-
