@@ -147,6 +147,12 @@ function getRelationship(friendId) {
 	return 0;
 }
 
+function getImageUrl(url,style){
+	return url.substring(0,url.lastIndexOf("/")+1)+style+url.substring(url.lastIndexOf("/")+1);
+}
+
+
+
 /*Api helper functions*/
 
 function addFriendAPI(id, friend_id, type, is_invitee,  onSuccess, onError) {
@@ -328,7 +334,7 @@ function setPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError){
 	var path = "v1/portrait/set",
 		url = ServerRoot + ServiceType.PORTRAIT +path,
 		data ="userId=" + userId + "&imageId=" + imageId,
-		ajax_obj = getAjaxObj(url, "PUT", "json", onAjaxSuccess, onAjaxError);
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
@@ -349,6 +355,25 @@ function fullCommentAPI(userId,content,repliedToId,repliedById,onAjaxSuccess,onA
 		url = ServerRoot + ServiceType.COMMENT +path,
 		data ="userId=" + userId + "&content=" + content + 
 				"&repliedToId=" + repliedToId + "&repliedById=" + repliedById,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function simpleCommentAPI(userId,content,repliedById,onAjaxSuccess,onAjaxError){
+	var path = "v1/comment/add/replyBy",
+		url = ServerRoot + ServiceType.COMMENT +path,
+		data ="userId=" + userId + "&content=" + content + 
+				"&repliedById=" + repliedById,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function addCommentToImageByImageIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError){
+	var path = "v1/imageComment/add",
+		url = ServerRoot + ServiceType.COMMENT +path,
+		data ="imageId=" + imageId + "&commentId=" + commentId,
 		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);

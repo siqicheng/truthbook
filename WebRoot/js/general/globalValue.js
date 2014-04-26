@@ -16,7 +16,7 @@ $(function (){
  * 	Website and RESTful AJAX URL
  */
 
-//localhost = "175.186.105.126";
+//localhost = "175.186.105.228";
 localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
@@ -44,6 +44,8 @@ upload_for_friend = false;
 type_nFriends = 1;
 type_eFriends = 2;
 
+maxItemNum = 8;
+
 NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =8;
 NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 5;
 
@@ -55,6 +57,18 @@ CONTROL = {
 COMMENT = {
 		No:0,
 		Yes:1
+};
+MAX_MesssageToSend = 100;
+
+/*********************************************************************************
+ * 	Image style
+ */
+
+ImageType = {
+		Large : "Large",
+		Medium : "Medium",
+		Small : "Small",
+		Origin : ""
 };
 
 /*********************************************************************************

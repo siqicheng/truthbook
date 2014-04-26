@@ -161,16 +161,26 @@ function drawFriendsList(id, barType, friendsType) {
 					"</div>" +
 					"</div>";
 	if(num > 0) {
-		html = "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
-		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
-		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
-			"<a class=\"prevpage\">" +
-				"<i class=\"left arrow icon\"></i>" +
-			"</a>"+
-			"<a class=\"nextpage\">"+
-				"<i class=\"right arrow icon\"></i>"+
-			"</a>"+
-		"</div></div>";
+//		html = "<div class=\"ui item pagination\" style=\"display:none\" id=\"pageNum\">" +
+//		"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
+//		"<div class=\"right floated\" style=\"padding-top:0px;\">" +
+//			"<a class=\"prevpage\">" +
+//				"<i class=\"left arrow icon\"></i>" +
+//			"</a>"+
+//			"<a class=\"nextpage\">"+
+//				"<i class=\"right arrow icon\"></i>"+
+//			"</a>"+
+//		"</div></div>";
+		html ="<div class='ui thin item pagination'  id='pageNum' style='text-align:center;' >" +
+								"<div class='prevpage changePage' style='display:inline; padding-top:0; padding-right: 40px;'>" +
+										"<i class='left arrow icon' style='margin-right:0px;'></i>"+
+									"上一页"+
+								"</div>"+
+								"<span>1</span>"+
+								"<div class='nextpage changePage' style='display:inline; padding-top:0; padding-left: 40px;'>"+
+									"下一页"+
+										"<i class='right arrow icon' style='margin-right: 0px;'></i>"+
+								"</div></div>";
 		var img;
 		for(var i=0; i<num; i++) {
 			if(friendsArray[friendsType][i]["isActivated"] == "false") {
@@ -197,11 +207,20 @@ function drawFriendsList(id, barType, friendsType) {
 	};
 	$("#"+barType + " ."+friendsType+"List").html(html);
 	showPage(barType, friendsType, 0, num);
+	$("#"+barType + " ."+friendsType+"List" + " .item.pagination").hover(function(){
+		$(this).children(".right.floated").fadeIn(50);},
+		function(){
+		$(this).children(".right.floated").fadeOut(50);}
+	);
+	$("#"+barType + " ."+friendsType+"List").children().children('.changePage').hover(	
+			function(){$(this).css("color","#33B2E1");},
+			function(){$(this).css("color","");}
+	);
 }
 
 function showPage(barType, friendsType, page, num) {
-	var min=(page)*5,
-		max = (page+1)*5-1;
+	var min=(page)*maxItemNum+1,
+		max = (page+1)*maxItemNum;
 	if(max>num) {max=num;};
 	$("#"+barType+" ."+friendsType+"List .item").each(function() {
 		if(($(this).index()<min) || ($(this).index()>max)) {
@@ -211,18 +230,21 @@ function showPage(barType, friendsType, page, num) {
 		}
 	});
 	var pagination = $("#"+barType+" ."+friendsType+"List .item").first();
-	if(num<5) {
-		pagination.hide();
+	if( num ==0 ) {
+		pagination.show();
+		return false;
+	};
+	if(num<maxItemNum) {
 		return false;
 	} else {
 		pagination.show();
 	}
-	var maxpage = Math.ceil(num/5);
-	pagination.children(".content").html("Page "+(page+1));
+	var maxpage = Math.ceil(num/maxItemNum);
+	pagination.children('span').text(page+1);
 	var prev=(page+maxpage-1)%(maxpage),
 		next=(page+1)%(maxpage);
-	pagination.children().children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
-	pagination.children().children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
+	pagination.children(".prevpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+prev+", "+num+")");
+	pagination.children(".nextpage").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
 	pagination.children(".content").attr("onclick","showPage(\""+barType+"\",\""+friendsType+"\", "+next+", "+num+")");
 }
 

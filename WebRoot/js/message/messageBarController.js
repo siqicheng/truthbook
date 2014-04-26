@@ -2,11 +2,6 @@ $(function() {
 	getMessage();
 });
 
-$(window).load(function() {
-	if($("#unreadMessageNum").html() != "00"){
-		showMessageNumberTransition("#unreadMessageNum");
-	}
-});
 
 function messageLengthJson(data){
 	if(data == null){
@@ -35,6 +30,12 @@ function getMessage(){
 	getNewMessage(MessageType.ACCEPTIMAGE);
 	getNewMessage(MessageType.REPLY);
 	getNewMessage(MessageType.UPGRADE);
+	
+	$(window).load(function() {
+		if(Number($("#unreadMessageNum").html()) != 0){	
+			showMessageNumberTransition("#unreadMessageNum");
+		}
+	});
 
 }
 
@@ -329,7 +330,7 @@ function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 		inviteToUploadButtonOneOnclick(thisUserId);	
 		break;
 	case "6"://reply
-		goToThatImage();
+		goToThatImage(thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "7"://upgrade
 		
@@ -369,9 +370,7 @@ function buttonTwoOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 //	}	
 }
 
-function goToThatImage(){
-	
-}
+
 
 
 

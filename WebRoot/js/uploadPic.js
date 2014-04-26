@@ -120,7 +120,21 @@ $(function() {
 		},
 		done: function(e, data) {
 			gotoComplete();
+		},
+		progressall: function(e, data) {
+			var progress = parseInt(data.loaded / data.total * 100, 10);
+			$("#uploadProgress .bar").css(
+				"width",
+				progress + "%"
+			);
+		},
+		submit: function(e, data) {
+			$("#choosePic .two.buttons").hide();
+			$("#uploadProgress").show();
 		}
+//		disableImageMetaDataSave: true,
+//		imageOrientation: true,
+//		previewOrientation: 0
 	});
 	
 	$("#complete .black.button").click( function() {
@@ -187,6 +201,7 @@ $(function() {
 			checkFriendRelationship(picReceiver.userId, userId, onSuccess, onError);
 		} else {
 			console.log("upload pic for " + picReceiver);
+			completeMessage("为好友上传完成！", "赶快去通知好友来看吧！");
 			var userId = $.cookie("truthbook").userId;
 			uploadPic();
 		};
@@ -194,13 +209,14 @@ $(function() {
 
 	function nextstep1Function() {
 		var isValidForm = $("#choosePeople").form("validate form");
+		$("#choosePeople .message").show();
 		if(picReceiver != null) {
 			gotoChoosePic();
 			return;
 		};
-//		if(isValidForm == true) {
+		if(isValidForm == true) {
 			var user = $("#fullName").val();
-			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
+//			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
 			console.log("choose people form data : " + data);
 	//		Verify user quote: (fullName,school,entryTime) exist
@@ -285,7 +301,7 @@ $(function() {
 			};
 			verifyUserExists(data, onSuccess, onError);
 		};
-//	}
+	}
 });
 
 function upload_choosepic(people) {
@@ -339,6 +355,10 @@ function uploadPic() {
 	                  {
 	                      name: 'receiverid',
 	                      value: picReceiver.userId
+	                  },
+	                  {
+	                	  name: 'description',
+	                	  value: $("#picDescription").val()
 	                  }
 	              ];
 	picData.submit();
@@ -384,6 +404,8 @@ function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$('#img_prev').show();
+	$("#choosePic .two.buttons").show();
+	$("#uploadProgress").hide();
 	$("#step1").attr("class", "ui step");
 	$("#step2").attr("class", "ui active step");
 	$("#step3").attr("class", "ui disabled step");
