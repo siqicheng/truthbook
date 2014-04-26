@@ -25,9 +25,6 @@ public class MultipartRequestHandler {
 		// 1. Get all parts
 		Collection<Part> parts = request.getParts();
 		
-		// 2. Get paramter "twitter"
-		String twitter = request.getParameter("twitter");
-
 		// 3. Go over each part
 		FileMeta temp = null;
 		for(Part part:parts){	
@@ -112,6 +109,7 @@ public class MultipartRequestHandler {
 						temp.setFileType(item.getContentType());
 						temp.setFileSize(item.getSize()/1024+ "Kb");
 						temp.setIs(item.getInputStream());
+						
 				    	// 2.7 Add created FileMeta object to List<FileMeta> files
 						files.add(temp);
 				    }
