@@ -2,7 +2,8 @@ $(function() {
 	resetUpload();
 
 //Initializations BEGIN
-	
+
+	/*upload sidebar效果初始化*/
 	$('#upload')
 		.sidebar({
 			onShow: function(){
@@ -20,6 +21,7 @@ $(function() {
 		.sidebar('attach events', '#close_sidebar_btn', 'hide')
 		.sidebar('attach events', '.open_popup_link', 'hide');
 	
+	/*新建词条按钮初始化*/
 	$("#upload_for_new_btn").click(function(){
 		showSidebar();
 	});
