@@ -61,5 +61,6 @@
             <one-to-many class="db.mapping.object.Portrait" />
         </set>
         
+        <one-to-one name="userFetch" class="db.mapping.object.UserFetch" cascade="all"></one-to-one>  
     </class>
 </hibernate-mapping>

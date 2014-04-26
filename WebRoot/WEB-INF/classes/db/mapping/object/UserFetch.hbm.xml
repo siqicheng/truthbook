@@ -15,5 +15,6 @@
         <property name="lastFetchTime" type="java.sql.Timestamp">
             <column name="last_fetch_time" length="19" not-null="true" />
         </property>
+        <one-to-one name="user" class="db.mapping.object.User" ></one-to-one>  
     </class>
 </hibernate-mapping>

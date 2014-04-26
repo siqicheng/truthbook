@@ -42,8 +42,8 @@ public class UserDAO extends BaseHibernateDAO  {
 			if(password !=null){
 				UserPasswordDAO password_dao = new UserPasswordDAO();
 				password_dao.getSession().save(password);
-				UserFetchDAO userFetchdao = new UserFetchDAO();
-				userFetchdao.save(new UserFetch(transientInstance, new Timestamp(System.currentTimeMillis())));
+//				UserFetchDAO userFetchdao = new UserFetchDAO();
+//				userFetchdao.save(new UserFetch(transientInstance, new Timestamp(System.currentTimeMillis())));
 			}
 			log.debug("save successful");
 		} catch (RuntimeException re) {
