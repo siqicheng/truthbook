@@ -230,11 +230,11 @@ function showPage(barType, friendsType, page, num) {
 		}
 	});
 	var pagination = $("#"+barType+" ."+friendsType+"List .item").first();
-	if( num ==0 ) {
+	if( num == 0 ) {
 		pagination.show();
 		return false;
 	};
-	if(num<maxItemNum) {
+	if(num<=maxItemNum) {
 		return false;
 	} else {
 		pagination.show();
