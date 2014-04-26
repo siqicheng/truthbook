@@ -64,7 +64,7 @@ public class MsgService {
 		}	
 	}
 	
-	@GET
+	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/{imageid}/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendImageMesssage(@PathParam("id") Integer id,
@@ -110,7 +110,7 @@ public class MsgService {
 	}
 	
 	@POST
-	@Path("v1/message/{id}/{srcid}/{type}/send")
+	@Path("v1/message/content/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendContentMesssage(@FormParam("id") Integer id,
 			@FormParam("srcid") Integer srcid, 
