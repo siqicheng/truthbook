@@ -1,7 +1,12 @@
 
+function modifiedImageNum(num){
+	numImage = Number($("#photos_num").html()) + num;
+	$("#photos_num").html(numImage);
+}
+
 
 function prepareElement(data,isAppend,Control,Comment){
-	var url = data.imageUrl;
+	var url = data.imageUrl,
 		description = data.description,
 		uploaderName =  data.uploaderName,
 		uploaderId = data.uploaderId,

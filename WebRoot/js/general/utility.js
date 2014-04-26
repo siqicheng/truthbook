@@ -148,7 +148,11 @@ function getRelationship(friendId) {
 }
 
 function getImageUrl(url,style){
-	return url.substring(0,url.lastIndexOf("/")+1)+style+url.substring(url.lastIndexOf("/")+1);
+	if (url==undefined||url==null){
+		return DefaultPortrait;
+	}else{
+		return url.substring(0,url.lastIndexOf("/")+1)+style+url.substring(url.lastIndexOf("/")+1);
+	}
 }
 
 

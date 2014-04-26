@@ -6,7 +6,9 @@ $(function(){
 });
 
 /*********************************************************************************	
- *	Homepage check
+ *	Home Page check
+ *	1.	get all image if at home page
+ *	2.	check friend relation if on other's page
  */
 
 function getImagePreCheck(){
@@ -19,6 +21,10 @@ function getImagePreCheck(){
 
 /*********************************************************************************	
  *	Friend relation check
+ *	1.	is friend:	get all image without control panel
+ *	2.	stranger:	get one image (no control panel, 
+ *								   no comments can be seen, 
+ *								   cannot add comment)
  */
 
 function friendRelationCheck(){
@@ -33,7 +39,7 @@ function friendRelationCheck(){
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
-		drawConfirmPopUp("获取好友关系请求发送失败 Error: " + error);
+		if(isDebug)	drawConfirmPopUp("获取好友关系请求发送失败 Error: " + error);
 		return false;
 	};
 	
@@ -42,12 +48,16 @@ function friendRelationCheck(){
 }
 
 /*********************************************************************************	
- *	Get all images when on homepage or friend's page
+ *	Get all images when on home page or friend's page
+ *	1.	separate unapproved image and approved image
+ *	2.	the data and length are global variabels
+ *	3.	check new image button 
+ *	4.	draw approved image
  */
 
 function getAllImage(userId,Control){
 	var onAjaxSuccess = function(data,textStatus){
-		
+		//separate unapproved image and approved image
 		var allImageData = approvedImageData(data,data.length);
 		
 		numApprovedImage = allImageData[0].length;
@@ -71,12 +81,16 @@ function getAllImage(userId,Control){
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
-		drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
+		if(isDebug)	drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
 		return false;
 	};	
 	
 	getAllImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError);
 }
+
+/*********************************************************************************	
+ *	Help function to separate new image and approved image
+ */
 
 function approvedImageData(data,numTotalImage){
 	var approvedImageData = new Array();
@@ -91,32 +105,32 @@ function approvedImageData(data,numTotalImage){
 	return [approvedImageData,unapprovImageData];
 }
 
+/*********************************************************************************	
+ *	draw guest image(just latest one right new)
+ */
+
 function getGuestImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 		disableShowMoreButton();
 		if (data[0].imageUrl != undefined ){
 			numApprovedImage = 1;
-			modifiedImageNum(numApprovedImage);
 			drawGuestOneImage(data);
-			return true;
 		}
 		else{
-			numApprovedImage = 0;
-			modifiedImageNum(numApprovedImage);
+			numApprovedImage = 0;		
 			disableShowMoreButton();
-			return true;
 		}
+		modifiedImageNum(numApprovedImage);
 	};
 	var onAjaxError = function(xhr,status,error){
-		drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
+		if(isDebug) drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
 		return false;
 	};
 	getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError);
 }
 
 /*********************************************************************************
- * 	When the user only have one image or only allowed to see one image,
- * 	Use this to draw one segement and do not draw the show more button.
+ * 	When the user only allowed to see one image,
  */
 function drawGuestOneImage(imageData){
 	$.cookie("truthbook_Page_Image_Pointer", 1);
@@ -126,14 +140,10 @@ function drawGuestOneImage(imageData){
 
 /*********************************************************************************
  * 	The function to execute right after get all the image info from the server.
- * 
- * 	Two Usage:
- * 			1.	numOfNextBatch == numToShow (10~20) < numTotalImage : 
- * 					Import n images from cookie at a time and show them all
- * 					ShowMore Button click will call drawNextBatchImage()
- * 		   *2.	numOfNextBatch == numTotalImage > numToShow (10~20) :
- * 					Import all images and show partial of them
- * 					ShowMore Button click will call showNextBatchImage()
+ * 	1.	initialize the image pointer
+ * 	2.	prepare the element
+ * 	3.	use masonry to initialize the image layout
+ * 	4.	add magnificPopup to current image
  */
 function drawNextBatchImage(numOfImage,numToShow,imageData,Control){
 	$.cookie("truthbook_Page_Image_Pointer", numToShow);
@@ -143,8 +153,12 @@ function drawNextBatchImage(numOfImage,numToShow,imageData,Control){
 	}
 	if (numOfImage<=numToShow)	disableShowMoreButton();
 	itemInitialize("#eventsegment");
-	return;
 }
+
+/*********************************************************************************
+ * 	The function similar to drawNextBatchImage().
+ * 	1.	draw unapproved image
+ */
 
 function drawUnapproveImage(numOfImage,imageData){
 	for(var i = 0 ; i < numOfImage ; i++){
@@ -153,50 +167,50 @@ function drawUnapproveImage(numOfImage,imageData){
 	itemInitialize("#neweventsegment");
 }
 
-
+/*********************************************************************************
+ * 	The HTML part of new image
+ */
 function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId){
 	
 	var displayDate = dateHandle(createDate);
 	var urlLarge = getImageUrl(url,ImageType.Large);
 	var urlMedium = getImageUrl(url,ImageType.Medium);
 	
-	html =  "<div class='eventpile' id = 'un_imageId"+imageId+"' >" +
-	"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
-	"<span class = 'url_span' style='display:none;'>"+url+"</span>"+
-	"<div class='ui shape'>" +
-		"<div class='sides'>" +
+	html =  
+	"<div class='eventpile' id = 'un_imageId"+imageId+"'>" +
+		"<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>"+
+		"<span class = 'url_span' style='display:none;'>"+url+"</span>"+
+		"<div class='ui shape'>" +
+			"<div class='sides'>" +
 		
-			"<div class='active side ui items'>" +
-				"<div class='item'>" +    					
-					
-					"<a class='image' href='"+urlLarge+"'>"+
-						"<img src='"+urlMedium+"'>"+
-					"</a>"+
-					
-					"<div class = 'discript content'>"+
-						"<p class='description' style = 'display:"+descriptionDisplay+";word-break:break-all;margin-bottom: 10px;'>"+description+"</p>"+
-					"</div>"+
-					"<div class='meta' style = 'display:block;margin-top: 18px;' >"+
-						"<a class='uploaderName' style='display:block;font-size:14px;margin-bottom:4px;'>By 某个关注你的人</a>"+
-					"</div>"+
-					"<div class='ui confirmBtn icon' style='display:block;text-align:center;margin-bottom:10px;margin-top:10px;'>" +
-						"<div class='ui buttons'>"+
-						"<div class='ui negative button'>残忍拒绝</div>"+
-						"<div class='tiny or'></div>"+
-						"<div class='ui positive button'>欣然接受</div>"+
+				"<div class='active side ui items'>" +
+					"<div class='item'>" + 	
+						"<a class='image' href='"+urlLarge+"'>"+
+							"<img src='"+urlMedium+"'>"+
+						"</a>"+
+						"<div class = 'discript content'>"+
+							"<p class='description' style = 'display:"+descriptionDisplay+
+								";word-break:break-all;margin-bottom: 10px;'>"+description+"</p>"+
 						"</div>"+
-					"</div>" +
-		    		"<div class=\"extra\">"+
-		    	        "<span style='float: left;  text-align: left;'>"+displayDate+"</span>"+
-    	        	"</div>"+
-                 
-    	        "</div>" +
+						"<div class='meta' style = 'display:block;margin-top: 18px;' >"+
+							"<a class='uploaderName' style='display:block;font-size:14px;margin-bottom:4px;'>By 某个关注你的人</a>"+
+						"</div>"+
+						"<div class='ui confirmBtn icon' style='display:block;text-align:center;margin-bottom:10px;margin-top:10px;'>" +
+							"<div class='ui buttons'>"+
+								"<div class='ui negative button'>残忍拒绝</div>"+
+								"<div class='tiny or'></div>"+
+								"<div class='ui positive button'>欣然接受</div>"+
+							"</div>"+
+						"</div>" +
+						"<div class=\"extra\">"+
+		    	        	"<span style='float: left;  text-align: left;'>"+displayDate+"</span>"+
+		    	        "</div>"+              
+		    	  "</div>" +
               "</div>" +
 	        
-			"<div class='side ui items'>" +
-				"<div class='item'>" +
-				
-					"<div class='ui segment acceptHead' style='margin-bottom: 0px; padding: 0px; height: 45px;border-bottom-right-radius:0px;border-bottom-left-radius:0px;box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.1);'>" +
+              "<div class='side ui items'>" +
+              	  "<div class='item'>" +
+              	  	"<div class='ui segment acceptHead' style='margin-bottom: 0px; padding: 0px; height: 45px;border-bottom-right-radius:0px;border-bottom-left-radius:0px;box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.1);'>" +
     					"<div class=\"ui center aligned header\" style='cursor:auto'>"+
     						""+
     					"</div>"+
@@ -218,27 +232,17 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,i
 		    		"<div class=\"extra\">"+
 		    	        "<span style='float: left;  text-align: left;'>"+displayDate+"</span>"+
 		        	"</div>"+
-					
-    					
+		          "</div>" +
 				"</div>" +
-			"</div>" +
 			
-		"</div>" +
+			"</div>" +
 		"</div>" +
 	"</div>";
 return html;
 }
 
-
-
-
-
-
-
-
-
 /*********************************************************************************
- * 	The whole HTML part to draw
+ * 	The HTML part of approved image
  */
 function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike){
 	
