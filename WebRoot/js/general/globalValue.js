@@ -13,11 +13,17 @@ $(function (){
 
 
 /*********************************************************************************
+ * 	Debug mode
+ */
+
+isDebug = true;
+
+/*********************************************************************************
  * 	Website and RESTful AJAX URL
  */
 
-localhost = "175.186.105.228";
-//localhost = "localhost";
+//localhost = "175.186.105.228";
+localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
 DefaultImg = "img/logo_red.ico";

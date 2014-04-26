@@ -415,11 +415,9 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	var	replyDisplay = "none",
 		deleteDisplay = "inline";
 	
-	if(repliedByProtrait==undefined){
-		repliedByProtrait = DefaultPortrait;
-	}else{
-		repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-	}
+	
+	repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+
 	
 	$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 			repliedByCommentId,repliedByName,repliedByProtrait,

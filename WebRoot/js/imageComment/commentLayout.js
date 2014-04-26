@@ -33,11 +33,12 @@ function getThisComment_All(imageId,Control){
 				} else {
 					deleteDisplay = "none";
 				}
-				if(repliedByProtrait==undefined){
-					repliedByProtrait = DefaultPortrait;
-				}else{
-					repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-				}
+				repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+//				if(repliedByProtrait==undefined){
+//					repliedByProtrait = DefaultPortrait;
+//				}else{
+//					repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+//				}
 					
 					
 				$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
@@ -63,11 +64,12 @@ function getThisComment_All(imageId,Control){
 					} else {
 						deleteDisplay = "none";
 					}
-					if(repliedByProtrait==undefined){
-						repliedByProtrait = DefaultPortrait;
-					}else{
-						repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-					}
+					repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+//					if(repliedByProtrait==undefined){
+//						repliedByProtrait = DefaultPortrait;
+//					}else{
+//						repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+//					}
 					
 					$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 						repliedByCommentId,repliedByName,repliedByProtrait,
