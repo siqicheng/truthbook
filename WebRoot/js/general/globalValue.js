@@ -20,8 +20,6 @@ $(function (){
 localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
-DefaultImg = "img/logo_red.ico";
-QuoteImg = "img/logo.ico";
 ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
 ServiceType = {
     	   LOGIN:"loginService/",
@@ -31,20 +29,29 @@ ServiceType = {
     	   PORTRAIT:"portraitService/",
     	   COMMENT:"commentService/",
        };
-DefaultPortrait="img/profile_test/247144.jpg";
-DefaultPreviewImg="./img/profile_test/247146.jpg";
 
 /*********************************************************************************
  * 	Global Numbers
  */
 
-NEW_QUOTE = -1;
-picReceiver = null;
-upload_for_friend = false;
-type_nFriends = 1;
-type_eFriends = 2;
+/*Global Variables in uploadPic*/
+picReceiver = null;	//图片接收者
+picData = undefined; //图片信息
+upload_for_friend = false;//是否为好友上传
+userFriendsLists = undefined;//user's Friends Lists
+pageownerFriendsLists = undefined;//pageowner's Friends Lists
 
-maxItemNum = 8;
+/*Global Static Variables*/
+NEW_QUOTE = -1;      //新建词条
+type_nFriends = 1;//真友类型
+type_eFriends = 2;//极友类型
+
+DefaultImg = "img/logo_red.ico";
+DefaultPortrait="img/profile_test/247144.jpg";
+DefaultQuotePortrait = "img/logo.ico";
+DefaultPreviewImg="./img/profile_test/247146.jpg";
+
+maxItemNum = 8;//dropdown最多item数
 
 NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =8;
 NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 5;

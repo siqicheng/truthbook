@@ -2,6 +2,28 @@ $(function() {
 	resetUpload();
 
 //Initializations BEGIN
+	
+	$('#upload')
+		.sidebar({
+			onShow: function(){
+	//			selected_num=-1;
+				$("#upload_menu").toggle();
+				$("#close_sidebar_btn").slideDown();
+				},
+			onHide: function(){
+	//			selected_bool = false;
+				resetUpload();
+				$("#upload_menu").slideDown();
+				$("#close_sidebar_btn").toggle();
+				}
+			})
+		.sidebar('attach events', '#close_sidebar_btn', 'hide')
+		.sidebar('attach events', '.open_popup_link', 'hide');
+	
+	$("#upload_for_new_btn").click(function(){
+		showSidebar();
+	});
+	
 	/*  选人表单验证规则&初始化  */
 	$("#choosePeople").form({
 		username:{
@@ -69,7 +91,7 @@ $(function() {
 			url: "upload",
 			dataType: "json",
 			add: function(e, data) {
-				picData=data;
+				picData = data;
 			},
 			done: function(e, data) {
 				gotoComplete();

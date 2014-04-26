@@ -263,16 +263,16 @@ function drawFriendsList(id, barType, friendsType) {
 									"下一页"+
 										"<i class='right arrow icon' style='margin-right: 0px;'></i>"+
 								"</div></div>";
-		var img;
+		var portrait;
 		for(var i=0; i<num; i++) {
 			if(friendsArray[friendsType][i]["isActivated"] == "false") {
-				img = QuoteImg;
+				portrait = DefaultQuotePortrait;
 			} else {
-				img = DefaultImg;
+				portrait = friendsArray[friendsType][i].defaultPortrait;
 			};
 			html= html + "<div class=\"ui friend item\" style=\"display:none\">"+
 				"<img class=\"ui avatar image\" src=\""
-				+ img + "\">" + 
+				+ portrait + "\">" + 
 					"<div class=\"content frienditem\">" +
 					friendsArray[friendsType][i]["fullName"] +
 					"</div></div>";
