@@ -18,44 +18,60 @@ function getThisComment_All(imageId,Control){
 			if (numTotalComment == 1){
 				var commentContent = data.imageComment.comment.commentContent,
 					repliedByCommentId = data.imageComment.comment.repliedByCommentId,
-					repliedByName = data.imageComment.comment.repliedByName,
-					repliedByProtrait = data.imageComment.comment.repliedByProtrait,
+					repliedByName = data.imageComment.comment.repliedByCommentName,
+					repliedByProtrait = data.imageComment.comment.repliedByCommentPortrait,
 					repliedToCommentId = data.imageComment.comment.repliedToCommentId,
-					repliedToName = data.imageComment.comment.repliedToName,
-					commentId = data.imageComment[i].comment.commentId,
+					repliedToName = data.imageComment.comment.repliedToCommentName,
+					commentId = data.imageComment.comment.commentId,
 					
 					createDate = data.imageComment.comment.createDate;
 					
-					repliedToCommentId!=null? replyToDisplay = "inline":replyToDisplay = "none";
+				repliedToCommentId!= null ? replyToDisplay = "inline":replyToDisplay = "none";
+				repliedByCommentId != $.cookie("truthbook").userId ? replyDisplay = "inline":replyDisplay = "none";
+				if (Control == CONTROL.Self || repliedByCommentId == $.cookie("truthbook").userId){
+					deleteDisplay = "inline";
+				} else {
+					deleteDisplay = "none";
+				}
+				if(repliedByProtrait==undefined){
+					repliedByProtrait = DefaultPortrait;
+				}else{
+					repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+				}
 					
 					
 				$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 						repliedByCommentId,repliedByName,repliedByProtrait,
-						repliedToCommentId,repliedToName,createDate,replyToDisplay));
+						repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
 				
 			} else {
 				for (var i=0;i<numTotalComment;i++){
 					var commentContent = data.imageComment[i].comment.commentContent,
 						repliedByCommentId = data.imageComment[i].comment.repliedByCommentId,
-						repliedByName = data.imageComment[i].comment.repliedByName,
-						repliedByProtrait = data.imageComment[i].comment.repliedByProtrait,
+						repliedByName = data.imageComment[i].comment.repliedByCommentName,
+						repliedByProtrait = data.imageComment[i].comment.repliedByCommentPortrait,
 						repliedToCommentId = data.imageComment[i].comment.repliedToCommentId,
-						repliedToName = data.imageComment[i].comment.repliedToName,
+						repliedToName = data.imageComment[i].comment.repliedToCommentName,
 						commentId = data.imageComment[i].comment.commentId,
 
 						createDate = data.imageComment[i].comment.createDate;
 					
-					repliedToCommentId!=null? replyToDisplay = "inline":replyToDisplay = "none";
+					repliedToCommentId!=null ? replyToDisplay = "inline":replyToDisplay = "none";
+					repliedByCommentId != $.cookie("truthbook").userId ? replyDisplay = "inline":replyDisplay = "none";
 					if (Control == CONTROL.Self || repliedByCommentId == $.cookie("truthbook").userId){
 						deleteDisplay = "inline";
 					} else {
 						deleteDisplay = "none";
 					}
+					if(repliedByProtrait==undefined){
+						repliedByProtrait = DefaultPortrait;
+					}else{
+						repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+					}
 					
 					$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 						repliedByCommentId,repliedByName,repliedByProtrait,
-						repliedToCommentId,repliedToName,createDate,replyToDisplay,deleteDisplay));
-					
+						repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
 					
 				}			
 			}
@@ -80,7 +96,8 @@ function getThisComment_All(imageId,Control){
 
 function addCommentButtonHandler(imageId){
 	$("#imageId"+imageId).find(".actions .reply").click(function(){
-		replySomeone(imageId,$(this).parent().parent().parent().find(".repliedByName_span").html());
+		thisComment = $(this).parent().parent().parent();
+		replySomeone(imageId,thisComment.find(".repliedByName_span").html(),thisComment.find(".repliedByCommentId_span").html());
 	});
 	
 	$("#imageId"+imageId).find(".actions .delete").click(function(){
@@ -88,10 +105,11 @@ function addCommentButtonHandler(imageId){
 	});
 	
 	
+	
 }
 
 function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,
-							repliedToCommentId,repliedToName,createDate,replyToDisplay){
+							repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){
 	
 	html = 	"<div class=\"comment\" id=\"commentId" + commentId + "\">"+
 				"<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>"+
@@ -99,19 +117,19 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 				"<span class = 'repliedToCommentId_span' style='display:none;'>"+repliedToCommentId+"</span>"+
 				"<span class = 'commentId_span' style='display:none;'>"+commentId+"</span>"+
 				"<a class=\"avatar tiny\" style=\"padding-top: 6px;\">"+
-					"<img src=\""+DefaultImg+"\" style='width:35px;height:35px;'>"+
+					"<img src=\""+repliedByProtrait+"\" style='width:35px;height:35px;'>"+
 				"</a>"+
 				"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
 					"<a class=\"author\" style='font-weight:bold;color:#4C7A9F;font-size:12px;'>" + repliedByName + "</a>"+
 					
 					"<div class='metadata' style='display:"+replyToDisplay+";margin-left: 4px;font-size:12px;'><span class='date'>to</span></div>"+
-					"<a class='to author' style='display:"+replyToDisplay+";font-weight:bold;color:#4C7A9F;font-size:12px;'>"+repliedToName+"</a>"+
+						"<a class='to author' style='display:"+replyToDisplay+";font-weight:bold;color:#4C7A9F;font-size:12px;'>"+repliedToName+"</a><span style='font-size:12px;'> :</span>"+
 					"<div class=\"text\" style='margin-bottom: 0px; margin-top: 0px;font-size:14px;'>"+
 						commentContent+
 					"</div>"+
 					"<div class=\"actions\" style='display:inline;'>"+
-			              "<a class=\"reply \" style='display:inline;font-size:12px;'>回复</a>"+
-			              "<a class=\"delete \" style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
+			              "<a class=\"reply \" style='display:"+replyDisplay+";font-size:12px;'>回复</a>"+
+			              "<a class=\"delete \" id='delete"+commentId+"' style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
 		            "</div>"+
 		            "<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + createDate + "</span>"+
 				"</div>"+

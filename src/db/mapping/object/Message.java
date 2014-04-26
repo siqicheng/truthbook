@@ -67,7 +67,7 @@ public class Message implements java.io.Serializable {
 	}
 
 	public Integer getImageId() {
-		return ImageId;
+		return this.image.getImageId();
 	}
 
 	public void setImageId(Integer imageId) {

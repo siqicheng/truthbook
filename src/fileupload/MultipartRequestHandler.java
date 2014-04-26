@@ -109,7 +109,6 @@ public class MultipartRequestHandler {
 				    	temp.setPath(RealPath);
 				    	temp.setDescription(description);
 						temp.setFileName(item.getName());
-						temp.setContent(item.getInputStream());
 						temp.setFileType(item.getContentType());
 						temp.setFileSize(item.getSize()/1024+ "Kb");
 						temp.setIs(item.getInputStream());

@@ -101,6 +101,7 @@ public class Image implements java.io.Serializable {
 		this.liked = liked;
 	}
 	
+	@XmlTransient
 	public Integer getUserId(){
 		return this.user.getUserId();
 	}

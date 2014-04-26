@@ -20,10 +20,27 @@
 	</init-param>
   	<load-on-startup>1</load-on-startup>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>JAX-RS REST Servlet</servlet-name>
   	<url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>imageUploadServlet</servlet-name>
+  	<servlet-class>imageUpload.imageUploadServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>imageUploadServlet</servlet-name>
+  	<url-pattern>/servlet/imageUpload</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>ProgressServlet</servlet-name>
+  	<servlet-class>imageUpload.ProgressServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ProgressServlet</servlet-name>
+  	<url-pattern>/servlet/Progress</url-pattern>
   </servlet-mapping>
   
   <servlet>

@@ -319,7 +319,7 @@ public class CommentService {
 		Criteria criteria = session.createCriteria(ImageComment.class);
 		criteria.addOrder(Order.desc(ImageComment.ID))
 				.add(Restrictions.eq("image",image))
-				.setMaxResults(2);
+				.setMaxResults(commentNumber);
 		
 		List<ImageComment> icl = criteria.list();
 		

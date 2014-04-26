@@ -1,8 +1,114 @@
 
-function changeImageNum(){
-	numImage = Number($("#photos_num").html()) + $.cookie("truthbook_Page_Image_Num");
-	$("#photos_num").html(numImage);
+
+function prepareElement(data,isAppend,Control,Comment){
+	var url = data.imageUrl;
+		description = data.description,
+		uploaderName =  data.uploaderName,
+		uploaderId = data.uploaderId,
+		createDate = data.createDate,
+		numOfComment = data.commentCnt,
+		imageId = data.imageId,
+		numLike = data.like,
+		descriptionDisplay = "",
+		display = "inline";	
+	
+	if (numLike=="") numLike = "0";
+	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
+	
+	var html = thisImageHTML(url,description,descriptionDisplay,uploaderName,
+			uploaderId,createDate,numOfComment,display,imageId,numLike);
+	if (isAppend == true){
+		$("#eventsegment").append(html);
+	}else{
+		$("#eventsegment").prepend(html);
+	}
+	
+	addImageButtonHandler(imageId,Control,Comment);
+	if(Comment == COMMENT.Yes){
+		getThisComment_All(imageId,Control);
+	} else {
+		strangerHandler(imageId);
+	}
+	
+	var element = $("#eventsegment").find("#imageId"+imageId);
+	return element;
 }
+
+function prepareUnapprovedElement(data,isAppend){
+	var url = data.imageUrl;
+		description = data.description,
+		createDate = data.createDate,
+		imageId = data.imageId,
+		descriptionDisplay = "";
+		
+	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
+	
+	var html = thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId);
+	if (isAppend == true){
+		$("#neweventsegment").append(html);
+	}else{
+		$("#neweventsegment").prepend(html);
+	}
+	
+	addUnapprovedImageButtonHandler(imageId);
+	
+	var element = $("#neweventsegment").find("#un_imageId"+imageId);
+	return element;
+}
+
+
+/*********************************************************************************	
+ *	Handle new buttons
+ */
+
+function handleNewImageButton(){
+	showNewImageButton(numUnapprovImage);
+	$("#newPhotoButton").click(function(){
+		hideNewImageButton();
+		showReturnHomeButton();
+		$("#neweventwrap").slideToggle("slow",function(){
+		});	
+		drawUnapproveImage(numUnapprovImage,unapprovImage);
+		
+	});
+	$("#approvedPhotoButton").click(function(){
+		hideReturnHomeButton();
+		showNewImageButton(numUnapprovImage);
+		$("#neweventwrap").slideToggle("slow");
+		
+		$("#neweventsegment").masonry( 'destroy');
+		$("#neweventsegment").html("");
+	});
+}
+
+
+
+
+
+function showNewImageButton(numUnapprovImage){
+	$("#newPhotoButton").removeClass(" hidden");
+	$("#newPhotoButton").addClass(" visible");
+	$("#numOfUnapprovedImage").html(numUnapprovImage);
+	addFriendTransition("#newPhotoButton");
+}
+
+function hideNewImageButton(){
+	$("#newPhotoButton").removeClass(" visible ");
+	$("#newPhotoButton").addClass(" hidden ");
+}
+
+function showReturnHomeButton(){
+	$("#approvedPhotoButton").removeClass(" hidden");
+	$("#approvedPhotoButton").addClass(" visible");
+	addFriendTransition("#approvedPhotoButton");	
+}
+
+function hideReturnHomeButton(){
+	$("#approvedPhotoButton").removeClass(" visible ");
+	$("#approvedPhotoButton").addClass(" hidden ");
+}
+
+
 
 function imageInOrder(numTotalImage,data){
 	var imageIdinorder = [];
@@ -12,52 +118,44 @@ function imageInOrder(numTotalImage,data){
 		imageIdinorder [i][1] = i;
 	}
 	imageIdinorder.sort(function(x,y){return (y[0]-x[0]);});
-	return imageIdinorder;
+	var orderedData = new Array();
+	for	(var i = 0 ; i < numTotalImage;i++){
+		orderedData.push(data[imageIdinorder[i][1]]);
+	}
+	return orderedData;
 }
 
-function itemInitialize(){
-	
-	$('#eventsegment').masonry({		
+function itemInitialize(id){
+	$(id).masonry({		
 		itemSelector: '.eventpile',
 		gutter: 11});
 
-	$('#eventsegment').imagesLoaded( function() {
-		$('#eventsegment').masonry();
+	$(id).imagesLoaded( function() {
+		$(id).masonry();
 	});
-		
-	//buttons on images show on/off
-	$("#eventsegment .eventpile .item .image").hover(function(){
-		    $(this).children(".imgbtnArea").fadeIn("fast");
-		    $(this).children("img").fadeTo("fast",0.9);
-				},
-				function(){
-		    $(this).children(".imgbtnArea").fadeOut("fast");
-		    $(this).children("img").fadeTo("fast",1);
-			}
-		);
-	//遍历所有图片元素后为它们加上magnificPopup插件的初始化选项
-	$("#eventsegment").find(".eventpile").slice(0, $.cookie("truthbook_Page_Image_Pointer")).find(".item .image").magnificPopup({
-//				items: {
-// 					src:  $($num_items[i]).attr("src")
-//				},
-				gallery:{
-					enabled:true,
-					preload:[0,2],
-				},
-				type: 'image',
-				image: {
-					verticalFit: true
-				},
-				zoom:{
-					enabled: true,
-					duration: 500, // don't foget to change the duration also in CSS
-					opener: function(element) {
-						return element.find('img');
-						}
-				},
-		}); 
-	}
+	
+	addGallery(id);
+}
 
+function addGallery(id){
+	$(id).find(".eventpile .item .image").magnificPopup({
+		gallery:{
+			enabled:true,
+			preload:[0,2],
+		},
+		type: 'image',
+		image: {
+			verticalFit: true
+		},
+		zoom:{
+			enabled: true,
+			duration: 500, // don't foget to change the duration also in CSS
+			opener: function(element) {
+				return element.find('img');
+				}
+		},
+}); 
+}
 
 function dateHandle(createDate){
 	date = new Date();
@@ -97,3 +195,12 @@ function dateHandle(createDate){
 		return defaultDisplayDate;
 	}
 }
+
+function returnSmaller(one,two){
+	if (one > two){
+		return  two;
+	} else {
+		return  one;
+	}
+}
+

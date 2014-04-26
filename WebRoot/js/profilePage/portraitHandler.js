@@ -1,33 +1,53 @@
 
+function setInitialPortrait(){
+	var portraitUrl = $.cookie("truthbook_PageOwner_userId").defaultPortrait;
+	if(portraitUrl != undefined){
+		portraitUrl = getImageUrl(portraitUrl,ImageType.Small);
+		$("#portraitImage").attr("src",portraitUrl);
+		$("#portraitImage").magnificPopup({
+			items: {
+					src:  getImageUrl($.cookie("truthbook").defaultPortrait,ImageType.Large)
+			},
+			type: 'image',
+			image: {
+				verticalFit: true
+			}
+		});
+	}else{
+		$("#portraitImage").attr("src",DefaultPortrait);
+	}
+
+}
 
 
 function setPortraitImageForThisPage(){
-	var userId = $.cookie("truthbook_PageOwner_userId").userId
+	var userId = $.cookie("truthbook").userId;
+		
 	var onAjaxSuccess = function(data,textStatus){
 		if (data != null ){
-			var portraitUrl = data.image.imageUrl;
+			$.cookie("truthbook",data);
+			var portraitUrl = data.defaultPortrait;
+			portraitUrl = getImageUrl(portraitUrl,ImageType.Small);
 			$("#portraitImage").attr("src",portraitUrl);
 		}else{
-			$("#portraitImage").attr("src",DefaultPortrait);
+
 		}
-		
   		$("#portraitImage").magnificPopup({
 			items: {
-					src:  $("#portraitImage").attr("src")
+					src:  getImageUrl($.cookie("truthbook").defaultPortrait,ImageType.Large)
 			},
 			type: 'image',
-//			image: {
-//				verticalFit: false
-//			}
+			image: {
+				verticalFit: true
+			}
   		});
   	
 	};
 	var onAjaxError = function(xhr,status,error){
-		$("#portraitImage").attr("src",DefaultPortrait);
-		drawConfirmPopUp("获取头像请求发送失败 Error: " + error);
+		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
 		return false;
 	};
-	getDefaultPortraitAPI(userId,onAjaxSuccess,onAjaxError)
+	getUserAPI(userId, onAjaxSuccess, onAjaxError);
 }
 
 

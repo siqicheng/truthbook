@@ -120,7 +120,6 @@ public class FileMeta {
 			Image image = new Image();
 			image.setContent(this.description);
 			image.setApproved(false);
-			image.setContent("");
 			image.setCreateDate(RestUtil.getCurrentDate());
 			image.setDeleted(false);
 			image.setImageUrl(this.location+'/'+fileName);

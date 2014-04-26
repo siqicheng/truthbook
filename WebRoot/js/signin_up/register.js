@@ -142,7 +142,7 @@ $('.ui.form.register-form')
 							}
 							if(name.length > 3) {
 								content += name.slice(2);
-								ans = name.slice(0,1);
+								ans = name.slice(0,2);
 							} else {
 								content += name.slice(1);
 								ans = name.charAt(0);

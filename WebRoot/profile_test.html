@@ -108,39 +108,37 @@
 			<div class="field" id="fullNameTest">
             	<label>姓名</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="fullName" placeholder="姓名" name="fullName" >
+                	<input tabindex="1" type="text" id="fullName" placeholder="姓名" name="fullName" >
                 	<i class="user icon"></i>
                 </div>
        		</div>
 			<div class="field" id="schoolTest">
 				<label>学校</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
+                	<input tabindex="2" type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
                   	<i class="book icon"></i>
                	</div>
       		</div>
 			<div class="field" id="entryTimeTest">
 				<label>入学年份</label>
            		<div class="ui left labeled icon input">
-  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
+  					<input tabindex="3" type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
 					<i class="align justify icon"></i>
         		</div>
      		</div>
             <div class="ui error message"></div>
-<!-- 			<div class="ui divider"></div> -->
-			<div class="ui black fluid button" id="nextstep1" >下一步</div>
+			<input tabindex="4" class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
 <!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
 		</form>
  				
  			<div class="ui form uploadForm" id="choosePic" style="display:none">
-<!--  				<div class="ui message" id="previewMessage"></div> -->
 				<div class="ui items">
 					<div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;">
 						<div class="ui image">
 							<img id="imgPrev" >
 						</div>
 						<div class="content">
-							<textarea class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
+							<textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
 						</div>
 						<div class="meta">
 						</div>
@@ -151,6 +149,9 @@
 						<input type ="file" id="picInput"  onchange="readURL(this);" multiple>选择图片
 					</div>	
 					<div class="ui black button" id="submitBtn"  >确定上传</div>
+				</div>
+				<div class="ui successful progress" id="uploadProgress" style="display:none">
+					<div class="bar"></div>
 				</div>
  			</div>
  				
@@ -173,7 +174,7 @@
 					<div class="row">
 					<div class="middle aligned column">
 					    <div>
-					    	<img class="ui medium image" src="img/profile_test/247144.jpg">
+					    	<img id='peoplePrev' class="ui medium image" src="img/profile_test/247144.jpg">
 				    	</div>
 				    </div>
 				    </div>
@@ -225,12 +226,22 @@
 						 	    style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
 						           <div class="visible content">&ensp;<i class="cloud upload icon"></i>&ensp;</div>
 						           <div class="hidden content">传照片</div>
-						       </button>
-						       <button class="ui black vertical animated button transition hidden" id="disabeFriendButton"
-						       style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+						       	</button>
+						       	<button class="ui black vertical animated button transition hidden" id="disabeFriendButton"
+						       	style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
 						           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
 						           <div class="hidden content">变路人</div>
-						       </button>
+						       	</button>
+								<button class="ui teal vertical animated button transition hidden" id="newPhotoButton"
+					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+					        		<div class="hidden content"><i class="briefcase icon"></i><span id="numOfUnapprovedImage"></span></div>
+					        		<div class="visible content">待通过照片</div>
+					   			 </button>
+					   			 <button class="ui orange vertical animated button transition hidden" id="approvedPhotoButton"
+					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
+					        		<div class="visible content">&ensp;&ensp;<i class="home icon"></i>&ensp;&ensp;</div>
+					        		<div class="hidden content">回到主页</div>
+					   			 </button>
 							</div>
 						</div>
 				  </div>
@@ -238,6 +249,9 @@
 					  <div class="ui segment">
 					    	<span id="testCookie"></span>
 					  </div>
+				  </div>
+				  <div class="column">
+
 				  </div>
 			</div>
 
@@ -263,6 +277,7 @@
 						<i class="half empty star small icon"></i> 真·友
 						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
 						<div class="list menu nFriendsList goto_fri_page" id="nFriendsList">
+							
    						</div>
    					</div>
 				</div>
@@ -286,24 +301,26 @@
 						<i class="mail small icon"></i> 消息通知
 						<div class="floating ui circular green label" id="unreadMessageNum" style="display:none">00</div>
 						<div class="ui divided list vertical menu message" >
-							<div id="inviteToUpload_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-							<div id="friendRequest_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-							<div id="acceptFriendRequest_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-							<div id="takeQuote_MessageMenu"></div>
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-<!-- 							<div id="friendRequest_MessageMenu"></div> -->
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-<!-- 							<div id="friendRequest_MessageMenu"></div> -->
-							<hr size="0.1" width="100%" align="center" color="gray" style="margin-bottom: 0px; margin-top: 0px;">
-<!-- 							<div id="friendRequest_MessageMenu"></div> -->
+							<div id="inviteToUpload_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="friendRequest_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="acceptFriendRequest_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="takeQuote_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="rejectImage_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="acceptImage_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="reply_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="upgrade_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
 														
    						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div class="" id="neweventwrap" style="background-color:#C4C2C4;margin-bottom: 10px;border-radius:8px;display:none;width:1020px;margin:0 auto;margin-bottom:20px;">
+		<div class="ui small center aligned header" style="padding-top:10px;">待审核区
+		</div>
+		<div class="" id="neweventsegment" >
+
 		</div>
 	</div>
 	
@@ -393,13 +410,14 @@
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 	
-	<script src="./js/jquery.iframe-transport.js"></script>
-	<script src="./js/vendor/jquery.ui.widget.js"></script>
-	<script src="./js/jquery.fileupload.js"></script>
+	<script src="./assets/jquery/jquery.iframe-transport.js"></script>
+	<script src="./assets/jquery/jquery.ui.widget.js"></script>
+	<script src="./assets/jquery/jquery.fileupload.js"></script>
+<!-- 	<script src="./assets/jquery/jquery.fileupload-image.js"></script> -->
 	
 	<script src="./js/uploadPic.js"></script>
 	<script src="./js/refreshFriendsLists.js"></script>
-	<script src="./js/uploadpopup.js"></script>
+<!-- 	<script src="./js/uploadpopup.js"></script> -->
 	<script src="./js/sidebar_toggle.js"></script>
 	
 	
@@ -421,7 +439,7 @@
 
 	<script type="text/javascript">
 	$(function() {
-		setPortraitImageForThisPage();
+		setInitialPortrait();
 		handleLogoutPopUp();
 		testFunction_Cookie();
 		addFriendButtonCheck();

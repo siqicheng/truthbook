@@ -16,7 +16,7 @@ $(function (){
  * 	Website and RESTful AJAX URL
  */
 
-//localhost = "175.186.105.126";
+//localhost = "175.186.105.228";
 localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
@@ -26,7 +26,7 @@ ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
 ServiceType = {
     	   LOGIN:"loginService/",
     	   USERPROFILE :"userProfile/",
-    	   NOTIFICATION :"push/",
+    	   NOTIFICATION :"notification/",
     	   IMAGE:"imageService/",
     	   PORTRAIT:"portraitService/",
     	   COMMENT:"commentService/",
@@ -44,12 +44,31 @@ upload_for_friend = false;
 type_nFriends = 1;
 type_eFriends = 2;
 
-NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =9;
+maxItemNum = 8;
+
+NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =8;
 NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 5;
 
 CONTROL = {
 		Self:1,
 		No:0
+};
+
+COMMENT = {
+		No:0,
+		Yes:1
+};
+MAX_MesssageToSend = 100;
+
+/*********************************************************************************
+ * 	Image style
+ */
+
+ImageType = {
+		Large : "Large",
+		Medium : "Medium",
+		Small : "Small",
+		Origin : ""
 };
 
 /*********************************************************************************
@@ -92,31 +111,31 @@ MessageType = {
 	   typeHeadMenuName : "位好友认领了你新建的词条"
 	   },
 	   REJECTIMAGE :{
-	   number : "4",
-	   typeName : "rejectImage",
-	   typeButtonOneName : "upload_for_fri_btn_4",
-	   typeButtonTwoName : "delete_message_btn_4",
-	   typeHeadMenuName : "张照片的拒绝原因"
+		   number : "4",
+		   typeName : "rejectImage",
+		   typeButtonOneName : "upload_for_fri_btn_4",
+		   typeButtonTwoName : "delete_message_btn_4",
+		   typeHeadMenuName : "张照片的拒绝原因"
 	   },
 	   ACCEPTIMAGE :{
-	   number : "5",
-	   typeName : "acceptImage",
-	   typeButtonOneName : "upload_for_fri_btn_5",
-	   typeButtonTwoName : "delete_message_btn_5",
-	   typeHeadMenuName : "张照片被接受"
+		   number : "5",
+		   typeName : "acceptImage",
+		   typeButtonOneName : "upload_for_fri_btn_5",
+		   typeButtonTwoName : "delete_message_btn_5",
+		   typeHeadMenuName : "张照片被接受"
 	   },
 	   REPLY :{
-	   number : "6",
-	   typeName : "reply",
-	   typeButtonOneName : "go_fri_btn_6",
-	   typeButtonTwoName : "delete_message_btn_6",
-	   typeHeadMenuName : "条回复"
+		   number : "6",
+		   typeName : "reply",
+		   typeButtonOneName : "go_fri_btn_6",
+		   typeButtonTwoName : "delete_message_btn_6",
+		   typeHeadMenuName : "条回复"
 	   },
 	   UPGRADE :{
-	   number : "7",
-	   typeName : "upgrade",
-	   typeButtonOneName : "no_btn_7",
-	   typeButtonTwoName : "delete_message_btn_7",
-	   typeHeadMenuName : "位好友升级了"
+		   number : "7",
+		   typeName : "upgrade",
+		   typeButtonOneName : "no_btn_7",
+		   typeButtonTwoName : "delete_message_btn_7",
+		   typeHeadMenuName : "位好友升级了"
 	   },
-	};
+};

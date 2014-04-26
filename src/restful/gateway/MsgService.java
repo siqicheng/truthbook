@@ -64,7 +64,7 @@ public class MsgService {
 		}	
 	}
 	
-	@PUT
+	@GET
 	@Path("v1/message/{id}/{srcid}/{type}/{imageid}/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendImageMesssage(@PathParam("id") Integer id,
@@ -84,8 +84,8 @@ public class MsgService {
 					new Timestamp(System.currentTimeMillis()));
 			Image image= this.imageDAO.findById(imageid);
 			newinstance.setImage(image);
-			String[] property = {MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
-			Object[] value = {Message.REPLY_TYPE, image};
+			String[] property = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
+			Object[] value = {id, Message.REPLY_TYPE, image};
 			
 			List<Message> message_list = this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
 			

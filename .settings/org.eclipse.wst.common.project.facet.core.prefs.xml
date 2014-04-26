@@ -18,4 +18,9 @@
       <attribute name="platform-id" value="generic_2_1"/>
     </node>
   </facet>
+  <facet id="jst.jaxws">
+    <node name="libprov">
+      <attribute name="provider-id" value="runtime-library-provider"/>
+    </node>
+  </facet>
 </root>
