@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 public class UserFetch implements java.io.Serializable {
 
 	// Fields
-
+	private Integer userId;
 	private User user;
 	private Timestamp lastFetchTime;
 
@@ -30,6 +30,14 @@ public class UserFetch implements java.io.Serializable {
 
 	public User getUser() {
 		return this.user;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 	public void setUser(User user) {

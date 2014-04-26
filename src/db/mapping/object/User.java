@@ -64,7 +64,7 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
-    
+  
     public String getDefaultPortrait(){
     	return this.defaultPortrait;
     }
