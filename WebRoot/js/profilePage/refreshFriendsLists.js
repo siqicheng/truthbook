@@ -268,7 +268,11 @@ function drawFriendsList(id, barType, friendsType) {
 			if(friendsArray[friendsType][i]["isActivated"] == "false") {
 				portrait = DefaultQuotePortrait;
 			} else {
-				portrait = friendsArray[friendsType][i].defaultPortrait;
+				if(friendsArray[friendsType][i].defaultPortrait != undefined){
+					portrait = friendsArray[friendsType][i].defaultPortrait;
+				} else {
+					portrait = DefaultPortrait;
+				}
 			};
 			html= html + "<div class=\"ui friend item\" style=\"display:none\">"+
 				"<img class=\"ui avatar image\" src=\""

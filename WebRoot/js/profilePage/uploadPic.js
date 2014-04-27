@@ -294,7 +294,9 @@ $(function() {
 							};
 							getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
 						} else {
-							portrait = uploadCandidates[i].defaultPortrait; //TODO: 改成用户头像url
+							if(uploadCandidates[i].defaultPortrait != undefined) {
+								portrait = uploadCandidates[i].defaultPortrait;
+							};
 							content = uploadCandidates[i].school + " " + uploadCandidates[i].entryTime;
 						};
 						html = html + "<div class=\"ui item segment rechooseitem\">" +
@@ -311,9 +313,15 @@ $(function() {
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
+						var selected_num=$(this).index();
+						var portrait;
+						if(uploadCandidates[selected_num].defaultPortrait != undefined) {
+							portrait = uploadCandidates[selected_num].defaultPortrait;
+						} else {
+							portrait = DefaultPortrait;
+						}
 						var mediumPortrait = getImageUrl(portrait, ImageType.Medium);
 						$("#peoplePrev").attr('src', mediumPortrait);
-						var selected_num=$(this).index();
 						picReceiver = uploadCandidates[selected_num];
 						console.log("User choosed picReceiver: ");
 						console.log(picReceiver);

@@ -16,14 +16,20 @@ function searchUsers(){
 			}
 			else{
 				length = userLengthJson(data);
+				var userId, fullName, school, entryTime, email, portrait;
 				if (length == 1){
 					userId = data.user.userId;
 					fullName = data.user.fullName;
 					school = data.user.school;
 					entryTime = data.user.entryTime;
 					email = data.user.email;
+					if(data.defaultPortrait != undefined){
+						portrait = data.defaultPortrait;
+					} else {
+						portrait = DefaultPortrait;
+					}
 					html = html + "<div class=\"item\" onclick = \"goOthersPage(" + userId + ")\"><img class=\"ui avatar image\" src=\"" +
-											 DefaultImg + "\">  <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
+											 portrait + "\">  <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 
 				} else if (length < 6){
 					for(var i = 0;i<length;++i){
@@ -32,8 +38,13 @@ function searchUsers(){
 						school = data.user[i].school;
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
+						if(data.user[i].defaultPortrait != undefined){
+							portrait = data.user[i].defaultPortrait;
+						} else {
+							portrait = DefaultPortrait;
+						}
 						html = html + "<div class=\"item\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
-												 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
+												 portrait + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 					}
 				} else {
 					for(var i = 0;i<3;++i){
@@ -42,8 +53,13 @@ function searchUsers(){
 						school = data.user[i].school;
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
+						if(data.user[i].defaultPortrait != undefined){
+							portrait = data.user[i].defaultPortrait;
+						} else {
+							portrait = DefaultPortrait;
+						}
 						html = html + "<div class=\"item\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
-												 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
+												 portrait + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 					}
 					html = html + "<div class=\"item\" id = \"getMoreSearchResult\"> <div class=\"content\">加载更多<div class=\"description\">搜索更多结果</div></div></div>";
 				}
@@ -78,8 +94,13 @@ function getMoreSearchResult(data, length) {
 		school = data.user[i].school;
 		entryTime = data.user[i].entryTime;
 		email = data.user[i].email;
+		if(data.user[i].defaultPortrait != undefined){
+			portrait = data.user[i].defaultPortrait;
+		} else {
+			portrait = DefaultPortrait;
+		}
 		html = html + "<div class=\"item\" style=\"display:none\" onclick = \"goOthersPage("+userId + ")\"><img class=\"ui avatar image\" src=\"" +
-								 DefaultImg + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
+								 portrait + "\"> <div class=\"content\">"+ fullName + "</a> <div class=\"description\">" + school + "\t" + entryTime + "</div></div></div>";
 	}
 //	html = html + "<div class=\"ui item\" style=\"display:none\" id=\"pageNum\">" +
 //							"<div class=\"content\" style=\"padding-top:0px;\">Page 1"+"</div>" +
