@@ -66,6 +66,10 @@
 	padding-top: 4px;
 	position: relative;
 }
+.timelineBookmark a,
+.timelineBookmark a:visited {
+	color:#4C7A9F;
+}
 
 .timelineBookmark .timelineBookmarkAvatar {
 	position: absolute;
@@ -196,7 +200,7 @@
 	left:15px;
 	top:15px;
 	z-index:9;
-/* 	display:none; */
+ 	display:none; 
 }
 
 .timelineCenter .item .image .imgbtnArea .likebtn .heart.icon{

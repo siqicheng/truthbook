@@ -164,7 +164,7 @@ function drawUnapproveImage(numOfImage,imageData){
 	for(var i = 0 ; i < numOfImage ; i++){
 		prepareUnapprovedElement(imageData[i],true);
 	}
-	itemInitialize("#neweventsegment");
+	newitemInitialize("#neweventsegment");
 }
 
 /*********************************************************************************

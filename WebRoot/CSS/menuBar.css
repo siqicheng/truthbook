@@ -1,6 +1,7 @@
 #menubar {
 	width:1000px;
 	margin:0 auto;
+	padding-bottom: 0px;
 }
 
 #menubar .ui.four.column.grid .column {

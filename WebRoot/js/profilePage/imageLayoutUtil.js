@@ -141,6 +141,17 @@ function itemInitialize(id){
 	
 	addGallery(id);
 }
+function newitemInitialize(id){
+	$(id).masonry({		
+		itemSelector: '.eventpile',
+		gutter: 1});
+
+	$(id).imagesLoaded( function() {
+		$(id).masonry();
+	});
+	
+	addGallery(id);
+}
 
 function addGallery(id){
 	$(id).find(".eventpile .item .image").magnificPopup({
@@ -201,11 +212,4 @@ function dateHandle(createDate){
 	}
 }
 
-function returnSmaller(one,two){
-	if (one > two){
-		return  two;
-	} else {
-		return  one;
-	}
-}
 

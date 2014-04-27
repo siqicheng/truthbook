@@ -13,7 +13,7 @@
    	
 </head>
 
-<body>
+<body id="body">
 	<div class="ui fixed transparent main small menu" id="topbar" >
 		<div class="left  menu">
 	
@@ -164,7 +164,7 @@
 			</div>
 	</div>
 
-	<div class="ui dimmer page hidden">	
+	<div class="ui dimmer page hidden">
 	 	<div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
 		    <div class="header">退出 Truthbook</div>
 	    	<div class="content">
@@ -186,10 +186,60 @@
 	      		</div>
 	    	</div>
 	    </div>
+		
+	 	<div class="ui basic modal deleteFriend transition hidden" id="testModal" style="margin-top: -159px;">
+		    <div class="header" id="modalHeader"></div>
+	    	<div class="content">
+	    		<div class="left"style="width: 40%"><i class="home icon" id = "modalLogo"></i></div>
+				<div class="right"><p id="modalContent"></p></div>
+	   		</div>
+	    	<div class="actions">
+	    		<div class="ui two fluid buttons">
+				  <div class="ui negative vertical animated left labeled icon button">
+	          			<i class="remove icon"></i>
+	          			<div class="visible content" id="modalNegativeBtn">取消</div>
+	          			<div class="hidden content" id="modalNegativeBtnHidden"></div>				  
+				  </div>
+<!-- 				  <div class="or"></div> -->
+				  <div class="ui positive vertical animated right labeled icon button">
+	        			<div class="visible content" id="modalPositiveBtn">确定</div>
+	          			<div class="hidden content" id="modalPositiveBtnHidden"></div>				  
+				  		<i class="checkmark icon"></i>
+				  </div>
+				</div>
+	    	</div>
+	    </div>
+	</div>
+
+    <div class="ui item dimmable">
+		<div class="ui page dimmer message hidden">
+		    <div class="content">
+		        <div class="center">  	
+		            <h1 class="ui inverted icon header">
+		                <i class="icon circular inverted emphasized green checked checkbox"></i>
+		                朕知道了
+		                <div class="sub header"  id="alertMessage"></div>
+		            </h1>
+		        </div>
+		    </div>
+		</div>
+		
+		<div class="ui page dimmer dummyDimmerForExtention hidden">
+		    <div class="content">
+		        <div class="center">  	
+		            <h1 class="ui inverted icon header">
+		                <i class="icon circular inverted emphasized green checked checkbox"></i>
+		                朕知道了
+		                <div class="sub header" id="dummyDimmerForExtention"></div>
+		            </h1>
+		        </div>
+		    </div>
+		</div>
 	</div>
 
 	
 	<div class="timelineContainer">
+		<div class="timelineWrapper">
 		<div class="timelineItem timelineFirst">
 			<div class="timelineSider">
 				<div class="timelineBookmark">
@@ -198,15 +248,15 @@
 						<span class="timelineBookmarkInfoTimestamp">2天前</span>
 					</div>
 					<div class="timelineBookmarkAvatar">
-						<img class="ui avatar image" src="Uploaded/wzy_to_csq_at_2014-04-17_23-37-53.jpeg">
+						<img class="ui avatar image" src="Uploaded/Mediumcsq_to_1_at_2014-04-26_17-24-11.jpg">
 					</div>
 				</div>
 			</div>
 			<div class="timelineCenter">
 				<div class="ui items">
 					<div class="item">
-						<a class="image" href="Uploaded/wzy_to_csq_at_2014-04-17_23-36-30.JPG">
-							<img class="img1" src="Uploaded/wzy_to_csq_at_2014-04-17_23-36-30.JPG">
+						<a class="image" href="Uploaded/Largecsq_to_1_at_2014-04-26_17-24-11.jpg">
+							<img class="img1" src="Uploaded/Mediumcsq_to_1_at_2014-04-26_17-24-11.jpg">
 							<div class="imgbtnArea" >
 								<div class="ui tiny button likebtn"><i class="heart tiny icon"></i></div>
 <!-- 								<div class="ui tiny red inverted button commentbtn commentToggle">
@@ -355,48 +405,12 @@
 				</div>
 			</div>			
 		</div>
-		
-		<div class="timelineItem">
-			<div class="timelineSider">
-				<div class="timelineBookmark">
-					<div class="timelineBookmarkInfo">
-						<a href="" class="timelineBookmarkInfoUsername">JoeWu就是路人</a>
-						<span class="timelineBookmarkInfoTimestamp">3天前</span>
-					</div>
-					<div class="timelineBookmarkAvatar">
-						<img class="ui avatar image" src="Uploaded/wzy_to_csq_at_2014-04-17_23-37-53.jpeg">
-					</div>
-				</div>
-			</div>
-			<div class="timelineCenter">
-				<div class="ui items">
-					<div class="item"></div>
-				</div>			
-			</div>
+
 		</div>
-		<div class="timelineItem">
-			<div class="timelineSider">
-				<div class="timelineBookmark">
-					<div class="timelineBookmarkInfo">
-						<a href="" class="timelineBookmarkInfoUsername">JoeWu就是路人</a>
-						<span class="timelineBookmarkInfoTimestamp">3天前</span>
-					</div>
-					<div class="timelineBookmarkAvatar">
-						<img class="ui avatar image" src="Uploaded/wzy_to_csq_at_2014-04-17_23-37-53.jpeg">
-					</div>
-				</div>
-			</div>
-			<div class="timelineCenter">
-				<div class="ui items">
-					<div class="item"></div>
-				</div>			
-			</div>
-		</div>
-		
 		<div class="timelineItem timelineLast">
 			<div class="timelineSider"></div>
 			<div class="timelineCenter">
-				<div class="ui basic fluid button">加载更多</div>		
+				<div class="ui basic fluid button" id="loadMoreButton">加载更多</div>		
 			</div>
 		</div>
 	</div>
@@ -412,11 +426,12 @@
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/utility.js"></script>
 
-	<script src="./js/jquery.iframe-transport.js"></script>
-	<script src="./js/vendor/jquery.ui.widget.js"></script>
-	<script src="./js/jquery.fileupload.js"></script>
+	<script src="./assets/jquery/jquery.iframe-transport.js"></script>
+	<script src="./assets/jquery/jquery.ui.widget.js"></script>
+	<script src="./assets/jquery/jquery.fileupload.js"></script>
+<!-- 	<script src="./assets/jquery/jquery.fileupload-image.js"></script> -->
 
-	<script src="./js/uploadPic.js"></script>
+<!-- 	<script src="./js/uploadPic.js"></script> -->
 	<script src="./js/refreshFriendsLists.js"></script>
 	<script src="./js/uploadpopup.js"></script>
 	<script src="./js/sidebar_toggle.js"></script>
@@ -424,7 +439,11 @@
 	<script src="./js/friendRelationButtonHandler.js"></script>
 	<script src="./js/userAndPageInfo.js"></script>
 	<script src="./js/general/searchBar.js"></script>
+	<script src="./js/imageComment/commentLayout.js"></script>
+	<script src="./js/timelinePage/timelineButtonFunction.js"></script>
+	<script src="./js/timelinePage/timelineButtonController.js"></script>
 	<script src="./js/timelinePage/timelineLayout.js"></script>
+	<script src="./js/timelinePage/timelineUtil.js"></script>
 	
 	<script type="text/javascript">
 	$(function() {

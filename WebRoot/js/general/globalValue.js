@@ -36,6 +36,7 @@ ServiceType = {
     	   IMAGE:"imageService/",
     	   PORTRAIT:"portraitService/",
     	   COMMENT:"commentService/",
+    	   TIMELINE:"feedService/"
        };
 DefaultPortrait="img/profile_test/247144.jpg";
 DefaultPreviewImg="./img/profile_test/247146.jpg";
@@ -65,6 +66,10 @@ COMMENT = {
 		Yes:1
 };
 MAX_MesssageToSend = 100;
+
+NUM_SHOW_COMMENT_ON_TIMELINE = 2;
+NUM_FIRST_BATCH_ITEM_ON_TIMELINE = 5;
+NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 5;
 
 /*********************************************************************************
  * 	Image style

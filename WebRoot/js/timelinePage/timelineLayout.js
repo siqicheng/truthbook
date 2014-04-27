@@ -1,18 +1,61 @@
+$(function(){
+	getAllTimeline($.cookie("truthbook").userId);
+	loadMoreButtonHandler();
+});
+
+function getAllTimeline(userId) {
+	var onAjaxSuccess = function (data, textStatus){
+		var allTimelineData = timelineToArray(data);
+		numTimelineItem = allTimelineData.length;
+		allTimelineItem = timelineInOrder(numTimelineItem, allTimelineData);
+		// Get ordered timeline item Array
+		if(numTimelineItem != 0){
+			drawNextBatchFeed(numTimelineItem, NUM_FIRST_BATCH_ITEM_ON_TIMELINE, allTimelineItem);
+			return true;
+		}
+		else{
+//			disableShowMoreButton();
+			return true;
+		}
+	};
+	var onAjaxError = function(xhr, status, error){
+		if(isDebug) drawConfirmPopup("获取新鲜事请求发送失败 Error: "+ error);
+		return false;
+	};
+	getAllTimelineByUserIdAPI(userId, onAjaxSuccess, onAjaxError);
+}
+
+function drawNextBatchFeed(numTimelineItem,numToShow,imageData){
+	$.cookie("truthbook_Timeline_Item_Pointer", numToShow);
+	var numToDraw = returnSmaller(numToShow, numTimelineItem);
+	for(var i=0; i<numToDraw; i++){
+		prepareFeed(imageData[i],true,COMMENT.Yes);
+	}
+//	if (numTimelineItem <= numToShow) disableShowMoreButton();
+	timelineInitialize(".timelineWrapper");
+}
+
+
+
 /*********************************************************************************
  * 	The whole HTML part to draw
  */
-function thistimelineItemHTML(url,discription,uploaderName,uploaderId,createDate,numOfComment,display,imageId,imageOwnerId,imageOwnerName,numLike){
+function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate,numOfComment,imageId,imageOwnerId,imageOwnerName,numLike){
 	
-	displayDate = dateHandle(createDate);
-	userId = $.cookie("truthbook").userId;
-	numOfCommentShow = numOfComment - 2;
-
-	html = 	"<div class='timelineItem'>\n" +
+	var displayDate = commentDateHandle(createDate);
+//	var userId = $.cookie("truthbook").userId;
+	var numOfCommentShow = numOfComment - NUM_SHOW_COMMENT_ON_TIMELINE;
+	var urlLarge = getImageUrl(url,ImageType.Large);
+	var urlMedium = getImageUrl(url,ImageType.Medium);
+	console.log(imageOwnerName);
+	html = 	"<div class='timelineItem' id = 'itemId"+imageId+"'>\n" +
+			"\t<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>\n"+
+			"\t<span class = 'url_span' style='display:none;'>"+url+"</span>\n"+
 			"\t<div class='timelineSider'>\n" +
 			"\t\t<div class='timelineBookmark'>\n" +
 			"\t\t\t<div class='timelineBookmarkInfo'>\n" +
-			"\t\t\t\t<a href='"+imageId+"' class='timelineBookmarkInfoUsername'>"+imageOwnerName+"</a>\n" +
-			"\t\t\t\t<span class='timelineBookmarkInfoTimestamp'>"+createDate+"</span>\n" +
+			"\t\t\t\t<a class='timelineBookmarkInfoUsername'>"+imageOwnerName+"</a>\n" +
+			"\t\t\t\t<span class='timelineBookmarkInfoTimestamp'>"+displayDate+"</span>\n" +
 			"\t\t\t</div>\n" +
 			"\t\t\t<div class='timelineBookmarkAvatar'>\n" +
 			"\t\t\t\t<img class='ui avatar image' src='"+DefaultImg+"'>\n" +
@@ -22,8 +65,8 @@ function thistimelineItemHTML(url,discription,uploaderName,uploaderId,createDate
 			"\t<div class='timelineCenter'>\n" +
 			"\t\t<div class='ui items'>\n" +
 			"\t\t\t<div class='item'>\n" +
-			"\t\t\t\t<a class='image' href='"+url+"'>\n" +
-			"\t\t\t\t\t<img src='"+url+"'>\n" +
+			"\t\t\t\t<a class='image' href='"+urlLarge+"'>\n" +
+			"\t\t\t\t\t<img src='"+urlMedium+"'>\n" +
 			"\t\t\t\t\t<div class='imgbtnArea'>\n" +
 			"\t\t\t\t\t\t<div class='ui tiny button likebtn'><i class='heart tiny icon'></i></div>\n" +
 			"\t\t\t\t\t</div>\n" +
@@ -31,7 +74,7 @@ function thistimelineItemHTML(url,discription,uploaderName,uploaderId,createDate
 			"\t\t\t\t<div class = 'discript content'>\n" +
 		    "\t\t\t\t\t<p class='description'>"+description+"</p>\n" +
 		    "\t\t\t\t\t<div class='meta'>\n" +
-		    "\t\t\t\t\t\t<a class='uploaderName'>By"+uploaderName+"</a>\n" +
+		    "\t\t\t\t\t\t<a class='uploaderName'>By "+uploaderName+"</a>\n" +
 		    "\t\t\t\t\t\t<span class='uploaderId' style='display:none;'>"+uploaderId+"</span>\n" +
 		    "\t\t\t\t\t</div>\n" +
 		    "\t\t\t\t</div>\n"+
@@ -80,14 +123,15 @@ function thistimelineItemHTML(url,discription,uploaderName,uploaderId,createDate
 	return html;
 }
 
-function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){	
-	html = 	"<div class='comment' id='commentId"+commentId+"'>\n"+
+function thistimelineCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){	
+	var displayDate = commentDateHandle(createDate);
+	html = 	"<div class='comment newcomment' id='commentId"+commentId+"'>\n"+
 			"\t<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>\n"+
 			"\t<span class = 'repliedByName_span' style='display:none;'>"+repliedByName+"</span>\n"+
 			"\t<span class = 'repliedToCommentId_span' style='display:none;'>"+repliedToCommentId+"</span>\n"+
 			"\t<span class = 'commentId_span' style='display:none;'>"+commentId+"</span>\n"+
 			"\t<a class='avatar tiny'>\n"+
-			"\t\t<img src='"+DefaultImg+"'>\n"+
+			"\t\t<img src='"+repliedByProtrait+"'>\n"+
 			"\t</a>\n"+
 			"\t<div class='content'>\n"+
 			"\t\t<a class='author'>" + repliedByName + "</a>\n"+					
@@ -100,7 +144,7 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 			"\t\t\t<a class='reply' style='display:"+replyDisplay+"'>回复</a>\n"+
 			"\t\t\t<a class='delete' id='delete"+commentId+"' style='display:"+deleteDisplay+"'>删除</a>\n"+  
 		    "\t\t</div>\n"+
-		    "\t\t<span class='date'>" + createDate + "</span>\n"+
+		    "\t\t<span class='date'>" + displayDate + "</span>\n"+
 			"\t</div>\n"+
 			"</div>\n";
 	return html;

@@ -84,8 +84,58 @@ public class MsgService {
 					new Timestamp(System.currentTimeMillis()));
 			Image image= this.imageDAO.findById(imageid);
 			newinstance.setImage(image);
-			String[] property = {MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
-			Object[] value = {Message.REPLY_TYPE, image};
+			String[] property = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
+			Object[] value = {id, Message.REPLY_TYPE, image};
+			
+			List<Message> message_list = this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			
+			for (Message message : message_list){
+				if (!message.getStatus().equals(Message.READ_STATUS)){
+					session.close();
+					return RestUtil.string2json("true");
+				}
+			}
+			
+			Transaction tx=session.beginTransaction();
+			session.save(newinstance);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}	
+	}
+	
+	
+	
+	@POST
+	@Path("v1/message/imageContent/send")
+	@Produces("application/json;charset=utf-8")
+	public Object sendImageContentMesssage(@FormParam("id") Integer id,
+			@FormParam("srcid") Integer srcid, 
+			@FormParam("type") String type,
+			@FormParam("content") String content,
+			@FormParam("imageId") Integer imageId) throws Exception {
+		
+		if (id==srcid){
+			return RestUtil.string2json("false");
+		}
+		
+		Session session=this.messageDAO.getSession();
+		try{
+			User src = (new UserDAO()).findById(srcid);
+			
+			Message newinstance = new Message(type, id, src,
+					new Timestamp(System.currentTimeMillis()));
+			Image image= this.imageDAO.findById(imageId);
+			newinstance.setImage(image);
+			newinstance.setContent(content);
+			
+			String[] property = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
+			Object[] value = {id, Message.REPLY_TYPE, image};
 			
 			List<Message> message_list = this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
 			
@@ -110,7 +160,7 @@ public class MsgService {
 	}
 	
 	@POST
-	@Path("v1/message/{id}/{srcid}/{type}/send")
+	@Path("v1/message/content/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendContentMesssage(@FormParam("id") Integer id,
 			@FormParam("srcid") Integer srcid, 

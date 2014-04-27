@@ -155,6 +155,13 @@ function getImageUrl(url,style){
 	}
 }
 
+function returnSmaller(one,two){
+	if (one > two){
+		return  two;
+	} else {
+		return  one;
+	}
+}
 
 
 /*Api helper functions*/
@@ -397,14 +404,29 @@ function deleteCommentByCommentIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError
 	ajax_call(ajax_obj);
 }
 
+/*********************************************************************************
+ * Timeline Service API
+ */
+function getAllTimelineByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/feed/"+ userId + "/all",
+		url = ServerRoot + ServiceType.TIMELINE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
+function getNewTimelineByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/feed/"+ userId,
+		url = ServerRoot + ServiceType.TIMELINE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
-
-
-
-
-
-
+function getPartOfCommentAPI(imageId,commentNumber,onAjaxSuccess,onAjaxError){
+	var path = "v1/imageComment/"+imageId+"/"+commentNumber,
+		url = ServerRoot + ServiceType.COMMENT +path,
+		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
 
 
 

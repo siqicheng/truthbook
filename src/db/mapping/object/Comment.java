@@ -73,33 +73,23 @@ public class Comment implements java.io.Serializable {
 	
 	//@XmlTransient
 	public String getRepliedToCommentName() {
-		try{
+		if  (this.repliedToCommentId != null)
 			return new UserDAO().findById(this.repliedToCommentId).getFullName();
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
+		else 	return null;
 	}
 	
 	//@XmlTransient
 	public String getRepliedByCommentName() {
-		try{
+		if (this.repliedByCommentId != null)
 			return new UserDAO().findById(this.repliedByCommentId).getFullName();
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
+		else 	return null;
 	}
 	
 	//@XmlTransient
 	public String getRepliedByCommentPortrait() {
-		try{
+		if  (this.repliedByCommentId != null)
 			return new UserDAO().findById(repliedByCommentId).getDefaultPortrait();
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
-		
+		else 	return null;
 	}
 
 

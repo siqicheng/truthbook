@@ -31,6 +31,7 @@ public class Message implements java.io.Serializable {
 	private String status;
 	private Timestamp readTime;
 	private Image image;
+	private Integer ImageOwnerid;
 	public static final String READ_STATUS = "read";
 	public static final String SENT_STATUS = "sent";
 	public static final String UNSENT_STATUS = "unsent";
@@ -65,9 +66,24 @@ public class Message implements java.io.Serializable {
 	public Image getImage() {
 		return image;
 	}
+	
+	
+	public Integer getImageOwnerid() {
+		if (this.image != null) {
+			return this.image.getUserId();
+		}
+		return null;
+	}
+
+	public void setImageOwnerid(Integer imageOwnerid) {
+		ImageOwnerid = imageOwnerid;
+	}
 
 	public Integer getImageId() {
-		return ImageId;
+		if (this.image != null) {
+			return this.image.getUserId();
+		}
+		return null;
 	}
 
 	public void setImageId(Integer imageId) {
