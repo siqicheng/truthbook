@@ -68,14 +68,14 @@ function getThisComment_All(imageId,Control){
 			}
 			
 			addCommentButtonHandler(imageId);
-			flipCardCheck(imageId);
 			
-			return true;
+			
+
 		} else {
 			//没有评论
-			return true;
 		}
-
+		flipCardCheck(imageId);
+		return true;
 	};
 	var onAjaxError = function(xhr,status,error){
 		drawConfirmPopUp("获取评论请求发送失败 Error: " + error);

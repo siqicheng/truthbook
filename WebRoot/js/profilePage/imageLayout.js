@@ -23,14 +23,15 @@ function flipImageByImageId(imageId){
 
 function needToLoadMoreImage(){
 	if ($.cookie("truthbook_thisImageId")==undefined||$.cookie("truthbook_thisImageId")==null) return;
-	recurFindTheImageToFlip($.cookie("truthbook_thisImageId"));
+	recurFindTheImageToFlip($.cookie("truthbook_thisImageId"),1);
 }
 
-function recurFindTheImageToFlip(imageId){
+function recurFindTheImageToFlip(imageId,level){
+	if(level == 10) return;
 	if($("#imageId"+imageId).html()==undefined){
 		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE);
 		itemInitialize("#eventsegment");
-		recurFindTheImageToFlip(imageId);
+		recurFindTheImageToFlip(imageId,level+1);
 		return;
 	}
 	return;
@@ -202,7 +203,7 @@ function drawUnapproveImage(numOfImage,imageData){
 /*********************************************************************************
  * 	The HTML part of new image
  */
-function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId){
+function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId,uploaderId){
 	
 	var displayDate = dateHandle(createDate);
 	var urlLarge = getImageUrl(url,ImageType.Large);
@@ -248,9 +249,9 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,i
     					"</div>"+
 					"</div>"+
 					"<div class='ui minimal comments' style='padding-top: 10px;'>"+
+						"<span class = 'uploaderId' style='display:none;'>"+uploaderId+"</span>"+
 						"<div class=\"ui tiny center aligned header\" style='cursor:auto;'>"+
 							"上传者：<span class=\"uploaderName\" style='color:#4C7A9F;'></span>"+
-							"<span class = 'uploaderId' style='display:none;'></span>"+
 						"</div>"+
 						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
 							"<div class='field'>"+

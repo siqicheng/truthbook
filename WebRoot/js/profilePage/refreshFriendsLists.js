@@ -268,11 +268,7 @@ function drawFriendsList(id, barType, friendsType) {
 			if(friendsArray[friendsType][i]["isActivated"] == "false") {
 				portrait = DefaultQuotePortrait;
 			} else {
-				if(friendsArray[friendsType][i].defaultPortrait != undefined){
-					portrait = friendsArray[friendsType][i].defaultPortrait;
-				} else {
-					portrait = DefaultPortrait;
-				}
+				portrait = getImageUrl(friendsArray[friendsType][i].defaultPortrait,ImageType.Small);
 			};
 			html= html + "<div class=\"ui friend item\" style=\"display:none\">"+
 				"<img class=\"ui avatar image\" src=\""

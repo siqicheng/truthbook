@@ -81,7 +81,7 @@ public class Message implements java.io.Serializable {
 
 	public Integer getImageId() {
 		if (this.image != null) {
-			return this.image.getUserId();
+			return this.image.getImageId();
 		}
 		return null;
 	}

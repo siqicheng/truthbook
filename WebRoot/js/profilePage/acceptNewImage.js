@@ -47,7 +47,7 @@ function acceptImage(thisElem,imageId){
 		if (data != null){
 			thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("谜底揭晓");
 			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned .uploaderName").html(data.uploaderName);
-			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned .uploaderId").html(data.uploaderId);
+//			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned .uploaderId").html(data.uploaderId);
 			thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","感谢一下吧，或者。。。让他等着");
 			addThisImageToHomePage(imageId);
 			flipTheImageCard(thisElem);//flip only change #eventsegment
@@ -80,6 +80,10 @@ function acceptImage(thisElem,imageId){
 function rejectCommentMessage(imageId,thisElem){
 	if(thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").val() != ""){
 		//Todo:send why reject Message
+		var uploaderId = thisElem.parents('.ui.shape').find(".comments .uploaderId").html();
+		var selfId = $.cookie("truthbook").userId;
+		var content = thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").val();
+		sendMessageWithContentAPI(uploaderId,selfId,imageId,content,MessageType.REJECTIMAGE.typeName);
 	}	
 	hiddenThisImage(thisElem,imageId);
 }
@@ -90,7 +94,7 @@ function acceptCommentMessage(imageId,thisElem){
 	var selfId = $.cookie("truthbook").userId;
 	var content = thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").val();
 	if(content=="") content=DefaultThankYou;
-	sendMessageWithContentAPI(uploaderId, selfId,imageId,content,MessageType.ACCEPTIMAGE.typeName);
+	sendMessageWithContentAPI(uploaderId,selfId,imageId,content,MessageType.ACCEPTIMAGE.typeName);
 	hiddenThisImage(thisElem,imageId);
 }
 

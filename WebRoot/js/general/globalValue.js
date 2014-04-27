@@ -79,9 +79,9 @@ DefaultThankYou="谢谢你为我传照片";
  */
 
 ImageType = {
-		Large : "Large",
-		Medium : "Medium",
-		Small : "Small",
+		Large : "-Large",
+		Medium : "-Medium",
+		Small : "-Small",
 		Origin : ""
 };
 

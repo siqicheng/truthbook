@@ -44,12 +44,13 @@ function prepareUnapprovedElement(data,isAppend){
 	var url = data.imageUrl;
 		description = data.description,
 		createDate = data.createDate,
+		uploaderId = data.uploaderId,
 		imageId = data.imageId,
 		descriptionDisplay = "";
 		
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
-	var html = thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId);
+	var html = thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId,uploaderId);
 	if (isAppend == true){
 		$("#neweventsegment").append(html);
 	}else{

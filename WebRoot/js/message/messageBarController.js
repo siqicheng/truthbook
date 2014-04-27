@@ -206,12 +206,12 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 				imageId = data.message[i].imageId,
 				content = data.message[i].content;
 			var contentDisplay = "none";			
-			if(messageType.typeName == MessageType.REJECTIMAGE.typeName	||
-					messageType.typeName == MessageType.ACCEPTIMAGE.typeName){
-				if (content != ""){
-					contentDisplay = "inline";
-				}
-			}
+//			if(messageType.typeName == MessageType.REJECTIMAGE.typeName	||
+//					messageType.typeName == MessageType.ACCEPTIMAGE.typeName){
+//				if (content != ""){
+//					contentDisplay = "inline";
+//				}
+//			}
 			
 		}
 
@@ -225,8 +225,8 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 				"<a class=\""+messageType.typeButtonOneName+"\"><i class=\"" + iconName[0]  + " large icon\"></i></a>" +
 				"<a class=\""+messageType.typeButtonTwoName+"\"><i class=\"" + iconName[1]  + " large icon\"></i></a>" +
 			"</div>" +
-			"<div class=\"content message\" style=\"width: 150px;word-break:break-all;\">" +
-			fullName + "<span class='messageContent' style='display:"+contentDisplay+"'>: "+content+"</span>"+
+			"<div class=\"content message messageId"+ messageId+"\" style=\"width: 150px;word-break:break-all;\">" +
+			fullName + //"<span class='messageContent' style='display:"+contentDisplay+"'>: "+content+"</span>"+
 			"</div></div>";
 	}
 	html = html +"</div>";
@@ -283,6 +283,35 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 		buttonTwoOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent().parent());
 
 	});
+	
+	
+	//Has to modified message Layout
+//	if(messageType.typeName == MessageType.REJECTIMAGE.typeName){
+//		$("#"+messageType.typeName+"MessageContent")
+//		.children(".item.message")
+//		.children(".content.message.messageId"+messageId)
+//		.popup({
+//			    on: 'hover',
+//			    position : 'left center',
+//			    title	:	'真的不是故意拒绝：',
+//			    content	:	content,
+//			    transition: 'fade down'
+//		});
+//	}
+//	
+//	if(messageType.typeName == MessageType.ACCEPTIMAGE.typeName){
+//		$("#"+messageType.typeName+"MessageContent")
+//		.children(".item.message")
+//		.children(".content.message.messageId"+messageId)
+//		.popup({
+//			    on: 'hover',
+//			    position : 'left center',
+//			    title	:	"收照感言：",
+//			    content	:	content,
+//			    transition: 'fade down'
+//		});
+//	}
+	
 }
 
 function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
@@ -335,7 +364,7 @@ function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 		goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "6"://reply
-		goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem);
+		goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "7"://upgrade
 		

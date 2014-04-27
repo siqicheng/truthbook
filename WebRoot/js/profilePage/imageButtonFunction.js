@@ -421,7 +421,8 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	cleanTheTempVar(thisReplyForm);
 	moveDownScroll($("#imageId"+imageId).find(".commentwrap"));
 	var thisOwnerId = $("#imageId"+imageId).find(".userId_span").html();
-	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId);
+	var uploaderId = $("#imageId"+imageId).find(".uploaderId").html();
+	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId);
 }
 
 function resetTextarea(thisText){
@@ -448,15 +449,16 @@ function moveDownScroll(thisElem){
 	thisElem.scrollTop(thisElem[0].scrollHeight);
 }
 
-function sendMessageToAboveAll(thiscomment,imageId,ownId){
+function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 	var numReply = thiscomment.length;
 	var numMessageToSend = returnSmaller(numReply,MAX_MesssageToSend);
 	var end =thiscomment.length-1;
 	var selfId = $.cookie("truthbook").userId; 
 	var nameList = new Array();
 	
-	//send message to image owner
+	//send message to image owner & uploader
 	if(ownId != selfId)	sendMessageWithImageIdAPI(ownId,selfId,imageId, MessageType.REPLY.typeName);
+	if(uploaderId != selfId)	sendMessageWithImageIdAPI(uploaderId,selfId,imageId, MessageType.REPLY.typeName);	
 	
 	for(var i=0;i<numMessageToSend;i++){
 		if(thiscomment[end-i].innerHTML==selfId || $.inArray(thiscomment[end-i].innerHTML, nameList)!=-1) continue;

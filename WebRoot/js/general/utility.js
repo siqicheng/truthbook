@@ -151,7 +151,7 @@ function getImageUrl(url,style){
 	if (url==undefined||url==null){
 		return DefaultPortrait;
 	}else{
-		return url.substring(0,url.lastIndexOf("/")+1)+style+url.substring(url.lastIndexOf("/")+1);
+		return "http://"+url+style;
 	}
 }
 
@@ -262,7 +262,7 @@ function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjax
 function sendMessageWithImageIdAPI(receiver, sender, imageId, messageTypeName, onAjaxSuccess, onAjaxError){
 	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName +"/"+imageId+ "/send",
 		url=ServerRoot+ServiceType.NOTIFICATION + path,
-		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
 	ajax_call(ajax_obj);	
 }
 

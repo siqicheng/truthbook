@@ -59,6 +59,7 @@ function goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,t
 }
 
 function recurFindTheImageAndFlip(imageId,level){
+	if(level==10)	return;
 	if($("#imageId"+imageId).html()==undefined){
 		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE);
 		itemInitialize("#eventsegment");
@@ -72,7 +73,8 @@ function recurFindTheImageAndFlip(imageId,level){
 	return;
 }
 
-function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
+
+function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
 	var onAjaxSuccess = function(data,textStatus){
 		if(data != null){
 			var userId = data.userId;
@@ -88,6 +90,8 @@ function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,th
 					$.cookie("truthbook_PageOwner_userId", data);
 					$.cookie("truthbook_thisImageId",thisImageId);
 					deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+					//test
+//					window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
 				} else {
 					drawConfirmPopUp("获取用户失败");
 				}
@@ -110,6 +114,41 @@ function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,th
 	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
 
 }
+
+function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
+	var onAjaxSuccess = function(data,textStatus){
+		if(data != null){
+			var userId = data.userId;
+			var onSuccess = function(data,textStatus){
+				if(data != null ){
+					$.cookie("truthbook_PageOwner_userId", data);
+					$.cookie("truthbook_thisImageId",thisImageId);
+					deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+					//test
+//					window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
+				} else {
+					drawConfirmPopUp("获取用户失败");
+				}
+			};
+			var onError = function(xhr,status,error){
+				drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+				return false;
+			};
+			
+			getUserAPI(userId, onSuccess, onError);
+		} else {
+			drawConfirmPopUp("获取用户失败");
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
+		return false;
+	};
+	
+	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
+
+}
+
 
 function deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem){
 	var onAjaxSuccess = function(data, textStatus) {
