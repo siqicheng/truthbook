@@ -7,6 +7,7 @@ function modifiedImageNum(num){
 
 function prepareElement(data,isAppend,Control,Comment){
 	var url = data.imageUrl,
+		userId = data.userId,
 		description = data.description,
 		uploaderName =  data.uploaderName,
 		uploaderId = data.uploaderId,
@@ -21,7 +22,7 @@ function prepareElement(data,isAppend,Control,Comment){
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
 	var html = thisImageHTML(url,description,descriptionDisplay,uploaderName,
-			uploaderId,createDate,numOfComment,display,imageId,numLike);
+			uploaderId,createDate,numOfComment,display,imageId,numLike,userId);
 	if (isAppend == true){
 		$("#eventsegment").append(html);
 	}else{
@@ -43,12 +44,13 @@ function prepareUnapprovedElement(data,isAppend){
 	var url = data.imageUrl;
 		description = data.description,
 		createDate = data.createDate,
+		uploaderId = data.uploaderId,
 		imageId = data.imageId,
 		descriptionDisplay = "";
 		
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
-	var html = thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId);
+	var html = thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId,uploaderId);
 	if (isAppend == true){
 		$("#neweventsegment").append(html);
 	}else{

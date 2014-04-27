@@ -68,12 +68,14 @@ function getThisComment_All(imageId,Control){
 			}
 			
 			addCommentButtonHandler(imageId);
-			return true;
+			
+			
+
 		} else {
 			//没有评论
-			return true;
 		}
-
+		flipCardCheck(imageId);
+		return true;
 	};
 	var onAjaxError = function(xhr,status,error){
 		drawConfirmPopUp("获取评论请求发送失败 Error: " + error);
@@ -256,7 +258,7 @@ function addCommentButtonHandler(imageId){
 function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,
 							repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){
 	
-	
+	var displayDate = commentDateHandle(createDate);
 	
 	html = 	"<div class=\"comment\" id=\"commentId" + commentId + "\">"+
 				"<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>"+
@@ -278,7 +280,7 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 			              "<a class=\"reply \" style='display:"+replyDisplay+";font-size:12px;'>回复</a>"+
 			              "<a class=\"delete \" id='delete"+commentId+"' style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
 		            "</div>"+
-		            "<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + createDate + "</span>"+
+		            "<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + displayDate + "</span>"+
 				"</div>"+
 			"</div>";
 	return html;

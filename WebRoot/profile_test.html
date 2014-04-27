@@ -16,7 +16,6 @@
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
     <link href="./CSS/notification.css" rel="stylesheet">
   	<link rel="shortcut icon" href="img/logo_red.ico"/>
-   	
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
@@ -72,14 +71,14 @@
 				<form class="ui form item" autocomplete="off" onsubmit="return false" style="padding-top: 0px;padding-left: 0px;padding-bottom: 0px;">
      				<div class="ui dropdown" id="searchbar">
      					<div class="ui small input icon">
-		       				<input type="text" id = "searchFullName" onkeyup="searchUsers()" placeholder="Search..." >
-		       				<i class="search link icon" onclick = "searchUsers();"></i>
+		       				<input  tabindex="1" type="text" id = "searchInput" placeholder="Search..." >
+		       				<i class="search link icon"></i>
 		       			</div>
 <!-- 		       			<div class="ui fluid list menu"> -->
-<!-- 		       				<div class="item"> -->
+<!-- 		       				<div class="item" tabindex="2"> -->
 		       				
 <!-- 		       				</div> -->
-<!-- 		       				<div class="item"> -->
+<!-- 		       				<div class="item" tabindex="3"> -->
 		       				
 <!-- 		       				</div> -->
 <!-- 		       			</div> -->
@@ -165,7 +164,7 @@
 					<div class="ui dropdown fluid item" >
 						<i class="star small icon"></i> 极·友
 						<div class="ui small label" id="eFriends_num">0</div>
-						<div class="ui list menu eFriendsList goto_fri_page" id="eFriendsList">	
+						<div class="ui fluid list menu eFriendsList goto_fri_page" id="eFriendsList">	
      					</div>
    					</div>
 				</div>
@@ -175,7 +174,7 @@
 					<div class="ui dropdown fluid item">
 						<i class="half empty star small icon"></i> 真·友
 						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
-						<div class="list menu nFriendsList goto_fri_page" id="nFriendsList">
+						<div class="ui fluid list menu nFriendsList goto_fri_page" id="nFriendsList">
 							
    						</div>
    					</div>
@@ -418,12 +417,12 @@
 	<script src="./assets/jquery/jquery.iframe-transport.js"></script>
 	<script src="./assets/jquery/jquery.ui.widget.js"></script>
 	<script src="./assets/jquery/jquery.fileupload.js"></script>
-	<script src="./assets/jquery/jquery.fileupload-image.js"></script>
+<!-- 	<script src="./assets/jquery/jquery.fileupload-image.js"></script> -->
 	
-	<script src="./js/uploadPic.js"></script>
-	<script src="./js/refreshFriendsLists.js"></script>
-	<script src="./js/uploadpopup.js"></script>
-	<script src="./js/sidebar_toggle.js"></script>
+	<script src="./js/profilePage/uploadPic.js"></script>
+	<script src="./js/profilePage/refreshFriendsLists.js"></script>
+<!-- 	<script src="./js/uploadpopup.js"></script> -->
+<!-- 	<script src="./js/sidebar_toggle.js"></script> -->
 	
 	
 	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	

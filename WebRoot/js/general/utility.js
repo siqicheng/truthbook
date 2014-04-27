@@ -71,7 +71,7 @@ function setUserInfoCookie(data){
 
 function goHomePage(){
 	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
-	window.location.href = HomePage;
+	window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
 }
 
 function goZhangSan(){
@@ -85,7 +85,7 @@ function goOthersPage(id){
 			drawConfirmPopUp("获取用户失败");
 		} else {
 			$.cookie("truthbook_PageOwner_userId", data);
-			window.location.href = HomePage;
+			window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
@@ -151,7 +151,7 @@ function getImageUrl(url,style){
 	if (url==undefined||url==null){
 		return DefaultPortrait;
 	}else{
-		return url.substring(0,url.lastIndexOf("/")+1)+style+url.substring(url.lastIndexOf("/")+1);
+		return "http://"+url+style;
 	}
 }
 
@@ -257,6 +257,29 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 		url = ServerRoot + ServiceType.NOTIFICATION + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
+}
+
+function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjaxError){
+	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName + "/send",
+		url=ServerRoot+ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);	
+}
+
+function sendMessageWithImageIdAPI(receiver, sender, imageId, messageTypeName, onAjaxSuccess, onAjaxError){
+	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName +"/"+imageId+ "/send",
+		url=ServerRoot+ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);	
+}
+
+function sendMessageWithContentAPI(receiver, sender,imageId, content,messageTypeName, onAjaxSuccess, onAjaxError){
+	var path = "v1/message/imageContent/send",
+		url = ServerRoot + ServiceType.NOTIFICATION +path,
+		data ="id="+receiver+"&srcid=" + sender + "&type=" + messageTypeName + "&content=" + content + "&imageId=" + imageId,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
 }
 
 /*********************************************************************************

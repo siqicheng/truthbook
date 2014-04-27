@@ -23,7 +23,8 @@ import fileupload.imageUtil;
 public class FileMeta {
 	
 	private static final String location = "Uploaded";
-	private static final String bucket = "truthbookwinkar.qiniudb.com";
+	private static final String bucket = "truthbookwinkar.qiniudn.com";
+
 
 	private String fileName;
 	private String fileSize;

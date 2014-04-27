@@ -1,9 +1,41 @@
 $(function(){
+
 	getImagePreCheck();
 
 	showMoreButtonHandler();
 
 });
+
+function flipCardCheck(imageId){
+	if ($.cookie("truthbook_thisImageId")==undefined||$.cookie("truthbook_thisImageId")==null)	return;
+	if(imageId !=$.cookie("truthbook_thisImageId")) return;
+	var imageToFlipId = $.cookie("truthbook_thisImageId");
+//	$.cookie("truthbook_thisImageId", null,{expires: -1});
+	flipImageByImageId(imageToFlipId);
+}
+
+function flipImageByImageId(imageId){
+	showReply($("#imageId"+imageId).find(".likebtn"));
+	//comment hasn't loaded problem
+	$.cookie("truthbook_thisImageId", null,{expires: -1});
+	$("#imageId"+imageId).find(".textarea").focus();
+}
+
+function needToLoadMoreImage(){
+	if ($.cookie("truthbook_thisImageId")==undefined||$.cookie("truthbook_thisImageId")==null) return;
+	recurFindTheImageToFlip($.cookie("truthbook_thisImageId"),1);
+}
+
+function recurFindTheImageToFlip(imageId,level){
+	if(level == 10) return;
+	if($("#imageId"+imageId).html()==undefined){
+		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE);
+		itemInitialize("#eventsegment");
+		recurFindTheImageToFlip(imageId,level+1);
+		return;
+	}
+	return;
+}
 
 /*********************************************************************************	
  *	Home Page check
@@ -153,6 +185,7 @@ function drawNextBatchImage(numOfImage,numToShow,imageData,Control){
 	}
 	if (numOfImage<=numToShow)	disableShowMoreButton();
 	itemInitialize("#eventsegment");
+	needToLoadMoreImage();
 }
 
 /*********************************************************************************
@@ -170,7 +203,7 @@ function drawUnapproveImage(numOfImage,imageData){
 /*********************************************************************************
  * 	The HTML part of new image
  */
-function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId){
+function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId,uploaderId){
 	
 	var displayDate = dateHandle(createDate);
 	var urlLarge = getImageUrl(url,ImageType.Large);
@@ -216,6 +249,7 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,i
     					"</div>"+
 					"</div>"+
 					"<div class='ui minimal comments' style='padding-top: 10px;'>"+
+						"<span class = 'uploaderId' style='display:none;'>"+uploaderId+"</span>"+
 						"<div class=\"ui tiny center aligned header\" style='cursor:auto;'>"+
 							"上传者：<span class=\"uploaderName\" style='color:#4C7A9F;'></span>"+
 						"</div>"+
@@ -244,11 +278,10 @@ return html;
 /*********************************************************************************
  * 	The HTML part of approved image
  */
-function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike){
+function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike,userId){
 	
 	var displayDate = dateHandle(createDate);
-	var userId = $.cookie("truthbook").userId;
-	
+	var createDateStd = createDate.substr(0,4)+"年"+createDate.substr(5,2)+"月"+createDate.substr(8,2)+"日";	
 	var urlLarge = getImageUrl(url,ImageType.Large);
 	var	urlMedium = getImageUrl(url,ImageType.Medium);
 	
@@ -268,7 +301,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    						"<div class='ui tiny button likebtn' style='margin-right: 2px'>"+
 			    							"<i class='heart tiny icon'></i>"+
 			    						"</div>"+
-			    						"<div class='ui tiny green inverted button commentbtn commentToggle'>" +
+			    						"<div class='ui tiny green inverted button commentbtn commentShow'>" +
 			    							"<i class='comment icon'></i><span class='numOfComment_inline'>"+numOfComment+"</span>"+
 			    						"</div>" +
 			    					"</div>"+
@@ -277,7 +310,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    					"<div class = 'discript content'>"+
 		    						"<p class='description' style = 'display:"+descriptionDisplay+";word-break:break-all;margin-bottom: 10px;'>"+description+"</p>"+
 		    						"<div class='meta' style = 'display:block;margin-top: 18px;' >"+
-		    							"<a class='uploaderName' style='display:block;font-size:14px;margin-bottom:4px;'>By "+uploaderName+"</a>"+
+		    							"<span style='font-size:14px;'>By </span><a class='uploaderName' style='display:inline;font-size:14px;margin-bottom:4px;'>"+uploaderName+"</a>"+
 		    							"<span class='uploaderId' style='display:none;'>" + uploaderId + "</span> "+
 		    						"</div>"+
 		    						"<div class='ui editBtn icon' style='display:none; margin:0 auto;cursor:pointer;width:10%'>" +
@@ -301,7 +334,8 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		                        "</div>" +
 					    		"<div class=\"extra\">"+
 					    			"<span class='numLikeSpan' style='float: left;  text-align: left;'>"+numLike+"</span><span>个赞</span>"+
-					    	        "<span style='float: right;  text-align: right;margin-right: 5%'>"+displayDate+"</span>"+
+					    	        "<span class = 'shortDate' style='float: right;  text-align: right;margin-right: 4%'>"+displayDate+"</span>"+
+					    	        "<span class= 'stdDate' style='display:none;float: right;  text-align: right;margin-right: 4%'>"+createDateStd+"</span>"+
 			    	        	"</div>"+
 		                     
 			    	        "</div>" +
