@@ -78,7 +78,20 @@ $(function() {
             onFailure :  disableRegisterButton,
 			onInvalid : disableRegisterButton,
         });
-        
+
+		$("#confirmbtn").click(function() {
+			if(selected_num == -1) {
+				$("#checkinput").val("");
+				$("#checkinput").attr("placeholder", "请在以上的选项中选择一个");
+			} else if(selected_num == -2) {
+				register_new($('.ui.form.register-form').serialize());
+			} else {
+				var choosenQuote = uploadCandidates[selected_num];
+				checkInviterName(choosenQuote, $("#checkinput").val());
+			}
+		});
+    
+    
         function disableRegisterButton(){
         	document.getElementById("register_button").className = "ui disabled fluid blue button";
         	return false;
@@ -142,10 +155,10 @@ $('.ui.form.register-form')
 							}
 							if(name.length > 3) {
 								content += name.slice(2);
-								ans = name.slice(0,2);
+								uploadCandidates[i].ans = name.slice(0,2);
 							} else {
 								content += name.slice(1);
-								ans = name.charAt(0);
+								uploadCandidates[i].ans = name.charAt(0);
 							}
 						};
 						onError = function(xhr, error, status) {
@@ -176,19 +189,20 @@ $('.ui.form.register-form')
 						$("#rechooseerror").hide();
 						
 						var onSuccess = function(data, textStatus) {
-							$("#imgPrev").attr("src", data[0].imageUrl);
+							$("#imgPrev").attr("src", getImageUrl(data[0].imageUrl, ImageType.Medium));
 						},
 							onError = function(xhr,status,error){
-								drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
+								console.log("获取照片请求发送失败 Error: " + error);
 								return false;
 						};
 						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
 						
-						if(ans.length==2) {
+						if(uploadCandidates[selected_num].ans.length==2) {
 							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？（两个字）");
 						} else {
 							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？");
-						}
+						};
+						$("#checkinput").val("");
 						$("#checkinput").removeAttr("disabled");
 					});
 					$("#newQuote").click(function() {
@@ -197,18 +211,10 @@ $('.ui.form.register-form')
 						selected_num=$(this).next().index()-1;
 //						console.log(selected_num);
 						$("#rechooseerror").hide();
+						$("#checkinput").val("");
 						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
 						$("#checkinput").attr("disabled", "true");
-					});
-					$("#confirmbtn").click(function() {
-						if(selected_num == -1) {
-							$("#rechooseerror").show();
-						} else if(selected_num == -2) {
-							register_new($('.ui.form.register-form').serialize());
-						} else {
-							var choosenQuote = uploadCandidates[selected_num];
-							checkInviterName(choosenQuote.userId, $("#checkinput").val());
-						}
+						$("#imgPrev").attr("src", DefaultPortrait);//TODO： 新建词条专用图片
 					});
 					$("#rechooseform").submit(function() {
 						if(selected_num == -1) {
@@ -221,7 +227,13 @@ $('.ui.form.register-form')
 						}
 						return false;
 					});
-					$("#rechooseform").modal("show");
+					$("#rechooseform")
+					.modal("show").modal('setting', 'onHidden', function() {
+						selected_num = -1;
+						$("#imgPrev").attr("src", DefaultPortrait); //TODO：改成选人专用图片
+						$("#checkinput").val("");
+						$("#checkinput").attr("placeholder", "请选择");
+					});
 				} else {
 					console.log("no quote found");
 					register_new($('.ui.form.register-form').serialize());
@@ -238,7 +250,7 @@ $('.ui.form.register-form')
 	return false;
 });
     
-    /*	Helper function
+/*	Helper function
  */
 function register_new(info) {
 	var path = "v1/full/register";
@@ -315,36 +327,10 @@ function take_quote(id, register_info) {
 	ajax_call(ajax_obj);
 }
 
-function checkInviterName(id, inviterName) {
-//	var path = "v1/friends/" + id +"/1",
-//		url = ServerRoot + ServiceType.USERPROFILE + path,
-//		onAjaxSuccess = function(data, textStatus) {
-//			var num = userLengthJson(data);
-//			var name;
-//			var inputName = $("#checkinput").val();
-//			for(var i=0;i<num;i++) {
-//				if(num>1) {
-//					name = data.user[i]["fullName"];
-//				} else {
-//					name = data.user["fullName"];
-//				};
-//				if(name == inputName) {
-//					take_quote(id, $('.ui.form.register-form').serializeArray());
-//					return true;
-//				}
-//			}
-//			$("#checkinput").val("");
-//			$("#checkinput").attr("placeholder","好像不是他/她哦");
-//			return false;
-//		},
-//		onAjaxError = function(xhr, status, error) {
-//			console.log("Get inviter json failed with error: " + error);
-//		};
-//		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
-//		ajax_call(ajax_obj);
+function checkInviterName(choosenQuote, inviterName) {
 	var inputName = $("#checkinput").val();
-	if(inputName == ans) {
-		take_quote(id, $('.ui.form.register-form').serializeArray());
+	if(inputName == choosenQuote.ans) {
+		take_quote(choosenQuote.userId, $('.ui.form.register-form').serializeArray());
 	} else {
 		$("#checkinput").val("");
 		$("#checkinput").attr("placeholder","好像不是这个哦");
