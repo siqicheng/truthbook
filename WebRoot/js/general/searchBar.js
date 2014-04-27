@@ -6,6 +6,9 @@ $(function() {
 	$("#searchInput").keyup(function(event) {
 		if( ((event.which>47) && (event.which<106)) || (event.which == 13) || (event.which == 8) ) {
 			searchUsers();
+		};
+		if( event.which == 40 ){
+			$('#searchbarDropdown').children().first().focus();
 		}
 	});
 });
@@ -76,10 +79,19 @@ function searchUsers(){
 				$("#getMoreSearchResult").click(function() {
 					getMoreSearchResult(data, length);
 				});
-				$("#searchbar").children().each(function() {
+				$("#searchbarDropdown").children().each(function() {
 					$(this).keydown(function(event) {
 						if(event.which == 13) {
-							$(this).click();
+							$(this).trigger('click');
+						};
+						if(event.which == 40) {
+							$(this).next().focus();
+						};
+						if(event.which == 38) {
+							$(this).prev().focus();
+							if($(this).index() == 0) {
+								$("#searchInput").focus();
+							}
 						}
 					});
 				});
@@ -134,6 +146,33 @@ function getMoreSearchResult(data, length) {
 	html = html + "</div>";
 	$("#searchbar").append(html);
 	showSearchResultPage(0, length);
+	$("#searchbarDropdown").children().first().focus();
+	$("#searchbarDropdown").children().each(function() {
+		$(this).keydown(function(event) {
+			if(event.which == 13) {
+				this.click();
+			};
+			if(event.which == 40) {
+				$(this).next().focus();
+			};
+			if(event.which == 38) {
+				$(this).prev().focus();
+				if($(this).index() == 0) {
+					$("#searchInput").focus();
+				}
+			}
+		});
+	});
+	$('.prevpage').keydown(function(event) {
+		if(event.which == 13) {
+			this.click();
+		}
+	});
+	$('.nextpage').keydown(function(event) {
+		if(event.which == 13) {
+			this.click();
+		}
+	});
 }
 
 function showSearchResultPage(page, num) {
