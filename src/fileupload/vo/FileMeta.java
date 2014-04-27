@@ -23,6 +23,7 @@ import fileupload.imageUtil;
 public class FileMeta {
 	
 	private static final String location = "Uploaded";
+	private static final String bucket = "truthbookwinkar.qiniudb.com";
 
 	private String fileName;
 	private String fileSize;
@@ -122,7 +123,7 @@ public class FileMeta {
 			image.setApproved(false);
 			image.setCreateDate(RestUtil.getCurrentDate());
 			image.setDeleted(false);
-			image.setImageUrl(this.location+'/'+fileName);
+			image.setImageUrl(this.bucket+'/'+fileName);
 			image.setLastModified(RestUtil.getCurrentDate());
 			image.setUploaderId(userId);
 			User receiver = new UserDAO().findById(receiverId);

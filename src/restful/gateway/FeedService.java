@@ -51,7 +51,10 @@ public class FeedService {
 				List<Relationship> relat_list = this.relationshipDAO.findByUser(user);
 				for (Relationship relat : relat_list){
 					Criteria criteria = session.createCriteria(Image.class);
-					criteria.add(Restrictions.gt("lastModified", userFetch.getLastFetchTime()))
+					criteria.add(Restrictions.gt(Image.LASTE_MODIFIED, userFetch.getLastFetchTime()))
+					.add(Restrictions.eq(Image.USER, user))
+					.add(Restrictions.eq(Image.APPROVED,true))
+					.add(Restrictions.eq(Image.DELETED, false))
 					.addOrder(Order.desc("lastModified"));
 					List<Image> friend_image = criteria.list();
 					image_list.addAll(friend_image);
@@ -84,7 +87,10 @@ public class FeedService {
 				List<Relationship> relat_list = this.relationshipDAO.findByUser(user);
 				for (Relationship relat : relat_list){
 					Criteria criteria = session.createCriteria(Image.class);
-					criteria.addOrder(Order.desc("lastModified"));
+					criteria.addOrder(Order.desc("lastModified"))
+					.add(Restrictions.eq(Image.USER, user))
+					.add(Restrictions.eq(Image.APPROVED,true))
+					.add(Restrictions.eq(Image.DELETED, false));
 					List<Image> friend_image = criteria.list();
 					image_list.addAll(friend_image);
 				}
