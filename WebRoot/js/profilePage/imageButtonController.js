@@ -16,7 +16,14 @@ function addImageButtonHandler(imageId,control,comment){
 		return false;
 	});
 	
-	$("#imageId"+imageId).find(".commentToggle").click(function(event){	
+	$("#imageId"+imageId).find(".commentShow").click(function(event){	
+		event.stopPropagation();
+		showReply($(this));
+//		$("#imageId"+imageId).find(".textarea").focus();
+		return false;
+	});
+	
+	$("#imageId"+imageId).find(".commentReturn").click(function(event){	
 		event.stopPropagation();
 		showReply($(this));
 		return false;
@@ -51,6 +58,8 @@ function addImageButtonHandler(imageId,control,comment){
 			$(this).parent().parent().children(".btnArea").slideToggle("fast",function(){
 				$('#eventsegment').masonry();
 			});
+			$(this).parents(".eventpile").find(".extra .shortDate").toggle();
+			$(this).parents(".eventpile").find(".extra .stdDate").toggle();
 	//		$(this).parent().children('.extra').toggle();
 			
 		});

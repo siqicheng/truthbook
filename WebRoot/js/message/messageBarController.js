@@ -31,11 +31,11 @@ function getMessage(){
 	getNewMessage(MessageType.REPLY);
 	getNewMessage(MessageType.UPGRADE);
 	
-	$(window).load(function() {
-		if(Number($("#unreadMessageNum").html()) != 0){	
-			showMessageNumberTransition("#unreadMessageNum");
-		}
-	});
+//	$(window).load(function() {
+//		if(Number($("#unreadMessageNum").html()) != 0){	
+//			showMessageNumberTransition("#unreadMessageNum");
+//		}
+//	});
 
 }
 
@@ -66,10 +66,10 @@ function updateNewMessageNum(numOfMessage){
 		$("#unreadMessageNum").html("00");
 		$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 	} else if (newNumOfMessage<10){
-//		showMessageNumberTransition("#unreadMessageNum");
+		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html("0" + newNumOfMessage);
 	} else {
-//		showMessageNumberTransition("#unreadMessageNum");
+		showMessageNumberTransition("#unreadMessageNum");
 		$("#unreadMessageNum").html(newNumOfMessage);
 	}
 }
@@ -130,7 +130,7 @@ function pickIconName(messageTypeName){
 		var iconArray = ["cloud upload","remove"];
 		return iconArray;
 	} else if (messageTypeName == MessageType.ACCEPTIMAGE.typeName){
-		var iconArray = ["cloud upload","remove"];
+		var iconArray = ["comment outline","remove"];
 		return iconArray;
 	} else if (messageTypeName == MessageType.REPLY.typeName){
 		var iconArray = ["comment outline","remove"];
@@ -186,9 +186,10 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 	for(var i=0;i<numOfMessage;i++){
 		if (numOfMessage == 1){
 			var userId = data.message.friend.userId,
-			messageId = data.message.messageId,
-			fullName = data.message.friend.fullName;
-			var content = data.message.content;
+				messageId = data.message.messageId,
+				fullName = data.message.friend.fullName,
+				imageId = data.message.imageId,
+				content = data.message.content;
 			var contentDisplay = "none";
 			
 			if(messageType.typeName == MessageType.REJECTIMAGE.typeName	||
@@ -200,11 +201,11 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 			
 		}else {
 			var userId = data.message[i].friend.userId,
-			messageId = data.message[i].messageId,
-			fullName = data.message[i].friend.fullName;
-			var content = data.message[i].content;
-			var contentDisplay = "none";
-			
+				messageId = data.message[i].messageId,
+				fullName = data.message[i].friend.fullName,
+				imageId = data.message[i].imageId,
+				content = data.message[i].content;
+			var contentDisplay = "none";			
 			if(messageType.typeName == MessageType.REJECTIMAGE.typeName	||
 					messageType.typeName == MessageType.ACCEPTIMAGE.typeName){
 				if (content != ""){
@@ -214,10 +215,13 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 			
 		}
 
+		if (imageId == undefined ) imageId ="";
+		
 		html = html +"<div class=\"item message\" >"+
 			"<div class=\"right floated\" style=\"padding-top:5px;width:60px;margin:0;display:none;\">" +
 				"<span class=\"this_userId\" style=\"display:none;\">" + userId + "</span>" +
 				"<span class=\"this_messageId\" style=\"display:none;\">" + messageId + "</span>" +
+				"<span class=\"this_imageId\" style=\"display:none;\">" + imageId + "</span>" +
 				"<a class=\""+messageType.typeButtonOneName+"\"><i class=\"" + iconName[0]  + " large icon\"></i></a>" +
 				"<a class=\""+messageType.typeButtonTwoName+"\"><i class=\"" + iconName[1]  + " large icon\"></i></a>" +
 			"</div>" +
@@ -268,7 +272,8 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 	$(".list.menu.message ." + messageType.typeButtonOneName).click(function() {
 		var thisUserId = $(this).parent().children(".this_userId").html();
 		var thisMessageId = $(this).parent().children(".this_messageId").html();
-		buttonOneOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent().parent());
+		var thisImageId = $(this).parent().children(".this_imageId").html();
+		buttonOneOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent().parent(),thisImageId);
 		
 	});
 	
@@ -309,7 +314,7 @@ function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
 	}	
 }
 
-function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
+function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem,thisImageId){
 	switch (messageTypeNumber){
 	case "0"://inviteToUpload
 		inviteToUploadButtonOneOnclick(thisUserId);	
@@ -327,10 +332,10 @@ function buttonOneOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisI
 		inviteToUploadButtonOneOnclick(thisUserId);	
 		break;
 	case "5"://acceptImage
-		inviteToUploadButtonOneOnclick(thisUserId);	
+		goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "6"://reply
-		goToThatImage(thisUserId,thisMessageId,messageTypeNumber,thisItem);
+		goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "7"://upgrade
 		

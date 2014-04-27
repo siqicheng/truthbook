@@ -22,7 +22,7 @@ isDebug = true;
  * 	Website and RESTful AJAX URL
  */
 
-//localhost = "175.186.105.228";
+//localhost = "175.186.104.114";
 localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
@@ -52,8 +52,8 @@ type_eFriends = 2;
 
 maxItemNum = 8;
 
-NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =8;
-NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 5;
+NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =2;
+NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 2;
 
 CONTROL = {
 		Self:1,
@@ -65,6 +65,7 @@ COMMENT = {
 		Yes:1
 };
 MAX_MesssageToSend = 100;
+DefaultThankYou="谢谢你为我传照片";
 
 /*********************************************************************************
  * 	Image style

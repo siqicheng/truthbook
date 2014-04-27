@@ -47,6 +47,7 @@ function acceptImage(thisElem,imageId){
 		if (data != null){
 			thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("谜底揭晓");
 			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned .uploaderName").html(data.uploaderName);
+			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned .uploaderId").html(data.uploaderId);
 			thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","感谢一下吧，或者。。。让他等着");
 			addThisImageToHomePage(imageId);
 			flipTheImageCard(thisElem);//flip only change #eventsegment
@@ -85,7 +86,11 @@ function rejectCommentMessage(imageId,thisElem){
 
 function acceptCommentMessage(imageId,thisElem){
 	//Todo:send acceptMessage
-	
+	var uploaderId = thisElem.parents(".minimal.comments").find(".uploaderId").html();
+	var selfId = $.cookie("truthbook").userId;
+	var content = thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").val();
+	if(content=="") content=DefaultThankYou;
+	sendMessageWithContentAPI(uploaderId, selfId,imageId,content,MessageType.ACCEPTIMAGE.typeName);
 	hiddenThisImage(thisElem,imageId);
 }
 

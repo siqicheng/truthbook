@@ -68,6 +68,8 @@ function getThisComment_All(imageId,Control){
 			}
 			
 			addCommentButtonHandler(imageId);
+			flipCardCheck(imageId);
+			
 			return true;
 		} else {
 			//没有评论
@@ -102,7 +104,7 @@ function addCommentButtonHandler(imageId){
 function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,
 							repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){
 	
-	
+	var displayDate = commentDateHandle(createDate);
 	
 	html = 	"<div class=\"comment\" id=\"commentId" + commentId + "\">"+
 				"<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>"+
@@ -124,10 +126,58 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 			              "<a class=\"reply \" style='display:"+replyDisplay+";font-size:12px;'>回复</a>"+
 			              "<a class=\"delete \" id='delete"+commentId+"' style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
 		            "</div>"+
-		            "<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + createDate + "</span>"+
+		            "<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + displayDate + "</span>"+
 				"</div>"+
 			"</div>";
 	return html;
+}
+
+function commentDateHandle(createDate){
+	if(createDate == "just now") return "just now";
+	date = new Date();
+	day = date.getDate();
+	month = Number(date.getMonth()+1);if (month < 10) month="0"+Number(date.getMonth()+1);
+	year = date.getFullYear();
+	
+	thisMonth = year+"-"+month; 
+	uploadDate = createDate.substring(0,createDate.indexOf("T")-3);
+	defaultUploadDate = createDate.substring(0,createDate.indexOf("T"));
+	defaultDisplayDate = defaultUploadDate.substr(0,4)+"年"+defaultUploadDate.substr(5,2)+"月"+defaultUploadDate.substr(8,2)+"日";	
+	if(uploadDate != thisMonth){	
+		return defaultDisplayDate;
+	} else {
+		hour = date.getHours();
+		minute = date.getMinutes();
+		second = date.getSeconds();
+		
+		upload_day = createDate.substr(createDate.indexOf("T")-2,2);
+		upload_hour = createDate.substr(createDate.indexOf("T")+1,2);
+		upload_minute = createDate.substr(createDate.indexOf("T")+4,2);
+		upload_second = createDate.substr(createDate.indexOf("T")+7,2);
+
+		if (day>upload_day){
+			if(day-upload_day==1){
+				return ("昨天 "+upload_hour+":"+upload_minute);
+			} else {
+				var month_display = defaultUploadDate.substr(5,2);
+				if (Number(month_display)<10){
+					month_display = defaultUploadDate.substr(6,1);
+				}
+				return (month_display+"月"+defaultUploadDate.substr(8,2)+"日 "+upload_hour+":"+upload_minute);
+			}
+		}
+		if (hour>upload_hour){
+			return ("今天 "+upload_hour+":"+upload_minute);
+		}
+		if (minute>upload_minute){
+			return (minute - upload_minute)+"分钟前";
+		}
+		if (second>upload_second){
+			return (second - upload_second)+"秒钟前";
+		}
+		return defaultDisplayDate;
+	}
+
 }
 
 

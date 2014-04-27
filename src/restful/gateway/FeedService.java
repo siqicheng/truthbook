@@ -1,5 +1,6 @@
 package restful.gateway;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.ws.rs.Produces;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -40,33 +42,68 @@ public class FeedService {
 		@Path("v1/feed/{userId}")
 		@Produces("application/json;charset=utf-8")
 		public Image[] getFeed(@PathParam("userId") Integer userId){
-			
-			UserFetch userFetch = this.userFetchDAO.findById(userId) ;
-			User user = this.userDAO.findById(userId);
-			List<Image> image_list =new ArrayList();
-			
-			List<Relationship> relat_list = this.relationshipDAO.findByUser(user);
-			
-			for (Relationship relat : relat_list){
-//				User friend = this.userDAO.findById(relat.getFriendId() );
-				Session session = this.imageDAO.getSession();
-				
-//				List<Image> friend_image= this.imageDAO.findByUser(friend);
-				
-				Criteria criteria = session.createCriteria(Image.class);
-				criteria.add(Restrictions.gt("lastModified", userFetch.getLastFetchTime()))
-				.addOrder(Order.desc("lastModified"));
-				
-				List<Image> friend_image = criteria.list();
-				
-				image_list.addAll(friend_image);
+			Session session = this.userFetchDAO.getSession();
+			Transaction tx = session.beginTransaction();
+			try{
+				UserFetch userFetch = this.userFetchDAO.findById(userId) ;
+				User user = this.userDAO.findById(userId);
+				List<Image> image_list =new ArrayList();
+				List<Relationship> relat_list = this.relationshipDAO.findByUser(user);
+				for (Relationship relat : relat_list){
+					Criteria criteria = session.createCriteria(Image.class);
+					criteria.add(Restrictions.gt(Image.LASTE_MODIFIED, userFetch.getLastFetchTime()))
+					.add(Restrictions.eq(Image.USER, user))
+					.add(Restrictions.eq(Image.APPROVED,true))
+					.add(Restrictions.eq(Image.DELETED, false))
+					.addOrder(Order.desc("lastModified"));
+					List<Image> friend_image = criteria.list();
+					image_list.addAll(friend_image);
+				}
+				Image[] images = new Image[image_list.size()];
+				for (int i=0 ;i < image_list.size(); ++i){
+					images[i] = image_list.get(i);
+				}
+				userFetch.setLastFetchTime(new Timestamp(System.currentTimeMillis()));
+				session.update(userFetch);
+				tx.commit();
+				session.close();
+				return images;
+			} catch (Exception e){
+				e.printStackTrace();
+				session.close();
+				return null;
 			}
-			
-			Image[] images = new Image[image_list.size()];
-			for (int i=0 ;i < image_list.size(); ++i){
-				images[i] = image_list.get(i);
+		}
+		
+		@GET
+		@Path("v1/feed/{userId}/all")
+		@Produces("application/json;charset=utf-8")
+		public Image[] getAllFeed(@PathParam("userId") Integer userId){
+			Session session = this.userFetchDAO.getSession();
+			try{
+				UserFetch userFetch = this.userFetchDAO.findById(userId) ;
+				User user = this.userDAO.findById(userId);
+				List<Image> image_list =new ArrayList();
+				List<Relationship> relat_list = this.relationshipDAO.findByUser(user);
+				for (Relationship relat : relat_list){
+					Criteria criteria = session.createCriteria(Image.class);
+					criteria.addOrder(Order.desc("lastModified"))
+					.add(Restrictions.eq(Image.USER, user))
+					.add(Restrictions.eq(Image.APPROVED,true))
+					.add(Restrictions.eq(Image.DELETED, false));
+					List<Image> friend_image = criteria.list();
+					image_list.addAll(friend_image);
+				}
+				Image[] images = new Image[image_list.size()];
+				for (int i=0 ;i < image_list.size(); ++i){
+					images[i] = image_list.get(i);
+				}
+				session.close();
+				return images;
+			} catch (Exception e){
+				e.printStackTrace();
+				session.close();
+				return null;
 			}
-			
-			return images;
 		}
 }

@@ -58,10 +58,73 @@ function goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,t
 	getUserAPI(thisUserId, onAjaxSuccess, onAjaxError);
 }
 
-function goToThatImage(thisUserId,thisMessageId,messageTypeNumber,thisItem){
+function recurFindTheImageAndFlip(imageId,level){
+	if($("#imageId"+imageId).html()==undefined){
+		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE);
+		itemInitialize("#eventsegment");
+		recurFindTheImageAndFlip(imageId,level+1);
+		return;
+	}else{
+		if(level == 1){
+			flipImageByImageId(imageId);
+		}
+	}
+	return;
+}
+
+function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
+	var onAjaxSuccess = function(data,textStatus){
+		if(data != null){
+			var userId = data.userId;
+			if(userId == $.cookie("truthbook").userId){
+				//不用跳转，反面即可
+				$.cookie("truthbook_thisImageId",thisImageId);
+				recurFindTheImageAndFlip(thisImageId,1);
+				deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+				return;
+			}
+			var onSuccess = function(data,textStatus){
+				if(data != null ){
+					$.cookie("truthbook_PageOwner_userId", data);
+					$.cookie("truthbook_thisImageId",thisImageId);
+					deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+				} else {
+					drawConfirmPopUp("获取用户失败");
+				}
+			};
+			var onError = function(xhr,status,error){
+				drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+				return false;
+			};
+			
+			getUserAPI(userId, onSuccess, onError);
+		} else {
+			drawConfirmPopUp("获取用户失败");
+		}
+	};
+	var onAjaxError = function(xhr,status,error){
+		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
+		return false;
+	};
 	
-	
-//	deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
+
+}
+
+function deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem){
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			deleteMessageTrasition(messageTypeNumber,thisItem);
+			window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
+		}else{
+			drawConfirmPopUp("标记信息已读失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("标记信息已读请求发送失败 Error: " + error);			
+	};
+
+	markReadMessageAPI(thisMessageId,onAjaxSuccess, onAjaxError);	
 }
 
 
