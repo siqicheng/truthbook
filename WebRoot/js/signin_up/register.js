@@ -78,7 +78,20 @@ $(function() {
             onFailure :  disableRegisterButton,
 			onInvalid : disableRegisterButton,
         });
-        
+
+		$("#confirmbtn").click(function() {
+			if(selected_num == -1) {
+				$("#checkinput").val("");
+				$("#checkinput").attr("placeholder", "请在以上的选项中选择一个");
+			} else if(selected_num == -2) {
+				register_new($('.ui.form.register-form').serialize());
+			} else {
+				var choosenQuote = uploadCandidates[selected_num];
+				checkInviterName(choosenQuote, $("#checkinput").val());
+			}
+		});
+    
+    
         function disableRegisterButton(){
         	document.getElementById("register_button").className = "ui disabled fluid blue button";
         	return false;
@@ -179,7 +192,7 @@ $('.ui.form.register-form')
 							$("#imgPrev").attr("src", getImageUrl(data[0].imageUrl, ImageType.Medium));
 						},
 							onError = function(xhr,status,error){
-								drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
+								console.log("获取照片请求发送失败 Error: " + error);
 								return false;
 						};
 						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
@@ -188,7 +201,8 @@ $('.ui.form.register-form')
 							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？（两个字）");
 						} else {
 							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？");
-						}
+						};
+						$("#checkinput").val("");
 						$("#checkinput").removeAttr("disabled");
 					});
 					$("#newQuote").click(function() {
@@ -197,20 +211,10 @@ $('.ui.form.register-form')
 						selected_num=$(this).next().index()-1;
 //						console.log(selected_num);
 						$("#rechooseerror").hide();
+						$("#checkinput").val("");
 						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
 						$("#checkinput").attr("disabled", "true");
 						$("#imgPrev").attr("src", DefaultPortrait);//TODO： 新建词条专用图片
-					});
-					$("#confirmbtn").click(function() {
-						if(selected_num == -1) {
-							$("#checkinput").val("");
-							$("#checkinput").attr("placeholder", "请在以上的选项中选择一个");
-						} else if(selected_num == -2) {
-							register_new($('.ui.form.register-form').serialize());
-						} else {
-							var choosenQuote = uploadCandidates[selected_num];
-							checkInviterName(choosenQuote, $("#checkinput").val());
-						}
 					});
 					$("#rechooseform").submit(function() {
 						if(selected_num == -1) {
