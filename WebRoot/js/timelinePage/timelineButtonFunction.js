@@ -21,7 +21,7 @@ function showNextBatchFeed(numToShow){
 		return;
 	}
 	for (;currPointer < nextEndPoint ;currPointer++){	
-		var element = prepareFeed(allTimelineItem[currPointer],true,Comment);
+		var element = prepareFeed(allTimelineItem[currPointer],true,COMMENT.Yes);
 //		$(".timelineWrapper").masonry( 'appended', element );
 		
 		if(currPointer == numTimelineItem - 1){
