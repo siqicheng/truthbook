@@ -191,7 +191,54 @@ public class MsgService {
 		}	
 	}
 
-	
+	@GET
+	@Path("v1/message/{userid}/getunsent")
+	@Produces("application/json;charset=utf-8")
+	public Object getUnsendMessage(@PathParam("userid") Integer id) throws Exception {
+		
+		Session session = this.messageDAO.getSession();
+
+//		String status = Message.UNSENT_STATUS;
+		
+		String property[] = {MessageDAO.USER_ID, MessageDAO.STATUS};
+		Object value[] = {id, Message.UNSENT_STATUS};	
+		
+		try{
+			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
+			
+			
+			if (Messages.size()>0){
+				List message_list = new ArrayList();
+				
+				Transaction tx = session.beginTransaction();
+				
+				for (Object message : Messages){
+					if (message instanceof Message ){
+						
+						((Message) message).setStatus(Message.SENT_STATUS);
+
+						session.update((Message)message);
+						message_list.add(message);
+					}
+				}
+				
+				tx.commit();
+				session.close();
+				
+				Message[] messages = new Message[message_list.size()];
+				for (int i=0; i<message_list.size();i++){
+					messages[i] = (Message) message_list.get(i);
+				}
+				return messages;
+			}
+			return null;
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return null;
+		}
+	}
+
 	
 	@GET
 	@Path("v1/message/{userid}/{type}/get")

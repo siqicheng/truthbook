@@ -280,6 +280,14 @@ function sendMessageWithContentAPI(receiver, sender,imageId, content,messageType
 	ajax_call(ajax_obj);
 }
 
+function getUpdateMessageAPI(receiver,onAjaxSuccess, onAjaxError){
+	var path = "v1/message/"+receiver+"/getunsent",
+		url=ServerRoot+ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+
 /*********************************************************************************
  * Image Service API
  */

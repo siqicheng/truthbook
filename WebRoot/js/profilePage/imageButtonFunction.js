@@ -461,8 +461,9 @@ function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 		sendMessageWithImageIdAPI(ownId,selfId,imageId, MessageType.REPLY.typeName);
 		nameList.push(ownId);
 	}
-	if(uploaderId != selfId)	{
-		sendMessageWithImageIdAPI(uploaderId,selfId,imageId, MessageType.REPLY.typeName);	
+
+	if(uploaderId != selfId){
+		sendMessageWithImageIdAPI(uploaderId,selfId,imageId, MessageType.REPLY.typeName);
 		nameList.push(uploaderId);
 	}
 	
