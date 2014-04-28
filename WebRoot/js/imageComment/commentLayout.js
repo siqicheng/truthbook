@@ -141,7 +141,7 @@ function getThisComment_All_onTimeline(imageId){
 				}			
 			}
 			
-			addCommentButtonHandler(imageId);
+			addCommentButtonHandlerOnTimeline(imageId);
 			return true;
 		} else {
 			//没有评论
@@ -162,6 +162,7 @@ function getThisComment_Part_onTimeline(imageId,showCommentNumber,totalCommentNu
 	var onAjaxSuccess = function(data,textStatus){
 		if (data != null){
 			var numTotalComment = commentLengthJson(data);
+			console.log(numTotalComment);
 			if ((totalCommentNumber-numTotalComment)<=0)
 				$("#itemId"+imageId).find(".loadAllComments").hide();
 			if (numTotalComment == 1){
@@ -217,7 +218,7 @@ function getThisComment_Part_onTimeline(imageId,showCommentNumber,totalCommentNu
 			addCommentButtonHandlerOnTimeline(imageId);
 			return true;
 		} else {
-			//没有评论
+			$("#itemId"+imageId).find(".loadAllComments").hide();
 			return true;
 		}
 
@@ -238,6 +239,12 @@ function addCommentButtonHandlerOnTimeline(imageId){
 	
 	$("#itemId"+imageId).find(".actions .delete").click(function(){
 		removeComment(imageId,$(this).parent().parent().parent().find(".commentId_span").html());
+	});
+	
+	$("#itemId"+imageId).find(".commentwrap .comment .avatar.tiny").click(function(){
+		var thisCommentByUserId = $(this).parent().find(".repliedByCommentId_span").html();
+		console.log(thisCommentByUserId);
+		goOthersPage(thisCommentByUserId);
 	});
 }
 

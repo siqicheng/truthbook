@@ -1,4 +1,4 @@
-function timelineButtonHandler(imageId, comment){
+function timelineButtonHandler(imageId, comment, imageOwnerId){
 	
 	$("#itemId"+imageId).find(".image").hover(function(){
 	    $(this).children(".imgbtnArea").fadeIn("fast");
@@ -16,12 +16,24 @@ function timelineButtonHandler(imageId, comment){
 		return false;
 	});
 	
-//	$("#itemId"+imageId).find(".commentSubmit").click(function(){
-//		submitComment(imageId);
-//	});
+	$("#itemId"+imageId).find(".commentSubmit").click(function(){
+		submitComment(imageId,imageOwnerId);
+	});
 	
 	$("#itemId"+imageId).find(".loadAllComments").click(function(){
 		$(this).parent().html("");
 		getThisComment_All_onTimeline(imageId);
+	});
+	
+	$("#itemId"+imageId).find(".uploaderName").click(function(){
+		goOthersPage($(this).parent().find(".uploaderId").html());
+	});
+	
+	$("#itemId"+imageId).find(".timelineBookmarkInfoUsername").click(function(){
+		goOthersPage(imageOwnerId);
+	});
+	
+	$("#itemId"+imageId).find(".timelineBookmarkAvatar").click(function(){
+		goOthersPage(imageOwnerId);
 	});
 }

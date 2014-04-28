@@ -69,6 +69,11 @@ function setUserInfoCookie(data){
 	$.cookie("truthbook", data);
 }
 
+function goTimeLine(){
+	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
+	window.location.href = TimeLinePage;
+}
+
 function goHomePage(){
 	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
 	window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
@@ -259,18 +264,11 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 	ajax_call(ajax_obj);	
 }
 
-function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjaxError){
-	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName + "/send",
-		url=ServerRoot+ServiceType.NOTIFICATION + path,
-		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
-	ajax_call(ajax_obj);	
-}
-
 function sendMessageWithImageIdAPI(receiver, sender, imageId, messageTypeName, onAjaxSuccess, onAjaxError){
 	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName +"/"+imageId+ "/send",
 		url=ServerRoot+ServiceType.NOTIFICATION + path,
 		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
-	ajax_call(ajax_obj);	
+	ajax_call(ajax_obj);
 }
 
 function sendMessageWithContentAPI(receiver, sender,imageId, content,messageTypeName, onAjaxSuccess, onAjaxError){

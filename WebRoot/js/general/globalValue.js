@@ -26,6 +26,7 @@ isDebug = true;
 localhost = "localhost";
 LoginPage = "http://"+localhost+":8080/truthbook/";
 HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
+TimeLinePage = "http://"+localhost+":8080/truthbook/timeline.html";
 ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
 ServiceType = {
     	   LOGIN:"loginService/",

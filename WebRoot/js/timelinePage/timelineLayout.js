@@ -40,7 +40,7 @@ function drawNextBatchFeed(numTimelineItem,numToShow,imageData){
 /*********************************************************************************
  * 	The whole HTML part to draw
  */
-function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate,numOfComment,imageId,imageOwnerId,imageOwnerName,numLike){
+function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate,numOfComment,imageId,imageOwnerId,imageOwnerName,imageOwnerPortrait,numLike){
 	
 	var displayDate = commentDateHandle(createDate);
 //	var userId = $.cookie("truthbook").userId;
@@ -51,6 +51,7 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 	html = 	"<div class='timelineItem' id = 'itemId"+imageId+"'>\n" +
 			"\t<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>\n"+
 			"\t<span class = 'url_span' style='display:none;'>"+url+"</span>\n"+
+			"\t<span class = 'imageOwnerId_span' style='display:none;'>"+imageOwnerId+"</span>\n"+
 			"\t<div class='timelineSider'>\n" +
 			"\t\t<div class='timelineBookmark'>\n" +
 			"\t\t\t<div class='timelineBookmarkInfo'>\n" +
@@ -58,7 +59,7 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 			"\t\t\t\t<span class='timelineBookmarkInfoTimestamp'>"+displayDate+"</span>\n" +
 			"\t\t\t</div>\n" +
 			"\t\t\t<div class='timelineBookmarkAvatar'>\n" +
-			"\t\t\t\t<img class='ui avatar image' src='"+DefaultImg+"'>\n" +
+			"\t\t\t\t<img class='ui avatar image' src='"+imageOwnerPortrait+"'>\n" +
 			"\t\t\t</div>\n" +
 			"\t\t</div>\n" +
 			"\t</div>\n" +

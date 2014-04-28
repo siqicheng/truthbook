@@ -39,22 +39,25 @@ function prepareFeed(data,isAppend,Comment){
 		numLike = data.liked,
 		imageOwnerId = data.user.userId,
 		imageOwnerName = data.user.fullName,
+		imageOwnerPortrait = data.user.defaultPortrait,
 		descriptionDisplay = "",
 		display = "inline";	
 	var	commentContent = "";
-	
+	imageOwnerPortrait = getImageUrl(imageOwnerPortrait,ImageType.Small);
+	console.log(numOfComment);
 //	if (numLike=="") numLike = "0";
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
 	var html = thistimelineItemHTML(url,description,uploaderName,
-			uploaderId,createDate,numOfComment,imageId,imageOwnerId,imageOwnerName,numLike);
+			uploaderId,createDate,numOfComment,imageId,imageOwnerId,imageOwnerName,
+			imageOwnerPortrait,numLike);
 	if (isAppend == true){
 		$(".timelineWrapper").append(html);
 	}else{
 		$(".timelineWrapper").prepend(html);
 	}
 	
-	timelineButtonHandler(imageId,Comment);
+	timelineButtonHandler(imageId,Comment,imageOwnerId);
 	if(Comment == COMMENT.Yes){
 		getThisComment_Part_onTimeline(imageId,NUM_SHOW_COMMENT_ON_TIMELINE,numOfComment);
 	} else {
@@ -66,6 +69,7 @@ function prepareFeed(data,isAppend,Comment){
 }
 
 function timelineInitialize(id){
+	$(id+" .timelineItem:first-child").addClass("timelineFirst");
 	$(id).find(".timelineItem .timelineCenter .item .image").magnificPopup({
 		type: 'image',
 		image: {

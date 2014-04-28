@@ -75,6 +75,7 @@
 	position: absolute;
 	right: 0;
 	top: 0;
+	cursor:pointer;
 }
 
 .timelineBookmark .timelineBookmarkAvatar .avatar.image {
@@ -91,8 +92,13 @@
 	text-align: right;
 }
 
+.timelineBookmarkInfoUsername {
+	cursor:pointer;
+}
+
 .timelineBookmarkInfoTimestamp {
 	color:#999;
+	font-size:12px;
 }
 
 /* timelinecenter item description area */

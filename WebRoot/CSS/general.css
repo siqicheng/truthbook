@@ -20,6 +20,9 @@ a:visited {
 	position: relative;
 }
 
+.profile-wrapper{min-height:1200px;}
+
+
 .footer {
 	margin-top:50px;
 	clear: both;

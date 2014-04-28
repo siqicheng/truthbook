@@ -52,10 +52,10 @@
 			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
 			
 		</div>			      
-		<a class="active green item">
+		<a class="active green item" onclick = "goHomePage();">
 			<i class="home  large icon"></i>
 		</a>
-		<a class="blue item">
+		<a class="blue item" id="gotimelineBtn" onclick="goTimeLine();">
 	    	<i class="grid layout large icon"></i>
 		</a>
 		<a class="orange item">
@@ -65,7 +65,7 @@
 		<a class="open_popup_link item" href="#upload" style="display:none">上传照片（PopUp）</a>
 		<div class="title" onclick = "goHomePage();">
 	        <img src="img/Truthbook_red.png" width="140px" >
-	    </div>	
+	    </div>
 		
 		<div class="right menu">
 				<form class="ui form item" autocomplete="off" onsubmit="return false" style="padding-top: 0px;padding-left: 0px;padding-bottom: 0px;">
@@ -228,7 +228,8 @@
 	<div class="" id="eventsegment"></div>
 	
 	<div class="itemloadBtn" id = "showMoreButton"><div class="ui basic fluid icon button"><i class="double angle down large icon"></i></div></div>
-
+	
+	
 	</div>
 	<div id="upload" class="white-popup  mfp-hide">
 		<h3 class="ui header">上传照片</h3>
