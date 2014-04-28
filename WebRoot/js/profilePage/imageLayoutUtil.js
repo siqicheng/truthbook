@@ -70,19 +70,18 @@ function prepareUnapprovedElement(data,isAppend){
 
 function handleNewImageButton(){
 	showNewImageButton(numUnapprovImage);
-	$("#newPhotoButton").click(function(){
+	$("#newPhotoBar").click(function(){
 		hideNewImageButton();
 		showReturnHomeButton();
 		$("#neweventwrap").slideToggle("slow",function(){
-		});	
-		drawUnapproveImage(numUnapprovImage,unapprovImage);
+			});	
+		drawUnapproveImage(numUnapprovImage,unapprovImage);	
 		
 	});
-	$("#approvedPhotoButton").click(function(){
+	$("#newPhotoReturnBar").click(function(){
 		hideReturnHomeButton();
 		showNewImageButton(numUnapprovImage);
-		$("#neweventwrap").slideToggle("slow");
-		
+		$("#neweventwrap").slideToggle("slow");		
 		$("#neweventsegment").masonry( 'destroy');
 		$("#neweventsegment").html("");
 	});
@@ -93,26 +92,30 @@ function handleNewImageButton(){
 
 
 function showNewImageButton(numUnapprovImage){
-	$("#newPhotoButton").removeClass(" hidden");
-	$("#newPhotoButton").addClass(" visible");
+	$("#newPhotoBar").show();
+//	$("#newPhotoButton").removeClass(" hidden");
+//	$("#newPhotoButton").addClass(" visible");
 	$("#numOfUnapprovedImage").html(numUnapprovImage);
-	addFriendTransition("#newPhotoButton");
+//	addFriendTransition("#newPhotoButton");
 }
 
 function hideNewImageButton(){
-	$("#newPhotoButton").removeClass(" visible ");
-	$("#newPhotoButton").addClass(" hidden ");
+//	$("#newPhotoButton").removeClass(" visible ");
+//	$("#newPhotoButton").addClass(" hidden ");
+	$("#newPhotoBar").hide();
 }
 
 function showReturnHomeButton(){
-	$("#approvedPhotoButton").removeClass(" hidden");
-	$("#approvedPhotoButton").addClass(" visible");
-	addFriendTransition("#approvedPhotoButton");	
+//	$("#approvedPhotoButton").removeClass(" hidden");
+//	$("#approvedPhotoButton").addClass(" visible");
+//	addFriendTransition("#approvedPhotoButton");
+	$("#newPhotoReturnBar").show();
 }
 
 function hideReturnHomeButton(){
-	$("#approvedPhotoButton").removeClass(" visible ");
-	$("#approvedPhotoButton").addClass(" hidden ");
+//	$("#approvedPhotoButton").removeClass(" visible ");
+//	$("#approvedPhotoButton").addClass(" hidden ");
+	$("#newPhotoReturnBar").hide();
 }
 
 
@@ -146,7 +149,7 @@ function itemInitialize(id){
 function newitemInitialize(id){
 	$(id).masonry({		
 		itemSelector: '.eventpile',
-		gutter: 1});
+		gutter: 0});
 
 	$(id).imagesLoaded( function() {
 		$(id).masonry();

@@ -5,17 +5,23 @@ $(function(){
 
 function getAllTimeline(userId) {
 	var onAjaxSuccess = function (data, textStatus){
-		var allTimelineData = timelineToArray(data);
-		numTimelineItem = allTimelineData.length;
-		allTimelineItem = timelineInOrder(numTimelineItem, allTimelineData);
-		// Get ordered timeline item Array
-		if(numTimelineItem != 0){
-			drawNextBatchFeed(numTimelineItem, NUM_FIRST_BATCH_ITEM_ON_TIMELINE, allTimelineItem);
-			return true;
+		if (data){
+			var allTimelineData = timelineToArray(data);
+			numTimelineItem = allTimelineData.length;
+			allTimelineItem = timelineInOrder(numTimelineItem, allTimelineData);
+			// Get ordered timeline item Array
+			if(numTimelineItem != 0){
+				drawNextBatchFeed(numTimelineItem, NUM_FIRST_BATCH_ITEM_ON_TIMELINE, allTimelineItem);
+				return true;
+			}
+			else{
+//				disableShowMoreButton();
+				return true;			
+			}
 		}
-		else{
-//			disableShowMoreButton();
-			return true;
+		else {
+			$(".timelineContainer").html("<div style='text-align:center;margin-top:30%'>"+ 
+					NO_TIMELINE_ITEM + "</div>\n");
 		}
 	};
 	var onAjaxError = function(xhr, status, error){
