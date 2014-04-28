@@ -59,8 +59,8 @@ DefaultPreviewImg="./img/profile_test/247146.jpg";
 
 maxItemNum = 8;//dropdown最多item数
 
-NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =2;
-NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 2;
+NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =12;
+NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 6;
 
 CONTROL = {
 		Self:1,
@@ -108,28 +108,28 @@ MessageType = {
 	   typeName : "friendRequest",
 	   typeButtonOneName : "add_fri_btn_1",
 	   typeButtonTwoName : "later_fri_btn_1",
-	   typeHeadMenuName : "条好友请求"
+	   typeHeadMenuName : "条真·友请求"
 	   },
 	   ACCEPTFRIEND :{
 	   number : "2",
 	   typeName : "acceptFriendRequest",
 	   typeButtonOneName : "no_btn_2",
 	   typeButtonTwoName : "delete_message_btn_2",
-	   typeHeadMenuName : "位好友接受好友请求"
+	   typeHeadMenuName : "位新真·友"
 	   },
 	   TAKEQUOTE :{
 	   number : "3",
 	   typeName : "takeQuote",
 	   typeButtonOneName : "go_fri_btn_3",
 	   typeButtonTwoName : "delete_message_btn_3",
-	   typeHeadMenuName : "位好友认领了你新建的词条"
+	   typeHeadMenuName : "个词条被认领"
 	   },
 	   REJECTIMAGE :{
 		   number : "4",
 		   typeName : "rejectImage",
 		   typeButtonOneName : "upload_for_fri_btn_4",
 		   typeButtonTwoName : "delete_message_btn_4",
-		   typeHeadMenuName : "张照片的拒绝原因"
+		   typeHeadMenuName : "张照片被拒了"
 	   },
 	   ACCEPTIMAGE :{
 		   number : "5",
@@ -143,13 +143,13 @@ MessageType = {
 		   typeName : "reply",
 		   typeButtonOneName : "go_fri_btn_6",
 		   typeButtonTwoName : "delete_message_btn_6",
-		   typeHeadMenuName : "条回复"
+		   typeHeadMenuName : "条新回复"
 	   },
 	   UPGRADE :{
 		   number : "7",
 		   typeName : "upgrade",
 		   typeButtonOneName : "no_btn_7",
 		   typeButtonTwoName : "delete_message_btn_7",
-		   typeHeadMenuName : "位好友升级了"
+		   typeHeadMenuName : "位真·友升级"
 	   },
 };

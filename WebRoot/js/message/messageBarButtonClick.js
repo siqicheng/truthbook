@@ -46,9 +46,8 @@ function goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,t
 		if(data == false){
 			drawConfirmPopUp("获取用户失败");
 		} else {
-			deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
 			$.cookie("truthbook_PageOwner_userId", data);
-			window.location.href = HomePage;
+			deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
@@ -74,10 +73,10 @@ function recurFindTheImageAndFlip(imageId,level){
 }
 
 
-function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
-	var onAjaxSuccess = function(data,textStatus){
-		if(data != null){
-			var userId = data.userId;
+function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem,imageOwnId){
+//	var onAjaxSuccess = function(data,textStatus){
+//		if(data != null){
+			var userId = imageOwnId;
 			if(userId == $.cookie("truthbook").userId){
 				//不用跳转，反面即可
 				$.cookie("truthbook_thisImageId",thisImageId);
@@ -102,29 +101,28 @@ function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNu
 			};
 			
 			getUserAPI(userId, onSuccess, onError);
-		} else {
-			drawConfirmPopUp("获取用户失败");
-		}
-	};
-	var onAjaxError = function(xhr,status,error){
-		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
-		return false;
-	};
-	
-	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
+//		} else {
+//			drawConfirmPopUp("获取用户失败");
+//		}
+//	};
+//	var onAjaxError = function(xhr,status,error){
+//		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
+//		return false;
+//	};
+//	
+//	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
 
 }
 
 function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
-	var onAjaxSuccess = function(data,textStatus){
-		if(data != null){
-			var userId = data.userId;
+//	var onAjaxSuccess = function(data,textStatus){
+//		if(data != null){
+			var userId = thisUserId;
 			var onSuccess = function(data,textStatus){
 				if(data != null ){
 					$.cookie("truthbook_PageOwner_userId", data);
 					$.cookie("truthbook_thisImageId",thisImageId);
 					deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
-					//test
 //					window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
 				} else {
 					drawConfirmPopUp("获取用户失败");
@@ -136,16 +134,16 @@ function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,th
 			};
 			
 			getUserAPI(userId, onSuccess, onError);
-		} else {
-			drawConfirmPopUp("获取用户失败");
-		}
-	};
-	var onAjaxError = function(xhr,status,error){
-		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
-		return false;
-	};
-	
-	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
+//		} else {
+//			drawConfirmPopUp("获取用户失败");
+//		}
+//	};
+//	var onAjaxError = function(xhr,status,error){
+//		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
+//		return false;
+//	};
+//	
+//	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
 
 }
 
@@ -196,10 +194,10 @@ function deleteMessageTrasition(messageTypeNumber,thisItem){
 }
 
 function deleteHeadMessageNumUpdate(thisItem){
-	var newNumOfMessage = Number(thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html()) - 1;
+	var newNumOfMessage = Number(thisItem.parent().parent().find(".messageNumber").html()) - 1;
 	if (newNumOfMessage <= 0){
-		thisItem.parent().parent().children(".header.item").hide();
+		thisItem.parent().parent().children(".item").hide();
 	} else {
-		thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html(newNumOfMessage);
+		thisItem.parent().parent().find(".messageNumber").html(newNumOfMessage);
 	}
 }

@@ -457,8 +457,14 @@ function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 	var nameList = new Array();
 	
 	//send message to image owner & uploader
-	if(ownId != selfId)	sendMessageWithImageIdAPI(ownId,selfId,imageId, MessageType.REPLY.typeName);
-	if(uploaderId != selfId)	sendMessageWithImageIdAPI(uploaderId,selfId,imageId, MessageType.REPLY.typeName);	
+	if(ownId != selfId)	{
+		sendMessageWithImageIdAPI(ownId,selfId,imageId, MessageType.REPLY.typeName);
+		nameList.push(ownId);
+	}
+	if(uploaderId != selfId){
+		sendMessageWithImageIdAPI(uploaderId,selfId,imageId, MessageType.REPLY.typeName);
+		nameList.push(uploaderId);
+	}
 	
 	for(var i=0;i<numMessageToSend;i++){
 		if(thiscomment[end-i].innerHTML==selfId || $.inArray(thiscomment[end-i].innerHTML, nameList)!=-1) continue;

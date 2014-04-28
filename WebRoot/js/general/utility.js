@@ -252,13 +252,6 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 	ajax_call(ajax_obj);	
 }
 
-function sendMessageAPI(receiver, sender, messageTypeName, onAjaxSuccess, onAjaxError){
-	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName + "/send",
-		url=ServerRoot+ServiceType.NOTIFICATION + path,
-		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
-	ajax_call(ajax_obj);	
-}
-
 function sendMessageWithImageIdAPI(receiver, sender, imageId, messageTypeName, onAjaxSuccess, onAjaxError){
 	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName +"/"+imageId+ "/send",
 		url=ServerRoot+ServiceType.NOTIFICATION + path,
@@ -274,6 +267,14 @@ function sendMessageWithContentAPI(receiver, sender,imageId, content,messageType
 	ajax_obj.data = data;
 	ajax_call(ajax_obj);
 }
+
+function getUpdateMessageAPI(receiver,onAjaxSuccess, onAjaxError){
+	var path = "v1/message/"+receiver+"/getunsent",
+		url=ServerRoot+ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
+
 
 /*********************************************************************************
  * Image Service API
