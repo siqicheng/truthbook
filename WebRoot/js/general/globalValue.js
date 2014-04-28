@@ -23,11 +23,12 @@ isDebug = true;
  */
 
 //localhost = "175.186.104.114";
-localhost = "localhost";
-LoginPage = "http://"+localhost+":8080/truthbook/";
-HomePage = "http://"+localhost+":8080/truthbook/profile_test.html";
-TimeLinePage = "http://"+localhost+":8080/truthbook/timeline.html";
-ServerRoot = "http://" + localhost + ":8080/truthbook/services/";
+localhost = "192.81.130.72";
+suffix = "";
+LoginPage = "http://" + localhost + suffix + "/";
+HomePage = "http://" + localhost + suffix + "/profile_test.html";
+TimeLinePage = "http://" + localhost + suffix + "/timeline.html";
+ServerRoot = "http://" + localhost + suffix + "/services/";
 ServiceType = {
     	   LOGIN:"loginService/",
     	   USERPROFILE :"userProfile/",
