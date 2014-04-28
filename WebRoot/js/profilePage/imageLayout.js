@@ -221,7 +221,7 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,i
 		
 				"<div class='active side ui items'>" +
 					"<div class='item'>" + 	
-						"<a class='image' href='"+urlLarge+"'>"+
+						"<a class='image' href='"+urlLarge+"' title='"+description+"'>"+
 							"<img src='"+urlMedium+"'>"+
 						"</a>"+
 						"<div class = 'discript content'>"+
@@ -298,7 +298,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    			"<div class='active side ui items'>" +
 		    				"<div class='item'>" +    					
 		    					
-		    					"<a class='image' href='"+urlLarge+"'>"+
+		    					"<a class='image' href='"+urlLarge+"' title='"+description+"'>"+
 		    						"<img src='"+urlMedium+"'>"+
 		    						"<div class='imgbtnArea'>" +
 			    						"<div class='ui tiny button likebtn' style='margin-right: 2px'>"+

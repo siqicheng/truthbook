@@ -166,6 +166,7 @@ function addGallery(id){
 		},
 		type: 'image',
 		image: {
+			titleSrc: 'title',
 			verticalFit: false
 		},
 		zoom:{

@@ -33,6 +33,7 @@ function drawConfirmPopUp_dummyDimmerForExtention(messageToShow){
 
 function handleLogoutPopUp(){
 	$( "#exitButton" ).click(function() {
+		$("#body").addClass("dimmable");
 		$('.basic.modal.logout')
 	   	.modal('setting', {
 	   		closable: true,

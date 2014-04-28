@@ -72,7 +72,7 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 			"\t<div class='timelineCenter'>\n" +
 			"\t\t<div class='ui items'>\n" +
 			"\t\t\t<div class='item'>\n" +
-			"\t\t\t\t<a class='image' href='"+urlLarge+"'>\n" +
+			"\t\t\t\t<a class='image' href='"+urlLarge+"' title='"+description+"'>\n" +
 			"\t\t\t\t\t<img src='"+urlMedium+"'>\n" +
 			"\t\t\t\t\t<div class='imgbtnArea'>\n" +
 			"\t\t\t\t\t\t<div class='ui tiny button likebtn'><i class='heart tiny icon'></i></div>\n" +
