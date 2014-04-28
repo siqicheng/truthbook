@@ -27,7 +27,10 @@ function needToLoadMoreImage(){
 }
 
 function recurFindTheImageToFlip(imageId,level){
-	if(level == 10) return;
+	if(level == 10) {
+		$.cookie("truthbook_thisImageId", null,{expires: -1});
+		return;
+	}
 	if($("#imageId"+imageId).html()==undefined){
 		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE);
 		itemInitialize("#eventsegment");

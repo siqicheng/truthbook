@@ -47,7 +47,7 @@ function getNewMessage(messageType){
 			}
 		}
 		if(messageType.typeName==MessageType.UPGRADE.typeName){
-			returnIntervalInt=self.setInterval("updateMessage()",20000);
+			returnIntervalInt=self.setInterval("updateMessage()",periodCheckNewMessage);
 		}
 		
 	};

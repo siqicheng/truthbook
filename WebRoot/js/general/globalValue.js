@@ -80,6 +80,8 @@ NUM_SHOW_COMMENT_ON_TIMELINE = 2;
 NUM_FIRST_BATCH_ITEM_ON_TIMELINE = 5;
 NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 5;
 
+periodCheckNewMessage = 20000;  //ms
+
 /*********************************************************************************
  * 	Image style
  */
