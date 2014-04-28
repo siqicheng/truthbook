@@ -223,7 +223,7 @@ $('.ui.form.register-form')
 							register_new($('.ui.form.register-form').serialize());
 						} else {
 							var choosenQuote = uploadCandidates[selected_num];
-							checkInviterName(choosenQuote.userId, $("#checkinput").val());
+							checkInviterName(choosenQuote, $("#checkinput").val());
 						}
 						return false;
 					});
