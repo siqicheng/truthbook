@@ -163,7 +163,7 @@ function addGallery(id){
 		},
 		type: 'image',
 		image: {
-			verticalFit: true
+			verticalFit: false
 		},
 		zoom:{
 			enabled: true,

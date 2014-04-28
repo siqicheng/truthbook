@@ -73,7 +73,7 @@ function timelineInitialize(id){
 	$(id).find(".timelineItem .timelineCenter .item .image").magnificPopup({
 		type: 'image',
 		image: {
-			verticalFit: true
+			verticalFit: false
 		},
 		zoom:{
 			enabled: true,

@@ -63,7 +63,7 @@ function acceptImage(thisElem,imageId){
 	
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){
-			modifiedImageNum(1);
+			modifiedImageNum(1);			
 			getImageByImageIdAPI(imageId,onGetNameAjaxSuccess,onGetNameAjaxError);
 			
 		}else{
