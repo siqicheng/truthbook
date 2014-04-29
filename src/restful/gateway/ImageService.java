@@ -261,7 +261,6 @@ public class ImageService {
 				image.setApproved(true);
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
-				
 				User user = image.getUser();
 				Integer friendId = image.getUploaderId();
 				
@@ -272,6 +271,8 @@ public class ImageService {
 					Message message = new Message(Message.UPGRADE_TYPE, friendId, user, RestUtil.getCurrentTime() );
 					session.save(message);
 				}
+				
+				session.update(relat);
 				
 				tx.commit();
 				session.close();

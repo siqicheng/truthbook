@@ -3,7 +3,6 @@ package restful.gateway;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,9 +16,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-//import db.mapping.object.Image;
-//import db.mapping.object.Portrait;
-//import db.mapping.object.PortraitDAO;
 import db.mapping.object.Relationship;
 import db.mapping.object.User;
 import db.mapping.object.DAO.RelationshipDAO;
@@ -53,10 +49,10 @@ public class UserProfile {
 		return this.relationshipDAO.getSession().createCriteria(Relationship.class);
 	}
 
+ 	
 	@POST
 	@Path("v1/friends/add")
 	@Produces("application/json;charset=utf-8")
-
 	public Object addFriend(@FormParam("id") Integer id,
 			@FormParam("friend_id") Integer friend_id,
 			@FormParam("type") Integer type,
@@ -78,10 +74,10 @@ public class UserProfile {
 		}
 	}
 
+	
 	@PUT
 	@Path("v1/friends/update")
 	@Produces("application/json;charset=utf-8")
-
 	public Object updateFriend(@FormParam("id") Integer id,
 			@FormParam("friend_id") Integer friend_id,
 			@FormParam("type") Integer type,
@@ -114,10 +110,10 @@ public class UserProfile {
 
 	}
 
+	
 	@GET
 	@Path("v1/friends/{id}/{friend_id}/check")
 	@Produces("application/json;charset=utf-8")
-
 	public Object checkFriends(@PathParam("id") Integer id,@PathParam("friend_id") Integer friend_id) {
 		User user = this.userDAO.findById(id);
 
@@ -136,10 +132,10 @@ public class UserProfile {
 		return RestUtil.string2json("-1");
 	}
 
+	
 	@GET
 	@Path("v1/friends/{id}/{friend_id}/delete")
 	@Produces("application/json;charset=utf-8")
-
 	public Object deleteFriend(@PathParam("id") Integer id,@PathParam("friend_id") Integer friend_id) {
 
 		User user = this.userDAO.findById(id);
@@ -175,16 +171,19 @@ public class UserProfile {
 	@GET
 	@Path("v1/friends/{id}/{type}")
 	@Produces("application/json;charset=utf-8")
-
-	public User[] getFriends(@PathParam("id") Integer id,@PathParam("type") String type) throws Exception {
+	public User[] getFriends(@PathParam("id") Integer id,@PathParam("type") Integer type) throws Exception {
 
 		User user = this.userDAO.findById(id);
 
-		String property[] = { RelationshipDAO.USER, RelationshipDAO.RELATIONSHIP };
-		Object value[] = { user, type };
+//		String property[] = { RelationshipDAO.USER, RelationshipDAO.RELATIONSHIP };
+//		Object value[] = { user, type };
 
-		List relationships = this.relationshipDAO.findByProperties(property,
-				value, RelationshipDAO.TABLE);
+//		List relationships = this.relationshipDAO.findByProperties(property,
+//				value, RelationshipDAO.TABLE);
+		List relationships = this.getCriteria().add(Restrictions.eq(RelationshipDAO.USER, user))
+												.add(Restrictions.eq(RelationshipDAO.RELATIONSHIP, type))
+												.list();
+				
 		if (relationships.size() > 0) {
 			List friend_list = new ArrayList();
 			for (Object relationship : relationships) {
