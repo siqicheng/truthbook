@@ -8,7 +8,17 @@
  *	Generate an object for AJAX call
  */
 function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete,cache){
+	try{
+		var token = $.cookie("truthbook").token;
+		if(token==undefined||token==null) token="";
+	}
+	catch(err){
+		
+	}
 	var ajax_obj = new Object();
+	ajax_obj.beforeSend = function(request){
+		request.setRequestHeader("token",token);
+	};
 	ajax_obj.url = url;
 	ajax_obj.type = type;
 	ajax_obj.dataType = dataType;
@@ -24,6 +34,7 @@ function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete,c
  */		
 function ajax_call(ajax_obj){
 	$.ajax({
+		beforeSend:ajax_obj.beforeSend,
 		async: ajax_obj.async,
 		url: ajax_obj.url,
 		type: ajax_obj.type,
@@ -58,6 +69,8 @@ function Redirect (url) {
 function cleanUserInfoCookie(){
 	$.cookie("truthbook", null,{expires: -1});
 	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
+	$.cookie("truthbook_Page_Image_Pointer",null,{expires: -1});
+	$.cookie("truthbook_Timeline_Item_Pointer",null,{expires: -1});
 }
 
 function cleanFriendsCookie() {
