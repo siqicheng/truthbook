@@ -1,9 +1,11 @@
 package restful.gateway;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -17,10 +19,10 @@ import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.Image;
 import db.mapping.object.Message;
+import db.mapping.object.User;
 import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.MessageDAO;
 import db.mapping.object.DAO.UserDAO;
-import antySamy.AntySamyFilter;
 
 @Path("notification")
 public class MsgService {
@@ -113,11 +115,16 @@ public class MsgService {
 	@Produces("application/json;charset=utf-8")
 	public Object sendMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
-			@PathParam("type") String type) throws Exception {
+			@PathParam("type") String type,
+			@HeaderParam("token") String token) {
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
 		try{
+			User user = this.userDAO.findById(srcid);
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
 			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid), RestUtil.getCurrentTime()));
 			return RestUtil.string2json("true");
 		}catch (Exception e){
@@ -132,12 +139,17 @@ public class MsgService {
 	public Object sendImageMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
 			@PathParam("type") String type,
-			@PathParam("imageid") Integer imageid){
+			@PathParam("imageid") Integer imageid,
+			@HeaderParam("token") String token){
 		
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
 		try{
+			User user = this.userDAO.findById(srcid);
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
 			Image image= this.imageDAO.findById(imageid);
 			if (type.equals(Message.REPLY_TYPE) && this.existDuplicated(id, Message.REPLY_TYPE, image) ) {
 				return RestUtil.string2json("true");
@@ -160,12 +172,17 @@ public class MsgService {
 			@FormParam("srcid") Integer srcid, 
 			@FormParam("type") String type,
 			@FormParam("content") String content,
-			@FormParam("imageId") Integer imageId) throws Exception {
+			@FormParam("imageId") Integer imageId,
+			@HeaderParam("token") String token) throws Exception {
 		
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
 		try{
+			User user = this.userDAO.findById(srcid);
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
 			Image image= this.imageDAO.findById(imageId);
 			if (type.equals(Message.REPLY_TYPE) && this.existDuplicated(id, Message.REPLY_TYPE, image)){
 				return RestUtil.string2json("true");
@@ -184,12 +201,17 @@ public class MsgService {
 	public Object sendContentMesssage(@FormParam("id") Integer id,
 			@FormParam("srcid") Integer srcid, 
 			@FormParam("type") String type,
-			@FormParam("content") String content) throws Exception {
+			@FormParam("content") String content,
+			@HeaderParam("token") String token) throws Exception {
 		
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
 		try{
+			User user = this.userDAO.findById(srcid);
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
 			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid),  RestUtil.getCurrentTime(), content) );
 			return RestUtil.string2json("true");
 		}catch (Exception e){
@@ -201,8 +223,13 @@ public class MsgService {
 	@GET
 	@Path("v1/message/{userid}/getunsent")
 	@Produces("application/json;charset=utf-8")
-	public Object getUnsendMessage(@PathParam("userid") Integer id) {
+	public Object getUnsendMessage(@PathParam("userid") Integer id,
+			@HeaderParam("token") String token) {
 		try{
+			User user = this.userDAO.findById(id);
+			if (!user.getToken().equals(token)){
+				return null;
+			}
 			List<Message> Messages= this.getCriteria()
 					.add(Restrictions.eq(MessageDAO.USER_ID, id)).
 					add(Restrictions.eq(MessageDAO.STATUS, Message.UNSENT_STATUS)).
@@ -218,8 +245,13 @@ public class MsgService {
 	@Path("v1/message/{userid}/{type}/get")
 	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id,
-			@PathParam("type") String type) throws Exception {
+			@PathParam("type") String type,
+			@HeaderParam("token") String token) throws Exception {
 		try{
+			User user = this.userDAO.findById(id);
+			if (!user.getToken().equals(token)){
+				return null;
+			}
 			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
 					.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
 					.add(Restrictions.ne(MessageDAO.STATUS, Message.READ_STATUS))
@@ -234,9 +266,14 @@ public class MsgService {
 	@GET
 	@Path("v1/message/{userid}/get")
 	@Produces("application/json;charset=utf-8")
-	public Object getMessage(@PathParam("userid") Integer id) {
+	public Object getMessage(@PathParam("userid") Integer id,
+			@HeaderParam("token") String token) {
 		
 		try{
+			User user = this.userDAO.findById(id);
+			if (!user.getToken().equals(token)){
+				return null;
+			}
 			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
 					.add(Restrictions.ne(MessageDAO.STATUS, Message.READ_STATUS))
 					.list();
@@ -250,12 +287,20 @@ public class MsgService {
 	@GET
 	@Path("v1/message/{messageid}/read")
 	@Produces("application/json;charset=utf-8")
-	public Object readMessage(@PathParam("messageid") Integer id){
+	public Object readMessage(@PathParam("messageid") Integer id,
+			@HeaderParam("token") String token){
 		try{
-			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.MESSAGE_ID, id))
-					.add(Restrictions.eq(MessageDAO.STATUS, Message.SENT_STATUS))
-					.list();
-			this.setRead(Messages);
+			Message message = this.messageDAO.findById(id);
+			User user = this.userDAO.findById(message.getUserId());
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
+			if (message.getStatus().equals(Message.SENT_STATUS)){
+				List<Message> msg = new ArrayList<Message>();
+				msg.add(message);
+				this.setRead(msg);
+			}
+			
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
@@ -266,8 +311,15 @@ public class MsgService {
 	@GET
 	@Path("v1/message/{userid}/{type}/read")
 	@Produces("application/json;charset=utf-8")
-	public Object readSentMessage(@PathParam("userid") Integer id , @PathParam("type") String type){
+	public Object readSentMessage(@PathParam("userid") Integer id ,
+			@PathParam("type")String type,
+			@HeaderParam("token") String token){
 		try{
+			User user = this.userDAO.findById(id);
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
+			
 			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
 					.add(Restrictions.eq(MessageDAO.STATUS, Message.SENT_STATUS))
 					.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
