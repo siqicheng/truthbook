@@ -84,7 +84,9 @@ $(function() {
 				$("#checkinput").val("");
 				$("#checkinput").attr("placeholder", "请在以上的选项中选择一个");
 			} else if(selected_num == -2) {
-				register_new($('.ui.form.register-form').serialize());
+//				register_new($('.ui.form.register-form').serialize());
+				$("#checkinput").val("");
+				$("#checkinput").attr("placeholder", "暂未开放注册，敬请期待");
 			} else {
 				var choosenQuote = uploadCandidates[selected_num];
 				checkInviterName(choosenQuote, $("#checkinput").val());
@@ -236,7 +238,8 @@ $('.ui.form.register-form')
 					});
 				} else {
 					console.log("no quote found");
-					register_new($('.ui.form.register-form').serialize());
+//					register_new($('.ui.form.register-form').serialize());
+					alert('暂未开放注册，敬请期待');
 				};
 			};
 			var onAjaxError = function(xhr,status,error){
