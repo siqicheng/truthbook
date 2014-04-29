@@ -197,10 +197,14 @@ $(function() {
 	
 	/*确认上传按钮*/
 	$("#submitBtn").click(function() {
-		if($("#imgPrev").attr("src") == DefaultPreviewImg) {
+		if($("#imgPrev img").attr("src") == DefaultPreviewImg) {
 			drawConfirmPopUp("请选择要上传的图片");
 			return;
-		}
+		};
+		if($("#picDescription").val().length>200) {
+			drawConfirmPopUp("图片描述超出字数限制");
+			return;
+		};
 		if(picReceiver == NEW_QUOTE) {
 			var data = $("#choosePeople").serialize(),
 				onSuccess = function(data, textStatus) {
