@@ -57,7 +57,7 @@ type_nFriends = 1;//真友类型
 type_eFriends = 2;//极友类型
 
 DefaultImg = "img/logo_red.ico";
-DefaultPortrait="img/profile_test/247144.jpg";
+DefaultPortrait="img/logo_red.ico";
 DefaultQuotePortrait = "img/logo.ico";
 DefaultPreviewImg="./img/picPreview.png";
 
