@@ -10,25 +10,14 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.Session;
 
+import db.mapping.object.DAO.UserDAO;
+
 /**
  * Comment entity. @author MyEclipse Persistence Tools
  */
 @XmlRootElement
 @XmlSeeAlso({User.class})
 public class Comment implements java.io.Serializable {
-	
-	// Table Name
-	
-	public static final String TABLE = "Comment";
-	
-	// DB Mapping info
-	
-	public static final String COMMENT_ID = "commentId";
-	public static final String USER = "user";
-	public static final String COMMENT_CONTENT = "commentContent";
-	public static final String REPLIED_TO_COMMENT_ID = "repliedToCommentId";
-	public static final String REPLIED_BY_COMMENT_ID = "repliedByCommentId";
-	public static final String CREATE_DATE = "createDate";
 	
 	// Fields
 

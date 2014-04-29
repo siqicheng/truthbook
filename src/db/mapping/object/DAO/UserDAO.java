@@ -1,4 +1,4 @@
-package db.mapping.object;
+package db.mapping.object.DAO;
 
 
 import db.mapping.baseDAO.BaseHibernateDAO;
@@ -11,6 +11,7 @@ import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import db.mapping.object.User;
+import db.mapping.object.UserFetch;
 import db.mapping.object.UserPassword;
 
 /**

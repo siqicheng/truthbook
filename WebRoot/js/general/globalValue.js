@@ -22,8 +22,8 @@ isDebug = true;
  * 	Website and RESTful AJAX URL
  */
 
-//localhost = "175.186.104.114";
-localhost = "localhost";
+localhost = "175.186.106.35";
+//localhost = "localhost";
 suffix = ":8080/truthbook";
 LoginPage = "http://" + localhost + suffix + "/";
 HomePage = "http://" + localhost + suffix + "/profile_test.html";
@@ -83,7 +83,7 @@ NUM_SHOW_COMMENT_ON_TIMELINE = 2;
 NUM_FIRST_BATCH_ITEM_ON_TIMELINE = 5;
 NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 5;
 
-periodCheckNewMessage = 20000;  //ms
+periodCheckNewMessage = 60000;  //ms
 
 /*********************************************************************************
  * 	Image style

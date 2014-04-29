@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -15,11 +16,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import db.mapping.object.Image;
-import db.mapping.object.ImageDAO;
 import db.mapping.object.Portrait;
-import db.mapping.object.PortraitDAO;
 import db.mapping.object.User;
-import db.mapping.object.UserDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.PortraitDAO;
+import db.mapping.object.DAO.UserDAO;
 
 @Path("portraitService")
 public class PortraitService {	
@@ -56,14 +57,14 @@ public class PortraitService {
 		}
 		
 		if(isDefault != null){
-			String property[] = {Portrait.USER_ID, Portrait.IMAGE_ID, Portrait.DEFAULT_IMAGE};
+			String property[] = {PortraitDAO.USER_ID, PortraitDAO.IMAGE_ID, PortraitDAO.DEFAULT_IMAGE};
 			Object value[] = {this.user,this.image,isDefault};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);		
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);		
 		}
 		else{
-			String property[] = {Portrait.USER_ID, Portrait.IMAGE_ID};
+			String property[] = {PortraitDAO.USER_ID, PortraitDAO.IMAGE_ID};
 			Object value[] = {this.user,this.image};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);
 		}	
 		
 		return portraits;
@@ -79,14 +80,14 @@ public class PortraitService {
 		}
 		
 		if(isDefault != null){
-			String property[] = {Portrait.USER_ID,Portrait.DEFAULT_IMAGE};
+			String property[] = {PortraitDAO.USER_ID,PortraitDAO.DEFAULT_IMAGE};
 			Object value[] = {this.user,isDefault};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);		
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);		
 		}
 		else{
-			String property[] = {Portrait.USER_ID};
+			String property[] = {PortraitDAO.USER_ID};
 			Object value[] = {this.user};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);
 		}	
 		
 		return portraits;
@@ -221,25 +222,17 @@ public class PortraitService {
 	@POST
 	@Path("v1/portrait/set")
 	@Produces("application/json")
-	public Object setDefaultPortrait(@FormParam("userId") Integer userId,@FormParam("imageId") Integer imageId){
-		this.refinePortrait(userId, imageId);		
+	public Object setDefaultPortrait(@FormParam("userId") Integer userId,
+			@FormParam("imageId") Integer imageId,
+			@HeaderParam("token") String token){
 		Session session = this.portraitDAO.getSession();
-		Transaction tx = session.beginTransaction();			
-		
 		try{
-			
-//			List portraits = this.findPortrait(userId, imageId, false);
-//			
-//			if (portraits.size()==1){
-//				this.portrait = (Portrait)portraits.get(0);
-//				this.portrait.setUser(user);
-//				this.portrait.setImage(image);
-//				this.portrait.setDefaultImage(true);
-//				session.update(this.portrait);	
-//				tx.commit();
-//				session.close();
-//				return RestUtil.string2json("true");
-//			}
+			User user = this.userDAO.findById(userId);
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
+			this.refinePortrait(userId, imageId);		
+			Transaction tx = session.beginTransaction();			
 			this.user.setDefaultPortrait(this.image.getImageUrl());
 			this.portrait.setUser(user);
 			this.portrait.setImage(image);
@@ -251,9 +244,9 @@ public class PortraitService {
 			return RestUtil.string2json("true");
 			
 		}catch (Exception e){
-			e.printStackTrace();						
+			e.printStackTrace();
+			session.close();
 		}
-		session.close();
 		return RestUtil.string2json("false"); 		
 	}
 	

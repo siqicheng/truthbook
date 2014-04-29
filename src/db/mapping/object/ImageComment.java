@@ -7,18 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class ImageComment implements java.io.Serializable {
-	
-	// Table Name
-	
-	public static final String TABLE = "ImageComment";
-	
-	// DB Mapping info
-	
-	public static final String ID = "id";
-	public static final String IMAGE = "image";
-	public static final String COMMENT = "comment";
-	
-	
 	// Fields
 
 	private Integer id;

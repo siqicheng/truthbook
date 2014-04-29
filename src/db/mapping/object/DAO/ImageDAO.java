@@ -1,6 +1,8 @@
-package db.mapping.object;
+package db.mapping.object.DAO;
 
 import db.mapping.baseDAO.BaseHibernateDAO;
+import db.mapping.object.Image;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -25,11 +27,19 @@ import org.slf4j.LoggerFactory;
 public class ImageDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(ImageDAO.class);
 	// property constants
+	public static final String DETELED = "deteled";
+	public static final String IMAGE_ID = "imageId";
 	public static final String IMAGE_URL = "imageUrl";
+	public static final String CREATE_DATE = "createDate";
+	public static final String LASTE_MODIFIED = "lastModified";
 	public static final String UPLOADER_ID = "uploaderId";
 	public static final String APPROVED = "approved";
-	public static final String DETELED = "deteled";
+	public static final String DELETED = "deleted";
 	public static final String USER = "user";
+	public static final String CONTENT = "content";
+	public static final String LIKED = "liked";
+	public static final String TABLE = "Image";
+	
 
 	public void save(Image transientInstance) {
 		log.debug("saving Image instance");

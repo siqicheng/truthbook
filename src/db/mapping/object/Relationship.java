@@ -7,25 +7,20 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 
 public class Relationship implements java.io.Serializable {
-	
-	// Table Name
-	
-	public static final String TABLE = "Relationship";
-	
-	// DB Mapping info
-	
-	public static final String USER_ID = "user";
-	public static final String FRIEND_ID = "friendId";
-	public static final String RELATIONSHIP = "relationship";
-	public static final String IS_INVITEE = "isInvitee";
 	// Fields
 
 	private Integer id;
 	private User user;
 	private Integer friendId;
-	private String relationship;
+	private Integer relationship;
 	private Boolean isInvitee;
 
+	public static final Integer E_FRIEND  = 6;
+	public static final Integer N_FRIEND  = 1;
+	public static final Integer N_FRIEND_LEVEL = 1;
+	public static final Integer E_FRIEND_LEVEL = 2;
+
+	
 	// Constructors
 
 	/** default constructor */
@@ -33,14 +28,29 @@ public class Relationship implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Relationship(User user, Integer friendId, String relationship,
+	public Relationship(User user, Integer friendId, Integer relationship,
 			Boolean isInvitee) {
 		this.user = user;
 		this.friendId = friendId;
 		this.relationship = relationship;
 		this.isInvitee = isInvitee;
 	}
+	
 
+	public boolean levelUp(){
+		if (this.relationship< E_FRIEND ){
+			this.relationship += 1;
+			if (this.relationship == E_FRIEND){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void levelDown(){
+		this.relationship = N_FRIEND;
+	}
+	
 	// Property accessors
 
 	public Integer getId() {
@@ -67,13 +77,28 @@ public class Relationship implements java.io.Serializable {
 		this.friendId = friendId;
 	}
 
-	public String getRelationship() {
+	public Integer getRelationship() {
+		if (this.relationship >= this.E_FRIEND) {
+			return this.E_FRIEND_LEVEL;
+		}
+		else return this.N_FRIEND_LEVEL;
+	}
+
+	public void setRelationship(Integer relationship) {
+		if (relationship == E_FRIEND_LEVEL){
+			this.relationship = E_FRIEND;
+		}
+		else this.relationship = N_FRIEND;
+	}
+	
+	public Integer getRelationshipLevel() {
 		return this.relationship;
 	}
 
-	public void setRelationship(String relationship) {
-		this.relationship = relationship;
+	public void setRelationshipLevel(Integer relationshipLevel) {
+		this.relationship = relationshipLevel;
 	}
+
 
 	public Boolean getIsInvitee() {
 		return this.isInvitee;

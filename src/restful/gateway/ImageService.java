@@ -6,30 +6,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
+import org.apache.struts2.components.Head;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import db.mapping.object.Image;
-import db.mapping.object.ImageDAO;
+import db.mapping.object.Message;
+import db.mapping.object.Relationship;
 import db.mapping.object.User;
-import db.mapping.object.UserDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.RelationshipDAO;
+import db.mapping.object.DAO.UserDAO;
 
 
 @Path("imageService")
 public class ImageService {
 	
 	private ImageDAO imageDAO;
-	
+	private RelationshipDAO relationshipDAO;
+	private UserDAO userDAO;
 	
 	public ImageService(){
 		imageDAO = new ImageDAO();
-		
+		relationshipDAO = new RelationshipDAO();
+		userDAO = new UserDAO();
 	}
 	
 	private static Map ProduceMap(Image image){
@@ -54,46 +64,15 @@ public class ImageService {
 		return map;
 	}
 	
-//	@GET
-//	@Path("v1/image/{imageid}/{imageSize}/resizedImage")
-//	@Produces("image/jpeg")
-//	public Object getImage(@PathParam("imageid") Integer imageid, 
-//			@PathParam("imageSize") String imageSize){
-//		
-//		try{
-////			String path =new ImageDAO().findById(imageid).getImageUrl();
-//			String path = 
-//					"C:\\Users\\WinKaR\\Workspaces\\MyEclipse Professional\\.metadata\\.me_tcat7\\webapps\\truthbook\\Uploaded\\Koala.jpg";
-////			File image = new File(path);
-//////			return image.;
-////			File file = new File(path);
-////			 
-////			ResponseBuilder response = Response.ok((Object) file);
-////			response.header("Content-Disposition",
-////				"attachment; filename=image_from_server.png");
-////			return response.build();
-//			
-//			BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
-//			ByteArrayOutputStream out =new  ByteArrayOutputStream();
-//			int size=0;
-//			byte[] temp = new byte[1024];        
-//			while ((size = in.read(temp))!=-1){
-//				out.write(temp, 0, size);        
-//			}
-//			in.close();
-//			return Response.ok(out.toByteArray()).build();
-//		} catch (Exception e){
-//			e.printStackTrace();
-//			
-//			return null;
-//		}
-//	}
-	
 	@GET
 	@Path("v1/image/{userid}/latest")
 	@Produces("application/json;charset=utf-8")
-	public Object getLatestImage(@PathParam("userid") Integer userId){
+	public Object getLatestImage(@PathParam("userid") Integer userId,
+			@HeaderParam("token") String token){
 		User user = new UserDAO().findById(userId);
+		if (!user.getToken().equals(token)){
+			return null;
+		}
 		Set set = user.getImages();
 		Image latest = null;
 		for (Object image : set){
@@ -117,7 +96,8 @@ public class ImageService {
 	public Object addImage(@FormParam("imageURL") String imageURL,
 			@FormParam("userId") Integer userId,
 			@FormParam("uploaderId") Integer uploaderId,
-			@FormParam("description") String content) {
+			@FormParam("description") String content,
+			@HeaderParam("token") String token) {
 		
 		Session session = this.imageDAO.getSession();
 		try{
@@ -125,7 +105,9 @@ public class ImageService {
 			
 			UserDAO userdao= new UserDAO();
 			User user= userdao.findById(userId);
-			
+			if (!user.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
 			Image image = new Image();
 			image.setImageUrl(imageURL);
 			image.setUploaderId(uploaderId);
@@ -153,95 +135,108 @@ public class ImageService {
 	@GET
 	@Path("v1/image/{imageId}/id")
 	@Produces("application/json;charset=utf-8")
-	public Object getImageById(@PathParam("imageId") Integer imageId) {
-		Image image = new Image();
-		image = this.imageDAO.findById(imageId);
-		if (image!=null && image.getDeleted()){
-			image = null;
+	public Object getImageById(@PathParam("imageId") Integer imageId,
+			@HeaderParam("token") String token) {
+		try {
+			Image image = new Image();
+			if (!image.getUser().getToken().equals(token)){
+				return null;
+			}
+			image = this.imageDAO.findById(imageId);
+			if (image!=null && image.getDeleted()){
+				image = null;
+			}
+			//return image;
+			return RestUtil.map2json(ProduceMap(image));
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
 		}
-		//return image;
-		return RestUtil.map2json(ProduceMap(image));
+		
 	}
 	
 	@GET
 	@Path("v1/image/{userId}/user")
 	@Produces("application/json;charset=utf-8")
-	public Object getImagesByUser(@PathParam("userId") Integer userId) {
-
-		User user = new UserDAO().findById(userId);
-		
-		Set set = user.getImages();
-		
-		List image_list = new ArrayList();
-		for (Object image : set){
-			if (image instanceof Image && !((Image) image).getDeleted() ){
-				image_list.add(image);
+	public Object getImagesByUser(@PathParam("userId") Integer userId,
+			@HeaderParam("token") String token) {
+		try{
+			User user = new UserDAO().findById(userId);
+			if (!user.getToken().equals(token)){
+				return null;
 			}
+			Set set = user.getImages();
+			
+			List image_list = new ArrayList();
+			for (Object image : set){
+				if (image instanceof Image && !((Image) image).getDeleted() ){
+					image_list.add(image);
+				}
+			}
+			
+			Object[] images = new Object[image_list.size()];
+			
+			for (int i=0; i<image_list.size(); i++){
+				images[i] = ProduceMap((Image) image_list.get(i));
+			}
+			
+			return RestUtil.array2json(images);
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
 		}
-		
-//		Image[] images = new Image[image_list.size()];
-//		
-//		for (int i=0; i<image_list.size();i++){
-//			images[i] = (Image) image_list.get(i);
-//		}
-		
-		Object[] images = new Object[image_list.size()];
-		
-		for (int i=0; i<image_list.size(); i++){
-			images[i] = ProduceMap((Image) image_list.get(i));
-		}
-		
-		return RestUtil.array2json(images);
-		
-		
 	}
 	
 	@GET
 	@Path("v1/image/{uploaderId}/uploader")
 	@Produces("application/json;charset=utf-8")
-	public Object getImagesByUploader(@PathParam("uploaderId") Integer uploaderId) {
-		String property[] = {Image.UPLOADER_ID,Image.DELETED};
-		Object value[] = {uploaderId,false};
+	public Object getImagesByUploader(@PathParam("uploaderId") Integer uploaderId,
+			@HeaderParam("token") String token) {
 		
-		List images = this.imageDAO.findByProperties(property, value, Image.TABLE);
-		
-		if (images.size() > 0){
-			List image_list = new ArrayList();
-			for (Object image : images){
-				if (image instanceof Image && !((Image) image).getDeleted()){
-					if (image!= null){
-						image_list.add(image);
-					}					
-				}				
+		try{
+			User uploader = this.userDAO.findById(uploaderId);
+			if (!uploader.getToken().equals(token)){
+				return null;
 			}
-//			Image[] image = new Image[image_list.size()];
-//			for (int i=0; i<image_list.size();i++){
-//				image[i] = (Image) image_list.get(i);
-//			}
-//			
-//			return image;
+			String property[] = {ImageDAO.UPLOADER_ID,ImageDAO.DELETED};
+			Object value[] = {uploaderId,false};
 			
-			Object[] image = new Object[image_list.size()];
+			List images = this.imageDAO.findByProperties(property, value, ImageDAO.TABLE);
 			
-			for (int i=0; i<image_list.size(); i++){
-				image[i] = ProduceMap((Image) image_list.get(i));
+			if (images.size() > 0){
+				List image_list = new ArrayList();
+				for (Object image : images){
+					if (image instanceof Image && !((Image) image).getDeleted()){
+						if (image!= null){
+							image_list.add(image);
+						}					
+					}				
+				}
+				Object[] image = new Object[image_list.size()];
+				
+				for (int i=0; i<image_list.size(); i++){
+					image[i] = ProduceMap((Image) image_list.get(i));
+				}
+				
+				return RestUtil.array2json(image);
 			}
-			
-			return RestUtil.array2json(image);
+			return null;		
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
 		}
-		return null;		
+		
 	}
 	@GET
 	@Path("v1/image/{imageId}/like")
 	@Produces("application/json;charset=utf-8")
 	public Object likeImage(@PathParam("imageId") Integer imageId){
 		Image image =(Image) this.imageDAO.findById(imageId);
-		
-		if (image.getDeleted()){
-			return RestUtil.string2json("false");
-		}
 		Session session = this.imageDAO.getSession();
 		try{
+			if (image.getDeleted()){
+				return RestUtil.string2json("false");
+			}
 			image.setLiked(image.getLiked()+1);
 			Transaction tx = session.beginTransaction();
 			session.update(image);
@@ -253,8 +248,6 @@ public class ImageService {
 			session.close();
 			return RestUtil.string2json("false");
 		}
-		
-		
 	}
 	
 	@GET
@@ -286,38 +279,59 @@ public class ImageService {
 	@GET
 	@Path("v1/image/{imageId}/approve")
 	@Produces("application/json;charset=utf-8")
-	public Object approveImage(@PathParam("imageId") Integer imageId) {
+	public Object approveImage(@PathParam("imageId") Integer imageId,
+			@HeaderParam("token") String token) {
 		Image image = new Image();
 		image = this.imageDAO.findById(imageId);
+		if (image==null ||!image.getUser().getToken().equals(token)){
+			return RestUtil.string2json("false");
+		}
 		if (image.getDeleted()){
 			return RestUtil.string2json("false");
 		}
 		if (image.getApproved()){
 			return RestUtil.string2json("true");
-		}else{
-			Session session = this.imageDAO.getSession();
-			try{
-				Transaction tx = session.beginTransaction();
-				image.setApproved(true);
-				image.setLastModified(RestUtil.getCurrentDate());
-				session.update(image);
-				tx.commit();
-				session.close();
-				return RestUtil.string2json("true");
-			}catch (Exception e){
-				e.printStackTrace();
-				session.close();
-				return RestUtil.string2json("false");
+		}
+		Session session = this.imageDAO.getSession();
+		try{
+			Transaction tx = session.beginTransaction();
+			image.setApproved(true);
+			image.setLastModified(RestUtil.getCurrentDate());
+			session.update(image);
+			User user = image.getUser();
+			Integer friendId = image.getUploaderId();
+			
+			Relationship relat = (Relationship) this.relationshipDAO
+								.findByUserAndFriend(user,friendId);
+			
+			if (relat.levelUp()){
+				Message message = new Message(Message.UPGRADE_TYPE, 
+												user.getUserId(), this.userDAO.findById(friendId), RestUtil.getCurrentTime() );
+				session.save(message);
 			}
-		}	
+			
+			session.update(relat);
+			
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return RestUtil.string2json("false");
+		}
 	}
 	
 	@PUT
 	@Path("v1/image/{imageId}/unapprove")
 	@Produces("application/json;charset=utf-8")
-	public Object unapproveImage(@PathParam("imageId") Integer imageId) {
+	public Object unapproveImage(@PathParam("imageId") Integer imageId,
+			@HeaderParam("token") String token) {
 		Image image = new Image();
 		image = this.imageDAO.findById(imageId);
+		if (image==null ||!image.getUser().getToken().equals(token)){
+			return RestUtil.string2json("false");
+		}
 		if (image.getDeleted()){
 			return RestUtil.string2json("false");
 		}
@@ -344,9 +358,13 @@ public class ImageService {
 	@PUT
 	@Path("v1/image/{imageId}/delete")
 	@Produces("application/json;charset=utf-8")
-	public Object deleteImage(@PathParam("imageId") Integer imageId) {
+	public Object deleteImage(@PathParam("imageId") Integer imageId,
+			@HeaderParam("token") String token) {
 		Image image = new Image();
 		image = this.imageDAO.findById(imageId);
+		if (image==null ||!image.getUser().getToken().equals(token)){
+			return RestUtil.string2json("false");
+		}
 		if (image.getDeleted()){
 			return RestUtil.string2json("true");
 		}else{
@@ -356,6 +374,15 @@ public class ImageService {
 				image.setDeleted(true);
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
+				
+				User user = image.getUser();
+				Integer friendId = image.getUploaderId();
+				
+				Relationship relat = (Relationship) this.relationshipDAO
+									.findByUserAndFriend(user,friendId);
+				relat.levelDown();
+				session.update(relat);
+				
 				tx.commit();
 				session.close();
 				return RestUtil.string2json("true");
@@ -370,9 +397,13 @@ public class ImageService {
 	@PUT
 	@Path("v1/image/{imageId}/restore")
 	@Produces("application/json;charset=utf-8")
-	public Object restoreImage(@PathParam("imageId") Integer imageId) {
+	public Object restoreImage(@PathParam("imageId") Integer imageId,
+			@HeaderParam("token") String token) {
 		Image image = new Image();
 		image = this.imageDAO.findById(imageId);
+		if (image==null || !image.getUser().getToken().equals(token)){
+			return RestUtil.string2json("false");
+		}
 		if (!image.getDeleted()){
 			return RestUtil.string2json("true");
 		}else{

@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
+import db.mapping.object.DAO.UserDAO;
+
 /**
  * Image entity. @author MyEclipse Persistence Tools
  */
@@ -16,24 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlSeeAlso({Portrait.class, ImageComment.class})
 public class Image implements java.io.Serializable {
 	
-	// Table Name
-	
-	public static final String TABLE = "Image";
-	
-	// DB Mapping info
-	public static final String IMAGE_ID = "imageId";
-	public static final String IMAGE_URL = "imageUrl";
-	public static final String CREATE_DATE = "createDate";
-	public static final String LASTE_MODIFIED = "lastModified";
-	public static final String UPLOADER_ID = "uploaderId";
-	public static final String APPROVED = "approved";
-	public static final String DELETED = "deleted";
-	public static final String USER = "user";
-	public static final String CONTENT = "content";
-	public static final String LIKED = "liked";
-	
 	// Fields
-
 	private Integer imageId;
 	private User user;
 	private String imageUrl;

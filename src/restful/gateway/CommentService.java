@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,6 +18,12 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.*;
+import db.mapping.object.DAO.CommentDAO;
+import db.mapping.object.DAO.ImageCommentDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.UserDAO;
+
+import antySamy.AntySamyFilter;;
 
 @Path("commentService")
 public class CommentService {
@@ -50,15 +57,21 @@ public class CommentService {
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
 			@FormParam("repliedToId") Integer repliedToId,
-			@FormParam("repliedById") Integer repliedById) {
+			@FormParam("repliedById") Integer repliedById,
+			@HeaderParam("token") String token) {
 		
 			session = this.commentDAO.getSession();
 			try{
 				Transaction tx = session.beginTransaction();			
 				
 				this.user = this.userDAO.findById(userId);
+				User sender = this.userDAO.findById(repliedById);
+				if (sender==null || !sender.getToken().equals(token)){
+					return null;
+				}
 				if(this.user != null){
 					this.comment.setUser(this.user);
+					content = AntySamyFilter.getCleanHtml(content);
 					this.comment.setCommentContent(content);
 					this.comment.setRepliedByCommentId(repliedById);
 					this.comment.setRepliedToCommentId(repliedToId);
@@ -67,31 +80,196 @@ public class CommentService {
 					tx.commit();
 				}
 				session.close();
-			//	return RestUtil.string2json("true");
+				return RestUtil.object2json(this.comment.getCommentId());
+			}catch (Exception e){
+				e.printStackTrace();
+				session.close();
+				return null;
+			}
+	}
+	
+	@POST
+	@Path("v1/comment/add/replyBy")
+	@Produces("application/json")	
+	public Object addCommentWithReplyBy(
+			@FormParam("userId") Integer userId,
+			@FormParam("content") String content,
+			@FormParam("repliedById") Integer repliedById,
+			@HeaderParam("token") String token) {
+		
+			session = this.commentDAO.getSession();
+			try{
+				Transaction tx = session.beginTransaction();			
+				User sender = this.userDAO.findById(repliedById);
+				if (!sender.getToken().equals(token)){
+					return null;
+				}
+				this.user = this.userDAO.findById(userId);
+				if(this.user != null){
+					this.comment.setUser(this.user);
+					content = AntySamyFilter.getCleanHtml(content);
+					this.comment.setCommentContent(content);
+					this.comment.setRepliedByCommentId(repliedById);
+					this.comment.setCreateDate(RestUtil.getCurrentDate());
+					session.save(this.comment);
+					tx.commit();
+				}
+				session.close();
 				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
 				session.close();
 			}
-
-			//return RestUtil.string2json("false");		
 			return null;
 	}
 	
+	
+	@POST
+	@Path("v1/imageComment/add")
+	@Produces("application/json")
+	public Object addImageComment(@FormParam("imageId") Integer imageId,
+			@FormParam("commentId") Integer commentId,
+			@HeaderParam("token") String token){
+		
+		
+		try{
+			this.image = this.imageDAO.findById(imageId);
+			this.comment = this.commentDAO.findById(commentId);
+			
+			User sender = this.userDAO.findById(this.comment.getRepliedByCommentId());
+			if (!sender.getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
+			
+			this.imageComment.setImage(this.image);
+			this.imageComment.setComment(this.comment);
+			
+			session = this.imageCommentDAO.getSession();
+			
+			Transaction tx = session.beginTransaction();
+			session.save(this.imageComment);
+			tx.commit();
+			session.close();
+			return RestUtil.string2json("true");
+		}catch (Exception e){
+			e.printStackTrace();
+			if (session.isConnected()) session.close();
+		}
+		return RestUtil.string2json("false");
+	}
+	
+	@GET
+	@Path("v1/imageComment/{imageId}")
+	@Produces("application/json")
+	public ImageComment[] getImageComment(@PathParam("imageId") Integer imageId,
+			@HeaderParam("token") String token){
+		ImageComment[] imageComment = null;
+		this.image = this.imageDAO.findById(imageId);
+		if (!this.image.getUser().getToken().equals(token)){
+			return null;
+		}
+		List imageComments = this.imageCommentDAO.findByProperty(ImageCommentDAO.IMAGE, this.image);
+		if(imageComments.size()>0){
+			imageComment = new ImageComment[imageComments.size()];
+			for (int i=0; i<imageComments.size();i++){
+				imageComment[i] = (ImageComment) imageComments.get(i);
+			}
+		}
+		return imageComment;
+	}
+	
+	@DELETE
+	@Path("v1/imageComment/{imageId}/{commentId}/delete")
+	@Produces("application/json")
+	public Object deleteImageComment(@PathParam("imageId") Integer imageId,
+			@PathParam("commentId") Integer commentId,
+			@HeaderParam("token") String token){
+		
+		try{
+			this.image = this.imageDAO.findById(imageId);
+			if (!this.image.getUser().getToken().equals(token)){
+				return RestUtil.string2json("false");
+			}
+			this.comment = this.commentDAO.findById(commentId);
+			
+			String property[] = {ImageCommentDAO.IMAGE,ImageCommentDAO.COMMENT};
+			Object value[] = {this.image,this.comment};
+			
+			List imageComments = this.imageCommentDAO.findByProperties(property, value, ImageCommentDAO.TABLE);
+			session = this.imageCommentDAO.getSession();
+			if(imageComments.size()>0){
+				Transaction tx = session.beginTransaction();
+				for(int i=0; i<imageComments.size();i++){
+					this.imageComment = (ImageComment)imageComments.get(i);
+					if(this.imageComment!=null){
+						session.delete(this.imageComment);
+					}
+				}
+				tx.commit();				
+			}
+			session.close();
+			return RestUtil.string2json("true");
+		}catch (Exception e){
+			e.printStackTrace();
+			session.close();
+		}
+	
+		return RestUtil.string2json("false");
+	}
+	
+	
+	@GET
+	@Path("v1/imageComment/{imageId}/{commentNumber}")
+	@Produces("application/json")
+	public ImageComment[] getLatestImageComment(@PathParam("imageId") Integer imageId,
+			@PathParam("commentNumber") Integer commentNumber,
+			@HeaderParam("token") String token){
+		
+		try{
+			ImageComment[] imageComment = null;
+			this.image = this.imageDAO.findById(imageId);
+			if (!this.image.getUser().getToken().equals(token)){
+				return null;
+			}
+			Session session = this.imageDAO.getSession();
+			Criteria criteria = session.createCriteria(ImageComment.class);
+			criteria.addOrder(Order.desc(ImageCommentDAO.ID))
+					.add(Restrictions.eq("image",image))
+					.setMaxResults(commentNumber);
+			
+			List<ImageComment> icl = criteria.list();
+			
+			imageComment = new ImageComment[icl.size()];
+			
+			for (int i=0; i<icl.size(); i++){
+				imageComment[i] = icl.get(i);
+			}
+			
+			return imageComment;
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+/*	
+
 	@POST
 	@Path("v1/comment/add/simple")
 	@Produces("application/json")	
 	public Object addSimpleComment(
 			@FormParam("userId") Integer userId,
-			@FormParam("content") String content) {
+			@FormParam("content") String content,
+			@HeaderParam("token") String token) {
 		
 			session = this.commentDAO.getSession();
 			try{
 				Transaction tx = session.beginTransaction();			
-				
 				this.user = this.userDAO.findById(userId);
 				if(this.user != null){
 					this.comment.setUser(this.user);
+					content = AntySamyFilter.getCleanHtml(content);
 					this.comment.setCommentContent(content);
 					this.comment.setCreateDate(RestUtil.getCurrentDate());
 					session.save(this.comment);
@@ -115,15 +293,16 @@ public class CommentService {
 	public Object addCommentWithReplyTo(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
-			@FormParam("repliedToId") Integer repliedToId) {
+			@FormParam("repliedToId") Integer repliedToId,
+			@FormParam("token") String token) {
 		
 			session = this.commentDAO.getSession();
 			try{
 				Transaction tx = session.beginTransaction();			
-				
 				this.user = this.userDAO.findById(userId);
 				if(this.user != null){
 					this.comment.setUser(this.user);
+					content = AntySamyFilter.getCleanHtml(content);
 					this.comment.setCommentContent(content);
 					this.comment.setRepliedToCommentId(repliedToId);
 					this.comment.setCreateDate(RestUtil.getCurrentDate());
@@ -131,49 +310,15 @@ public class CommentService {
 					tx.commit();
 				}
 				session.close();
-//				return RestUtil.string2json("true");
 				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
 				session.close();
 			}
 
-//			return RestUtil.string2json("false");		
 			return null;
 	}
-	
-	@POST
-	@Path("v1/comment/add/replyBy")
-	@Produces("application/json")	
-	public Object addCommentWithReplyBy(
-			@FormParam("userId") Integer userId,
-			@FormParam("content") String content,
-			@FormParam("repliedById") Integer repliedById) {
-		
-			session = this.commentDAO.getSession();
-			try{
-				Transaction tx = session.beginTransaction();			
-				
-				this.user = this.userDAO.findById(userId);
-				if(this.user != null){
-					this.comment.setUser(this.user);
-					this.comment.setCommentContent(content);
-					this.comment.setRepliedByCommentId(repliedById);
-					this.comment.setCreateDate(RestUtil.getCurrentDate());
-					session.save(this.comment);
-					tx.commit();
-				}
-				session.close();
-//				return RestUtil.string2json("true");
-				return RestUtil.object2json(this.comment.getCommentId());
-			}catch (Exception e){
-				e.printStackTrace();
-				session.close();
-			}
 
-//			return RestUtil.string2json("false");	
-			return null;
-	}
 	
 	@DELETE
 	@Path("v1/comment/{commentId}/delete")
@@ -197,7 +342,7 @@ public class CommentService {
 
 		return RestUtil.string2json("false");		
 	}
-	
+/*	
 	@GET
 	@Path("v1/comment/{commentId}")
 	@Produces("application/json")	
@@ -206,6 +351,7 @@ public class CommentService {
 		return this.comment;
 	}
 	
+	
 	@GET
 	@Path("v1/comment/{userId}/user")
 	@Produces("application/json")	
@@ -213,7 +359,7 @@ public class CommentService {
 		Comment comment[] = null;
 		this.user = this.userDAO.findById(userId);
 		if(this.user!= null){
-			List comments = this.commentDAO.findByProperty(Comment.USER, this.user);
+			List comments = this.commentDAO.findByProperty(CommentDAO.USER, this.user);
 			if(comments.size() > 0){
 				comment = new Comment[comments.size()];
 				for (int i=0; i<comments.size();i++){
@@ -223,113 +369,14 @@ public class CommentService {
 		}
 		return comment;		
 	}
+*/
 	
-	@POST
-	@Path("v1/imageComment/add")
-	@Produces("application/json")
-	public Object addImageComment(@FormParam("imageId") Integer imageId,@FormParam("commentId") Integer commentId){
-		
-		this.image = this.imageDAO.findById(imageId);
-		this.comment = this.commentDAO.findById(commentId);
-		this.imageComment.setImage(this.image);
-		this.imageComment.setComment(this.comment);
-		
-		session = this.imageCommentDAO.getSession();
-		try{
-			Transaction tx = session.beginTransaction();
-			session.save(this.imageComment);
-			tx.commit();
-			session.close();
-			return RestUtil.string2json("true");
-		}catch (Exception e){
-			e.printStackTrace();
-			session.close();
-		}
 	
-		return RestUtil.string2json("false");
-	}
 	
-	@DELETE
-	@Path("v1/imageComment/{imageId}/{commentId}/delete")
-	@Produces("application/json")
-	public Object deleteImageComment(@PathParam("imageId") Integer imageId,@PathParam("commentId") Integer commentId){
-		
-		this.image = this.imageDAO.findById(imageId);
-		this.comment = this.commentDAO.findById(commentId);
-		
-		String property[] = {ImageComment.IMAGE,ImageComment.COMMENT};
-		Object value[] = {this.image,this.comment};
-		
-		List imageComments = this.imageCommentDAO.findByProperties(property, value, ImageComment.TABLE);
-		session = this.imageCommentDAO.getSession();
-		try{
-			if(imageComments.size()>0){
-				Transaction tx = session.beginTransaction();
-				for(int i=0; i<imageComments.size();i++){
-					this.imageComment = (ImageComment)imageComments.get(i);
-					if(this.imageComment!=null){
-						session.delete(this.imageComment);
-					}
-				}
-				tx.commit();				
-			}
-			session.close();
-			return RestUtil.string2json("true");
-		}catch (Exception e){
-			e.printStackTrace();
-			session.close();
-		}
 	
-		return RestUtil.string2json("false");
-	}
 	
-	@GET
-	@Path("v1/imageComment/{imageId}")
-	@Produces("application/json")
-	public ImageComment[] getImageComment(@PathParam("imageId") Integer imageId){
-		ImageComment[] imageComment = null;
-		this.image = this.imageDAO.findById(imageId);
-		
-		List imageComments = this.imageCommentDAO.findByProperty(ImageComment.IMAGE, this.image);
-		if(imageComments.size()>0){
-			imageComment = new ImageComment[imageComments.size()];
-			for (int i=0; i<imageComments.size();i++){
-				imageComment[i] = (ImageComment) imageComments.get(i);
-			}
-		}
-		return imageComment;
-	}
+
 	
-	@GET
-	@Path("v1/imageComment/{imageId}/{commentNumber}")
-	@Produces("application/json")
-	public ImageComment[] getLatestImageComment(@PathParam("imageId") Integer imageId,
-			@PathParam("commentNumber") Integer commentNumber){
-		ImageComment[] imageComment = null;
-		this.image = this.imageDAO.findById(imageId);
-		
-//		List imageComments = this.imageCommentDAO.findByProperty(ImageComment.IMAGE, this.image);
-//		if(imageComments.size()>0){
-//			imageComment = new ImageComment[imageComments.size()];
-//			for (int i=0; i<imageComments.size();i++){
-//				imageComment[i] = (ImageComment) imageComments.get(i);
-//			}
-//		}
-		Session session = this.imageDAO.getSession();
-		Criteria criteria = session.createCriteria(ImageComment.class);
-		criteria.addOrder(Order.desc(ImageComment.ID))
-				.add(Restrictions.eq("image",image))
-				.setMaxResults(commentNumber);
-		
-		List<ImageComment> icl = criteria.list();
-		
-		imageComment = new ImageComment[icl.size()];
-		
-		for (int i=0; i<icl.size(); i++){
-			imageComment[i] = icl.get(i);
-		}
-		
-		return imageComment;
-	}
+	
 	
 }

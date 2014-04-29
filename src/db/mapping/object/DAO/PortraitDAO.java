@@ -1,7 +1,8 @@
-package db.mapping.object;
+package db.mapping.object.DAO;
 
 import db.mapping.baseDAO.BaseHibernateDAO;
-import java.sql.Timestamp;
+import db.mapping.object.Portrait;
+
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -11,23 +12,33 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * UserFetch entities. Transaction control of the save(), update() and delete()
+ * Portrait entities. Transaction control of the save(), update() and delete()
  * operations can directly support Spring container-managed transactions or they
  * can be augmented to handle user-managed Spring transactions. Each of these
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see db.mapping.object.UserFetch
+ * @see db.mapping.object.Portrait
  * @author MyEclipse Persistence Tools
  */
-public class UserFetchDAO extends BaseHibernateDAO {
+
+public class PortraitDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory
-			.getLogger(UserFetchDAO.class);
-
+			.getLogger(PortraitDAO.class);
 	// property constants
+	// Table Name
+	
+	public static final String TABLE = "Portrait";
+		
+	// DB Mapping info
+		
+	public static final String ID = "id";
+	public static final String IMAGE_ID = "image";
+	public static final String USER_ID = "user";
+	public static final String DEFAULT_IMAGE = "defaultImage";
 
-	public void save(UserFetch transientInstance) {
-		log.debug("saving UserFetch instance");
+	public void save(Portrait transientInstance) {
+		log.debug("saving Portrait instance");
 		try {
 			getSession().save(transientInstance);
 			log.debug("save successful");
@@ -37,8 +48,8 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void delete(UserFetch persistentInstance) {
-		log.debug("deleting UserFetch instance");
+	public void delete(Portrait persistentInstance) {
+		log.debug("deleting Portrait instance");
 		try {
 			getSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -48,11 +59,11 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public UserFetch findById(java.lang.Integer id) {
-		log.debug("getting UserFetch instance with id: " + id);
+	public Portrait findById(java.lang.Integer id) {
+		log.debug("getting Portrait instance with id: " + id);
 		try {
-			UserFetch instance = (UserFetch) getSession().get(
-					"db.mapping.object.UserFetch", id);
+			Portrait instance = (Portrait) getSession().get(
+					"db.mapping.object.Portrait", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -60,12 +71,12 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByExample(UserFetch instance) {
-		log.debug("finding UserFetch instance by example");
+	public List findByExample(Portrait instance) {
+		log.debug("finding Portrait instance by example");
 		try {
-			List results = getSession()
-					.createCriteria("db.mapping.object.UserFetch")
-					.add(Example.create(instance)).list();
+			List results = getSession().createCriteria(
+					"db.mapping.object.Portrait").add(Example.create(instance))
+					.list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
 			return results;
@@ -76,10 +87,10 @@ public class UserFetchDAO extends BaseHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding UserFetch instance with property: " + propertyName
+		log.debug("finding Portrait instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from UserFetch as model where model."
+			String queryString = "from Portrait as model where model."
 					+ propertyName + "= ?";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
@@ -90,10 +101,14 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		}
 	}
 
+	public List findByDefaultImage(Object defaultImage) {
+		return findByProperty(DEFAULT_IMAGE, defaultImage);
+	}
+
 	public List findAll() {
-		log.debug("finding all UserFetch instances");
+		log.debug("finding all Portrait instances");
 		try {
-			String queryString = "from UserFetch";
+			String queryString = "from Portrait";
 			Query queryObject = getSession().createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -102,10 +117,10 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public UserFetch merge(UserFetch detachedInstance) {
-		log.debug("merging UserFetch instance");
+	public Portrait merge(Portrait detachedInstance) {
+		log.debug("merging Portrait instance");
 		try {
-			UserFetch result = (UserFetch) getSession().merge(detachedInstance);
+			Portrait result = (Portrait) getSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -114,8 +129,8 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachDirty(UserFetch instance) {
-		log.debug("attaching dirty UserFetch instance");
+	public void attachDirty(Portrait instance) {
+		log.debug("attaching dirty Portrait instance");
 		try {
 			getSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -125,8 +140,8 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachClean(UserFetch instance) {
-		log.debug("attaching clean UserFetch instance");
+	public void attachClean(Portrait instance) {
+		log.debug("attaching clean Portrait instance");
 		try {
 			getSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
