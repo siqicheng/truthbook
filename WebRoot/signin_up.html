@@ -134,9 +134,17 @@
 	<script src="./js/general/globalValue.js"></script>	
 	<script src="./js/signin_up/form_toggle.js"></script>	
 	<script src="./js/signin_up/register.js"></script>	
+	
+	<script>
+		$(function() {
+			if($.cookie("truthbook") != undefined) {
+				goHomePage();
+			}
+		});
+	</script>
 	<script type="text/javascript">
 	//login form functions
-		$(function() {		
+		$(function() {
 			//form validation
 			$( '.ui.form.login-form' )
 				.form({
