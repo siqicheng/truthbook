@@ -455,6 +455,7 @@ function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
+	$("#uploadProgress .bar").css("width", "0%");
 	$('#picDescription').val("");
 	$("#choosePic .two.buttons").show();
 	$("#uploadProgress").hide();

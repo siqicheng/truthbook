@@ -167,20 +167,20 @@ $('.ui.form.register-form')
 							console.log("Get uploader name failed with error: " + error);
 						};
 						getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
-						html = html + "<div class=\"ui item segment rechooseitem\">" +
-									"<a class=\"ui corner green label\" style=\"display:none\">" +
-									"<i class=\"checkmark small icon\"></i> </a>" +
-		 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
-		 							"<div class=\"content\">" +
-		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + content +
+						html = html + "<div class='ui item segment rechooseitem'>" +
+									"<a class='ui corner green label' style='display:none'>" +
+									"<i class='checkmark small icon'></i> </a>" +
+		 							"<img class='ui avatar image' src=" + DefaultImg +">" + 
+		 							"<div class='content'>" +
+		  							"<div class='header'>" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
 					}
-					html = html + "<div class=\"ui item segment\"  id='newQuote'>" +
-					"<a class=\"ui corner green label\" style=\"display:none\">" +
-					"<i class=\"checkmark small icon\"></i> </a>" +
-						"<img class=\"ui avatar image\" src=" +  DefaultImg +">" + 
-						"<div class=\"content\">" +
-						"<div class=\"header\">继续注册</div>以上都不是？</div></div>";
+					html = html + "<div class='ui item segment'  id='newQuote'>" +
+					"<a class='ui corner green label' style='display:none'>" +
+					"<i class='checkmark small icon'></i> </a>" +
+						"<img class='ui avatar image' src=" +  DefaultImg +">" + 
+						"<div class='content'>" +
+						"<div class='header'>继续注册</div>以上都不是？</div></div>";
 					$("#rechoosemessage").html(rechoosemessage);
 					$("#rechooselist").html(html);
 					$(".ui.item.rechooseitem").click(function(){
