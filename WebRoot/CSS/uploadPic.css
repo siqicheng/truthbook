@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 
-#choosePic .item .image img {
+#choosePic .item .image {
 	border-top-left-radius: 0.33em;
 	border-top-right-radius: 0.33em;
 	cursor:zoom-in;
