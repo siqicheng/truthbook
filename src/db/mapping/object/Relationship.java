@@ -15,7 +15,8 @@ public class Relationship implements java.io.Serializable {
 	private Integer relationship;
 	private Boolean isInvitee;
 
-	public static final Integer E_FRIEND = 6;
+	public static final Integer E_FRIEND  = 6;
+	public static final Integer N_FRIEND  = 1;
 	public static final Integer N_FRIEND_LEVEL = 1;
 	public static final Integer E_FRIEND_LEVEL = 2;
 
@@ -37,9 +38,9 @@ public class Relationship implements java.io.Serializable {
 	
 
 	public boolean levelUp(){
-		if (this.relationship <6 ){
+		if (this.relationship< E_FRIEND ){
 			this.relationship += 1;
-			if (this.relationship == 6){
+			if (this.relationship == E_FRIEND){
 				return true;
 			}
 		}
@@ -47,7 +48,7 @@ public class Relationship implements java.io.Serializable {
 	}
 	
 	public void levelDown(){
-		this.relationship = 1;
+		this.relationship = N_FRIEND;
 	}
 	
 	// Property accessors
@@ -84,8 +85,20 @@ public class Relationship implements java.io.Serializable {
 	}
 
 	public void setRelationship(Integer relationship) {
-		this.relationship = relationship;
+		if (relationship == E_FRIEND_LEVEL){
+			this.relationship = E_FRIEND;
+		}
+		else this.relationship = N_FRIEND;
 	}
+	
+	public Integer getRelationshipLevel() {
+		return this.relationship;
+	}
+
+	public void setRelationshipLevel(Integer relationshipLevel) {
+		this.relationship = relationshipLevel;
+	}
+
 
 	public Boolean getIsInvitee() {
 		return this.isInvitee;

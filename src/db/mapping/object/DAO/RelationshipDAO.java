@@ -37,7 +37,7 @@ public class RelationshipDAO extends BaseHibernateDAO {
 	
 	public static final String USER = "user";
 	public static final String FRIEND_ID = "friendId";
-	public static final String RELATIONSHIP = "relationship";
+	public static final String RELATIONSHIP_LEVEL = "relationshipLevel";
 	public static final String IS_INVITEE = "isInvitee";
 
 	public void save(Relationship transientInstance) {
@@ -124,8 +124,8 @@ public class RelationshipDAO extends BaseHibernateDAO {
 		return findByProperty(USER, user);
 	}
 
-	public List findByRelationship(Object relationship) {
-		return findByProperty(RELATIONSHIP, relationship);
+	public List findByRelationshipLevel(Object relationship) {
+		return findByProperty(RELATIONSHIP_LEVEL, relationship);
 	}
 
 	public List findByIsInvitee(Object isInvitee) {

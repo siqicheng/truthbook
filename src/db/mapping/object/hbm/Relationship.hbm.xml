@@ -16,7 +16,7 @@
         <property name="friendId" type="java.lang.Integer">
             <column name="friend_id" not-null="true" />
         </property>
-        <property name="relationship" type="java.lang.Integer">
+        <property name="relationshipLevel" type="java.lang.Integer">
             <column name="relationship" not-null="true">
                 <comment>0:blacklisted relationship 1:normal relationship 2:dear relationship</comment>
             </column>

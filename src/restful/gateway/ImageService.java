@@ -268,7 +268,8 @@ public class ImageService {
 									.findByUserAndFriend(user,friendId);
 				
 				if (relat.levelUp()){
-					Message message = new Message(Message.UPGRADE_TYPE, friendId, user, RestUtil.getCurrentTime() );
+					Message message = new Message(Message.UPGRADE_TYPE, 
+													user.getUserId(), this.userDAO.findById(friendId), RestUtil.getCurrentTime() );
 					session.save(message);
 				}
 				
@@ -303,14 +304,6 @@ public class ImageService {
 				image.setApproved(false);
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
-				
-				User user = image.getUser();
-				Integer friendId = image.getUploaderId();
-				
-				Relationship relat = (Relationship) this.relationshipDAO
-									.findByUserAndFriend(user,friendId);
-				relat.levelDown();
-				session.update(relat);
 				tx.commit();
 				session.close();
 				return RestUtil.string2json("true");
@@ -337,6 +330,15 @@ public class ImageService {
 				image.setDeleted(true);
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
+				
+				User user = image.getUser();
+				Integer friendId = image.getUploaderId();
+				
+				Relationship relat = (Relationship) this.relationshipDAO
+									.findByUserAndFriend(user,friendId);
+				relat.levelDown();
+				session.update(relat);
+				
 				tx.commit();
 				session.close();
 				return RestUtil.string2json("true");

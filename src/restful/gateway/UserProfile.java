@@ -174,20 +174,14 @@ public class UserProfile {
 	public User[] getFriends(@PathParam("id") Integer id,@PathParam("type") Integer type) throws Exception {
 
 		User user = this.userDAO.findById(id);
-
-//		String property[] = { RelationshipDAO.USER, RelationshipDAO.RELATIONSHIP };
-//		Object value[] = { user, type };
-
-//		List relationships = this.relationshipDAO.findByProperties(property,
-//				value, RelationshipDAO.TABLE);
 		List relationships = this.getCriteria().add(Restrictions.eq(RelationshipDAO.USER, user))
-												.add(Restrictions.eq(RelationshipDAO.RELATIONSHIP, type))
 												.list();
 				
 		if (relationships.size() > 0) {
 			List friend_list = new ArrayList();
 			for (Object relationship : relationships) {
-				if (relationship instanceof Relationship) {
+				if (relationship instanceof Relationship
+						&& ((Relationship) relationship).getRelationship() == type) {
 					Integer friend_id = ((Relationship) relationship)
 							.getFriendId();
 					User friend = (new UserDAO()).findById(friend_id);
