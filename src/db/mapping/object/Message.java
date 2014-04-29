@@ -40,6 +40,14 @@ public class Message implements java.io.Serializable {
 	
 	public static final String REPLY_TYPE = "reply";
 	public static final String UPGRADE_TYPE = "upgrade";
+	public static final String INVITETOUPLOAD_TYPE = "inviteToUpload";
+	public static final String ADDFRIEND_TYPE = "friendRequest";
+	public static final String ACCEPTFRIEND_TYPE = "acceptFriendRequest";
+	public static final String TAKEQUOTE_TYPE = "takeQuote";
+	public static final String REJECTIMAGE_TYPE = "rejectImage";
+	public static final String ACCEPTIMAGE_TYPE ="acceptImage";
+	
+
 	// Constructors
 
 	/** default constructor */

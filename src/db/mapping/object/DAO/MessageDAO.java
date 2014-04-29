@@ -27,7 +27,7 @@ public class MessageDAO extends BaseHibernateDAO {
 	// property constants
 	public static final String MESSAGE_TYPE = "messageType";
 	public static final String USER_ID = "userId";
-	public static final String SOURCE_ID = "sourceId";
+	public static final String FRIEND = "friend";
 	public static final String TABLE = "Message";
 	public static final String STATUS = "status";
 	public static final String IMAGE = "image";
@@ -106,9 +106,6 @@ public class MessageDAO extends BaseHibernateDAO {
 		return findByProperty(USER_ID, userId);
 	}
 
-	public List findBySourceId(Object sourceId) {
-		return findByProperty(SOURCE_ID, sourceId);
-	}
 
 	public List findAll() {
 		log.debug("finding all Message instances");
