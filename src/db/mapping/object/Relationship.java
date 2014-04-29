@@ -7,25 +7,19 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 
 public class Relationship implements java.io.Serializable {
-	
-	// Table Name
-	
-	public static final String TABLE = "Relationship";
-	
-	// DB Mapping info
-	
-	public static final String USER_ID = "user";
-	public static final String FRIEND_ID = "friendId";
-	public static final String RELATIONSHIP = "relationship";
-	public static final String IS_INVITEE = "isInvitee";
 	// Fields
 
 	private Integer id;
 	private User user;
 	private Integer friendId;
-	private String relationship;
+	private Integer relationship;
 	private Boolean isInvitee;
 
+	public static final Integer E_FRIEND = 6;
+	public static final Integer N_FRIEND_LEVEL = 1;
+	public static final Integer E_FRIEND_LEVEL = 2;
+
+	
 	// Constructors
 
 	/** default constructor */
@@ -33,14 +27,29 @@ public class Relationship implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Relationship(User user, Integer friendId, String relationship,
+	public Relationship(User user, Integer friendId, Integer relationship,
 			Boolean isInvitee) {
 		this.user = user;
 		this.friendId = friendId;
 		this.relationship = relationship;
 		this.isInvitee = isInvitee;
 	}
+	
 
+	public boolean levelUp(){
+		if (this.relationship <6 ){
+			this.relationship += 1;
+			if (this.relationship == 6){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void levelDown(){
+		this.relationship = 1;
+	}
+	
 	// Property accessors
 
 	public Integer getId() {
@@ -67,11 +76,14 @@ public class Relationship implements java.io.Serializable {
 		this.friendId = friendId;
 	}
 
-	public String getRelationship() {
-		return this.relationship;
+	public Integer getRelationship() {
+		if (this.relationship >= this.E_FRIEND) {
+			return this.E_FRIEND_LEVEL;
+		}
+		else return this.N_FRIEND_LEVEL;
 	}
 
-	public void setRelationship(String relationship) {
+	public void setRelationship(Integer relationship) {
 		this.relationship = relationship;
 	}
 

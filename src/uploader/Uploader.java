@@ -16,6 +16,7 @@ public class Uploader {
 				Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
 		        String bucketName = "truthbookwinkar";
 		        PutPolicy putPolicy = new PutPolicy(bucketName);
+//		        putPolicy.persistentOps += "imageMogr2/auto-orient";
 		        uptoken = putPolicy.token(mac);
 			} catch (Exception e){
 				e.printStackTrace();

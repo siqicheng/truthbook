@@ -1,12 +1,18 @@
-package db.mapping.object;
+package db.mapping.object.DAO;
 
-import db.mapping.baseDAO.BaseHibernateDAO;
 import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import db.mapping.baseDAO.BaseHibernateDAO;
+import db.mapping.object.Relationship;
+import db.mapping.object.User;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -23,11 +29,16 @@ import org.slf4j.LoggerFactory;
 public class RelationshipDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(RelationshipDAO.class);
-	// property constants
+	// Table Name
+	
+	public static final String TABLE = "Relationship";
+	
+	// DB Mapping info
+	
+	public static final String USER = "user";
 	public static final String FRIEND_ID = "friendId";
 	public static final String RELATIONSHIP = "relationship";
 	public static final String IS_INVITEE = "isInvitee";
-	public static final String USER = "user";
 
 	public void save(Relationship transientInstance) {
 		log.debug("saving Relationship instance");
@@ -93,6 +104,18 @@ public class RelationshipDAO extends BaseHibernateDAO {
 		}
 	}
 
+	public Object findByUserAndFriend(User user, Integer friendId){
+		Criteria criteria = this.getSession().createCriteria(Relationship.class);
+		List relat_list = criteria.add(Restrictions.eq(USER, user))
+										.add(Restrictions.eq(FRIEND_ID, friendId))
+										.list();
+		
+		if (relat_list.size() > 0){
+			return relat_list.get(0);
+		}
+		return null;
+	}
+	
 	public List findByFriendId(Object friendId) {
 		return findByProperty(FRIEND_ID, friendId);
 	}

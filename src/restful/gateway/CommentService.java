@@ -17,6 +17,10 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.*;
+import db.mapping.object.DAO.CommentDAO;
+import db.mapping.object.DAO.ImageCommentDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.UserDAO;
 
 @Path("commentService")
 public class CommentService {
@@ -213,7 +217,7 @@ public class CommentService {
 		Comment comment[] = null;
 		this.user = this.userDAO.findById(userId);
 		if(this.user!= null){
-			List comments = this.commentDAO.findByProperty(Comment.USER, this.user);
+			List comments = this.commentDAO.findByProperty(CommentDAO.USER, this.user);
 			if(comments.size() > 0){
 				comment = new Comment[comments.size()];
 				for (int i=0; i<comments.size();i++){
@@ -257,10 +261,10 @@ public class CommentService {
 		this.image = this.imageDAO.findById(imageId);
 		this.comment = this.commentDAO.findById(commentId);
 		
-		String property[] = {ImageComment.IMAGE,ImageComment.COMMENT};
+		String property[] = {ImageCommentDAO.IMAGE,ImageCommentDAO.COMMENT};
 		Object value[] = {this.image,this.comment};
 		
-		List imageComments = this.imageCommentDAO.findByProperties(property, value, ImageComment.TABLE);
+		List imageComments = this.imageCommentDAO.findByProperties(property, value, ImageCommentDAO.TABLE);
 		session = this.imageCommentDAO.getSession();
 		try{
 			if(imageComments.size()>0){
@@ -290,7 +294,7 @@ public class CommentService {
 		ImageComment[] imageComment = null;
 		this.image = this.imageDAO.findById(imageId);
 		
-		List imageComments = this.imageCommentDAO.findByProperty(ImageComment.IMAGE, this.image);
+		List imageComments = this.imageCommentDAO.findByProperty(ImageCommentDAO.IMAGE, this.image);
 		if(imageComments.size()>0){
 			imageComment = new ImageComment[imageComments.size()];
 			for (int i=0; i<imageComments.size();i++){
@@ -307,17 +311,9 @@ public class CommentService {
 			@PathParam("commentNumber") Integer commentNumber){
 		ImageComment[] imageComment = null;
 		this.image = this.imageDAO.findById(imageId);
-		
-//		List imageComments = this.imageCommentDAO.findByProperty(ImageComment.IMAGE, this.image);
-//		if(imageComments.size()>0){
-//			imageComment = new ImageComment[imageComments.size()];
-//			for (int i=0; i<imageComments.size();i++){
-//				imageComment[i] = (ImageComment) imageComments.get(i);
-//			}
-//		}
 		Session session = this.imageDAO.getSession();
 		Criteria criteria = session.createCriteria(ImageComment.class);
-		criteria.addOrder(Order.desc(ImageComment.ID))
+		criteria.addOrder(Order.desc(ImageCommentDAO.ID))
 				.add(Restrictions.eq("image",image))
 				.setMaxResults(commentNumber);
 		

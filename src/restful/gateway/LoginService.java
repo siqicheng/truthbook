@@ -241,7 +241,6 @@
 
 package restful.gateway;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -251,8 +250,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -261,9 +258,9 @@ import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.User;
 import db.mapping.object.UserPassword;
-import db.mapping.object.UserPasswordDAO;
 import db.mapping.object.UserPasswordId;
-import db.mapping.object.UserDAO;
+import db.mapping.object.DAO.UserDAO;
+import db.mapping.object.DAO.UserPasswordDAO;
 
 @Path("loginService")
 public class LoginService {
@@ -326,7 +323,6 @@ public class LoginService {
 		this.user.setFullName(fullName);
 		this.user.setSchool(school);
 		this.user.setEntryTime(entryTime);
-//		this.user.setIsActivated(false);
 		List<User> users = this.userDAO.findByExample(this.user);
 		
 		return users;		
@@ -369,7 +365,7 @@ public class LoginService {
 			this.user.setSchool(school);			
 			this.user.setEntryTime(entryTime);
 			this.user.setIsActivated(false);	
-			
+			this.user.setToken(RestUtil.generateToken(fullName));
 			this.userPassword = new UserPassword(new UserPasswordId(email,password),this.user);
 			this.user.setUserPassword(userPassword);
 			this.user.setIsActivated(true);

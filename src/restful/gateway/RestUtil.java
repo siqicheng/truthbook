@@ -1,19 +1,40 @@
 package restful.gateway;
 
-import java.beans.IntrospectionException;  
-
-import java.beans.Introspector;  
-  
-import java.beans.PropertyDescriptor;  
-  
-import java.math.BigDecimal;  
-import java.math.BigInteger;  
-import java.text.DateFormat;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;  
-import java.util.Map;  
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class RestUtil {  
+	
+	
+	 private static String bytes2hex(byte bt[]){
+	        StringBuilder sb = new StringBuilder();
+	        for (byte b : bt) {
+	            sb.append(String.format("%02X", b));
+	        }
+	        return sb.toString();
+	 }
+	
+	public static String generateToken(String fullName){
+		try{
+        	MessageDigest md = MessageDigest.getInstance("SHA-1");
+        	byte[] bt = md.digest((fullName + getCurrentTime().toString()).getBytes());
+        	return bytes2hex(bt);
+        } catch (Exception e){
+        	e.printStackTrace();
+        	return null;
+        }
+	}
+	
 	public static String object2json(Object obj) {  
          StringBuilder json = new StringBuilder();  
          if (obj == null) {  
@@ -165,10 +186,13 @@ public class RestUtil {
          return sb.toString();  
   }  
 	public static Date getCurrentDate(){
-	//	String  currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(new Date());
-	//	return new Date(currentDate);
 		return new Date(System.currentTimeMillis());
 	}
+	
+	public static Timestamp getCurrentTime(){
+			return new Timestamp(System.currentTimeMillis());
+		}
+	
 	public static boolean isNull(Object input){
 		
 		boolean ret = (input !=null && !"".equals(input))?false:true;

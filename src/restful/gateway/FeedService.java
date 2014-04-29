@@ -16,13 +16,13 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.Image;
-import db.mapping.object.ImageDAO;
 import db.mapping.object.Relationship;
-import db.mapping.object.RelationshipDAO;
 import db.mapping.object.User;
-import db.mapping.object.UserDAO;
 import db.mapping.object.UserFetch;
-import db.mapping.object.UserFetchDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.RelationshipDAO;
+import db.mapping.object.DAO.UserDAO;
+import db.mapping.object.DAO.UserFetchDAO;
 
 @Path("feedService")
 public class FeedService {
@@ -52,10 +52,10 @@ public class FeedService {
 				for (Relationship relat : relat_list){
 					User friend = this.userDAO.findById(relat.getFriendId());
 					Criteria criteria = session.createCriteria(Image.class);
-					criteria.add(Restrictions.gt(Image.LASTE_MODIFIED, userFetch.getLastFetchTime()))
-					.add(Restrictions.eq(Image.USER, friend))
-					.add(Restrictions.eq(Image.APPROVED,true))
-					.add(Restrictions.eq(Image.DELETED, false))
+					criteria.add(Restrictions.gt(ImageDAO.LASTE_MODIFIED, userFetch.getLastFetchTime()))
+					.add(Restrictions.eq(ImageDAO.USER, friend))
+					.add(Restrictions.eq(ImageDAO.APPROVED,true))
+					.add(Restrictions.eq(ImageDAO.DELETED, false))
 					.addOrder(Order.desc("lastModified"));
 					List<Image> friend_image = criteria.list();
 					image_list.addAll(friend_image);
@@ -90,9 +90,9 @@ public class FeedService {
 					User friend = this.userDAO.findById(relat.getFriendId());
 					Criteria criteria = session.createCriteria(Image.class);
 					criteria.addOrder(Order.desc("lastModified"))
-					.add(Restrictions.eq(Image.USER, friend))
-					.add(Restrictions.eq(Image.APPROVED,true))
-					.add(Restrictions.eq(Image.DELETED, false));
+					.add(Restrictions.eq(ImageDAO.USER, friend))
+					.add(Restrictions.eq(ImageDAO.APPROVED,true))
+					.add(Restrictions.eq(ImageDAO.DELETED, false));
 					List<Image> friend_image = criteria.list();
 					image_list.addAll(friend_image);
 				}

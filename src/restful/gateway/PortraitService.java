@@ -15,11 +15,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import db.mapping.object.Image;
-import db.mapping.object.ImageDAO;
 import db.mapping.object.Portrait;
-import db.mapping.object.PortraitDAO;
 import db.mapping.object.User;
-import db.mapping.object.UserDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.PortraitDAO;
+import db.mapping.object.DAO.UserDAO;
 
 @Path("portraitService")
 public class PortraitService {	
@@ -56,14 +56,14 @@ public class PortraitService {
 		}
 		
 		if(isDefault != null){
-			String property[] = {Portrait.USER_ID, Portrait.IMAGE_ID, Portrait.DEFAULT_IMAGE};
+			String property[] = {PortraitDAO.USER_ID, PortraitDAO.IMAGE_ID, PortraitDAO.DEFAULT_IMAGE};
 			Object value[] = {this.user,this.image,isDefault};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);		
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);		
 		}
 		else{
-			String property[] = {Portrait.USER_ID, Portrait.IMAGE_ID};
+			String property[] = {PortraitDAO.USER_ID, PortraitDAO.IMAGE_ID};
 			Object value[] = {this.user,this.image};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);
 		}	
 		
 		return portraits;
@@ -79,14 +79,14 @@ public class PortraitService {
 		}
 		
 		if(isDefault != null){
-			String property[] = {Portrait.USER_ID,Portrait.DEFAULT_IMAGE};
+			String property[] = {PortraitDAO.USER_ID,PortraitDAO.DEFAULT_IMAGE};
 			Object value[] = {this.user,isDefault};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);		
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);		
 		}
 		else{
-			String property[] = {Portrait.USER_ID};
+			String property[] = {PortraitDAO.USER_ID};
 			Object value[] = {this.user};
-			portraits = this.portraitDAO.findByProperties(property, value, Portrait.TABLE);
+			portraits = this.portraitDAO.findByProperties(property, value, PortraitDAO.TABLE);
 		}	
 		
 		return portraits;

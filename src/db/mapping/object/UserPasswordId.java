@@ -2,7 +2,6 @@ package db.mapping.object;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
 
 
 
@@ -19,17 +18,6 @@ public class UserPasswordId  implements java.io.Serializable {
      private String password;
 
      public static final String SALT = "noChinese";
-//     public static final Integer SALT_LENGTH = 7;
-//     public static String getRandomString(int length) {
-//    	 String base = "abcdefghijklmnopqrstuvwxyz0123456789";   
-//    	 Random random = new Random();   
-//    	 StringBuffer sb = new StringBuffer();   
-//    	 for (int i = 0; i < length; i++) {   
-//    		 int number = random.nextInt(base.length());   
-//    		 sb.append(base.charAt(number));   
-//    	 }   
-//    	 return sb.toString();   
-//     }  
     // Constructors
 
     /** default constructor */
@@ -49,7 +37,6 @@ public class UserPasswordId  implements java.io.Serializable {
     public UserPasswordId(String email, String password){
         this.email = email;
         this.password = password;
-       // this.salt = getRandomString();
         try{
         	MessageDigest md = MessageDigest.getInstance("SHA-1");
         	byte[] bt = md.digest((this.password + SALT).getBytes());

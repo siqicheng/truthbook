@@ -13,10 +13,11 @@ import org.hibernate.Transaction;
 import restful.gateway.RestUtil;
 import uploader.Uploader;
 import db.mapping.object.Image;
-import db.mapping.object.ImageDAO;
+import db.mapping.object.Relationship;
 import db.mapping.object.User;
-import db.mapping.object.UserDAO;
-import fileupload.imageUtil;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.RelationshipDAO;
+import db.mapping.object.DAO.UserDAO;
 
 
 @JsonIgnoreProperties({"content","receivedrId","userId","is"})
@@ -128,6 +129,12 @@ public class FileMeta {
 			image.setUploaderId(userId);
 			User receiver = new UserDAO().findById(receiverId);
 			image.setUser(receiver);
+
+			Relationship relat = (Relationship)new RelationshipDAO()
+					.findByUserAndFriend(receiver, userId);
+			
+			if (relat.getRelationship() == Relationship.E_FRIEND_LEVEL)
+			image.setApproved(true);
 			
 			session.save(image);
 			tx.commit();
@@ -168,10 +175,6 @@ public class FileMeta {
 			
 			File file = new File(fullPath);
 			file.delete();
-			
-//			imageUtil.resizeSmall(fullPath);
-//			imageUtil.resizeMedium(fullPath);
-//			imageUtil.resizeLarge(fullPath);
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,23 +14,30 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import db.mapping.object.Image;
-import db.mapping.object.ImageDAO;
+import db.mapping.object.Message;
+import db.mapping.object.Relationship;
 import db.mapping.object.User;
-import db.mapping.object.UserDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.RelationshipDAO;
+import db.mapping.object.DAO.UserDAO;
 
 
 @Path("imageService")
 public class ImageService {
 	
 	private ImageDAO imageDAO;
-	
+	private RelationshipDAO relationshipDAO;
+	private UserDAO userDAO;
 	
 	public ImageService(){
 		imageDAO = new ImageDAO();
-		
+		relationshipDAO = new RelationshipDAO();
+		userDAO = new UserDAO();
 	}
 	
 	private static Map ProduceMap(Image image){
@@ -53,41 +61,6 @@ public class ImageService {
 		
 		return map;
 	}
-	
-//	@GET
-//	@Path("v1/image/{imageid}/{imageSize}/resizedImage")
-//	@Produces("image/jpeg")
-//	public Object getImage(@PathParam("imageid") Integer imageid, 
-//			@PathParam("imageSize") String imageSize){
-//		
-//		try{
-////			String path =new ImageDAO().findById(imageid).getImageUrl();
-//			String path = 
-//					"C:\\Users\\WinKaR\\Workspaces\\MyEclipse Professional\\.metadata\\.me_tcat7\\webapps\\truthbook\\Uploaded\\Koala.jpg";
-////			File image = new File(path);
-//////			return image.;
-////			File file = new File(path);
-////			 
-////			ResponseBuilder response = Response.ok((Object) file);
-////			response.header("Content-Disposition",
-////				"attachment; filename=image_from_server.png");
-////			return response.build();
-//			
-//			BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
-//			ByteArrayOutputStream out =new  ByteArrayOutputStream();
-//			int size=0;
-//			byte[] temp = new byte[1024];        
-//			while ((size = in.read(temp))!=-1){
-//				out.write(temp, 0, size);        
-//			}
-//			in.close();
-//			return Response.ok(out.toByteArray()).build();
-//		} catch (Exception e){
-//			e.printStackTrace();
-//			
-//			return null;
-//		}
-//	}
 	
 	@GET
 	@Path("v1/image/{userid}/latest")
@@ -179,12 +152,6 @@ public class ImageService {
 			}
 		}
 		
-//		Image[] images = new Image[image_list.size()];
-//		
-//		for (int i=0; i<image_list.size();i++){
-//			images[i] = (Image) image_list.get(i);
-//		}
-		
 		Object[] images = new Object[image_list.size()];
 		
 		for (int i=0; i<image_list.size(); i++){
@@ -200,10 +167,10 @@ public class ImageService {
 	@Path("v1/image/{uploaderId}/uploader")
 	@Produces("application/json;charset=utf-8")
 	public Object getImagesByUploader(@PathParam("uploaderId") Integer uploaderId) {
-		String property[] = {Image.UPLOADER_ID,Image.DELETED};
+		String property[] = {ImageDAO.UPLOADER_ID,ImageDAO.DELETED};
 		Object value[] = {uploaderId,false};
 		
-		List images = this.imageDAO.findByProperties(property, value, Image.TABLE);
+		List images = this.imageDAO.findByProperties(property, value, ImageDAO.TABLE);
 		
 		if (images.size() > 0){
 			List image_list = new ArrayList();
@@ -214,13 +181,6 @@ public class ImageService {
 					}					
 				}				
 			}
-//			Image[] image = new Image[image_list.size()];
-//			for (int i=0; i<image_list.size();i++){
-//				image[i] = (Image) image_list.get(i);
-//			}
-//			
-//			return image;
-			
 			Object[] image = new Object[image_list.size()];
 			
 			for (int i=0; i<image_list.size(); i++){
@@ -301,6 +261,18 @@ public class ImageService {
 				image.setApproved(true);
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
+				
+				User user = image.getUser();
+				Integer friendId = image.getUploaderId();
+				
+				Relationship relat = (Relationship) this.relationshipDAO
+									.findByUserAndFriend(user,friendId);
+				
+				if (relat.levelUp()){
+					Message message = new Message(Message.UPGRADE_TYPE, friendId, user, RestUtil.getCurrentTime() );
+					session.save(message);
+				}
+				
 				tx.commit();
 				session.close();
 				return RestUtil.string2json("true");
@@ -330,6 +302,14 @@ public class ImageService {
 				image.setApproved(false);
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
+				
+				User user = image.getUser();
+				Integer friendId = image.getUploaderId();
+				
+				Relationship relat = (Relationship) this.relationshipDAO
+									.findByUserAndFriend(user,friendId);
+				relat.levelDown();
+				session.update(relat);
 				tx.commit();
 				session.close();
 				return RestUtil.string2json("true");

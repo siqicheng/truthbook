@@ -1,65 +1,128 @@
 	package restful.gateway;
 
-import org.hibernate.Session;
+import java.util.List;
+
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
-import javax.ws.rs.Produces;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
-import java.sql.Timestamp;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.Image;
-import db.mapping.object.ImageDAO;
-import db.mapping.object.User;
-import db.mapping.object.UserDAO;
 import db.mapping.object.Message;
-import db.mapping.object.MessageDAO;
+import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.MessageDAO;
+import db.mapping.object.DAO.UserDAO;
 
-import java.util.ArrayList;
-import java.util.List;
 @Path("notification")
 public class MsgService {
 	private MessageDAO messageDAO;
 	private ImageDAO imageDAO;
-
+	private UserDAO userDAO;
+	
 	public MsgService(){
 		this.messageDAO = new MessageDAO();
 		this.imageDAO = new ImageDAO();
+		this.userDAO = new UserDAO();
+	}
+
+	private Criteria getCriteria(){
+		return this.messageDAO.getSession().createCriteria(Message.class);
 	}
 	
+	private  void saveMessage(Message message){
+		Session session = this.messageDAO.getSession();
+		try{
+			Transaction tx = session.beginTransaction();
+			session.save(message);
+			tx.commit();
+		} catch (Exception e){
+			e.printStackTrace();
+		}  finally {
+			session.close();
+		}
+	}
+	
+	private boolean existDuplicated(Integer userId, String type, Image image){
+//		String[] property = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
+//		Object[] value = {userId, type, image};
+		List<Message> message_list = this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, userId))
+															.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
+															.add(Restrictions.eq(MessageDAO.IMAGE, image))
+															.add(Restrictions.ne(MessageDAO.STATUS, Message.READ_STATUS))
+															.list();
+		return (message_list.size() > 0);
+	}
 
-
+	private Message[] setStatus(List<Message> messages, String status){
+		if (messages.size()==0){
+			return null;
+		}
+		Session session = this.messageDAO.getSession();
+		try{
+			Message[] ret_messages =  new Message[messages.size()];
+			Transaction tx = session.beginTransaction();
+			for (int i=0; i<messages.size(); ++i){
+				Message message = messages.get(i);
+				message.setStatus(status);
+				session.update(message);
+				ret_messages[i] = message;
+			}
+			tx.commit();
+			return ret_messages;
+		} catch (Exception e){
+			e.printStackTrace();
+			session.close();
+			return null;
+		}
+	}
+	
+	private Message[] setSent(List<Message> messages){
+		return this.setStatus(messages, Message.SENT_STATUS);
+	}
+	
+	private void setRead(List<Message> messages){
+		if (messages.size()==0){
+			return ;
+		}
+		Session session = this.messageDAO.getSession();
+		try{
+			Transaction tx = session.beginTransaction();
+			for (int i=0; i<messages.size(); ++i){
+				Message message = messages.get(i);
+				message.setStatus(Message.READ_STATUS);
+				message.setReadTime(RestUtil.getCurrentTime());
+				session.update(message);
+			}
+			tx.commit();
+		} catch (Exception e){
+			e.printStackTrace();
+			session.close();
+		}
+	}
+	
+	
 	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/send")
 	@Produces("application/json;charset=utf-8")
 	public Object sendMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
 			@PathParam("type") String type) throws Exception {
-		
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
-		
-		Session session=this.messageDAO.getSession();
 		try{
-			User src = (new UserDAO()).findById(srcid);
-			
-			Message newinstance = new Message(type, id, src,
-					new Timestamp(System.currentTimeMillis()));
-			
-			Transaction tx=session.beginTransaction();
-			session.save(newinstance);
-			tx.commit();
-			session.close();
+			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid), RestUtil.getCurrentTime()));
 			return RestUtil.string2json("true");
-			
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
 			return RestUtil.string2json("false");
 		}	
 	}
@@ -70,41 +133,21 @@ public class MsgService {
 	public Object sendImageMesssage(@PathParam("id") Integer id,
 			@PathParam("srcid") Integer srcid, 
 			@PathParam("type") String type,
-			@PathParam("imageid") Integer imageid) throws Exception {
+			@PathParam("imageid") Integer imageid){
 		
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
-		
-		Session session=this.messageDAO.getSession();
 		try{
-			User src = (new UserDAO()).findById(srcid);
-			
-			Message newinstance = new Message(type, id, src,
-					new Timestamp(System.currentTimeMillis()));
 			Image image= this.imageDAO.findById(imageid);
-			newinstance.setImage(image);
-			String[] property = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
-			Object[] value = {id, Message.REPLY_TYPE, image};
-			
-			List<Message> message_list = this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
-			
-			for (Message message : message_list){
-				if (!message.getStatus().equals(Message.READ_STATUS)){
-					session.close();
-					return RestUtil.string2json("true");
-				}
+			if (type.equals(Message.REPLY_TYPE) && this.existDuplicated(id, Message.REPLY_TYPE, image) ) {
+				return RestUtil.string2json("true");
 			}
-			
-			Transaction tx=session.beginTransaction();
-			session.save(newinstance);
-			tx.commit();
-			session.close();
+			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid),  RestUtil.getCurrentTime(), image));
 			return RestUtil.string2json("true");
 			
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
 			return RestUtil.string2json("false");
 		}	
 	}
@@ -123,38 +166,15 @@ public class MsgService {
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
-		
-		Session session=this.messageDAO.getSession();
 		try{
-			User src = (new UserDAO()).findById(srcid);
-			
-			Message newinstance = new Message(type, id, src,
-					new Timestamp(System.currentTimeMillis()));
 			Image image= this.imageDAO.findById(imageId);
-			newinstance.setImage(image);
-			newinstance.setContent(content);
-			
-			String[] property = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
-			Object[] value = {id, Message.REPLY_TYPE, image};
-			
-			List<Message> message_list = this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
-			
-			for (Message message : message_list){
-				if (!message.getStatus().equals(Message.READ_STATUS)){
-					session.close();
-					return RestUtil.string2json("true");
-				}
+			if (type.equals(Message.REPLY_TYPE) && this.existDuplicated(id, Message.REPLY_TYPE, image)){
+				return RestUtil.string2json("true");
 			}
-			
-			Transaction tx=session.beginTransaction();
-			session.save(newinstance);
-			tx.commit();
-			session.close();
+			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid),  RestUtil.getCurrentTime(), image, content));
 			return RestUtil.string2json("true");
-			
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
 			return RestUtil.string2json("false");
 		}	
 	}
@@ -170,75 +190,44 @@ public class MsgService {
 		if (id==srcid){
 			return RestUtil.string2json("false");
 		}
-		
-		Session session=this.messageDAO.getSession();
 		try{
-			User src = (new UserDAO()).findById(srcid);
-			
-			Message newinstance = new Message(type, id, src,
-					new Timestamp(System.currentTimeMillis()));
-			newinstance.setContent(content);
-			Transaction tx=session.beginTransaction();
-			session.save(newinstance);
-			tx.commit();
-			session.close();
+			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid),  RestUtil.getCurrentTime(), content) );
 			return RestUtil.string2json("true");
-			
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
 			return RestUtil.string2json("false");
 		}	
 	}
 
-	
+	@GET
+	@Path("v1/message/{userid}/getunsent")
+	@Produces("application/json;charset=utf-8")
+	public Object getUnsendMessage(@PathParam("userid") Integer id) {
+		try{
+			List<Message> Messages= this.getCriteria()
+					.add(Restrictions.eq(MessageDAO.USER_ID, id)).
+					add(Restrictions.eq(MessageDAO.STATUS, Message.UNSENT_STATUS)).
+					list() ;
+			return this.setSent(Messages);
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	@GET
 	@Path("v1/message/{userid}/{type}/get")
 	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id,
 			@PathParam("type") String type) throws Exception {
-		
-		Session session = this.messageDAO.getSession();
-
-//		String status = Message.UNSENT_STATUS;
-		
-		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
-		Object value[] = {id,type};	
-		
 		try{
-			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
-			
-			
-			if (Messages.size()>0){
-				List message_list = new ArrayList();
-				
-				Transaction tx = session.beginTransaction();
-				
-				for (Object message : Messages){
-					if (message instanceof Message 
-							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
-						
-						((Message) message).setStatus(Message.SENT_STATUS);
-
-						session.update((Message)message);
-						message_list.add(message);
-					}
-				}
-				
-				tx.commit();
-				session.close();
-				
-				Message[] messages = new Message[message_list.size()];
-				for (int i=0; i<message_list.size();i++){
-					messages[i] = (Message) message_list.get(i);
-				}
-				return messages;
-			}
-			return null;
+			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
+					.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
+					.add(Restrictions.ne(MessageDAO.STATUS, Message.READ_STATUS))
+					.list();
+			return this.setSent(Messages);
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
 			return null;
 		}
 	}
@@ -248,40 +237,12 @@ public class MsgService {
 	@Produces("application/json;charset=utf-8")
 	public Object getMessage(@PathParam("userid") Integer id) {
 		
-		Session session = this.messageDAO.getSession();
-	//	String status = Message.UNSENT_STATUS ;
-	//	String property[] = {MessageDAO.USER_ID,MessageDAO.STATUS};
-	//	Object value[] = {id};	
-		
 		try{
-			List Messages=this.messageDAO.findByUserId(id);
-			if (Messages.size()>0){
-				List message_list = new ArrayList();
-			
-				Transaction tx = session.beginTransaction();
-				
-				for (Object message : Messages){
-					if (message instanceof Message
-							&& !((Message) message).getStatus().equals(Message.READ_STATUS)){
-						((Message) message).setStatus(Message.SENT_STATUS);
-						session.update((Message)message);
-						message_list.add(message);
-					}
-				}
-				
-				tx.commit();
-				session.close();
-				
-				Message[] messages = new Message[message_list.size()];
-				for (int i=0; i<message_list.size();i++){
-					messages[i] = (Message) message_list.get(i);
-				}
-				
-				return messages;
-			}
-			return null;
+			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
+					.add(Restrictions.ne(MessageDAO.STATUS, Message.READ_STATUS))
+					.list();
+			return this.setSent(Messages);
 		}catch (Exception e){
-			session.close();
 			e.printStackTrace();
 			return null;
 		}
@@ -291,97 +252,32 @@ public class MsgService {
 	@Path("v1/message/{messageid}/read")
 	@Produces("application/json;charset=utf-8")
 	public Object readMessage(@PathParam("messageid") Integer id){
-		Session session = this.messageDAO.getSession();
 		try{
-			Message message = this.messageDAO.findById(id);
-			if (message.getStatus().equals(Message.SENT_STATUS) ){
-			
-				Transaction tx = session.beginTransaction();
-		//	session.delete(message);
-		//	session.save(readmsg);
-				message.setStatus(Message.READ_STATUS);
-				message.setReadTime(new Timestamp(System.currentTimeMillis()));
-				session.update(message);
-				tx.commit();
-				session.close();
-			}
+			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.MESSAGE_ID, id))
+					.add(Restrictions.eq(MessageDAO.STATUS, Message.SENT_STATUS))
+					.list();
+			this.setRead(Messages);
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
 			return RestUtil.string2json("false");
 		}
 	}
-	
-//	@GET
-//	@Path("v1/message/{messageid}/{type}/read")
-//	@Produces("application/json;charset=utf-8")
-//	public Object readMessage(@PathParam("messageid") Integer id , @PathParam("type") String type){
-//		
-//		
-//		Session session = this.messageDAO.getSession();
-//		
-//		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
-//		Object value[] = {id,type};	
-//		
-//		try{
-//			Transaction tx = session.beginTransaction();
-//			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
-//			
-//			for (Object message : Messages){
-//				if (message instanceof Message){
-//					
-//					ReadMessage readmsg = new ReadMessage( (Message) message);
-//					readmsg.setReadTime(new Timestamp(System.currentTimeMillis() ));
-//					
-//					session.delete(message);
-//					session.save(readmsg);
-//				}
-//			}
-//			
-//			tx.commit();	
-//			session.close();
-//			return RestUtil.string2json("true");
-//			
-//		}catch (Exception e){
-//			e.printStackTrace();
-//			session.close();
-//			return RestUtil.string2json("false");
-//		}
-//	}
-	
+
 	@GET
 	@Path("v1/message/{userid}/{type}/read")
 	@Produces("application/json;charset=utf-8")
 	public Object readSentMessage(@PathParam("userid") Integer id , @PathParam("type") String type){
-		
-		Session session = this.messageDAO.getSession();
-		
-		String property[] = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE};
-		Object value[] = {id,type};	
-		
 		try{
-			Transaction tx = session.beginTransaction();
-			List Messages=this.messageDAO.findByProperties(property, value, MessageDAO.TABLE);
-			
-			for (Object message : Messages){
-				if (message instanceof Message && ((Message) message).getStatus().equals(Message.SENT_STATUS)){
-					
-					((Message)message).setStatus(Message.READ_STATUS);
-					((Message)message).setReadTime(new Timestamp(System.currentTimeMillis()));
-					session.update(message);
-				}
-			}
-			
-			tx.commit();	
-			session.close();
+			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
+					.add(Restrictions.eq(MessageDAO.STATUS, Message.SENT_STATUS))
+					.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
+					.list();
+			this.setRead(Messages);
 			return RestUtil.string2json("true");
-			
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
 			return RestUtil.string2json("false");
 		}
 	}
-	
 }

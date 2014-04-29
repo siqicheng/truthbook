@@ -1,7 +1,11 @@
-package db.mapping.object;
+package db.mapping.object.DAO;
 
 import db.mapping.baseDAO.BaseHibernateDAO;
+import db.mapping.object.Comment;
+
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Example;
@@ -10,24 +14,29 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * Portrait entities. Transaction control of the save(), update() and delete()
+ * Comment entities. Transaction control of the save(), update() and delete()
  * operations can directly support Spring container-managed transactions or they
  * can be augmented to handle user-managed Spring transactions. Each of these
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see db.mapping.object.Portrait
+ * @see db.mapping.object.Comment
  * @author MyEclipse Persistence Tools
  */
 
-public class PortraitDAO extends BaseHibernateDAO {
-	private static final Logger log = LoggerFactory
-			.getLogger(PortraitDAO.class);
+public class CommentDAO extends BaseHibernateDAO {
+	private static final Logger log = LoggerFactory.getLogger(CommentDAO.class);
 	// property constants
-	public static final String DEFAULT_IMAGE = "defaultImage";
+	public static final String COMMENT_ID = "commentId";
+	public static final String USER = "user";
+	public static final String COMMENT_CONTENT = "commentContent";
+	public static final String REPLIED_TO_COMMENT_ID = "repliedToCommentId";
+	public static final String REPLIED_BY_COMMENT_ID = "repliedByCommentId";
+	public static final String CREATE_DATE = "createDate";
+	public static final String TABLE = "Comment";
 
-	public void save(Portrait transientInstance) {
-		log.debug("saving Portrait instance");
+	public void save(Comment transientInstance) {
+		log.debug("saving Comment instance");
 		try {
 			getSession().save(transientInstance);
 			log.debug("save successful");
@@ -37,8 +46,8 @@ public class PortraitDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void delete(Portrait persistentInstance) {
-		log.debug("deleting Portrait instance");
+	public void delete(Comment persistentInstance) {
+		log.debug("deleting Comment instance");
 		try {
 			getSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -48,11 +57,11 @@ public class PortraitDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public Portrait findById(java.lang.Integer id) {
-		log.debug("getting Portrait instance with id: " + id);
+	public Comment findById(java.lang.Integer id) {
+		log.debug("getting Comment instance with id: " + id);
 		try {
-			Portrait instance = (Portrait) getSession().get(
-					"db.mapping.object.Portrait", id);
+			Comment instance = (Comment) getSession().get(
+					"db.mapping.object.Comment", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -60,11 +69,11 @@ public class PortraitDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByExample(Portrait instance) {
-		log.debug("finding Portrait instance by example");
+	public List findByExample(Comment instance) {
+		log.debug("finding Comment instance by example");
 		try {
 			List results = getSession().createCriteria(
-					"db.mapping.object.Portrait").add(Example.create(instance))
+					"db.mapping.object.Comment").add(Example.create(instance))
 					.list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -76,10 +85,10 @@ public class PortraitDAO extends BaseHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding Portrait instance with property: " + propertyName
+		log.debug("finding Comment instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from Portrait as model where model."
+			String queryString = "from Comment as model where model."
 					+ propertyName + "= ?";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
@@ -90,14 +99,22 @@ public class PortraitDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByDefaultImage(Object defaultImage) {
-		return findByProperty(DEFAULT_IMAGE, defaultImage);
+	public List findByCommentContent(Object commentContent) {
+		return findByProperty(COMMENT_CONTENT, commentContent);
+	}
+
+	public List findByRepliedToCommentId(Object repliedToCommentId) {
+		return findByProperty(REPLIED_TO_COMMENT_ID, repliedToCommentId);
+	}
+
+	public List findByRepliedByCommentId(Object repliedByCommentId) {
+		return findByProperty(REPLIED_BY_COMMENT_ID, repliedByCommentId);
 	}
 
 	public List findAll() {
-		log.debug("finding all Portrait instances");
+		log.debug("finding all Comment instances");
 		try {
-			String queryString = "from Portrait";
+			String queryString = "from Comment";
 			Query queryObject = getSession().createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -106,10 +123,10 @@ public class PortraitDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public Portrait merge(Portrait detachedInstance) {
-		log.debug("merging Portrait instance");
+	public Comment merge(Comment detachedInstance) {
+		log.debug("merging Comment instance");
 		try {
-			Portrait result = (Portrait) getSession().merge(detachedInstance);
+			Comment result = (Comment) getSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -118,8 +135,8 @@ public class PortraitDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachDirty(Portrait instance) {
-		log.debug("attaching dirty Portrait instance");
+	public void attachDirty(Comment instance) {
+		log.debug("attaching dirty Comment instance");
 		try {
 			getSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -129,8 +146,8 @@ public class PortraitDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachClean(Portrait instance) {
-		log.debug("attaching clean Portrait instance");
+	public void attachClean(Comment instance) {
+		log.debug("attaching clean Comment instance");
 		try {
 			getSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
