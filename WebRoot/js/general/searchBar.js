@@ -9,7 +9,7 @@ $(function() {
 		};
 		globalTimeout = setTimeout(function() {
 		    globalTimeout = null;  
-			if( ((event.which>47) && (event.which<106)) || (event.which == 13) || (event.which == 8) ) {
+			if( ((event.which>47) && (event.which<106)) || (event.which == 13) || (event.which == 8) || (event.which == 32) ) {
 				searchUsers();
 			};
 			if( event.which == 40 ){
@@ -41,7 +41,7 @@ function searchUsers(){
 					entryTime = data.user.entryTime;
 					email = data.user.email;
 					if(data.defaultPortrait != undefined){
-						portrait = data.defaultPortrait;
+						portrait = getImageUrl(data.defaultPortrait, ImageType.Small);
 					} else {
 						portrait = DefaultPortrait;
 					}
@@ -56,7 +56,7 @@ function searchUsers(){
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
 						if(data.user[i].defaultPortrait != undefined){
-							portrait = data.user[i].defaultPortrait;
+							portrait = getImageUrl(data.user[i].defaultPortrait, ImageType.Small);
 						} else {
 							portrait = DefaultPortrait;
 						}
@@ -71,7 +71,7 @@ function searchUsers(){
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
 						if(data.user[i].defaultPortrait != undefined){
-							portrait = data.user[i].defaultPortrait;
+							portrait = getImageUrl(data.user[i].defaultPortrait, ImageType.Small);
 						} else {
 							portrait = DefaultPortrait;
 						}
@@ -130,7 +130,7 @@ function getMoreSearchResult(data, length) {
 		entryTime = data.user[i].entryTime;
 		email = data.user[i].email;
 		if(data.user[i].defaultPortrait != undefined){
-			portrait = data.user[i].defaultPortrait;
+			portrait = getImageUrl(data.user[i].defaultPortrait, ImageType.Small);
 		} else {
 			portrait = DefaultPortrait;
 		}

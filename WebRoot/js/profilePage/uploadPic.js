@@ -319,7 +319,7 @@ $(function() {
 							getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
 						} else {
 							if(uploadCandidates[i].defaultPortrait != undefined) {
-								portrait = uploadCandidates[i].defaultPortrait;
+								portrait = getImageUrl(uploadCandidates[i].defaultPortrait, ImageType.Small);
 							};
 							content = uploadCandidates[i].school + " " + uploadCandidates[i].entryTime;
 						};
