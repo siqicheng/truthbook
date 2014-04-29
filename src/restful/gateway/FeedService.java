@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -41,12 +42,16 @@ public class FeedService {
 		@GET
 		@Path("v1/feed/{userId}")
 		@Produces("application/json;charset=utf-8")
-		public Image[] getFeed(@PathParam("userId") Integer userId){
+		public Image[] getFeed(@PathParam("userId") Integer userId,
+				@HeaderParam("token") String token){
 			Session session = this.userFetchDAO.getSession();
 			Transaction tx = session.beginTransaction();
 			try{
 				UserFetch userFetch = this.userFetchDAO.findById(userId) ;
 				User user = this.userDAO.findById(userId);
+				if (!user.getToken().equals(token)){
+					return null;
+				}
 				List<Image> image_list =new ArrayList();
 				List<Relationship> relat_list = this.relationshipDAO.findByUser(user);
 				for (Relationship relat : relat_list){
@@ -79,11 +84,15 @@ public class FeedService {
 		@GET
 		@Path("v1/feed/{userId}/all")
 		@Produces("application/json;charset=utf-8")
-		public Image[] getAllFeed(@PathParam("userId") Integer userId){
+		public Image[] getAllFeed(@PathParam("userId") Integer userId,
+				@HeaderParam("token") String token){
 			Session session = this.userFetchDAO.getSession();
 			try{
 				UserFetch userFetch = this.userFetchDAO.findById(userId) ;
 				User user = this.userDAO.findById(userId);
+				if (!user.getToken().equals(token)){
+					return null;
+				}
 				List<Image> image_list =new ArrayList();
 				List<Relationship> relat_list = this.relationshipDAO.findByUser(user);
 				for (Relationship relat : relat_list){
