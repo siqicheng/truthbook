@@ -60,28 +60,18 @@ function cleanUserInfoCookie(){
 	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
 }
 
-function cleanFriendsCookie() {
-	$.cookie("eFriends", null,{expires: -1});
-	$.cookie("nFriends", null, {expires: -1});
-}
-
 function setUserInfoCookie(data){
 	$.cookie("truthbook", data);
 }
 
 function goTimeLine(){
 	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
-	window.location.href = TimeLinePage;
+	Redirect(TimeLinePage);
 }
 
 function goHomePage(){
 	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
-	window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
-}
-
-function goZhangSan(){
-	$.cookie("truthbook_PageOwner_userId","42203:张三");
-	window.location.href = HomePage; 
+	Redirect(HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId);
 }
 
 function goOthersPage(id){
@@ -90,14 +80,15 @@ function goOthersPage(id){
 			drawConfirmPopUp("获取用户失败");
 		} else {
 			$.cookie("truthbook_PageOwner_userId", data);
-			window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
+//			window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
+			Redirect(HomePage+"?id="+data.userId);
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
 		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
 		return false;
 	};
-	getUserAPI(id, onAjaxSuccess, onAjaxError);
+	getUserAPI(id, onAjaxSuccess, onAjaxError, true);
 }
 
 function goLogin(){
@@ -234,10 +225,11 @@ function getFriendsSync(id, type, onSuccess, onError) {
 	ajax_call(ajax_obj);
 }
 
-function getUserAPI(id, onSuccess, onError) {
+function getUserAPI(id, onSuccess, onError, async) {
 	var path = "v1/" + id,
 		url = ServerRoot + ServiceType.LOGIN + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_obj.async = async;
 	ajax_call(ajax_obj);
 }
 /*********************************************************************************

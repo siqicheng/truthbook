@@ -23,8 +23,10 @@ function testFunction_Cookie(){
 	$("#testCookie").append("<br>");
 	$("#testCookie").append("UserID:\t"+$.cookie("truthbook").userId);
 	$("#testCookie").append("<br>");
-	$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId").userId);$("#testCookie").append("<br>");
-	printUserNameById($.cookie("truthbook_PageOwner_userId").userId);
+	$("#testCookie").append("PageOwnersUserID:\t"+$.cookie("truthbook_PageOwner_userId").userId);
+	$("#testCookie").append("<br>");
+	$("#testCookie").append("PageOwnersUserName:\t"+$.cookie("truthbook_PageOwner_userId").fullName);$("#testCookie").append("<br>");
+//	printUserNameById($.cookie("truthbook_PageOwner_userId").userId);
 }
 	
 	
