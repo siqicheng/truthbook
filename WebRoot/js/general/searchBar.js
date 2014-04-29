@@ -4,12 +4,18 @@
  */
 $(function() {
 	$("#searchInput").keyup(function(event) {
-		if( ((event.which>47) && (event.which<106)) || (event.which == 13) || (event.which == 8) ) {
-			searchUsers();
+		if (globalTimeout != null) {
+		    clearTimeout(globalTimeout);
 		};
-		if( event.which == 40 ){
-			$('#searchbarDropdown').children().first().focus();
-		}
+		globalTimeout = setTimeout(function() {
+		    globalTimeout = null;  
+			if( ((event.which>47) && (event.which<106)) || (event.which == 13) || (event.which == 8) ) {
+				searchUsers();
+			};
+			if( event.which == 40 ){
+				$('#searchbarDropdown').children().first().focus();
+			}
+		}, 500);
 	});
 });
 

@@ -45,6 +45,7 @@ ServiceType = {
  */
 
 /*Global Variables in uploadPic*/
+globalTimeout = null;
 picReceiver = null;	//图片接收者
 picData = undefined; //图片信息
 upload_for_friend = false;//是否为好友上传

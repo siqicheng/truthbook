@@ -22,7 +22,12 @@ function handleAddFriendButtonClick(){
 	$("#uploadPhoto").click(function(){
 		var towhom = $.cookie("truthbook_PageOwner_userId");
 		upload_choosepic(towhom);
-	});	
+	});
+	
+	$("#profile-segment").hover(
+			function(){	$("#coverControlBtn").fadeIn(300);},
+			function(){	$("#coverControlBtn").fadeOut(300);}		
+	);
 }
 
 function buttonController_AF_AP_DF_AFW(addFriend,addPhoto,disableFriend,addFriendWaiting){

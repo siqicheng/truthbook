@@ -221,6 +221,9 @@ function thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,i
 		
 				"<div class='active side ui items'>" +
 					"<div class='item'>" + 	
+						"<div class=\"ui left green corner label\" style=\"display:inline\">"+
+				    		"<div class=\"text\">New</div>"+
+				    	"</div>"+
 						"<a class='image' href='"+urlLarge+"' title='"+description+"'>"+
 							"<img src='"+urlMedium+"'>"+
 						"</a>"+
