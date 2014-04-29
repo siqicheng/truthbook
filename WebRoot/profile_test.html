@@ -98,8 +98,8 @@
 						<div class="ui item" style="height:190px;border-radius: 5px;border-bottom-right-radius: 0px;border-top-right-radius: 0px;padding-left: 0px;width: 210px;background-color:#5A5F64;">
 							<div class="ui icon header" id = "headicon" style='margin-top: 20px;'>
 							<img class="rounded ui image icon" src="" id="portraitImage" style="width:110px; height: 110px;cursor:pointer;margin-bottom: 0px;margin-left: 50px;margin-right: 50px;">
-							  <div class=" header" id = "user_name" style="font-size:20px;color:white;padding-top: 8px;padding-bottom: 6px;"></div>
-							  <div class="sub header" style="font-size:12px;color:#F6F3D5;"><i class="map marker icon" style="font-size:14px;display:inline;"></i>
+							  <div class=" header" id = "user_name" style="font-size:20px;color:#EDEEEF;padding-top: 8px;padding-bottom: 6px;"></div>
+							  <div class="sub header userInfo" style="font-size:12px;color:#C4C2C4;"><i class="map marker icon" id='userSchoolIcon' style="font-size:14px;display:inline;"></i>
 								  <span id = 'user_school' ></span>&ensp;
 								  <span id = 'user_entryTime' ></span>
 							  </div>
@@ -127,6 +127,12 @@
 						           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
 						           <div class="hidden content">变路人</div>
 						       	</button>
+						       	
+<!-- 						       	<button class="ui black vertical animated button transition hidden" id="disabeFriendButton" -->
+<!-- 						       	style="margin-left: 5px;margin-right: 5px;border-radius: 4px;">  -->
+<!-- 						           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div> -->
+<!-- 						           <div class="hidden content">变路人</div> -->
+<!-- 						       	</button> -->
 						       	
 <!-- 								<button class="ui teal vertical animated button transition hidden" id="newPhotoButton" -->
 <!-- 					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;">  -->
@@ -411,6 +417,7 @@
 	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>
+	<script src="./assets/jquery/jquery.animate-colors-min.js"></script>
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
@@ -454,7 +461,25 @@
 		handleLogoutPopUp();
 		testFunction_Cookie();
 		addFriendButtonCheck();
+	
+	$("#profile-segment").hover(
+		function(){
+			$("#user_name").animate({color:"#FFFFFE"},800);
+			
+			$("#userSchoolIcon").animate({color:"#EDEEEF"},800);
+			$("#user_school").animate({color:"#EDEEEF"},800);
+			$("#user_entryTime").animate({color:"#EDEEEF"},800);
 		
+		},
+		function(){	
+			$("#user_name").animate({color:"#EDEEEF"},800);
+			
+			$("#userSchoolIcon").animate({color:"#C4C2C4"},800);
+			$("#user_school").animate({color:"#C4C2C4"},800);
+			$("#user_entryTime").animate({color:"#C4C2C4"},800);
+		}
+	);
+	
 // 		var int=self.setInterval("startrequest()",1000); 
 	});
 		
@@ -463,6 +488,8 @@
 		var daytime = new Date();
 		$("#date").html(daytime.toString()); 
 	} 
+
+
 
 	</script>
 	
