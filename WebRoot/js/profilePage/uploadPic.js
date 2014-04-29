@@ -90,9 +90,8 @@ $(function() {
 		var isValidForm = $("#choosePeople").form(" form");
 		if(isValidForm) {
 			nextstep1Function();
-		} else {
-			return false;
-		}
+		};
+		return false;
 	});
 
 	/*upload step按钮(选人、选图）功能定义*/
