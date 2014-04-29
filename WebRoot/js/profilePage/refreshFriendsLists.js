@@ -298,6 +298,14 @@ function drawFriendsList(id, barType, friendsType) {
 			function(){$(this).css("color","#33B2E1");},
 			function(){$(this).css("color","");}
 	);
+//	$("#"+barType +" ."+friendsType+"List " + ' .frienditem').hover(
+//		function(){$(this).css("background-color","#F4F4F4");},
+//		function(){$(this).css("background-color","");}
+//	);
+	$("#"+barType +" ."+friendsType+"List " + ' .frienditem')
+	.hover(	function(){$(this).css("color","#33B2E1");},
+			function(){$(this).css("color","");}
+		  );
 }
 
 /*翻页function*/

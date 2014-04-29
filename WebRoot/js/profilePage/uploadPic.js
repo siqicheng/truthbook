@@ -6,7 +6,8 @@ $(function() {
 	$("#picInput").change(function(e) {
 		var file = e.target.files[0],
 			options = {
-				canvas: true
+				canvas: true,
+				minWidth: 287
 			};
 		loadImage.parseMetaData(file, function(data) {
 			if(data.exif) {
@@ -177,12 +178,11 @@ $(function() {
 							positiveBtn = "发送好友申请",
 							positiveBtnHidden = "等待通过后再传照片",
 							approveFunction = function() {
-								//TODO: 发送好友申请
-								alert("已发送好友申请");
-								$("testModal").modal("hide");
+								friendRequestSend(picReceiver);
+								$("#testModal").modal("hide");
 							},
 							denyFunction = function() {
-								$("testModal").modal("hide");
+								$("#testModal").modal("hide");
 							};
 						testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, positiveBtnHidden, approveFunction, denyFunction);
 					}
