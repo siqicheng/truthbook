@@ -59,7 +59,7 @@ type_eFriends = 2;//极友类型
 DefaultImg = "img/logo_red.ico";
 DefaultPortrait="img/profile_test/247144.jpg";
 DefaultQuotePortrait = "img/logo.ico";
-DefaultPreviewImg="./img/profile_test/247146.jpg";
+DefaultPreviewImg="./img/picPreview.png";
 
 maxItemNum = 8;//dropdown最多item数
 

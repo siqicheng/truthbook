@@ -2,6 +2,7 @@ $(function() {
 	resetUpload();
 //Initializations BEGIN
 
+	/*照片预览旋转bug */
 	$("#picInput").change(function(e) {
 		var file = e.target.files[0],
 			options = {
@@ -258,7 +259,9 @@ $(function() {
 	/*选人到选图片*/
 	function nextstep1Function() {
 		var isValidForm = $("#choosePeople").form("validate form");
-		$("#choosePeople .message").show();
+		if($("#choosePeople .message").html() != "") {
+			$("#choosePeople .message").show();
+		};
 		if(picReceiver != null) {
 			gotoChoosePic();
 			return;

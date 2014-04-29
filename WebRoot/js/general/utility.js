@@ -75,20 +75,20 @@ function goHomePage(){
 }
 
 function goOthersPage(id){
-	var onAjaxSuccess = function(data,textStatus){
-		if(data == false){
-			drawConfirmPopUp("获取用户失败");
-		} else {
-			$.cookie("truthbook_PageOwner_userId", data);
+//	var onAjaxSuccess = function(data,textStatus){
+//		if(data == false){
+//			drawConfirmPopUp("获取用户失败");
+//		} else {
+//			$.cookie("truthbook_PageOwner_userId", data);
 //			window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
-			Redirect(HomePage+"?id="+data.userId);
-		}
-	};
-	var onAjaxError = function(xhr,status,error){
-		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
-		return false;
-	};
-	getUserAPI(id, onAjaxSuccess, onAjaxError, true);
+	Redirect(HomePage+"?id="+id);
+//		}
+//	};
+//	var onAjaxError = function(xhr,status,error){
+//		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+//		return false;
+//	};
+//	getUserAPI(id, onAjaxSuccess, onAjaxError, true);
 }
 
 function goLogin(){
