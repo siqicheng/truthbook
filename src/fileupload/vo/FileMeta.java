@@ -169,12 +169,14 @@ public class FileMeta {
 			os.close();
 			
 			String fullPath =RealPath+ File.separator +this.getFileName();
-			
 			Uploader uploader = new Uploader();
-			uploader.upload(fileName, fullPath);
-			
+			String ret_val = uploader.upload(fileName, fullPath);
 			File file = new File(fullPath);
 			file.delete();
+			
+			if (ret_val.indexOf("error")>=0 ) {
+				return false;
+			}
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();

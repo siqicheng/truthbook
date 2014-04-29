@@ -94,6 +94,12 @@ public class UserProfile {
 			if (Friends.size() == 1) {
 				Transaction tx = session.beginTransaction();
 				Relationship relationship = Friends.get(0);
+				
+				//由于现在此函数只用于降级，过作此判定,防止误用
+				if (relationship.getRelationship()<type){
+					return RestUtil.string2json("false");
+				}
+				
 				relationship.setIsInvitee(is_invitee);
 				relationship.setRelationship(type);
 				session.update(relationship);

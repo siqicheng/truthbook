@@ -16,20 +16,20 @@ public class Uploader {
 				Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
 		        String bucketName = "truthbookwinkar";
 		        PutPolicy putPolicy = new PutPolicy(bucketName);
-//		        putPolicy.persistentOps += "imageMogr2/auto-orient";
 		        uptoken = putPolicy.token(mac);
 			} catch (Exception e){
 				e.printStackTrace();
 			}
 		}
 		
-		public void upload(String key, String localFile){
+		public String upload(String key, String localFile){
 			try{
 				PutExtra extra = new PutExtra();
 				PutRet ret = IoApi.putFile(uptoken, key, localFile, extra);
-				System.out.println(ret.response);
+				return ret.response;
 			} catch (Exception e){
 				e.printStackTrace();
+				return null;
 			}
 	        
 		}	
