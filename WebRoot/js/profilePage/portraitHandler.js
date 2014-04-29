@@ -1,16 +1,23 @@
 
 function setInitialPortrait(){
 	var portraitUrl = $.cookie("truthbook_PageOwner_userId").defaultPortrait;
-	portraitUrl = getImageUrl(portraitUrl,ImageType.Small);
-	$("#portraitImage").attr("src",portraitUrl);
-	$("#portraitImage").magnificPopup({
-		items: {
-				src:  getImageUrl($.cookie("truthbook_PageOwner_userId").defaultPortrait,ImageType.Large)
-		},
+	portraitSmall = getImageUrl(portraitUrl,ImageType.Small);
+	portraitMedium = getImageUrl(portraitUrl,ImageType.Large);
+	
+	$("#portraitImage").attr("src",portraitSmall);
+	$("#portraitLarge").attr("href",portraitMedium);
+	$("#portraitLarge").magnificPopup({
 		type: 'image',
 		image: {
 			verticalFit: true
-		}
+		},
+		zoom:{
+			enabled: true,
+			duration: 500, // don't foget to change the duration also in CSS
+			opener: function(element) {
+				return element.find('img');
+				}
+		},	
 	});
 
 
@@ -25,20 +32,28 @@ function setPortraitImageForThisPage(){
 			$.cookie("truthbook",data);
 			 $.cookie("truthbook_PageOwner_userId",data);//on own page
 			var portraitUrl = data.defaultPortrait;
-			portraitUrl = getImageUrl(portraitUrl,ImageType.Small);
-			$("#portraitImage").attr("src",portraitUrl);
+			portraitSmall = getImageUrl(portraitUrl,ImageType.Small);
+			portraitMedium = getImageUrl(portraitUrl,ImageType.Large);
+			
+			$("#portraitImage").attr("src",portraitSmall);
+			$("#portraitLarge").attr("href",portraitMedium);
+			
 		}else{
 
 		}
-  		$("#portraitImage").magnificPopup({
-			items: {
-					src:  getImageUrl($.cookie("truthbook").defaultPortrait,ImageType.Large)
-			},
+		$("#portraitLarge").magnificPopup({
 			type: 'image',
 			image: {
 				verticalFit: true
-			}
-  		});
+			},
+			zoom:{
+				enabled: true,
+				duration: 500, // don't foget to change the duration also in CSS
+				opener: function(element) {
+					return element.find('img');
+					}
+			},	
+		});
   	
 	};
 	var onAjaxError = function(xhr,status,error){
