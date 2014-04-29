@@ -58,18 +58,18 @@ public class UserProfile {
 		try {
 			User user = this.userDAO.findById(id);		
 			User friend = this.userDAO.findById(friend_id);
-			if (!user.getToken().equals(token)){
-				return RestUtil.string2json("false");
-			}
-			List<Message> messages = session.createCriteria(Message.class)
-															.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, Message.ADDFRIEND_TYPE))
-															.add(Restrictions.eq(MessageDAO.USER_ID, id))
-															.add(Restrictions.eq(MessageDAO.FRIEND, friend))
-															.setMaxResults(1)
-															.list();
-			if (messages.size()==0){
-				return RestUtil.string2json("false");
-			}
+//			if (!user.getToken().equals(token)){
+//				return RestUtil.string2json("false");
+//			}
+//			List<Message> messages = session.createCriteria(Message.class)
+//															.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, Message.ADDFRIEND_TYPE))
+//															.add(Restrictions.eq(MessageDAO.USER_ID, id))
+//															.add(Restrictions.eq(MessageDAO.FRIEND, friend))
+//															.setMaxResults(1)
+//															.list();
+//			if (messages.size()==0){
+//				return RestUtil.string2json("false");
+//			}
 			
 			List<Relationship> Friends = this.getCriteria()
 															.add(Restrictions.eq(RelationshipDAO.USER, user))
@@ -212,9 +212,9 @@ public class UserProfile {
 
 		try {
 			User user = this.userDAO.findById(id);
-			if (!user.getToken().equals(token)){
-				return null;
-			}
+//			if (!user.getToken().equals(token)){
+//				return null;
+//			}
 			List<Relationship> relationships = this.getCriteria().add(Restrictions.eq(RelationshipDAO.USER, user))
 					.list();
 

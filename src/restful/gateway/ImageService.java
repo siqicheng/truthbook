@@ -70,9 +70,9 @@ public class ImageService {
 	public Object getLatestImage(@PathParam("userid") Integer userId,
 			@HeaderParam("token") String token){
 		User user = new UserDAO().findById(userId);
-		if (!user.getToken().equals(token)){
-			return null;
-		}
+//		if (!user.getToken().equals(token)){
+//			return null;
+//		}
 		Set set = user.getImages();
 		Image latest = null;
 		for (Object image : set){
@@ -105,9 +105,9 @@ public class ImageService {
 			
 			UserDAO userdao= new UserDAO();
 			User user= userdao.findById(userId);
-			if (!user.getToken().equals(token)){
-				return RestUtil.string2json("false");
-			}
+//			if (!user.getToken().equals(token)){
+//				return RestUtil.string2json("false");
+//			}
 			Image image = new Image();
 			image.setImageUrl(imageURL);
 			image.setUploaderId(uploaderId);
@@ -138,14 +138,15 @@ public class ImageService {
 	public Object getImageById(@PathParam("imageId") Integer imageId,
 			@HeaderParam("token") String token) {
 		try {
-			Image image = new Image();
+			Image image = this.imageDAO.findById(imageId);
+//			if (image!=null && image.getDeleted()){
+//				image = null;
+//			}
 			if (!image.getUser().getToken().equals(token)){
 				return null;
 			}
-			image = this.imageDAO.findById(imageId);
-			if (image!=null && image.getDeleted()){
-				image = null;
-			}
+			
+			
 			//return image;
 			return RestUtil.map2json(ProduceMap(image));
 		} catch (Exception e){
@@ -162,9 +163,9 @@ public class ImageService {
 			@HeaderParam("token") String token) {
 		try{
 			User user = new UserDAO().findById(userId);
-			if (!user.getToken().equals(token)){
-				return null;
-			}
+//			if (!user.getToken().equals(token)){
+//				return null;
+//			}
 			Set set = user.getImages();
 			
 			List image_list = new ArrayList();

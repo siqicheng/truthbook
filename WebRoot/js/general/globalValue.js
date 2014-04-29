@@ -103,7 +103,7 @@ ImageType = {
 MESSAGESTATUS = {
 		READ : "read",
 		SENT : "sent",
-		UNSEND : "unsend"
+		UNSEND : "unsent"
 };
 
 MessageType = {

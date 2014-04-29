@@ -93,6 +93,8 @@ function friendRelationCheck(){
 function getAllImage(userId,Control){
 	var onAjaxSuccess = function(data,textStatus){
 		//separate unapproved image and approved image
+		
+		if(data==undefined||data == null) return;
 		var allImageData = approvedImageData(data,data.length);
 		
 		numApprovedImage = allImageData[0].length;

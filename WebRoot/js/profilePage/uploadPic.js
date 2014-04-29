@@ -426,6 +426,7 @@ function resetUpload() {
 	$("#school").val("");
 	$("#entryTime").val("");
 	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
+	$("#uploadProgress .bar").css("width", "0%");
 	$("#fullName").removeAttr("disabled");
 	$("#school").removeAttr("disabled");
 	$("#entryTime").removeAttr("disabled");
