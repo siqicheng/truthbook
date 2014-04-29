@@ -1,8 +1,26 @@
 $(function() {
 	resetUpload();
-
 //Initializations BEGIN
 
+	$("#picInput").change(function(e) {
+		var file = e.target.files[0],
+			options = {
+				canvas: true
+			};
+		loadImage.parseMetaData(file, function(data) {
+			if(data.exif) {
+				options.orientation = data.exif.get('Orientation');
+			}
+		});
+		loadImage(file,
+			function(img) {
+				$("#imgPrev").html(img);
+				$("#imgPrev canvas").addClass('ui image');
+			},
+			options
+		);
+	});
+	
 	/*upload sidebar效果初始化*/
 	$('#upload')
 		.sidebar({
@@ -396,8 +414,7 @@ function resetUpload() {
 	$("#fullName").val("");
 	$("#school").val("");
 	$("#entryTime").val("");
-	$("#img_prev").attr("src", DefaultPreviewImg);
-	$("#imgPrev").attr("src", DefaultPreviewImg);
+	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
 	$("#fullName").removeAttr("disabled");
 	$("#school").removeAttr("disabled");
 	$("#entryTime").removeAttr("disabled");
@@ -408,9 +425,10 @@ function readURL(input) {
     if (input.files && input.files[0]) {
     	$('#img_prev').show();
         var reader = new FileReader();
-        reader.onload = function (e) { $('#img_prev').attr('src', e.target.result); $("#imgPrev").attr("src", e.target.result); };
+        reader.onloadend = function (e) {
+        	$("#imgPrev").attr("src", e.target.result); 
+        };
         reader.readAsDataURL(input.files[0]);
-        $('#submitBtn').removeClass("disabled");
     } else {
         //IE情况
         var docObj = document.getElementByIdx_x('fileElem');
