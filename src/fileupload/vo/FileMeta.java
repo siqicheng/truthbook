@@ -11,13 +11,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import restful.gateway.RestUtil;
-import uploader.Uploader;
 import db.mapping.object.Image;
 import db.mapping.object.Relationship;
 import db.mapping.object.User;
 import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.RelationshipDAO;
 import db.mapping.object.DAO.UserDAO;
+import fileupload.Uploader;
 
 
 @JsonIgnoreProperties({"content","receivedrId","userId","is"})

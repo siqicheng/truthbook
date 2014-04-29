@@ -1,4 +1,4 @@
-package uploader;
+package fileupload;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;
 import com.qiniu.api.io.IoApi;

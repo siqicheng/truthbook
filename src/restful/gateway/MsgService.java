@@ -1,4 +1,4 @@
-	package restful.gateway;
+package restful.gateway;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import db.mapping.object.Message;
 import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.MessageDAO;
 import db.mapping.object.DAO.UserDAO;
+import antySamy.AntySamyFilter;
 
 @Path("notification")
 public class MsgService {
@@ -51,8 +52,6 @@ public class MsgService {
 	}
 	
 	private boolean existDuplicated(Integer userId, String type, Image image){
-//		String[] property = {MessageDAO.USER_ID, MessageDAO.MESSAGE_TYPE, MessageDAO.IMAGE};
-//		Object[] value = {userId, type, image};
 		List<Message> message_list = this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, userId))
 															.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
 															.add(Restrictions.eq(MessageDAO.IMAGE, image))
