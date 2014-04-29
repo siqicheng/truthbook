@@ -232,7 +232,7 @@ $('.ui.form.register-form')
 					$("#rechooseform")
 					.modal("show").modal('setting', 'onHidden', function() {
 						selected_num = -1;
-						$("#imgPrev").attr("src", DefaultPortrait); //TODO：改成选人专用图片
+						$("#imgPrev").attr("src", "img/Truthbook_red.png"); //TODO：改成选人专用图片
 						$("#checkinput").val("");
 						$("#checkinput").attr("placeholder", "请选择");
 					});

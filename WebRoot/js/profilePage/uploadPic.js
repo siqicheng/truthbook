@@ -298,7 +298,7 @@ $(function() {
 						var content = "uploaded by: ";
 						var portrait = DefaultPortrait;
 						if(uploadCandidates[i].isActivated == "false"){
-							portrait = DefaultPortrait; //TODO: 改成词条专用头像src
+							portrait = DefaultQuotePortrait; //TODO: 改成词条专用头像src
 							
 							onSuccess = function(data, textStatus) {
 								var num = userLengthJson(data);
@@ -341,11 +341,16 @@ $(function() {
 						var portrait;
 						if(uploadCandidates[selected_num].defaultPortrait != undefined) {
 							portrait = uploadCandidates[selected_num].defaultPortrait;
+							var mediumPortrait = getImageUrl(portrait, ImageType.Medium);
+							$("#peoplePrev").attr('src', mediumPortrait);
 						} else {
-							portrait = DefaultPortrait;
+							if(uploadCandidates[selected_num].isActivated == "false") {
+								portrait = DefaultQuotePortrait;
+							} else {
+								portrati = DefaultPortrait;
+							}
+							$("#peoplePrev").attr('src', portrait);
 						}
-						var mediumPortrait = getImageUrl(portrait, ImageType.Medium);
-						$("#peoplePrev").attr('src', mediumPortrait);
 						picReceiver = uploadCandidates[selected_num];
 						console.log("User choosed picReceiver: ");
 						console.log(picReceiver);
@@ -449,7 +454,7 @@ function gotoChoosePic() {
 	$("#choosePic .item .meta").html("By "+$.cookie("truthbook").fullName);
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
-	$('#img_prev').show();
+	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
 	$('#picDescription').val("");
 	$("#choosePic .two.buttons").show();
 	$("#uploadProgress").hide();
