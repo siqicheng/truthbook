@@ -1,4 +1,18 @@
+#Sat Apr 26 15:50:14 CST 2014
 eclipse.preferences.version=1
+encoding//WebRoot/CSS/general.css=UTF-8
+encoding//WebRoot/CSS/timeline.css=UTF-8
 encoding//WebRoot/js/general/searchBar.js=UTF-8
 encoding//WebRoot/js/general/utility.js=UTF-8
 encoding//WebRoot/profile_test.html=UTF-8
+encoding//src/db/mapping/object=UTF-8
+encoding//src/fileupload=UTF-8
+encoding//src/restful/gateway/CommentService.java=UTF-8
+encoding//src/restful/gateway/FeedService.java=UTF-8
+encoding//src/restful/gateway/ImageService.java=UTF-8
+encoding//src/restful/gateway/LoginService.java=UTF-8
+encoding//src/restful/gateway/PortraitService.java=UTF-8
+encoding//src/restful/gateway/RestUtil.java=UTF-8
+encoding//src/restful/gateway/UserProfile.java=UTF-8
+encoding/<project>=UTF-8
+encoding/src=UTF-8

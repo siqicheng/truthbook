@@ -1,21 +1,18 @@
 
 function setInitialPortrait(){
 	var portraitUrl = $.cookie("truthbook_PageOwner_userId").defaultPortrait;
-	if(portraitUrl != undefined){
-		portraitUrl = getImageUrl(portraitUrl,ImageType.Small);
-		$("#portraitImage").attr("src",portraitUrl);
-		$("#portraitImage").magnificPopup({
-			items: {
-					src:  getImageUrl($.cookie("truthbook").defaultPortrait,ImageType.Large)
-			},
-			type: 'image',
-			image: {
-				verticalFit: true
-			}
-		});
-	}else{
-		$("#portraitImage").attr("src",DefaultPortrait);
-	}
+	portraitUrl = getImageUrl(portraitUrl,ImageType.Small);
+	$("#portraitImage").attr("src",portraitUrl);
+	$("#portraitImage").magnificPopup({
+		items: {
+				src:  getImageUrl($.cookie("truthbook_PageOwner_userId").defaultPortrait,ImageType.Large)
+		},
+		type: 'image',
+		image: {
+			verticalFit: true
+		}
+	});
+
 
 }
 
@@ -26,6 +23,7 @@ function setPortraitImageForThisPage(){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data != null ){
 			$.cookie("truthbook",data);
+			 $.cookie("truthbook_PageOwner_userId",data);//on own page
 			var portraitUrl = data.defaultPortrait;
 			portraitUrl = getImageUrl(portraitUrl,ImageType.Small);
 			$("#portraitImage").attr("src",portraitUrl);

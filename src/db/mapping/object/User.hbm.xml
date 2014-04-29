@@ -47,7 +47,7 @@
             <one-to-many class="db.mapping.object.Message" />
         </set>
         
-         <set name="images" inverse="true">
+         <set name="images" lazy="false" inverse="true">
             <key>
                 <column name="user_id" not-null="true" />
             </key>
@@ -60,5 +60,6 @@
             </key>
             <one-to-many class="db.mapping.object.Portrait" />
         </set>
+        
     </class>
 </hibernate-mapping>

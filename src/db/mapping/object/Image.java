@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlMimeType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
@@ -42,9 +43,12 @@ public class Image implements java.io.Serializable {
 	private Boolean approved;
 	private Boolean deleted;
 	private String content;
+	private String uploaderName;
 	private Integer liked;
+	private Integer commentCnt;
 	private Set imageComments = new HashSet(0);
 	private Set portraits = new HashSet(0);
+	private Set messages = new HashSet(0);
 
 	// Constructors
 
@@ -80,14 +84,43 @@ public class Image implements java.io.Serializable {
 	}
 
 	// Property accessors
+	public Integer getCommentCnt(){
+		return this.imageComments.size();
+	}
+	
+	public String getUploaderName() {
+		if (this.uploaderId != null) {
+			return  new UserDAO().findById(this.uploaderId).getFullName();
+		}
+		else return null;
+	}
+
+	public void setUploaderName(String uploaderName) {
+		this.uploaderName = uploaderName;
+	}
+
+	public void setCommentCnt(Integer commentCnt){
+		this.commentCnt = commentCnt;
+	}
+	
 	public Integer getLiked(){
 		return this.liked;
 	}
 	
+	@XmlTransient
+	public Set getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Set messages) {
+		this.messages = messages;
+	}
+
 	public void setLiked(Integer liked){
 		this.liked = liked;
 	}
 	
+	@XmlTransient
 	public Integer getUserId(){
 		return this.user.getUserId();
 	}
@@ -158,6 +191,7 @@ public class Image implements java.io.Serializable {
 		this.approved = approved;
 	}
 
+	@XmlTransient
 	public Boolean getDeleted() {
 		return this.deleted;
 	}

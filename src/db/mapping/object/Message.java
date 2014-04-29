@@ -26,12 +26,16 @@ public class Message implements java.io.Serializable {
 	private User friend;
 	private String content;
 	private Timestamp createTime;
+	private Integer ImageId;
 	//private Map<String,String> content;
 	private String status;
 	private Timestamp readTime;
+	private Image image;
+	private Integer ImageOwnerid;
 	public static final String READ_STATUS = "read";
 	public static final String SENT_STATUS = "sent";
 	public static final String UNSENT_STATUS = "unsent";
+	public static final String REPLY_TYPE = "reply";
 	// Constructors
 
 	/** default constructor */
@@ -58,7 +62,38 @@ public class Message implements java.io.Serializable {
 		return content;
 	}
 
+	@XmlTransient
+	public Image getImage() {
+		return image;
+	}
 	
+	
+	public Integer getImageOwnerid() {
+		if (this.image != null) {
+			return this.image.getUserId();
+		}
+		return null;
+	}
+
+	public void setImageOwnerid(Integer imageOwnerid) {
+		ImageOwnerid = imageOwnerid;
+	}
+
+	public Integer getImageId() {
+		if (this.image != null) {
+			return this.image.getImageId();
+		}
+		return null;
+	}
+
+	public void setImageId(Integer imageId) {
+		ImageId = imageId;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}

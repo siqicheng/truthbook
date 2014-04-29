@@ -34,6 +34,7 @@ public class User  implements java.io.Serializable {
      private Set messages = new HashSet(0);
      private Set images = new HashSet(0);
      private String token;
+     private UserFetch userFetch;
     // Constructors
 
     /** default constructor */
@@ -63,11 +64,21 @@ public class User  implements java.io.Serializable {
 
    
     // Property accessors
+  
     public String getDefaultPortrait(){
     	return this.defaultPortrait;
     }
     
-    public void setDefaultPortrait(String defaultPortrait){
+    @XmlTransient
+	public UserFetch getUserFetch() {
+		return userFetch;
+	}
+
+	public void setUserFetch(UserFetch userFetch) {
+		this.userFetch = userFetch;
+	}
+
+	public void setDefaultPortrait(String defaultPortrait){
     	this.defaultPortrait = defaultPortrait;
     }
     

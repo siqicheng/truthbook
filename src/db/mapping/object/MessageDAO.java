@@ -29,6 +29,7 @@ public class MessageDAO extends BaseHibernateDAO {
 	public static final String SOURCE_ID = "sourceId";
 	public static final String TABLE = "Message";
 	public static final String STATUS = "status";
+	public static final String IMAGE = "image";
 	
 	public void save(Message transientInstance) {
 		log.debug("saving Message instance");

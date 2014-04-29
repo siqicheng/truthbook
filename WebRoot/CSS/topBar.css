@@ -1,7 +1,11 @@
+#topbar {
+	-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
 #topbar .title{
-	padding-top: 0px;
-	padding-bottom: 0px;
-	position:absolute; left:50%; width:165px; margin-left:-83px; 
+	position:absolute; left:50%; width:140px; margin-left:-70px;  
 	padding-top: 6px; padding-bottom: 7px;
 	display: inline-block;
 	cursor:pointer;

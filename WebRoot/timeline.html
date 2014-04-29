@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   	<meta charset="utf-8">
+   	<title>新鲜事 | Truthbook</title>
+
+   	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
+   	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
+   	<link href="./CSS/general.css" rel="stylesheet">
+   	<link href="./CSS/topBar.css" rel="stylesheet">
+   	<link href="./CSS/timeline.css" rel="stylesheet">
+   	<link rel="shortcut icon" href="img/logo_red.ico"/>
+   	
+</head>
+
+<body id="body">
+	<div class="ui fixed transparent main small menu" id="topbar" >
+		<div class="left  menu">
+	
+			<div class="ui dropdown item" id="upload_menu">
+				<i class="add large icon"></i>传照片	
+				<div class=" dropdown menu" style="width: 170px;">
+					<div class="item" id="upload_for_new_btn" style="text-align:center;width: 170px;">新建好友档案</div>
+					
+					<div class="ui dropdown item" id="upload_for_fri_btn" style="text-align:center;width: 170px;">
+						为已有好友上传
+						<div class="menu">
+							<div class="ui dropdown item" style="width: 170px;">
+								<div><i class="star small icon"></i>极·友<i class="dropdown icon"></i></div>
+								<div class="list menu eFriendsList upload_for_fri">
+								</div>
+							</div>
+							<div class="ui dropdown item" style="width: 170px;">
+								<div><i class="half empty star small icon"></i>真·友<i class="dropdown icon"></i></div>
+								<div class="list menu nFriendsList upload_for_fri">
+								</div>
+							</div>
+						</div>
+					</div>
+ 				</div>
+			</div>
+			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
+			
+		</div>			      
+		<a class="green item" onclick = "goHomePage();">
+			<i class="home  large icon"></i>
+		</a>
+		<a class="active blue item" id="gotimelineBtn" onclick="goTimeLine();">
+	    	<i class="grid layout large icon"></i>
+		</a>
+		<a class="orange item">
+	    	<i class="setting large icon"></i>
+		</a>
+		<div class="empty item"></div>
+		<a class="open_popup_link item" href="#upload" style="display:none">上传照片（PopUp）</a>
+		<div class="title" onclick = "goHomePage();">
+	        <img src="img/Truthbook_red.png" width="140px" >
+	    </div>	
+		
+		<div class="right menu">
+				<form class="ui form item" onsubmit = "return searchUsers();">
+     				<div class="ui icon input">
+       				<input type="text" id = "searchFullName" placeholder="Search..." >
+       				<i class="search link icon" onclick = "searchUsers();"></i>
+     				</div>
+   				</form>
+   				<a class = "item" id="exitButton"> 
+					    <i class="off large icon"></i>
+   				</a>
+ 		</div>
+ 		
+	</div>
+	
+	<div id="upload" class="white-popup  mfp-hide">
+		<h3 class="ui header">上传照片</h3>
+		
+		<div class="ui three steps" >
+			<div class="ui active step" id="step1" style="font-size: 10px;cursor: pointer;">选人</div>
+			<div class="ui disabled step" id="step2" style="font-size: 10px;cursor: default">选图</div>
+			<div class="ui disabled step" id="step3" style="font-size: 10px;cursor: default">完成</div>
+   		</div>
+   			
+   		<div class="ui divider"></div>
+   			
+		<form class="ui form uploadForm" id="choosePeople" onSubmit="return validateUploadFormOne()">
+			<div class="field" id="fullNameTest">
+            	<label>姓名</label>
+                <div class="ui left labeled icon input">
+                	<input tabindex="1" type="text" id="fullName" placeholder="姓名" name="fullName" >
+                	<i class="user icon"></i>
+                </div>
+       		</div>
+			<div class="field" id="schoolTest">
+				<label>学校</label>
+                <div class="ui left labeled icon input">
+                	<input tabindex="2" type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
+                  	<i class="book icon"></i>
+               	</div>
+      		</div>
+			<div class="field" id="entryTimeTest">
+				<label>入学年份</label>
+           		<div class="ui left labeled icon input">
+  					<input tabindex="3" type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
+					<i class="align justify icon"></i>
+        		</div>
+     		</div>
+            <div class="ui error message"></div>
+			<input tabindex="4" class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
+<!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
+		</form>
+ 				
+ 			<div class="ui form uploadForm" id="choosePic" style="display:none">
+				<div class="ui items">
+					<div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;">
+						<div class="ui image">
+							<img id="imgPrev" >
+						</div>
+						<div class="content">
+							<textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
+						</div>
+						<div class="meta">
+						</div>
+					</div>
+				</div>
+				<div class="ui fluid two buttons">
+					<div class="addpic button">
+						<input type ="file" id="picInput"  onchange="readURL(this);" multiple>选择图片
+					</div>	
+					<div class="ui black button" id="submitBtn"  >确定上传</div>
+				</div>
+				<div class="ui successful progress" id="uploadProgress" style="display:none">
+					<div class="bar"></div>
+				</div>
+ 			</div>
+ 				
+ 			<div class="ui form uploadForm" id="complete" style="display:none">
+ 				<div class="ui success message">
+<!--  					<i class="ui small cloud upload icon"></i> -->
+ 					<div class="content">
+	 					<div class="header"></div>
+	 					<p></p>
+ 					</div>
+ 				</div>
+ 				<div class="ui fluid two buttons">
+	 				<div class="ui white button" onclick="resetUpload()")>继续上传</div>
+	 				<div class="ui black button">完成</div>
+ 				</div>
+ 			</div>
+ 				
+			<div class="ui form uploadForm" id="rechoosePeople" style="display:none"> <!-- 重名选人 -->
+				<div class="ui two column vertically divided grid">
+					<div class="row">
+					<div class="middle aligned column">
+					    <div>
+					    	<img id='peoplePrev' class="ui medium image" src="img/profile_test/247144.jpg">
+				    	</div>
+				    </div>
+				    </div>
+					<div class="row">
+					<div class="middle aligned column">
+						<div class="ui attached message" id="rechooseMessage"></div>
+						<div class="ui selection list" id="rechooselist"></div>
+						<div class="ui red bottom attached message segment"  id="rechooseError" style="display:none">请选择要发给的对象</div>
+					</div>
+					</div>
+				</div>
+				<div class="ui divider"></div>
+				<div class="ui fluid two buttons">
+					<div class="ui red button" id="nextstep2_for_new_quote">以上都不是</div>
+					<div class="ui black button" id="nextstep2" >下一步</div>
+				</div>
+			</div>
+	</div>	
+
+	<div class="ui dimmer page hidden">
+	 	<div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
+		    <div class="header">退出 Truthbook</div>
+	    	<div class="content">
+		    	<div class="left"><i class="home icon"></i></div>
+	      		<div class="right"><p>确定一定以及肯定要下线并且   <b>注销登录</b>   了吗?</p></div>
+	   		</div>
+	    	<div class="actions">
+	      		<div class="two fluid ui buttons">
+	        		<div class="ui negative fade animated left labeled icon button ">
+	          			<i class="remove icon"></i>
+	          			<div class="visible content">取消</div>
+	          			<div class="hidden content">对不起，是我点错了</div>
+	        		</div>
+	        		<div class="ui positive fade animated right labeled icon button">
+	        			<div class="visible content">退出</div>
+	          			<div class="hidden content">谁都别拦着我</div>
+	          			<i class="checkmark icon"></i>
+	        		</div>
+	      		</div>
+	    	</div>
+	    </div>
+		
+	 	<div class="ui basic modal deleteFriend transition hidden" id="testModal" style="margin-top: -159px;">
+		    <div class="header" id="modalHeader"></div>
+	    	<div class="content">
+	    		<div class="left"style="width: 40%"><i class="home icon" id = "modalLogo"></i></div>
+				<div class="right"><p id="modalContent"></p></div>
+	   		</div>
+	    	<div class="actions">
+	    		<div class="ui two fluid buttons">
+				  <div class="ui negative vertical animated left labeled icon button">
+	          			<i class="remove icon"></i>
+	          			<div class="visible content" id="modalNegativeBtn">取消</div>
+	          			<div class="hidden content" id="modalNegativeBtnHidden"></div>				  
+				  </div>
+<!-- 				  <div class="or"></div> -->
+				  <div class="ui positive vertical animated right labeled icon button">
+	        			<div class="visible content" id="modalPositiveBtn">确定</div>
+	          			<div class="hidden content" id="modalPositiveBtnHidden"></div>				  
+				  		<i class="checkmark icon"></i>
+				  </div>
+				</div>
+	    	</div>
+	    </div>
+	</div>
+
+    <div class="ui item dimmable">
+		<div class="ui page dimmer message hidden">
+		    <div class="content">
+		        <div class="center">  	
+		            <h1 class="ui inverted icon header">
+		                <i class="icon circular inverted emphasized green checked checkbox"></i>
+		                朕知道了
+		                <div class="sub header"  id="alertMessage"></div>
+		            </h1>
+		        </div>
+		    </div>
+		</div>
+		
+		<div class="ui page dimmer dummyDimmerForExtention hidden">
+		    <div class="content">
+		        <div class="center">  	
+		            <h1 class="ui inverted icon header">
+		                <i class="icon circular inverted emphasized green checked checkbox"></i>
+		                朕知道了
+		                <div class="sub header" id="dummyDimmerForExtention"></div>
+		            </h1>
+		        </div>
+		    </div>
+		</div>
+	</div>
+
+	
+	<div class="timelineContainer">
+		<div class="timelineWrapper">
+
+		</div>
+		<div class="timelineItem timelineLast">
+			<div class="timelineSider"></div>
+			<div class="timelineCenter">
+				<div class="ui basic fluid button" id="loadMoreButton">加载更多</div>		
+			</div>
+		</div>
+	</div>
+	
+	<iframe frameborder=0 marginwidth=0 marginheight=0 scrolling=no width=100% src="./footer.html"></iframe>
+	
+	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<script src="./assets/jquery/jquery.cookie.js"></script>
+	<script src="./assets/semantic/javascript/semantic.js"></script>
+	<script src="./assets/masonry.pkgd.min.js"></script>
+	<script src="./assets/imagesloaded.pkgd.min.js"></script>
+	<script src="./assets/magnific-popup/magnific-popup.js"></script>
+	<script src="./js/general/globalValue.js"></script>
+	<script src="./js/general/language_zh_cn.js"></script>
+	<script src="./js/general/utility.js"></script>
+
+	<script src="./assets/jquery/jquery.iframe-transport.js"></script>
+	<script src="./assets/jquery/jquery.ui.widget.js"></script>
+	<script src="./assets/jquery/jquery.fileupload.js"></script>
+<!-- <script src="./assets/jquery/jquery.fileupload-image.js"></script> -->
+
+	<script src="./js/profilePage/uploadPic.js"></script>
+	<script src="./js/profilePage/refreshFriendsLists.js"></script>
+<!-- <script src="./js/uploadpopup.js"></script> -->
+<!-- <script src="./js/sidebar_toggle.js"></script> -->
+	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	
+	<script src="./js/friendRelationButtonHandler.js"></script>
+	<script src="./js/userAndPageInfo.js"></script>
+	<script src="./js/general/searchBar.js"></script>
+	<script src="./js/imageComment/commentLayout.js"></script>
+	<script src="./js/timelinePage/timelineButtonFunction.js"></script>
+	<script src="./js/timelinePage/timelineButtonController.js"></script>
+	<script src="./js/timelinePage/timelineLayout.js"></script>
+	<script src="./js/timelinePage/timelineUtil.js"></script>
+	
+	<script type="text/javascript">
+	$(function() {
+		handleLogoutPopUp();
+		testFunction_Cookie();
+		addFriendButtonCheck();
+	});
+	
+
+	</script>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+			//semantic dropdown intialization
+		$('.ui.dropdown')
+ 				.dropdown(
+ 					{on: 'click'
+ 					}
+ 				);
+ 		$('.ui.accordion')
+		  .accordion()
+		;	
+	});
+	
+
+	</script>
+
+	<script>
+	$(function(){
+		$(".open_popup_link").magnificPopup({
+			type:"inline",
+			midClick: true,
+			callbacks: {
+				afterClose: function() {
+					resetUpload();
+// 					selected_num=-1;
+				}
+			}
+		});
+	});
+	</script>
+
+	<script>
+	$(function() {
+		$("#upload_for_fri_btn").dropdown( {
+			on: "hover"
+		});
+	});
+	</script>
+</body>
+</html>

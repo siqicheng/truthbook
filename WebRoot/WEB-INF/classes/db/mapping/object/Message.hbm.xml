@@ -39,5 +39,9 @@
             <column name="read_time"  />
         </property>
         
+        <many-to-one name="image" class="db.mapping.object.Image" lazy="false" fetch="select">
+            <column name="image_id" />
+        </many-to-one>
+        
     </class>
 </hibernate-mapping>

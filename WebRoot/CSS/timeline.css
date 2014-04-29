@@ -1,0 +1,221 @@
+.timelineContainer {
+	width:1000px;
+	margin:0 auto;
+	padding-top:36px;
+	padding-bottom: 50px;
+	min-height:800px;
+}
+
+.timelineItem {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.timelineCenter {
+	background: #e0e1e2 url(../img/noisebg-2.png);
+	-webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.05),inset -1px 0 0 rgba(0,0,0,.05);
+	-moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.05),inset -1px 0 0 rgba(0,0,0,.05);
+	box-shadow: inset 1px 0 0 rgba(0,0,0,.05),inset -1px 0 0 rgba(0,0,0,.05);
+	border: 1px solid rgba(0,0,0,.1);
+	border-width: 0 1px;
+}
+
+.timelineCenter {
+	width: 512px;
+	margin-left: 228px;
+	margin-right:0;
+	/* margin: 0 auto; */
+	padding: 16px 32px;
+}
+
+ .timelineFirst .timelineSider,
+.timelineFirst .timelineCenter {
+	padding-top: 32px;
+}
+
+.timelineLast .timelineCenter {
+	-webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.05),inset -1px 0 0 rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.05);
+	-moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.05),inset -1px 0 0 rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.05);
+	box-shadow: inset 1px 0 0 rgba(0,0,0,.05),inset -1px 0 0 rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.05);
+	padding-bottom: 32px;
+	border-width: 0 1px 0px;
+	-webkit-border-radius: 0 0 3px 3px;
+	border-radius: 0 0 3px 3px;
+}
+
+.ui.items .item {
+	width: 512px;
+	padding: 0;
+	margin-left: 0px; margin-right: 0px;
+	cursor: auto;
+}
+.ui.items .item:hover{
+	cursor: auto;
+}
+
+.timelineSider {
+	float: left;
+	width: 228px;
+	padding: 16px 0;
+}
+
+.timelineBookmark {
+	font-weight: 700;
+	text-shadow: 0 1px 0 rgba(255,255,255,.8);
+	line-height: 16px;
+	margin-right: 24px;
+	padding-top: 4px;
+	position: relative;
+}
+.timelineBookmark a,
+.timelineBookmark a:visited {
+	color:#4C7A9F;
+}
+
+.timelineBookmark .timelineBookmarkAvatar {
+	position: absolute;
+	right: 0;
+	top: 0;
+	cursor:pointer;
+}
+
+.timelineBookmark .timelineBookmarkAvatar .avatar.image {
+	width:40px;height:40px;
+}
+
+.timelineBookmarkInfo {
+	padding:0 60px 0 0;
+}
+
+.timelineBookmarkInfoUsername,
+.timelineBookmarkInfoTimestamp {
+	display: block;
+	text-align: right;
+}
+
+.timelineBookmarkInfoUsername {
+	cursor:pointer;
+}
+
+.timelineBookmarkInfoTimestamp {
+	color:#999;
+	font-size:12px;
+}
+
+/* timelinecenter item description area */
+/**/
+/**/
+.timelineCenter .ui.items .item .discript.content{
+	padding:18px 15px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	border: 0px 0px 1px solid #e6e6e6;
+	border-width: 1 0px;
+}
+.timelineCenter .item .discript.content .description {
+	word-break:break-all;
+	margin-bottom: 10px;
+}
+.timelineCenter .item .discript.content .meta .uploaderName {
+	display:block;
+	font-size:14px;
+	margin-bottom:4px;
+}
+
+/* timelinecenter item comment area */
+/**/
+/**/
+.timelineCenter .item .ui.minimal.comments {
+/* 	padding-top: 10px; */
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap {
+	width:100%;
+	max-height:450px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment {
+	padding:0px 15px;
+ 	display:none;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment.newcomment,
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment.loadAllComments {
+	display:block;
+	margin-top:7px;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment.loadAllComments .content .text {
+	color:#999999;
+	font-size: 13px;
+	font-weight: bolder;
+	cursor: pointer;
+	padding-top: 8px;
+	width:120px;
+}
+
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .avatar {
+	padding-top: 6px;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .avatar img {
+	width:35px;
+	height:35px;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .content {
+	margin-left: 40px;
+	padding:2px 0 0 5px;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .content .author {
+	font-weight:bold;
+	color:#4C7A9F;
+	font-size:12px;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .content .metadata {
+	margin-left: 4px;
+	font-size:12px;	
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .content .text {
+	margin-bottom: 0px;
+	margin-top: 0px;
+	font-size: 14px;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .content .actions {
+	font-size:12px;
+}
+.timelineCenter .item .ui.minimal.comments .commentwrap .comment .content .date {
+	font-size:12px;
+	padding-top: 2px;
+	float:right;
+	text-align:right;
+	color:#999999;
+}
+.timelineCenter .item .ui.reply.form {
+	padding:0px 7px;
+	width: 97%;
+	margin:10px 0px;
+}
+.timelineCenter .item .ui.reply.form textarea {
+	resize:none;
+	min-height:35px;
+	overflow:hidden;
+	height: auto;
+}
+
+/* timelineCenter item image area */
+
+.timelineCenter .item .image .imgbtnArea {
+	position:absolute;
+	left:15px;
+	top:15px;
+	z-index:9;
+ 	display:none; 
+}
+
+.timelineCenter .item .image .imgbtnArea .likebtn .heart.icon{
+	margin:0px;
+}
+
+.timelineCenter .item .image img {
+	border-top-left-radius: 0.33em;
+	border-top-right-radius: 0.33em;
+	cursor:zoom-in;
+}

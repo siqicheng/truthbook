@@ -11,7 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import restful.gateway.RestUtil;
-
+import uploader.Uploader;
 import db.mapping.object.Image;
 import db.mapping.object.ImageDAO;
 import db.mapping.object.User;
@@ -23,6 +23,8 @@ import fileupload.imageUtil;
 public class FileMeta {
 	
 	private static final String location = "Uploaded";
+	private static final String bucket = "truthbookwinkar.qiniudn.com";
+
 
 	private String fileName;
 	private String fileSize;
@@ -120,10 +122,9 @@ public class FileMeta {
 			Image image = new Image();
 			image.setContent(this.description);
 			image.setApproved(false);
-//			image.setContent("");
 			image.setCreateDate(RestUtil.getCurrentDate());
 			image.setDeleted(false);
-			image.setImageUrl(this.location+'/'+fileName);
+			image.setImageUrl(this.bucket+'/'+fileName);
 			image.setLastModified(RestUtil.getCurrentDate());
 			image.setUploaderId(userId);
 			User receiver = new UserDAO().findById(receiverId);
@@ -160,10 +161,18 @@ public class FileMeta {
 			}
 			
 			os.close();
-			String fullPath =RealPath+ File.separator+this.getFileName();
-			imageUtil.resizeSmall(fullPath);
-			imageUtil.resizeMedium(fullPath);
-			imageUtil.resizeLarge(fullPath);
+			
+			String fullPath =RealPath+ File.separator +this.getFileName();
+			
+			Uploader uploader = new Uploader();
+			uploader.upload(fileName, fullPath);
+			
+			File file = new File(fullPath);
+			file.delete();
+			
+//			imageUtil.resizeSmall(fullPath);
+//			imageUtil.resizeMedium(fullPath);
+//			imageUtil.resizeLarge(fullPath);
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();

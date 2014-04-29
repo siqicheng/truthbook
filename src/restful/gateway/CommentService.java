@@ -10,8 +10,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.*;
 
@@ -42,7 +45,7 @@ public class CommentService {
 
 	@POST
 	@Path("v1/comment/add/full")
-	@Produces("application/json;charset=utf-8")	
+	@Produces("application/json")	
 	public Object addFullComment(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
@@ -77,7 +80,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/comment/add/simple")
-	@Produces("application/json;charset=utf-8")	
+	@Produces("application/json")	
 	public Object addSimpleComment(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content) {
@@ -108,7 +111,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/comment/add/replyTo")
-	@Produces("application/json;charset=utf-8")	
+	@Produces("application/json")	
 	public Object addCommentWithReplyTo(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
@@ -141,7 +144,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/comment/add/replyBy")
-	@Produces("application/json;charset=utf-8")	
+	@Produces("application/json")	
 	public Object addCommentWithReplyBy(
 			@FormParam("userId") Integer userId,
 			@FormParam("content") String content,
@@ -174,7 +177,7 @@ public class CommentService {
 	
 	@DELETE
 	@Path("v1/comment/{commentId}/delete")
-	@Produces("application/json;charset=utf-8")	
+	@Produces("application/json")	
 	public Object deleteComment(@PathParam("commentId") Integer commentId) {
 		
 		session = this.commentDAO.getSession();
@@ -197,7 +200,7 @@ public class CommentService {
 	
 	@GET
 	@Path("v1/comment/{commentId}")
-	@Produces("application/json;charset=utf-8")	
+	@Produces("application/json")	
 	public Comment getComment(@PathParam("commentId") Integer commentId) {
 		this.comment = this.commentDAO.findById(commentId);
 		return this.comment;
@@ -205,7 +208,7 @@ public class CommentService {
 	
 	@GET
 	@Path("v1/comment/{userId}/user")
-	@Produces("application/json;charset=utf-8")	
+	@Produces("application/json")	
 	public Comment[] getCommentByUser(@PathParam("userId") Integer userId) {
 		Comment comment[] = null;
 		this.user = this.userDAO.findById(userId);
@@ -223,7 +226,7 @@ public class CommentService {
 	
 	@POST
 	@Path("v1/imageComment/add")
-	@Produces("application/json;charset=utf-8")
+	@Produces("application/json")
 	public Object addImageComment(@FormParam("imageId") Integer imageId,@FormParam("commentId") Integer commentId){
 		
 		this.image = this.imageDAO.findById(imageId);
@@ -248,7 +251,7 @@ public class CommentService {
 	
 	@DELETE
 	@Path("v1/imageComment/{imageId}/{commentId}/delete")
-	@Produces("application/json;charset=utf-8")
+	@Produces("application/json")
 	public Object deleteImageComment(@PathParam("imageId") Integer imageId,@PathParam("commentId") Integer commentId){
 		
 		this.image = this.imageDAO.findById(imageId);
@@ -282,7 +285,7 @@ public class CommentService {
 	
 	@GET
 	@Path("v1/imageComment/{imageId}")
-	@Produces("application/json;charset=utf-8")
+	@Produces("application/json")
 	public ImageComment[] getImageComment(@PathParam("imageId") Integer imageId){
 		ImageComment[] imageComment = null;
 		this.image = this.imageDAO.findById(imageId);
@@ -296,5 +299,37 @@ public class CommentService {
 		}
 		return imageComment;
 	}
-
+	
+	@GET
+	@Path("v1/imageComment/{imageId}/{commentNumber}")
+	@Produces("application/json")
+	public ImageComment[] getLatestImageComment(@PathParam("imageId") Integer imageId,
+			@PathParam("commentNumber") Integer commentNumber){
+		ImageComment[] imageComment = null;
+		this.image = this.imageDAO.findById(imageId);
+		
+//		List imageComments = this.imageCommentDAO.findByProperty(ImageComment.IMAGE, this.image);
+//		if(imageComments.size()>0){
+//			imageComment = new ImageComment[imageComments.size()];
+//			for (int i=0; i<imageComments.size();i++){
+//				imageComment[i] = (ImageComment) imageComments.get(i);
+//			}
+//		}
+		Session session = this.imageDAO.getSession();
+		Criteria criteria = session.createCriteria(ImageComment.class);
+		criteria.addOrder(Order.desc(ImageComment.ID))
+				.add(Restrictions.eq("image",image))
+				.setMaxResults(commentNumber);
+		
+		List<ImageComment> icl = criteria.list();
+		
+		imageComment = new ImageComment[icl.size()];
+		
+		for (int i=0; i<icl.size(); i++){
+			imageComment[i] = icl.get(i);
+		}
+		
+		return imageComment;
+	}
+	
 }
