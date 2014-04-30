@@ -1,6 +1,8 @@
-package db.mapping.object;
+package db.mapping.object.DAO;
 
 import db.mapping.baseDAO.BaseHibernateDAO;
+import db.mapping.object.ImageComment;
+
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -24,6 +26,15 @@ public class ImageCommentDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(ImageCommentDAO.class);
 
+	// Table Name
+	
+	public static final String TABLE = "ImageComment";
+	
+	// DB Mapping info
+	
+	public static final String ID = "id";
+	public static final String IMAGE = "image";
+	public static final String COMMENT = "comment";
 	// property constants
 
 	public void save(ImageComment transientInstance) {

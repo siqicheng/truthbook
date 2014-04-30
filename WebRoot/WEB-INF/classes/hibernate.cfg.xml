@@ -24,15 +24,15 @@
 		</property>
 		<property name="show_sql">true</property>
 		<!-- 		<property name="hibernate.current_session_context_class">thread</property> -->
-		<mapping resource="db/mapping/object/User.hbm.xml" />
-		<mapping resource="db/mapping/object/UserPassword.hbm.xml" />
-		<mapping resource="db/mapping/object/Relationship.hbm.xml" />
-		<mapping resource="db/mapping/object/Message.hbm.xml" />
-		<mapping resource="db/mapping/object/Comment.hbm.xml" />
-		<mapping resource="db/mapping/object/Portrait.hbm.xml" />
-		<mapping resource="db/mapping/object/ImageComment.hbm.xml" />
-		<mapping resource="db/mapping/object/Image.hbm.xml" />
-		<mapping resource="db/mapping/object/UserFetch.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/User.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/UserPassword.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/Relationship.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/Message.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/Comment.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/Portrait.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/ImageComment.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/Image.hbm.xml" />
+		<mapping resource="db/mapping/object/hbm/UserFetch.hbm.xml" />
 	</session-factory>
 
 

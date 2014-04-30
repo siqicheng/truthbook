@@ -8,18 +8,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlRootElement
 public class Portrait implements java.io.Serializable {
-	
-	// Table Name
-	
-	public static final String TABLE = "Portrait";
-	
-	// DB Mapping info
-	
-	public static final String ID = "id";
-	public static final String IMAGE_ID = "image";
-	public static final String USER_ID = "user";
-	public static final String DEFAULT_IMAGE = "defaultImage";
-	
 	// Fields
 
 	private Integer id;

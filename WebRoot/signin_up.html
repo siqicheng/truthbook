@@ -125,14 +125,29 @@
 	</div>
     </div>
     
+   <div class="ui item dimmable">
+		<div class="ui page dimmer message hidden">
+		    <div class="content">
+		        <div class="center">  	
+		            <h1 class="ui inverted icon header">
+		                <i class="icon circular inverted emphasized green checked checkbox"></i>
+		                暂未开放直接注册
+		                <div class="sub header"  id="alertMessage"></div>
+		            </h1>
+		        </div>
+		    </div>
+		</div>
+	</div>
+    
+    
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>	
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./js/general/utility.js"></script>
 	<script src="./js/general/globalValue.js"></script>	
 	<script src="./js/signin_up/form_toggle.js"></script>	
-	<script src="./js/signin_up/register.js"></script>	
-	
+	<script src="./js/signin_up/register.js"></script>
+	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	
 	<script>
 		$(function() {
 			if($.cookie("truthbook") != undefined) {

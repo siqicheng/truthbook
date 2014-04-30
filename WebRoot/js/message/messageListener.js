@@ -55,11 +55,11 @@ function multiMessageHandler(message){
 
 function insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content){
 	var messageType = findMessageTypeByTypeName(messageTypeName);
-	if ($("#"+messageType+"HeaderMenu").html() == undefined){
+	if ($("#"+messageTypeName+"HeaderMenu").html() == undefined){
 		//no this type message exists
 		enableHeaderMenu(1,messageType);
 	}else{
-		modifyHeaderMenuNumber(num,messageTypeName);
+		modifyHeaderMenuNumber(1,messageTypeName);
 	}
 	var iconName = pickIconName(messageType.typeName);
 	$("#"+messageTypeName+"MessageContent").append(thisMessageContentHTML(sourceId,messageId,imageId,sourceName,iconName,messageType));

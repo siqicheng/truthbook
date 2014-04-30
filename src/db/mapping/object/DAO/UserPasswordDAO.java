@@ -1,6 +1,9 @@
-package db.mapping.object;
+package db.mapping.object.DAO;
 
 import db.mapping.baseDAO.BaseHibernateDAO;
+import db.mapping.object.UserPassword;
+import db.mapping.object.UserPasswordId;
+
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;

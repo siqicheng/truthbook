@@ -1,4 +1,4 @@
-package uploader;
+package fileupload;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;
 import com.qiniu.api.io.IoApi;
@@ -22,13 +22,14 @@ public class Uploader {
 			}
 		}
 		
-		public void upload(String key, String localFile){
+		public String upload(String key, String localFile){
 			try{
 				PutExtra extra = new PutExtra();
 				PutRet ret = IoApi.putFile(uptoken, key, localFile, extra);
-				System.out.println(ret.response);
+				return ret.response;
 			} catch (Exception e){
 				e.printStackTrace();
+				return null;
 			}
 	        
 		}	

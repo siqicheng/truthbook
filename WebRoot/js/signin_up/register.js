@@ -249,7 +249,8 @@ $('.ui.form.register-form')
 				} else {
 					console.log("no quote found");
 //					register_new($('.ui.form.register-form').serialize());
-					alert('暂未开放注册，敬请期待');
+					drawConfirmPopUp("快去找个用户为你创建个词条吧");
+//					alert('暂未开放注册，敬请期待');
 				};
 			};
 			var onAjaxError = function(xhr,status,error){
