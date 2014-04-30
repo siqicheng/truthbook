@@ -9,7 +9,7 @@ $(function() {
 		};
 		globalTimeout = setTimeout(function() {
 		    globalTimeout = null;  
-			if( ((event.which>47) && (event.which<106)) || (event.which == 13) || (event.which == 8) || (event.which == 32) ) {
+			if( ((event.which>47) && (event.which<106)) || (event.which == 13) || (event.which == 8) || (event.which == 32) || (event.which == 229) ) {
 				searchUsers();
 			};
 			if( event.which == 40 ){
