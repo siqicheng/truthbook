@@ -347,7 +347,7 @@ $(function() {
 							if(uploadCandidates[selected_num].isActivated == "false") {
 								portrait = DefaultQuotePortrait;
 							} else {
-								portrati = DefaultPortrait;
+								portrait = DefaultPortrait;
 							}
 							$("#peoplePrev").attr('src', portrait);
 						}
