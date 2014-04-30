@@ -273,7 +273,7 @@ $(function() {
 			console.log("choose people form data : " + data);
 	//		Verify user quote: (fullName,school,entryTime) exist
 			var onSuccess = function(data,textStatus) {
-				console.log("Varify people exists : " + data);
+				console.log("Verify people exists : " + data);
 				var len =userLengthJson(data);
 				if(len >= 1) {
 					console.log("find one or more candidates");
@@ -363,7 +363,7 @@ $(function() {
 				};
 			};
 			var onError = function(xhr,status,error){
-				console.log("Varify receiver failed with error:" + error);
+				console.log("Verify receiver failed with error:" + error);
 				return false;
 			};
 			verifyUserExists(data, onSuccess, onError);
