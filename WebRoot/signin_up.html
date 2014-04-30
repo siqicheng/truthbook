@@ -7,15 +7,22 @@
    	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
    	<!-- location CSS -->
    	<link href="./CSS/position.css" rel="stylesheet">
+   	<link href="./CSS/signin_up.css" rel="stylesheet">
    	<link rel="shortcut icon" href="img/logo_red.ico" /> 
 	<link rel="stylesheet" href="CSS/general.css" type="text/css"></link>
 	</head>
 
 <body class="body_bg">
-	<div class="absolute-center" style="width:380px; height:400px">
-		<img src="img/Truthbook_capital.png" width="380" >
+
+	<div class="absolute-center" id='centerarea'>
+		<img src="img/Truthbook_capital.png">
 		<!-- login form -->
-		<form class="ui form login-form" style="width:300px; margin-left: 40px;">	    		
+		<div id='topAlertBar'>
+			<div class="ui red  message">
+  				<p></p>
+			</div>
+		</div>
+		<form class="ui form login-form" >	    		
 			<!--email field-->
   			<div class="field">
     			<div class="ui left labeled icon input">
@@ -36,7 +43,7 @@
 		</form>
 
 		<!-- register form, display none in default -->
-		<form class="ui form register-form" style="width:300px; margin-left: 40px; display: none;">	                
+		<form class="ui form register-form">               
                 <!-- fullName field -->
                 <div class="field" id="fullNameTest">
                     <div class="ui left labeled icon input">
@@ -102,7 +109,7 @@
 	</div>
 	
 	<div class="ui dimmer page">
-	<div class="ui test modal transition hidden white-popup" id="rechooseform">				<!-- 重名选人 -->
+	<div class="ui test modal hidden white-popup" id="rechooseform">				<!-- 重名选人 -->
 		<form class="ui form" id="rechooseform"> 
 			<h3 class="ui header">发现重名</h3>
 			<div class="ui two column divided grid">
@@ -138,13 +145,16 @@
 		    </div>
 		</div>
 	</div>
+	
+	
     
     
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>	
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./js/general/utility.js"></script>
-	<script src="./js/general/globalValue.js"></script>	
+	<script src="./js/general/globalValue.js"></script>
+	<script src="./js/general/language_zh_cn.js"></script>
 	<script src="./js/signin_up/form_toggle.js"></script>	
 	<script src="./js/signin_up/register.js"></script>
 	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	

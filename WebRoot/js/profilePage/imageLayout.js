@@ -137,6 +137,7 @@ function approvedImageData(data,numTotalImage){
 			approvedImageData.push(data[i]);
 		} else {
 			unapprovImageData.push(data[i]);
+			console.log('unapprove')
 		}
 	}
 	return [approvedImageData,unapprovImageData];

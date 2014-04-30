@@ -1,0 +1,23 @@
+#centerarea {
+	height:320px;
+	width:380px;
+}
+#centerarea img {
+	width: 380px;
+}
+#centerarea form {
+	width:300px; margin-left: 40px;
+}
+#centerarea .register-form {
+	display:none;
+}
+
+#topAlertBar {
+	display: none;
+}
+
+#topAlertBar .message {
+	width: 300px;
+	margin:0 auto;
+	margin-bottom:20px;
+}

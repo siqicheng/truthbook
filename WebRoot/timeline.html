@@ -43,10 +43,10 @@
 			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
 			
 		</div>			      
-		<a class="active green item" onclick = "goHomePage();">
+		<a class="green item" onclick = "goHomePage();">
 			<i class="home  large icon"></i>
 		</a>
-		<a class="blue item" id="gotimelineBtn" onclick="goTimeLine();">
+		<a class="active blue item" id="gotimelineBtn" onclick="goTimeLine();">
 	    	<i class="grid layout large icon"></i>
 		</a>
 <!-- 		<a class="orange item"> -->
@@ -93,41 +93,40 @@
    			
    		<div class="ui divider"></div>
    			
-		<form class="ui form uploadForm" id="choosePeople" onSubmit="return validateUploadFormOne()">
+		<form class="ui form uploadForm" id="choosePeople">
 			<div class="field" id="fullNameTest">
             	<label>姓名</label>
                 <div class="ui left labeled icon input">
-                	<input tabindex="1" type="text" id="fullName" placeholder="姓名" name="fullName" >
+                	<input type="text" id="fullName" placeholder="姓名" name="fullName" >
                 	<i class="user icon"></i>
                 </div>
        		</div>
 			<div class="field" id="schoolTest">
 				<label>学校</label>
                 <div class="ui left labeled icon input">
-                	<input tabindex="2" type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
+                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
                   	<i class="book icon"></i>
                	</div>
       		</div>
 			<div class="field" id="entryTimeTest">
 				<label>入学年份</label>
            		<div class="ui left labeled icon input">
-  					<input tabindex="3" type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
+  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
 					<i class="align justify icon"></i>
         		</div>
      		</div>
             <div class="ui error message"></div>
-			<input tabindex="4" class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
+			<input class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
 <!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
 		</form>
  				
  			<div class="ui form uploadForm" id="choosePic" style="display:none">
 				<div class="ui items">
 					<div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;">
-						<div class="ui image">
-							<img id="imgPrev" >
+						<div id="imgPrev">
 						</div>
 						<div class="content">
-							<textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
+							<textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（最多200字）"></textarea>
 						</div>
 						<div class="meta">
 						</div>
@@ -135,7 +134,7 @@
 				</div>
 				<div class="ui fluid two buttons">
 					<div class="addpic button">
-						<input type ="file" id="picInput"  onchange="readURL(this);" multiple>选择图片
+						<input type ="file" id="picInput"  multiple>选择图片
 					</div>	
 					<div class="ui black button" id="submitBtn"  >确定上传</div>
 				</div>
@@ -280,6 +279,10 @@
 	<script src="./js/general/globalValue.js"></script>
 	<script src="./js/general/language_zh_cn.js"></script>
 	<script src="./js/general/utility.js"></script>
+	
+	<script src="js/load-image/load-image.min.js"></script>
+	<script src="js/load-image/load-image-orientation.js"></script>
+	<script src="js/load-image/load-image-exif.js"></script>
 
 	<script src="./assets/jquery/jquery.iframe-transport.js"></script>
 	<script src="./assets/jquery/jquery.ui.widget.js"></script>
