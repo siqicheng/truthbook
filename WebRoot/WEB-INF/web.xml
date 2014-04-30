@@ -26,6 +26,24 @@
   </servlet-mapping>
   
   <servlet>
+  	<servlet-name>imageUploadServlet</servlet-name>
+  	<servlet-class>imageUpload.imageUploadServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>imageUploadServlet</servlet-name>
+  	<url-pattern>/servlet/imageUpload</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>ProgressServlet</servlet-name>
+  	<servlet-class>imageUpload.ProgressServlet</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ProgressServlet</servlet-name>
+  	<url-pattern>/servlet/Progress</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
   	<servlet-name>upload</servlet-name>            
   	<servlet-class>fileupload.FileUploadServlet</servlet-class>
   </servlet>

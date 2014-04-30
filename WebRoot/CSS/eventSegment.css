@@ -1,6 +1,27 @@
+#newPhotoBar,
+#newPhotoReturnBar {
+	width:1000px;
+	margin:0 auto;
+	text-align:center;
+	color:#D95C5C;
+	/* padding:8px 0; */
+}
+
+#neweventwrap {
+	background-color:#C4C2C4;
+	margin-bottom: 10px;
+	border-bottom-right-radius: 8px; border-bottom-left-radius: 8px;
+	display:none;
+	width:1000px;
+	margin:0 auto;
+	margin-bottom:20px;
+}
+
+
 #eventsegment {
 	margin:0 auto;
 	width: 1018px;
+	margin-top:16px;
 }
 
 #eventsegment .eventpile {

@@ -8,7 +8,17 @@
  *	Generate an object for AJAX call
  */
 function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete,cache){
+	try{
+		var token = $.cookie("truthbook").token;
+		if(token==undefined||token==null) token="";
+	}
+	catch(err){
+		
+	}
 	var ajax_obj = new Object();
+	ajax_obj.beforeSend = function(request){
+		request.setRequestHeader("token",token);
+	};
 	ajax_obj.url = url;
 	ajax_obj.type = type;
 	ajax_obj.dataType = dataType;
@@ -24,6 +34,7 @@ function getAjaxObj(url,type,dataType,onAjaxSuccess,onAjaxError,onAjaxComplete,c
  */		
 function ajax_call(ajax_obj){
 	$.ajax({
+		beforeSend:ajax_obj.beforeSend,
 		async: ajax_obj.async,
 		url: ajax_obj.url,
 		type: ajax_obj.type,
@@ -58,41 +69,39 @@ function Redirect (url) {
 function cleanUserInfoCookie(){
 	$.cookie("truthbook", null,{expires: -1});
 	$.cookie("truthbook_PageOwner_userId",null,{expires: -1});
-}
-
-function cleanFriendsCookie() {
-	$.cookie("eFriends", null,{expires: -1});
-	$.cookie("nFriends", null, {expires: -1});
+	$.cookie("truthbook_Page_Image_Pointer",null,{expires: -1});
+	$.cookie("truthbook_Timeline_Item_Pointer",null,{expires: -1});
 }
 
 function setUserInfoCookie(data){
 	$.cookie("truthbook", data);
 }
 
-function goHomePage(){
+function goTimeLine(){
 	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
-	window.location.href = HomePage;
+	Redirect(TimeLinePage);
 }
 
-function goZhangSan(){
-	$.cookie("truthbook_PageOwner_userId","42203:张三");
-	window.location.href = HomePage; 
+function goHomePage(){
+	$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
+	Redirect(HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId);
 }
 
 function goOthersPage(id){
-	var onAjaxSuccess = function(data,textStatus){
-		if(data == false){
-			drawConfirmPopUp("获取用户失败");
-		} else {
-			$.cookie("truthbook_PageOwner_userId", data);
-			window.location.href = HomePage;
-		}
-	};
-	var onAjaxError = function(xhr,status,error){
-		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
-		return false;
-	};
-	getUserAPI(id, onAjaxSuccess, onAjaxError);
+//	var onAjaxSuccess = function(data,textStatus){
+//		if(data == false){
+//			drawConfirmPopUp("获取用户失败");
+//		} else {
+//			$.cookie("truthbook_PageOwner_userId", data);
+//			window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
+	Redirect(HomePage+"?id="+id);
+//		}
+//	};
+//	var onAjaxError = function(xhr,status,error){
+//		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+//		return false;
+//	};
+//	getUserAPI(id, onAjaxSuccess, onAjaxError, true);
 }
 
 function goLogin(){
@@ -148,9 +157,20 @@ function getRelationship(friendId) {
 }
 
 function getImageUrl(url,style){
-	return url.substring(0,url.lastIndexOf("/")+1)+style+url.substring(url.lastIndexOf("/")+1);
+	if (url==undefined||url==null){
+		return DefaultPortrait;
+	}else{
+		return "http://"+url+style;
+	}
 }
 
+function returnSmaller(one,two){
+	if (one > two){
+		return  two;
+	} else {
+		return  one;
+	}
+}
 
 
 /*Api helper functions*/
@@ -218,10 +238,11 @@ function getFriendsSync(id, type, onSuccess, onError) {
 	ajax_call(ajax_obj);
 }
 
-function getUserAPI(id, onSuccess, onError) {
+function getUserAPI(id, onSuccess, onError, async) {
 	var path = "v1/" + id,
 		url = ServerRoot + ServiceType.LOGIN + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onSuccess, onError);
+	ajax_obj.async = async;
 	ajax_call(ajax_obj);
 }
 /*********************************************************************************
@@ -247,6 +268,30 @@ function markReadMessageAPI(messageId,onAjaxSuccess, onAjaxError){
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
 	ajax_call(ajax_obj);	
 }
+
+function sendMessageWithImageIdAPI(receiver, sender, imageId, messageTypeName, onAjaxSuccess, onAjaxError){
+	var path = "v1/message/"+receiver+"/" + sender + "/" + messageTypeName +"/"+imageId+ "/send",
+		url=ServerRoot+ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url,"PUT","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
+
+function sendMessageWithContentAPI(receiver, sender,imageId, content,messageTypeName, onAjaxSuccess, onAjaxError){
+	var path = "v1/message/imageContent/send",
+		url = ServerRoot + ServiceType.NOTIFICATION +path,
+		data ="id="+receiver+"&srcid=" + sender + "&type=" + messageTypeName + "&content=" + content + "&imageId=" + imageId,
+		ajax_obj = getAjaxObj(url, "POST", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.data = data;
+	ajax_call(ajax_obj);
+}
+
+function getUpdateMessageAPI(receiver,onAjaxSuccess, onAjaxError){
+	var path = "v1/message/"+receiver+"/getunsent",
+		url=ServerRoot+ServiceType.NOTIFICATION + path,
+		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
+
 
 /*********************************************************************************
  * Image Service API
@@ -393,14 +438,29 @@ function deleteCommentByCommentIdAPI(imageId,commentId,onAjaxSuccess,onAjaxError
 	ajax_call(ajax_obj);
 }
 
+/*********************************************************************************
+ * Timeline Service API
+ */
+function getAllTimelineByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/feed/"+ userId + "/all",
+		url = ServerRoot + ServiceType.TIMELINE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
+function getNewTimelineByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/feed/"+ userId,
+		url = ServerRoot + ServiceType.TIMELINE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);
+}
 
-
-
-
-
-
-
+function getPartOfCommentAPI(imageId,commentNumber,onAjaxSuccess,onAjaxError){
+	var path = "v1/imageComment/"+imageId+"/"+commentNumber,
+		url = ServerRoot + ServiceType.COMMENT +path,
+		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
+	ajax_call(ajax_obj);
+}
 
 
 

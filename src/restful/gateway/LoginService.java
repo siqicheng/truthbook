@@ -407,7 +407,8 @@ public class LoginService {
 			this.user.setSchool(school);
 			entryTime = AntySamyFilter.getCleanHtml(entryTime);
 			this.user.setEntryTime(entryTime);
-			
+			this.user.setIsActivated(false);
+			this.user.setToken(RestUtil.generateToken(fullName));
 			userDAO.save(this.user);
 			tx.commit();
 			return this.user;

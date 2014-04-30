@@ -6,7 +6,7 @@ import org.owasp.validator.html.*;
 
 public class AntySamyFilter {
 
-	private static final String POLICY_FILE_LOCATION = "./antisamy-slashdot-1.4.4.xml";
+	private static final String POLICY_FILE_LOCATION = "antisamy-slashdot-1.4.4.xml";
 	private static Policy policy;
 	
 	AntySamyFilter(){

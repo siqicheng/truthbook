@@ -6,6 +6,7 @@
 
    	<link href="./assets/semantic/css/semantic.css" rel="stylesheet">
    	<link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
+   	<link href="./CSS/general.css" rel="stylesheet">
    	<link href="./CSS/position.css" rel="stylesheet">
    	<link href="./CSS/addpicBtn.css" rel="stylesheet">
    	<link href="./CSS/uploadPic.css" rel="stylesheet">
@@ -15,15 +16,15 @@
    	<link href="./CSS/profileSegment.css" rel="stylesheet">
     <link href="./CSS/notification.css" rel="stylesheet">
   	<link rel="shortcut icon" href="img/logo_red.ico"/>
-   	
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
 
 </head>
 
-<body style="background-color:#DEDCDE;margin:0px;" id = "body">
-	<div class="ui fixed transparent main small menu" id="topbar" >
+<body id = "body">
+	<div class='profile-wrapper'>
+	<div class="ui fixed transparent main small menu" id="topbar"  style="height:37px">
 		<div class="left  menu">
 	
 			<div class="ui dropdown item" id="upload_menu">
@@ -51,33 +52,33 @@
 			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
 			
 		</div>			      
-		<a class="active green item">
+		<a class="active green item" onclick = "goHomePage();">
 			<i class="home  large icon"></i>
 		</a>
-		<a class="blue item">
+		<a class="blue item" id="gotimelineBtn" onclick="goTimeLine();">
 	    	<i class="grid layout large icon"></i>
 		</a>
-		<a class="orange item">
-	    	<i class="setting large icon"></i>
-		</a>
+<!-- 		<a class="orange item"> -->
+<!-- 	    	<i class="setting large icon"></i> -->
+<!-- 		</a> -->
 		<div class="empty item"></div>
-		<a class="open_popup_link item" href="#upload" style="display:none">上传照片（PopUp）</a>
-		<div class="title" onclick = "goHomePage();">
+		<a class="open_popup_link item" id='popup' href="#upload" style="display:none">上传照片（PopUp）</a>
+		<div class="title" onclick = "goHomePage();" style="display:inline;">
 	        <img src="img/Truthbook_red.png" width="140px" >
-	    </div>	
+	    </div>
 		
-		<div class="right menu">
+		<div class="right menu" style="display:inline;">
 				<form class="ui form item" autocomplete="off" onsubmit="return false" style="padding-top: 0px;padding-left: 0px;padding-bottom: 0px;">
      				<div class="ui dropdown" id="searchbar">
      					<div class="ui small input icon">
-		       				<input type="text" id = "searchFullName" onkeyup="searchUsers()" placeholder="Search..." >
-		       				<i class="search link icon" onclick = "searchUsers();"></i>
+		       				<input  tabindex="1" type="text" id = "searchInput" placeholder="Search..." >
+		       				<i class="search link icon"></i>
 		       			</div>
 <!-- 		       			<div class="ui fluid list menu"> -->
-<!-- 		       				<div class="item"> -->
+<!-- 		       				<div class="item" tabindex="2"> -->
 		       				
 <!-- 		       				</div> -->
-<!-- 		       				<div class="item"> -->
+<!-- 		       				<div class="item" tabindex="3"> -->
 		       				
 <!-- 		       				</div> -->
 <!-- 		       			</div> -->
@@ -104,41 +105,40 @@
    			
    		<div class="ui divider"></div>
    			
-		<form class="ui form uploadForm" id="choosePeople" onSubmit="return validateUploadFormOne()">
+		<form class="ui form uploadForm" id="choosePeople">
 			<div class="field" id="fullNameTest">
             	<label>姓名</label>
                 <div class="ui left labeled icon input">
-                	<input tabindex="1" type="text" id="fullName" placeholder="姓名" name="fullName" >
+                	<input type="text" id="fullName" placeholder="姓名" name="fullName" >
                 	<i class="user icon"></i>
                 </div>
        		</div>
 			<div class="field" id="schoolTest">
 				<label>学校</label>
                 <div class="ui left labeled icon input">
-                	<input tabindex="2" type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
+                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
                   	<i class="book icon"></i>
                	</div>
       		</div>
 			<div class="field" id="entryTimeTest">
 				<label>入学年份</label>
            		<div class="ui left labeled icon input">
-  					<input tabindex="3" type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
+  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
 					<i class="align justify icon"></i>
         		</div>
      		</div>
             <div class="ui error message"></div>
-			<input tabindex="4" class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
+			<input class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
 <!-- 			<div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
 		</form>
  				
  			<div class="ui form uploadForm" id="choosePic" style="display:none">
 				<div class="ui items">
 					<div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;">
-						<div class="ui image">
-							<img id="imgPrev" >
+						<div id="imgPrev">
 						</div>
 						<div class="content">
-							<textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（可选）"></textarea>
+							<textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（最多200字）"></textarea>
 						</div>
 						<div class="meta">
 						</div>
@@ -146,7 +146,7 @@
 				</div>
 				<div class="ui fluid two buttons">
 					<div class="addpic button">
-						<input type ="file" id="picInput"  onchange="readURL(this);" multiple>选择图片
+						<input type ="file" id="picInput"  multiple>选择图片
 					</div>	
 					<div class="ui black button" id="submitBtn"  >确定上传</div>
 				</div>
@@ -193,24 +193,24 @@
 				</div>
 			</div>
 	</div>
+	
 	<div id="profile-segment">
-		<div class="ui stacked raised segment" style="height:310px;">
-			<div class="ui three wide column grid">
-				  <div class="column" >
-<!-- 					  <div class="ui segment" style="height:180px;"> -->
-<!-- 					    	<p id="testCookie1" style="text-align:center"></p> -->
-<!-- 					  </div> -->
-
-					  					    	
-						<div class="ui item" align="center" style="height:220px;">
-							<div class="ui icon header" id = "headicon">
-							<img class="rounded ui image icon" src="" id="portraitImage" style="width:110px; height: 110px;cursor:pointer;">
-							  <div class=" header" id = "user_name"></div>
-							  <div class="sub header" id = "user_school"></div>
-							  <div class="sub header" id = "user_entryTime"></div>
+		<div class="ui raised segment" style="height:190px;padding:0px;">
+			<div class="ui column grid" style="margin-left: 0px;margin-right: 0px;">
+				  <div class="column" style='margin-top: 0px;margin-bottom: 0px;width: 210px;padding-left: 0px;padding-right: 0px;' >			  					    	
+						<div class="ui item" style="height:190px;border-radius: 5px;border-bottom-right-radius: 0px;border-top-right-radius: 0px;padding-left: 0px;width: 210px;background-color:#5A5F64;">
+							<div class="ui icon header" id = "headicon" style='margin-top: 20px;'>
+							<a class='image' id='portraitLarge' href="">
+								<img class="rounded ui image icon" src="" id="portraitImage" style="width:110px; height: 110px;cursor:pointer;margin-bottom: 0px;margin-left: 50px;margin-right: 50px;">
+							</a> 
+							  <div class=" header" id = "user_name" style="font-size:20px;color:#EDEEEF;padding-top: 8px;padding-bottom: 6px;"></div>
+							  <div class="sub header userInfo" style="font-size:12px;color:#C4C2C4;"><i class="map marker icon" id='userSchoolIcon' style="font-size:14px;display:inline;"></i>
+								  <span id = 'user_school' ></span>&ensp;
+								  <span id = 'user_entryTime' ></span>
+							  </div>
 							</div>
 						</div>
-						<div class="ui item" align="center">
+						<div class="ui item" id='coverControlBtn' style="display:none;position:absolute; bottom:0;left:0;margin-bottom: 10px;margin-left: 220px;">
 							<div class="ui buttons" align="center">
 							    <button class="ui green vertical animated button transition hidden" id="addFriendButton"
 							    style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
@@ -232,26 +232,35 @@
 						           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div>
 						           <div class="hidden content">变路人</div>
 						       	</button>
-								<button class="ui teal vertical animated button transition hidden" id="newPhotoButton"
-					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
-					        		<div class="hidden content"><i class="briefcase icon"></i><span id="numOfUnapprovedImage"></span></div>
-					        		<div class="visible content">待通过照片</div>
-					   			 </button>
-					   			 <button class="ui orange vertical animated button transition hidden" id="approvedPhotoButton"
-					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;"> 
-					        		<div class="visible content">&ensp;&ensp;<i class="home icon"></i>&ensp;&ensp;</div>
-					        		<div class="hidden content">回到主页</div>
-					   			 </button>
+						       	
+<!-- 						       	<button class="ui black vertical animated button transition hidden" id="disabeFriendButton" -->
+<!-- 						       	style="margin-left: 5px;margin-right: 5px;border-radius: 4px;">  -->
+<!-- 						           <div class="visible content">&ensp;<i class="trash icon"></i>&ensp;</div> -->
+<!-- 						           <div class="hidden content">变路人</div> -->
+<!-- 						       	</button> -->
+						       	
+<!-- 								<button class="ui teal vertical animated button transition hidden" id="newPhotoButton" -->
+<!-- 					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;">  -->
+<!-- 					        		<div class="hidden content"><i class="briefcase icon"></i><span id="numOfUnapprovedImage"></span></div> -->
+<!-- 					        		<div class="visible content">待通过照片</div> -->
+<!-- 					   			 </button> -->
+<!-- 					   			 <button class="ui orange vertical animated button transition hidden" id="approvedPhotoButton" -->
+<!-- 					    			style="margin-left: 5px;margin-right: 5px;border-radius: 4px;">  -->
+<!-- 					        		<div class="visible content">&ensp;&ensp;<i class="home icon"></i>&ensp;&ensp;</div> -->
+<!-- 					        		<div class="hidden content">回到主页</div> -->
+<!-- 					   			 </button> -->
 							</div>
 						</div>
 				  </div>
-				  <div class="column">
-					  <div class="ui segment">
-					    	<span id="testCookie"></span>
-					  </div>
-				  </div>
-				  <div class="column">
-
+<!-- 				  <div class="column"> -->
+<!-- 					  <div class="ui segment"> -->
+<!-- 					    	<span id="testCookie"></span> -->
+<!-- 					  </div> -->
+<!-- 				  </div> -->
+				<div class="column" style="padding-left: 0px;padding-right: 0px;margin-bottom: 0px;margin-top: 0px;">
+					<div class="ui item" style="height:190px;border-radius: 5px;border-bottom-left-radius: 0px;border-top-left-radius: 0px;padding-left: 0px;width: 790px;background-color:#C4C2C4;">
+					
+					</div>
 				  </div>
 			</div>
 
@@ -266,7 +275,7 @@
 					<div class="ui dropdown fluid item" >
 						<i class="star small icon"></i> 极·友
 						<div class="ui small label" id="eFriends_num">0</div>
-						<div class="ui list menu eFriendsList goto_fri_page" id="eFriendsList">	
+						<div class="ui fluid list menu eFriendsList goto_fri_page" id="eFriendsList">	
      					</div>
    					</div>
 				</div>
@@ -276,7 +285,7 @@
 					<div class="ui dropdown fluid item">
 						<i class="half empty star small icon"></i> 真·友
 						<div class="ui small label" id="nFriends_num" style="float:right">0</div>
-						<div class="list menu nFriendsList goto_fri_page" id="nFriendsList">
+						<div class="ui fluid list menu nFriendsList goto_fri_page" id="nFriendsList">
 							
    						</div>
    					</div>
@@ -299,24 +308,30 @@
 				<div class="ui red inverted fluid menu"> 						
 					<div class="ui dropdown fluid item" id="notifiBtn">
 						<i class="mail small icon"></i> 消息通知
-						<div class="floating ui circular green label" id="unreadMessageNum" style="display:none">00</div>
+						<div class="floating ui circular green label transition hidden" id="unreadMessageNum" style="display:none;">00</div>
 						<div class="ui divided list vertical menu message" >
-							<div id="inviteToUpload_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-							<div id="friendRequest_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-							<div id="acceptFriendRequest_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-							<div id="takeQuote_MessageMenu"  style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-							<div id="rejectImage_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-							<div id="acceptImage_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-							<div id="reply_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-							<div id="upgrade_MessageMenu" style="-webkit-box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
-														
+							<div id="upgrade_MessageMenu" style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="reply_MessageMenu" style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="rejectImage_MessageMenu" style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="acceptImage_MessageMenu" style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="inviteToUpload_MessageMenu" style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="friendRequest_MessageMenu"  style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="acceptFriendRequest_MessageMenu"  style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+							<div id="takeQuote_MessageMenu"  style="-webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);"></div>
+													
    						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="" id="neweventwrap" style="background-color:#C4C2C4;margin-bottom: 10px;border-radius:8px;display:none;width:1020px;margin:0 auto;margin-bottom:20px;">
+	<div class="ui raised segment " id='newPhotoBar' style="display:none;cursor:pointer;">
+		<p>有<span id="numOfUnapprovedImage"></span>位好友为您上传了照片</p>
+	</div>
+	<div class="ui raised segment " id='newPhotoReturnBar' style="display:none;cursor:pointer;">
+		关闭审核区
+	</div>
+	<div class="" id="neweventwrap">
 		<div class="ui small center aligned header" style="padding-top:10px;">待审核区
 		</div>
 		<div class="" id="neweventsegment" >
@@ -326,8 +341,10 @@
 	
 	<div class="" id="eventsegment"></div>
 	
-
 	<div class="itemloadBtn" id = "showMoreButton"><div class="ui basic fluid icon button"><i class="double angle down large icon"></i></div></div>
+	
+	
+	</div>
 	
 	<div class="ui dimmer page hidden">
 	 	<div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
@@ -401,24 +418,35 @@
 		    </div>
 		</div>
 	</div>
+	
+	<iframe frameborder=0 marginwidth=0 marginheight=0 scrolling=no width=100% src="./footer.html"></iframe>	
+	
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>
 	<script src="./assets/jquery/jquery.cookie.js"></script>
+	<script src="./assets/jquery/jquery.animate-colors-min.js"></script>
+	
 	<script src="./assets/semantic/javascript/semantic.js"></script>
 	<script src="./assets/masonry.pkgd.min.js"></script>
 	<script src="./assets/imagesloaded.pkgd.min.js"></script>
 	<script src="./assets/magnific-popup/magnific-popup.js"></script>
 	<script src="./js/general/globalValue.js"></script>
+	<script src="./js/general/language_zh_cn.js"></script>
 	<script src="./js/general/utility.js"></script>
+	
+	<script src="js/load-image/load-image.min.js"></script>
+	<script src="js/load-image/load-image-orientation.js"></script>
+	<script src="js/load-image/load-image-exif.js"></script>
 	
 	<script src="./assets/jquery/jquery.iframe-transport.js"></script>
 	<script src="./assets/jquery/jquery.ui.widget.js"></script>
 	<script src="./assets/jquery/jquery.fileupload.js"></script>
 <!-- 	<script src="./assets/jquery/jquery.fileupload-image.js"></script> -->
 	
-	<script src="./js/uploadPic.js"></script>
-	<script src="./js/refreshFriendsLists.js"></script>
+	<script src="./js/profilePage/getPageOwner.js"></script>
+	<script src="./js/profilePage/uploadPic.js"></script>
+	<script src="./js/profilePage/refreshFriendsLists.js"></script>
 <!-- 	<script src="./js/uploadpopup.js"></script> -->
-	<script src="./js/sidebar_toggle.js"></script>
+<!-- 	<script src="./js/sidebar_toggle.js"></script> -->
 	
 	
 	<script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>	
@@ -426,14 +454,15 @@
 	<script src="./js/userAndPageInfo.js"></script>
 	<script src="./js/general/searchBar.js"></script>
 	<script src="./js/message/messageBarButtonClick.js"></script>
-	<script src="./js/message/messageBarController.js"></script>	
-	<script src="./js/eventsegment_layout.js"></script>
+	<script src="./js/message/messageBarController.js"></script>
+	<script src="./js/message/messageListener.js"></script>		
 	<script src="./js/profilePage/portraitHandler.js"></script>
 	<script src="./js/profilePage/showMoreButton.js"></script>
 	<script src="./js/profilePage/imageLayout.js"></script>
 	<script src="./js/profilePage/imageLayoutUtil.js"></script>
 	<script src="./js/profilePage/imageButtonController.js"></script>
 	<script src="./js/profilePage/imageButtonFunction.js"></script>
+	<script src="./js/profilePage/acceptNewImage.js"></script>
 	<script src="./js/imageComment/commentLayout.js"></script>
 	<script src="./js/notification.js"></script>
 
@@ -443,7 +472,34 @@
 		handleLogoutPopUp();
 		testFunction_Cookie();
 		addFriendButtonCheck();
+	
+	$("#profile-segment").hover(
+		function(){
+			$("#user_name").animate({color:"#FFFFFE"},400);
+			
+			$("#userSchoolIcon").animate({color:"#EDEEEF"},400);
+			$("#user_school").animate({color:"#EDEEEF"},400);
+			$("#user_entryTime").animate({color:"#EDEEEF"},400);
+		
+		},
+		function(){	
+			$("#user_name").animate({color:"#EDEEEF"},400);
+			
+			$("#userSchoolIcon").animate({color:"#C4C2C4"},400);
+			$("#user_school").animate({color:"#C4C2C4"},400);
+			$("#user_entryTime").animate({color:"#C4C2C4"},400);
+		}
+	);
+	
+// 		var int=self.setInterval("startrequest()",1000); 
 	});
+		
+	
+	function startrequest() { 
+		var daytime = new Date();
+		$("#date").html(daytime.toString()); 
+	} 
+
 
 
 	</script>
@@ -468,6 +524,7 @@
 		$(".open_popup_link").magnificPopup({
 			type:"inline",
 			midClick: true,
+			closeOnBgClick: false,
 			callbacks: {
 				afterClose: function() {
 					resetUpload();
@@ -475,6 +532,7 @@
 				}
 			}
 		});
+// 		$(".open_popup_link").trigger('click');
 	});
 	
 	</script>

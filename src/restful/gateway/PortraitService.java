@@ -221,24 +221,26 @@ public class PortraitService {
 		
 	@POST
 	@Path("v1/portrait/set")
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Object setDefaultPortrait(@FormParam("userId") Integer userId,
 			@FormParam("imageId") Integer imageId,
 			@HeaderParam("token") String token){
+		this.refinePortrait(userId, imageId);	
 		Session session = this.portraitDAO.getSession();
 		try{
 			User user = this.userDAO.findById(userId);
 			if (!user.getToken().equals(token)){
 				return RestUtil.string2json("false");
 			}
-			this.refinePortrait(userId, imageId);		
+				
 			Transaction tx = session.beginTransaction();			
-			this.user.setDefaultPortrait(this.image.getImageUrl());
+			user.setDefaultPortrait(this.image.getImageUrl());
 			this.portrait.setUser(user);
 			this.portrait.setImage(image);
 			this.portrait.setDefaultImage(true);
+			session.update(user);
 			session.saveOrUpdate(this.portrait);	
-			session.update(this.user);
+			
 			tx.commit();
 			session.close();
 			return RestUtil.string2json("true");

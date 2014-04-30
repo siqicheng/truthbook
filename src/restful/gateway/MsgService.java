@@ -227,7 +227,7 @@ public class MsgService {
 			@HeaderParam("token") String token) {
 		try{
 			User user = this.userDAO.findById(id);
-			if (!user.getToken().equals(token)){
+			if (user == null || !user.getToken().equals(token)){
 				return null;
 			}
 			List<Message> Messages= this.getCriteria()

@@ -1,7 +1,13 @@
 
+function modifiedImageNum(num){
+	numImage = Number($("#photos_num").html()) + num;
+	$("#photos_num").html(numImage);
+}
+
 
 function prepareElement(data,isAppend,Control,Comment){
-	var url = data.imageUrl;
+	var url = data.imageUrl,
+		userId = data.userId,
 		description = data.description,
 		uploaderName =  data.uploaderName,
 		uploaderId = data.uploaderId,
@@ -16,7 +22,7 @@ function prepareElement(data,isAppend,Control,Comment){
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
 	var html = thisImageHTML(url,description,descriptionDisplay,uploaderName,
-			uploaderId,createDate,numOfComment,display,imageId,numLike);
+			uploaderId,createDate,numOfComment,display,imageId,numLike,userId);
 	if (isAppend == true){
 		$("#eventsegment").append(html);
 	}else{
@@ -38,12 +44,13 @@ function prepareUnapprovedElement(data,isAppend){
 	var url = data.imageUrl;
 		description = data.description,
 		createDate = data.createDate,
+		uploaderId = data.uploaderId,
 		imageId = data.imageId,
 		descriptionDisplay = "";
 		
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
-	var html = thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId);
+	var html = thisUnapprovedImageHTML(url,description,descriptionDisplay,createDate,imageId,uploaderId);
 	if (isAppend == true){
 		$("#neweventsegment").append(html);
 	}else{
@@ -63,19 +70,18 @@ function prepareUnapprovedElement(data,isAppend){
 
 function handleNewImageButton(){
 	showNewImageButton(numUnapprovImage);
-	$("#newPhotoButton").click(function(){
+	$("#newPhotoBar").click(function(){
 		hideNewImageButton();
 		showReturnHomeButton();
 		$("#neweventwrap").slideToggle("slow",function(){
-		});	
-		drawUnapproveImage(numUnapprovImage,unapprovImage);
+			});	
+		drawUnapproveImage(numUnapprovImage,unapprovImage);	
 		
 	});
-	$("#approvedPhotoButton").click(function(){
+	$("#newPhotoReturnBar").click(function(){
 		hideReturnHomeButton();
 		showNewImageButton(numUnapprovImage);
-		$("#neweventwrap").slideToggle("slow");
-		
+		$("#neweventwrap").slideToggle("slow");		
 		$("#neweventsegment").masonry( 'destroy');
 		$("#neweventsegment").html("");
 	});
@@ -86,26 +92,30 @@ function handleNewImageButton(){
 
 
 function showNewImageButton(numUnapprovImage){
-	$("#newPhotoButton").removeClass(" hidden");
-	$("#newPhotoButton").addClass(" visible");
+	$("#newPhotoBar").show();
+//	$("#newPhotoButton").removeClass(" hidden");
+//	$("#newPhotoButton").addClass(" visible");
 	$("#numOfUnapprovedImage").html(numUnapprovImage);
-	addFriendTransition("#newPhotoButton");
+//	addFriendTransition("#newPhotoButton");
 }
 
 function hideNewImageButton(){
-	$("#newPhotoButton").removeClass(" visible ");
-	$("#newPhotoButton").addClass(" hidden ");
+//	$("#newPhotoButton").removeClass(" visible ");
+//	$("#newPhotoButton").addClass(" hidden ");
+	$("#newPhotoBar").hide();
 }
 
 function showReturnHomeButton(){
-	$("#approvedPhotoButton").removeClass(" hidden");
-	$("#approvedPhotoButton").addClass(" visible");
-	addFriendTransition("#approvedPhotoButton");	
+//	$("#approvedPhotoButton").removeClass(" hidden");
+//	$("#approvedPhotoButton").addClass(" visible");
+//	addFriendTransition("#approvedPhotoButton");
+	$("#newPhotoReturnBar").show();
 }
 
 function hideReturnHomeButton(){
-	$("#approvedPhotoButton").removeClass(" visible ");
-	$("#approvedPhotoButton").addClass(" hidden ");
+//	$("#approvedPhotoButton").removeClass(" visible ");
+//	$("#approvedPhotoButton").addClass(" hidden ");
+	$("#newPhotoReturnBar").hide();
 }
 
 
@@ -136,6 +146,17 @@ function itemInitialize(id){
 	
 	addGallery(id);
 }
+function newitemInitialize(id){
+	$(id).masonry({		
+		itemSelector: '.eventpile',
+		gutter: 0});
+
+	$(id).imagesLoaded( function() {
+		$(id).masonry();
+	});
+	
+	addGallery(id);
+}
 
 function addGallery(id){
 	$(id).find(".eventpile .item .image").magnificPopup({
@@ -145,7 +166,8 @@ function addGallery(id){
 		},
 		type: 'image',
 		image: {
-			verticalFit: true
+			titleSrc: 'title',
+			verticalFit: false
 		},
 		zoom:{
 			enabled: true,
@@ -196,11 +218,4 @@ function dateHandle(createDate){
 	}
 }
 
-function returnSmaller(one,two){
-	if (one > two){
-		return  two;
-	} else {
-		return  one;
-	}
-}
 

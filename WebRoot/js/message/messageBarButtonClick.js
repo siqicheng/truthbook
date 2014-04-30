@@ -46,9 +46,8 @@ function goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,t
 		if(data == false){
 			drawConfirmPopUp("获取用户失败");
 		} else {
-			deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
 			$.cookie("truthbook_PageOwner_userId", data);
-			window.location.href = HomePage;
+			deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
@@ -58,10 +57,89 @@ function goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,t
 	getUserAPI(thisUserId, onAjaxSuccess, onAjaxError);
 }
 
-function goToThatImage(thisUserId,thisMessageId,messageTypeNumber,thisItem){
+function recurFindTheImageAndFlip(imageId,level){
+	if(level == 10) {
+		$.cookie("truthbook_thisImageId", null,{expires: -1});
+		return;
+	}
+	if($("#imageId"+imageId).html()==undefined){
+		showNextBatchImage(NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE);
+		itemInitialize("#eventsegment");
+		recurFindTheImageAndFlip(imageId,level+1);
+		return;
+	}else{
+		if(level == 1){
+			$("#imageId"+imageId).find(".commentwrap").html("");
+			getThisComment_All(imageId,CONTROL.Self);
+//			flipImageByImageId(imageId);
+		}
+	}
+	return;
+}
+
+
+function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem,imageOwnId){
+	var userId = imageOwnId;
+	if(userId == $.cookie("truthbook").userId){
+		//不跳转，完成背后图片载入即可
+		$.cookie("truthbook_thisImageId",thisImageId);
+//		deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+		recurFindTheImageAndFlip(thisImageId,1);
+		
+	}else{
+		var onSuccess = function(data,textStatus){
+			if(data != null ){
+				$.cookie("truthbook_PageOwner_userId", data);
+				$.cookie("truthbook_thisImageId",thisImageId);
+				deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+			} else {
+				drawConfirmPopUp("获取用户失败");
+			}
+		};
+		var onError = function(xhr,status,error){
+			drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+			return false;
+		};
+		getUserAPI(userId, onSuccess, onError);
+	}
+}
+
+function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
+	var userId = thisUserId;
+	var onSuccess = function(data,textStatus){
+		if(data != null ){
+			$.cookie("truthbook_PageOwner_userId", data);
+			$.cookie("truthbook_thisImageId",thisImageId);
+			deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+//					window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
+		} else {
+			drawConfirmPopUp("获取用户失败");
+		}
+	};
+	var onError = function(xhr,status,error){
+		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+		return false;
+	};
 	
-	
-//	deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+	getUserAPI(userId, onSuccess, onError);
+}
+
+
+function deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem){
+	var onAjaxSuccess = function(data, textStatus) {
+		if (data == true){
+			deleteMessageTrasition(messageTypeNumber,thisItem);
+			window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
+		}else{
+			drawConfirmPopUp("标记信息已读失败");
+		}
+	};
+	var onAjaxError = function(xhr, textStatus, error) {
+		drawConfirmPopUp("标记信息已读请求发送失败 Error: " + error);			
+	};
+
+	markReadMessageAPI(thisMessageId,onAjaxSuccess, onAjaxError);	
 }
 
 
@@ -88,16 +166,19 @@ function deleteMessageTrasition(messageTypeNumber,thisItem){
 		duration  : '0.3s',
 		complete  : function() {
 			thisItem.hide();
-	}
+			thisItem.html("");
+			deleteHeadMessageNumUpdate(thisItem);
+		}
 	});
-	deleteHeadMessageNumUpdate(thisItem);
+	
 }
 
 function deleteHeadMessageNumUpdate(thisItem){
-	var newNumOfMessage = Number(thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html()) - 1;
+	var newNumOfMessage = Number(thisItem.parent().parent().find(".messageNumber").html()) - 1;
 	if (newNumOfMessage <= 0){
-		thisItem.parent().parent().children(".header.item").hide();
+		thisItem.parent().parent().find(".item").html("");
+		thisItem.parent().parent().children(".item").hide();
 	} else {
-		thisItem.parent().parent().children(".header.item").children(".pickTheNumber").children(".messageNumber.head").html(newNumOfMessage);
+		thisItem.parent().parent().find(".messageNumber").html(newNumOfMessage);
 	}
 }

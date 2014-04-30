@@ -176,15 +176,7 @@ function setPortraitStart(thisElem){
 					.parent().parent().parent().find(".imageId_span").html(),
 		userId = thisElem.parent().parent().parent()
 					.parent().parent().parent().find(".userId_span").html();
-	
-//	var onAjaxSuccess = function(data, textStatus) {
-//		setPortraitAPI(userId,imageId,onSetAjaxSuccess,onSetAjaxError);
-//	};
-//	var onAjaxError = function(xhr, textStatus, error) {
-//		drawConfirmPopUp("添加头像请求发送失败 Error: "+error);
-//	};
-	
-	
+
 	var onSetAjaxSuccess = function(data, textStatus) {
 		if (data == false){
 			drawConfirmPopUp("设置头像失败");
@@ -198,9 +190,6 @@ function setPortraitStart(thisElem){
 	};
 	
 	setPortraitAPI(userId,imageId,onSetAjaxSuccess,onSetAjaxError);
-	
-//	addPortraitAPI(userId,imageId,onAjaxSuccess,onAjaxError);
-	
 }
 
 function confirmSetPortrait(thisElem){
@@ -358,9 +347,7 @@ function submitComment(imageId){
 			content = thisText.val(),
 			repliedToId	= thisReplyForm.children(".replyToId").html(),
 			repliedById = $.cookie("truthbook").userId;
-		
-//		submitCommentStart(data,imageId,thisText,thisReplyForm);
-	
+
 		var onAjaxSuccess = function(data, textStatus) {
 			if (data != null){
 				var commentId = data;
@@ -415,11 +402,9 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	var	replyDisplay = "none",
 		deleteDisplay = "inline";
 	
-	if(repliedByProtrait==undefined){
-		repliedByProtrait = DefaultPortrait;
-	}else{
-		repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
-	}
+	
+	repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
+
 	
 	$("#imageId"+imageId).find(".commentwrap").append(thisCommentHTML(commentId,commentContent,
 			repliedByCommentId,repliedByName,repliedByProtrait,
@@ -435,7 +420,9 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	changeTheTotalCommentNumber($("#imageId"+imageId).find(".numOfComment_inline"),1);
 	cleanTheTempVar(thisReplyForm);
 	moveDownScroll($("#imageId"+imageId).find(".commentwrap"));
-	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"));
+	var thisOwnerId = $("#imageId"+imageId).find(".userId_span").html();
+	var uploaderId = $("#imageId"+imageId).find(".uploaderId").html();
+	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId);
 }
 
 function resetTextarea(thisText){
@@ -462,16 +449,28 @@ function moveDownScroll(thisElem){
 	thisElem.scrollTop(thisElem[0].scrollHeight);
 }
 
-function sendMessageToAboveAll(thiscomment){
+function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 	var numReply = thiscomment.length;
 	var numMessageToSend = returnSmaller(numReply,MAX_MesssageToSend);
 	var end =thiscomment.length-1;
 	var selfId = $.cookie("truthbook").userId; 
 	var nameList = new Array();
+	
+	//send message to image owner & uploader
+	if(ownId != selfId)	{
+		sendMessageWithImageIdAPI(ownId,selfId,imageId, MessageType.REPLY.typeName);
+		nameList.push(ownId);
+	}
+
+	if(uploaderId != selfId){
+		sendMessageWithImageIdAPI(uploaderId,selfId,imageId, MessageType.REPLY.typeName);
+		nameList.push(uploaderId);
+	}
+	
 	for(var i=0;i<numMessageToSend;i++){
 		if(thiscomment[end-i].innerHTML==selfId || $.inArray(thiscomment[end-i].innerHTML, nameList)!=-1) continue;
 		//send message
-		sendMessageAPI(thiscomment[end-i].innerHTML, selfId, MessageType.REPLY.typeName);
+		sendMessageWithImageIdAPI(thiscomment[end-i].innerHTML, selfId,imageId, MessageType.REPLY.typeName);
 		nameList.push(thiscomment[end-i].innerHTML);
 	}
 	

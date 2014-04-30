@@ -165,9 +165,9 @@ public class CommentService {
 			@HeaderParam("token") String token){
 		ImageComment[] imageComment = null;
 		this.image = this.imageDAO.findById(imageId);
-		if (!this.image.getUser().getToken().equals(token)){
-			return null;
-		}
+//		if (!this.image.getUser().getToken().equals(token)){
+//			return null;
+//		}
 		List imageComments = this.imageCommentDAO.findByProperty(ImageCommentDAO.IMAGE, this.image);
 		if(imageComments.size()>0){
 			imageComment = new ImageComment[imageComments.size()];
@@ -187,9 +187,9 @@ public class CommentService {
 		
 		try{
 			this.image = this.imageDAO.findById(imageId);
-			if (!this.image.getUser().getToken().equals(token)){
-				return RestUtil.string2json("false");
-			}
+//			if (!this.image.getUser().getToken().equals(token)){
+//				return RestUtil.string2json("false");
+//			}
 			this.comment = this.commentDAO.findById(commentId);
 			
 			String property[] = {ImageCommentDAO.IMAGE,ImageCommentDAO.COMMENT};
@@ -228,9 +228,9 @@ public class CommentService {
 		try{
 			ImageComment[] imageComment = null;
 			this.image = this.imageDAO.findById(imageId);
-			if (!this.image.getUser().getToken().equals(token)){
-				return null;
-			}
+//			if (!this.image.getUser().getToken().equals(token)){
+//				return null;
+//			}
 			Session session = this.imageDAO.getSession();
 			Criteria criteria = session.createCriteria(ImageComment.class);
 			criteria.addOrder(Order.desc(ImageCommentDAO.ID))
