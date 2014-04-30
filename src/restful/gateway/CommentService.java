@@ -107,7 +107,7 @@ public class CommentService {
 				this.user = this.userDAO.findById(userId);
 				if(this.user != null){
 					this.comment.setUser(this.user);
-//					content = AntySamyFilter.getCleanHtml(content);
+					content = AntySamyFilter.getCleanHtml(content);
 					this.comment.setCommentContent(content);
 					this.comment.setRepliedByCommentId(repliedById);
 					this.comment.setCreateDate(RestUtil.getCurrentDate());

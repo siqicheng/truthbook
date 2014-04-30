@@ -55,9 +55,10 @@ function multiMessageHandler(message){
 
 function insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content){
 	var messageType = findMessageTypeByTypeName(messageTypeName);
-	if ($("#"+messageTypeName+"HeaderMenu").html() == undefined){
+	if ($("#"+messageTypeName+"HeaderMenu").html() == undefined||$("#"+messageTypeName+"HeaderMenu").html()==""){
 		//no this type message exists
 		enableHeaderMenu(1,messageType);
+		drawMessageContentWrapper(messageType);
 	}else{
 		modifyHeaderMenuNumber(1,messageTypeName);
 	}
