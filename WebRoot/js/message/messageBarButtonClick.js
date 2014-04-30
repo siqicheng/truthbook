@@ -81,11 +81,12 @@ function recurFindTheImageAndFlip(imageId,level){
 function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem,imageOwnId){
 	var userId = imageOwnId;
 	if(userId == $.cookie("truthbook").userId){
-		//强行跳转，完成背后图片载入即可
+		//不跳转，完成背后图片载入即可
 		$.cookie("truthbook_thisImageId",thisImageId);
 //		deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
-		recurFindTheImageAndFlip(thisImageId,1);
 		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+		recurFindTheImageAndFlip(thisImageId,1);
+		
 	}else{
 		var onSuccess = function(data,textStatus){
 			if(data != null ){
