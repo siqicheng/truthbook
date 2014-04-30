@@ -83,6 +83,8 @@ $(function() {
 			if(selected_num == -1) {
 				$("#checkinput").val("");
 				$("#checkinput").attr("placeholder", "请在以上的选项中选择一个");
+				$("#tipMessage").text("请选择");
+				$("#tipMessage").fadeIn(300);
 			} else if(selected_num == -2) {
 //				register_new($('.ui.form.register-form').serialize());
 				$("#checkinput").val("");
@@ -167,20 +169,20 @@ $('.ui.form.register-form')
 							console.log("Get uploader name failed with error: " + error);
 						};
 						getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
-						html = html + "<div class=\"ui item segment rechooseitem\">" +
-									"<a class=\"ui corner green label\" style=\"display:none\">" +
-									"<i class=\"checkmark small icon\"></i> </a>" +
-		 							"<img class=\"ui avatar image\" src=" + DefaultImg +">" + 
-		 							"<div class=\"content\">" +
-		  							"<div class=\"header\">" + uploadCandidates[i]["fullName"] + "</div>" + content +
+						html = html + "<div class='ui item segment rechooseitem'>" +
+									"<a class='ui corner green label' style='display:none'>" +
+									"<i class='checkmark small icon'></i> </a>" +
+		 							"<img class='ui avatar image' src=" + DefaultImg +">" + 
+		 							"<div class='content'>" +
+		  							"<div class='header'>" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
 					}
-					html = html + "<div class=\"ui item segment\"  id='newQuote'>" +
-					"<a class=\"ui corner green label\" style=\"display:none\">" +
-					"<i class=\"checkmark small icon\"></i> </a>" +
-						"<img class=\"ui avatar image\" src=" +  DefaultImg +">" + 
-						"<div class=\"content\">" +
-						"<div class=\"header\">继续注册</div>以上都不是？</div></div>";
+					html = html + "<div class='ui item segment'  id='newQuote'>" +
+					"<a class='ui corner green label' style='display:none'>" +
+					"<i class='checkmark small icon'></i> </a>" +
+						"<img class='ui avatar image' src=" +  DefaultImg +">" + 
+						"<div class='content'>" +
+						"<div class='header'>继续注册</div>以上都不是？</div></div>";
 					$("#rechoosemessage").html(rechoosemessage);
 					$("#rechooselist").html(html);
 					$(".ui.item.rechooseitem").click(function(){
@@ -201,8 +203,12 @@ $('.ui.form.register-form')
 						
 						if(uploadCandidates[selected_num].ans.length==2) {
 							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？（两个字）");
+							$("#tipMessage").text("请输入照片上传者的姓（两个字）完成注册：");
+							$("#tipMessage").fadeIn(300);
 						} else {
 							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？");
+							$("#tipMessage").text("请输入照片上传者的姓完成注册：");
+							$("#tipMessage").fadeIn(300);
 						};
 						$("#checkinput").val("");
 						$("#checkinput").removeAttr("disabled");
@@ -216,11 +222,13 @@ $('.ui.form.register-form')
 						$("#checkinput").val("");
 						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
 						$("#checkinput").attr("disabled", "true");
+						$("#tipMessage").fadeOut(300);
 						$("#imgPrev").attr("src", DefaultPortrait);//TODO： 新建词条专用图片
 					});
 					$("#rechooseform").submit(function() {
 						if(selected_num == -1) {
-							$("#rechooseerror").show();
+							$("#tipMessage").text("请选择");
+							$("#tipMessage").fadeIn(300);
 						} else if(selected_num == -2) {
 							register_new($('.ui.form.register-form').serialize());
 						} else {
@@ -235,6 +243,8 @@ $('.ui.form.register-form')
 						$("#imgPrev").attr("src", "img/Truthbook_red.png"); //TODO：改成选人专用图片
 						$("#checkinput").val("");
 						$("#checkinput").attr("placeholder", "请选择");
+						$("#checkinput").attr("disabled", "true");
+						$("#tipMessage").hide();
 					});
 				} else {
 					console.log("no quote found");

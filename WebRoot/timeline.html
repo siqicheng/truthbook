@@ -15,7 +15,7 @@
 </head>
 
 <body id="body">
-	<div class="ui fixed transparent main small menu" id="topbar" >
+	<div class="ui fixed transparent main small menu" id="topbar"  style="height:37px">
 		<div class="left  menu">
 	
 			<div class="ui dropdown item" id="upload_menu">
@@ -43,26 +43,36 @@
 			<a class="item" id="close_sidebar_btn" style="display:none"><i class="remove large icon"></i>关闭</a>
 			
 		</div>			      
-		<a class="green item" onclick = "goHomePage();">
+		<a class="active green item" onclick = "goHomePage();">
 			<i class="home  large icon"></i>
 		</a>
-		<a class="active blue item" id="gotimelineBtn" onclick="goTimeLine();">
+		<a class="blue item" id="gotimelineBtn" onclick="goTimeLine();">
 	    	<i class="grid layout large icon"></i>
 		</a>
 <!-- 		<a class="orange item"> -->
 <!-- 	    	<i class="setting large icon"></i> -->
 <!-- 		</a> -->
 		<div class="empty item"></div>
-		<a class="open_popup_link item" href="#upload" style="display:none">上传照片（PopUp）</a>
-		<div class="title" onclick = "goHomePage();">
+		<a class="open_popup_link item" id='popup' href="#upload" style="display:none">上传照片（PopUp）</a>
+		<div class="title" onclick = "goHomePage();" style="display:inline;">
 	        <img src="img/Truthbook_red.png" width="140px" >
-	    </div>	
+	    </div>
 		
-		<div class="right menu">
-				<form class="ui form item" onsubmit = "return searchUsers();">
-     				<div class="ui icon input">
-       				<input type="text" id = "searchFullName" placeholder="Search..." >
-       				<i class="search link icon" onclick = "searchUsers();"></i>
+		<div class="right menu" style="display:inline;">
+				<form class="ui form item" autocomplete="off" onsubmit="return false" style="padding-top: 0px;padding-left: 0px;padding-bottom: 0px;">
+     				<div class="ui dropdown" id="searchbar">
+     					<div class="ui small input icon">
+		       				<input  tabindex="1" type="text" id = "searchInput" placeholder="Search..." >
+		       				<i class="search link icon"></i>
+		       			</div>
+<!-- 		       			<div class="ui fluid list menu"> -->
+<!-- 		       				<div class="item" tabindex="2"> -->
+		       				
+<!-- 		       				</div> -->
+<!-- 		       				<div class="item" tabindex="3"> -->
+		       				
+<!-- 		       				</div> -->
+<!-- 		       			</div> -->
      				</div>
    				</form>
    				<a class = "item" id="exitButton"> 

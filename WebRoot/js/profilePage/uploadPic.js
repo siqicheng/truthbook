@@ -124,9 +124,19 @@ $(function() {
 					progress + "%"
 				);
 			},
+			start: function (e) {
+			    console.log('Uploads started');
+			},
+			stop: function (e) {
+			    console.log('Uploads finished');
+			},
 			submit: function(e, data) {
 				$("#choosePic .two.buttons").hide();
 				$("#uploadProgress").show();
+			},
+			fail: function(e, data) {
+				console.log(data.textStatus);
+				console.log(data.errorThrown);
 			},
 			disableImageMetaDataSave: true,
 			imageOrientation: true,
@@ -273,7 +283,7 @@ $(function() {
 			console.log("choose people form data : " + data);
 	//		Verify user quote: (fullName,school,entryTime) exist
 			var onSuccess = function(data,textStatus) {
-				console.log("Varify people exists : " + data);
+				console.log("Verify people exists : " + data);
 				var len =userLengthJson(data);
 				if(len >= 1) {
 					console.log("find one or more candidates");
@@ -347,7 +357,7 @@ $(function() {
 							if(uploadCandidates[selected_num].isActivated == "false") {
 								portrait = DefaultQuotePortrait;
 							} else {
-								portrati = DefaultPortrait;
+								portrait = DefaultPortrait;
 							}
 							$("#peoplePrev").attr('src', portrait);
 						}
@@ -363,7 +373,7 @@ $(function() {
 				};
 			};
 			var onError = function(xhr,status,error){
-				console.log("Varify receiver failed with error:" + error);
+				console.log("Verify receiver failed with error:" + error);
 				return false;
 			};
 			verifyUserExists(data, onSuccess, onError);
@@ -456,6 +466,7 @@ function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
+	$("#uploadProgress .bar").css("width", "0%");
 	$('#picDescription').val("");
 	$("#choosePic .two.buttons").show();
 	$("#uploadProgress").hide();
