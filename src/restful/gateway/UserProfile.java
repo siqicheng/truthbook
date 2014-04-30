@@ -177,9 +177,9 @@ public class UserProfile {
 		Session session = this.relationshipDAO.getSession();
 		try {
 			User user = this.userDAO.findById(id);
-			if (!user.getToken().equals(token)){
-				return RestUtil.string2json("false");
-			}
+//			if (!user.getToken().equals(token)){
+//				return RestUtil.string2json("false");
+//			}
 			List<Relationship> Friends = this.getCriteria()
 					.add(Restrictions.eq(RelationshipDAO.USER, user))
 					.add(Restrictions.eq(RelationshipDAO.FRIEND_ID, friend_id))

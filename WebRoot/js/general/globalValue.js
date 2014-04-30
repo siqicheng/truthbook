@@ -22,9 +22,10 @@ isDebug = true;
  * 	Website and RESTful AJAX URL
  */
 
-localhost = "175.186.106.35";
+localhost = "192.81.130.72";
 //localhost = "localhost";
-suffix = ":8080/truthbook";
+//suffix = ":8080/truthbook";
+suffix="";
 LoginPage = "http://" + localhost + suffix + "/";
 HomePage = "http://" + localhost + suffix + "/profile_test.html";
 TimeLinePage = "http://" + localhost + suffix + "/timeline.html";
