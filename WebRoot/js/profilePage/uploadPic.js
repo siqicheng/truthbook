@@ -124,9 +124,19 @@ $(function() {
 					progress + "%"
 				);
 			},
+			start: function (e) {
+			    console.log('Uploads started');
+			},
+			stop: function (e) {
+			    console.log('Uploads finished');
+			},
 			submit: function(e, data) {
 				$("#choosePic .two.buttons").hide();
 				$("#uploadProgress").show();
+			},
+			fail: function(e, data) {
+				console.log(data.textStatus);
+				console.log(data.errorThrown);
 			},
 			disableImageMetaDataSave: true,
 			imageOrientation: true,
