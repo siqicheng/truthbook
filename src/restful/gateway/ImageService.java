@@ -183,7 +183,7 @@ public class ImageService {
 			Criteria criteria = session.createCriteria(Image.class);
 			List<Image> image_list = criteria
 					.add(Restrictions.eq(ImageDAO.USER, user))
-					.add(Restrictions.ne(ImageDAO.DELETED, false))
+					.add(Restrictions.ne(ImageDAO.DELETED, true))
 					.add(Restrictions.eq(ImageDAO.APPROVED, true))
 					.list();
 //			
