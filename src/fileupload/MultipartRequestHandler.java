@@ -85,13 +85,13 @@ public class MultipartRequestHandler {
 							receiverId = Integer.parseInt(item.getString("UTF-8"));
 						}
 						
-						else if (item.getFieldName().equals("username")){
-							userName = item.getString("UTF-8");
-						}
-						
-						else if (item.getFieldName().equals("receivername")){
-							receiverName = item.getString("UTF-8");
-						}
+//						else if (item.getFieldName().equals("username")){
+//							userName = item.getString("UTF-8");
+//						}
+//						
+//						else if (item.getFieldName().equals("receivername")){
+//							receiverName = item.getString("UTF-8");
+//						}
 				    	
 						else if (item.getFieldName().equals("description")){
 							description = item.getString("UTF-8");

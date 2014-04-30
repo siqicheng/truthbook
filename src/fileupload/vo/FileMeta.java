@@ -3,8 +3,8 @@ package fileupload.vo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import messageDigest.SHA1;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.Session;
@@ -18,7 +18,6 @@ import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.RelationshipDAO;
 import db.mapping.object.DAO.UserDAO;
 import fileupload.Uploader;
-
 
 @JsonIgnoreProperties({"content","receivedrId","userId","is"})
 public class FileMeta {
@@ -34,7 +33,7 @@ public class FileMeta {
 	private InputStream is;
 	private String path;
 	private String description;
-	
+	    
 	public String getDescription() {
 		return description;
 	}
@@ -81,13 +80,13 @@ public class FileMeta {
 		return fileName;
 	}
 	public void setFileName(String fileName) {
-		UserDAO userdao =  new UserDAO();
-		User user = userdao.findById(receiverId);
-		User uploader = userdao.findById(userId);
-		String ext = (fileName.lastIndexOf('.')>-1)?fileName.substring(fileName.lastIndexOf('.')):"";
-		fileName=uploader.getFullName()+"_to_"+user.getFullName()+"_at_"+
-				(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()))+ext;
-		this.fileName = fileName;
+		String ext = fileName.substring(fileName.lastIndexOf('.'));
+		try{
+	    	this.fileName = new SHA1().digest(fileName)+ ext;
+		}  catch (Exception e){
+			e.printStackTrace();
+			this.fileName = "defautFileName" + ext;
+		}
 	}
 	public String getFileSize() {
 		return fileSize;

@@ -16,9 +16,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.apache.struts2.components.Head;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.Image;
 import db.mapping.object.Message;
@@ -76,7 +77,8 @@ public class ImageService {
 		Set set = user.getImages();
 		Image latest = null;
 		for (Object image : set){
-			if (image instanceof Image && !((Image) image).getDeleted()){
+			if (image instanceof Image && !((Image) image).getDeleted() 
+					&& ((Image)image).getApproved()){
 				if (latest==null || ((Image)image).getLastModified().after(latest.getLastModified())){
 					latest = (Image) image;
 				}
@@ -161,28 +163,39 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object getImagesByUser(@PathParam("userId") Integer userId,
 			@HeaderParam("token") String token) {
+		Session session = this.imageDAO.getSession();
 		try{
 			User user = new UserDAO().findById(userId);
 //			if (!user.getToken().equals(token)){
 //				return null;
 //			}
-			Set set = user.getImages();
+//			Set set = user.getImages();
+//			
+//			List image_list = new ArrayList();
+//			for (Object image : set){
+//				if (image instanceof Image && !((Image) image).getDeleted() ){
+//					image_list.add(image);
+//				}
+//			}
 			
-			List image_list = new ArrayList();
-			for (Object image : set){
-				if (image instanceof Image && !((Image) image).getDeleted() ){
-					image_list.add(image);
-				}
-			}
 			
+			
+			Criteria criteria = session.createCriteria(Image.class);
+			List<Image> image_list = criteria
+					.add(Restrictions.eq(ImageDAO.USER, user))
+					.add(Restrictions.ne(ImageDAO.DELETED, false))
+					.add(Restrictions.eq(ImageDAO.APPROVED, true))
+					.list();
+//			
 			Object[] images = new Object[image_list.size()];
 			
 			for (int i=0; i<image_list.size(); i++){
 				images[i] = ProduceMap((Image) image_list.get(i));
 			}
-			
+			session.close();
 			return RestUtil.array2json(images);
 		} catch (Exception e){
+			session.close();
 			e.printStackTrace();
 			return null;
 		}
@@ -305,14 +318,15 @@ public class ImageService {
 			Relationship relat = (Relationship) this.relationshipDAO
 								.findByUserAndFriend(user,friendId);
 			
-			if (relat.levelUp()){
+			if (relat != null){
+				if (relat.levelUp()){
 				Message message = new Message(Message.UPGRADE_TYPE, 
 												user.getUserId(), this.userDAO.findById(friendId), RestUtil.getCurrentTime() );
-				session.save(message);
+					session.save(message);
+				}
+			
+				session.update(relat);
 			}
-			
-			session.update(relat);
-			
 			tx.commit();
 			session.close();
 			return RestUtil.string2json("true");
@@ -381,8 +395,10 @@ public class ImageService {
 				
 				Relationship relat = (Relationship) this.relationshipDAO
 									.findByUserAndFriend(user,friendId);
-				relat.levelDown();
-				session.update(relat);
+				if (relat != null ){
+					relat.levelDown();
+					session.update(relat);
+				}
 				
 				tx.commit();
 				session.close();

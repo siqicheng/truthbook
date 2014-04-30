@@ -408,7 +408,7 @@ public class LoginService {
 			entryTime = AntySamyFilter.getCleanHtml(entryTime);
 			this.user.setEntryTime(entryTime);
 			this.user.setIsActivated(false);
-			
+			this.user.setToken(RestUtil.generateToken(fullName));
 			userDAO.save(this.user);
 			tx.commit();
 			return this.user;
@@ -452,7 +452,7 @@ public class LoginService {
 			return RestUtil.string2json("false");
 		}		
 	}
-	
+	/*
 	@PUT
 	@Path("v1/update")
 	@Produces("application/json;charset=utf-8")
@@ -487,6 +487,6 @@ public class LoginService {
 			session.close();
 			return RestUtil.string2json("false");
 		}		
-	}
+	}*/
 		
 }
