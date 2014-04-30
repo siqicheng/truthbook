@@ -47,6 +47,11 @@ function multiMessageHandler(message){
 		if (imageId == undefined ) imageId ="";
 		if (imageOwnId == undefined ) imageOwnId ="";
 		if (content == undefined ) content ="";
+		
+		if(messageTypeName == MessageType.UPGRADE.typeName){
+			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
+		}
+		
 		insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content);
 	}
 	updateNewMessageNum(messagelength);

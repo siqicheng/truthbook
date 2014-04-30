@@ -47,14 +47,14 @@
                 <!-- school field -->
                 <div class="field" id="schoolTest">
                     <div class="ui left labeled icon input">
-                        <input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" onblur="checkButtonValid()">
+                        <input type="text" id="school" placeholder="学校：复旦大学/上海外国语大学" name="school" onblur="checkButtonValid()">
                         <i class="book icon"></i>
                     </div>
                 </div>	                
                 <!-- entryTime field -->
 				<div class="field" id="entryTimeTest">
                     <div class="ui left labeled icon input">
-                        <input type="text" id="entryTime" placeholder="入学年份： 2008/2012" name="entryTime" onblur="checkButtonValid()">
+                        <input type="text" id="entryTime" placeholder="入学年份：2008/2012/..." name="entryTime" onblur="checkButtonValid()">
                         <i class="align justify icon"></i>
                     </div>
                 </div>	
@@ -125,19 +125,32 @@
 	</div>
     </div>
     
-   <div class="ui item dimmable">
-		<div class="ui page dimmer message hidden">
-		    <div class="content">
-		        <div class="center">  	
-		            <h1 class="ui inverted icon header">
-		                <i class="icon circular inverted emphasized green checked checkbox"></i>
-		                暂未开放直接注册
-		                <div class="sub header"  id="alertMessage"></div>
-		            </h1>
-		        </div>
+    <div class="ui item dimmable">
+	    <div class="ui dimmer page hidden">
+	    	<div class="ui basic modal deleteFriend transition hidden" id="testModal" style="margin-top: -159px;">
+			    <div class="header" id="modalHeader"></div>
+		    	<div class="content">
+		    		<div class="left"style="width: 40%"><i class="home icon" id = "modalLogo"></i></div>
+					<div class="right"><p id="modalContent"></p></div>
+		   		</div>
+		    	<div class="actions">
+		    		<div class="ui two fluid buttons">
+					  <div class="ui negative vertical animated left labeled icon button">
+		          			<i class="remove icon"></i>
+		          			<div class="visible content" id="modalNegativeBtn">取消</div>
+		          			<div class="hidden content" id="modalNegativeBtnHidden"></div>				  
+					  </div>
+					  <div class="ui positive vertical animated right labeled icon button">
+		        			<div class="visible content" id="modalPositiveBtn">确定</div>
+		          			<div class="hidden content" id="modalPositiveBtnHidden"></div>				  
+					  		<i class="checkmark icon"></i>
+					  </div>
+					</div>
+		    	</div>
 		    </div>
 		</div>
 	</div>
+
     
     
 	<script src="./assets/jquery/jquery-1.7.2.js"></script>

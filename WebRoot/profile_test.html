@@ -107,23 +107,23 @@
    			
 		<form class="ui form uploadForm" id="choosePeople">
 			<div class="field" id="fullNameTest">
-            	<label>姓名</label>
+            	<label>真实姓名</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="fullName" placeholder="姓名" name="fullName" >
+                	<input type="text" id="fullName" placeholder="王大锤" name="fullName" >
                 	<i class="user icon"></i>
                 </div>
        		</div>
 			<div class="field" id="schoolTest">
-				<label>学校</label>
+				<label>学校全称</label>
                 <div class="ui left labeled icon input">
-                	<input type="text" id="school" placeholder="学校： 复旦大学/北京大学" name="school" >
+                	<input type="text" id="school" placeholder="复旦大学/上海外国语大学" name="school" >
                   	<i class="book icon"></i>
                	</div>
       		</div>
 			<div class="field" id="entryTimeTest">
 				<label>入学年份</label>
            		<div class="ui left labeled icon input">
-  					<input type="text" id="entryTime" placeholder="入学年份： 2008/2012/..." name="entryTime" >
+  					<input type="text" id="entryTime" placeholder="2008/2012/..." name="entryTime" >
 					<i class="align justify icon"></i>
         		</div>
      		</div>
@@ -204,7 +204,7 @@
 								<img class="rounded ui image icon" src="" id="portraitImage" style="width:110px; height: 110px;cursor:pointer;margin-bottom: 0px;margin-left: 50px;margin-right: 50px;">
 							</a> 
 							  <div class=" header" id = "user_name" style="font-size:20px;color:#EDEEEF;padding-top: 8px;padding-bottom: 6px;"></div>
-							  <div class="sub header userInfo" style="font-size:12px;color:#C4C2C4;"><i class="map marker icon" id='userSchoolIcon' style="font-size:14px;display:inline;"></i>
+							  <div class="sub header userInfo" style="font-size:12px;color:#848284;"><i class="map marker icon" id='userSchoolIcon' style="font-size:14px;display:inline;"></i>
 								  <span id = 'user_school' ></span>&ensp;
 								  <span id = 'user_entryTime' ></span>
 							  </div>
@@ -477,7 +477,7 @@
 		function(){
 			$("#user_name").animate({color:"#FFFFFE"},400);
 			
-			$("#userSchoolIcon").animate({color:"#EDEEEF"},400);
+			$("#userSchoolIcon").animate({color:"#FFFFFF"},400);
 			$("#user_school").animate({color:"#EDEEEF"},400);
 			$("#user_entryTime").animate({color:"#EDEEEF"},400);
 		
@@ -485,9 +485,9 @@
 		function(){	
 			$("#user_name").animate({color:"#EDEEEF"},400);
 			
-			$("#userSchoolIcon").animate({color:"#C4C2C4"},400);
-			$("#user_school").animate({color:"#C4C2C4"},400);
-			$("#user_entryTime").animate({color:"#C4C2C4"},400);
+			$("#userSchoolIcon").animate({color:"#848284"},400);
+			$("#user_school").animate({color:"#848284"},400);
+			$("#user_entryTime").animate({color:"#848284"},400);
 		}
 	);
 	

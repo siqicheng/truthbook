@@ -85,7 +85,16 @@ NUM_SHOW_COMMENT_ON_TIMELINE = 2;
 NUM_FIRST_BATCH_ITEM_ON_TIMELINE = 5;
 NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 5;
 
-periodCheckNewMessage = 5000;  //ms
+periodCheckNewMessage = 30000;  //ms
+//releaseTimeTotal = 60;
+//releaseTime = releaseTimeTotal;
+//
+//function speedUpMessageListener(){
+//	periodCheckNewMessage = 10000;
+//}
+//function speedDownMessageListener(){
+//	periodCheckNewMessage = 30000;
+//}
 
 /*********************************************************************************
  * 	Image style
