@@ -223,7 +223,7 @@ public class MsgService {
 	@GET
 	@Path("v1/message/{userid}/getunsent")
 	@Produces("application/json;charset=utf-8")
-	public Object getUnsendMessage(@PathParam("userid") Integer id,
+	public Object getUnsentMessage(@PathParam("userid") Integer id,
 			@HeaderParam("token") String token) {
 		try{
 			User user = this.userDAO.findById(id);

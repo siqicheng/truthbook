@@ -1,7 +1,8 @@
 package db.mapping.object;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import messageDigest.SHA1;
 
 
 
@@ -24,23 +25,15 @@ public class UserPasswordId  implements java.io.Serializable {
     public UserPasswordId() {
     }
 
-    private static String bytes2hex(byte bt[]){
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bt) {
-            sb.append(String.format("%02X", b));
-        }
-        return sb.toString();
-    }
-    
     /** full constructor 
      * @throws NoSuchAlgorithmException */
     public UserPasswordId(String email, String password){
         this.email = email;
         this.password = password;
         try{
-        	MessageDigest md = MessageDigest.getInstance("SHA-1");
-        	byte[] bt = md.digest((this.password + SALT).getBytes());
-        	this.password = bytes2hex(bt);
+        	//MessageDigest md = MessageDigest.getInstance("SHA-1");
+        	//byte[] bt = md.digest((this.password + SALT).getBytes());
+        	this.password = new SHA1().digest(this.password + SALT);
         } catch (Exception e){
         	e.printStackTrace();
         }

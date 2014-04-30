@@ -452,7 +452,7 @@ public class LoginService {
 			return RestUtil.string2json("false");
 		}		
 	}
-	
+	/*
 	@PUT
 	@Path("v1/update")
 	@Produces("application/json;charset=utf-8")
@@ -487,6 +487,6 @@ public class LoginService {
 			session.close();
 			return RestUtil.string2json("false");
 		}		
-	}
+	}*/
 		
 }

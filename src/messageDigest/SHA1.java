@@ -1,9 +1,9 @@
 package messageDigest;
 import java.security.MessageDigest;
 
-public class SHA1Factory extends MessageDigestFactory {
+public class SHA1 extends MessageDigestFactory {
 	private MessageDigest md;
-	public SHA1Factory() {
+	public SHA1() {
 		try{
 			 md = MessageDigest.getInstance("SHA-1");
 		} catch (Exception e){
