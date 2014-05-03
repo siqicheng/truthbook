@@ -17,13 +17,15 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import db.mapping.object.*;
+import antySamy.AntySamyFilter;
+import db.mapping.object.Comment;
+import db.mapping.object.Image;
+import db.mapping.object.ImageComment;
+import db.mapping.object.User;
 import db.mapping.object.DAO.CommentDAO;
 import db.mapping.object.DAO.ImageCommentDAO;
 import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.UserDAO;
-
-import antySamy.AntySamyFilter;;
 
 @Path("commentService")
 public class CommentService {
@@ -206,10 +208,19 @@ public class CommentService {
 		
 		try{
 			this.image = this.imageDAO.findById(imageId);
-//			if (!this.image.getUser().getToken().equals(token)){
-//				return RestUtil.string2json("false");
-//			}
+			boolean flag = true;
+			if (!this.image.getUser().getToken().equals(token)){
+				flag = false;
+			}
 			this.comment = this.commentDAO.findById(commentId);
+			User repliedBy = this.userDAO.findById(this.comment.getRepliedByCommentId());
+			if (!repliedBy.getToken().equals(token)){
+				flag = false;
+			}
+			
+			if (!flag) {
+				return RestUtil.string2json("false");
+			}
 			
 			String property[] = {ImageCommentDAO.IMAGE,ImageCommentDAO.COMMENT};
 			Object value[] = {this.image,this.comment};

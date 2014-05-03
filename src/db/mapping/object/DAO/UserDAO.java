@@ -32,6 +32,7 @@ public class UserDAO extends BaseHibernateDAO  {
 	public static final String ENTRY_TIME = "entryTime";
 	public static final String IS_ACTIVATED = "isActivated";
 	public static final String TABLE = "User";
+	public static final String TOKEN = "token";
 
 
     
@@ -93,8 +94,10 @@ public class UserDAO extends BaseHibernateDAO  {
         try {
             User instance = (User) getSession()
                     .get("db.mapping.object.User", id);
+            this.closeSession();
             return instance;
         } catch (RuntimeException re) {
+        	this.closeSession();
             log.error("get failed", re);
             throw re;
         }
@@ -143,6 +146,10 @@ public class UserDAO extends BaseHibernateDAO  {
 	) {
 		return findByProperty(EMAIL, email
 		);
+	}
+	
+	public List findByToken(Object token){
+		return findByProperty(TOKEN, token);
 	}
 	
 	public List findBySchool(Object school

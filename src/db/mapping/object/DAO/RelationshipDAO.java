@@ -67,8 +67,10 @@ public class RelationshipDAO extends BaseHibernateDAO {
 		try {
 			Relationship instance = (Relationship) getSession().get(
 					"db.mapping.object.Relationship", id);
+			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
+			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}
@@ -105,14 +107,14 @@ public class RelationshipDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public Object findByUserAndFriend(User user, Integer friendId){
+	public Relationship findByUserAndFriend(User user, Integer friendId){
 		Criteria criteria = this.getSession().createCriteria(Relationship.class);
 		List relat_list = criteria.add(Restrictions.eq(USER, user))
 										.add(Restrictions.eq(FRIEND_ID, friendId))
 										.list();
 		
 		if (relat_list.size() > 0){
-			return relat_list.get(0);
+			return (Relationship)relat_list.get(0);
 		}
 		return null;
 	}

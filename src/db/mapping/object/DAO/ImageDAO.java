@@ -27,11 +27,10 @@ import org.slf4j.LoggerFactory;
 public class ImageDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(ImageDAO.class);
 	// property constants
-	public static final String DETELED = "deteled";
 	public static final String IMAGE_ID = "imageId";
 	public static final String IMAGE_URL = "imageUrl";
 	public static final String CREATE_DATE = "createDate";
-	public static final String LASTE_MODIFIED = "lastModified";
+	public static final String LAST_MODIFIED = "lastModified";
 	public static final String UPLOADER_ID = "uploaderId";
 	public static final String APPROVED = "approved";
 	public static final String DELETED = "deleted";
@@ -71,6 +70,7 @@ public class ImageDAO extends BaseHibernateDAO {
 			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
+			this.closeSession();
 			log.error("get failed", re);
 			this.closeSession();
 			throw re;
@@ -127,10 +127,6 @@ public class ImageDAO extends BaseHibernateDAO {
 
 	public List findByApproved(Object approved) {
 		return findByProperty(APPROVED, approved);
-	}
-
-	public List findByDeteled(Object deteled) {
-		return findByProperty(DETELED, deteled);
 	}
 
 	public List findAll() {
