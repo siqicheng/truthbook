@@ -49,7 +49,8 @@ public class MsgService {
 		} catch (Exception e){
 			e.printStackTrace();
 		}  finally {
-			session.close();
+//			session.close();
+			this.messageDAO.closeSession();
 		}
 	}
 	
@@ -77,10 +78,12 @@ public class MsgService {
 				ret_messages[i] = message;
 			}
 			tx.commit();
+			this.messageDAO.closeSession();
 			return ret_messages;
 		} catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.messageDAO.closeSession();
 			return null;
 		}
 	}
@@ -103,9 +106,11 @@ public class MsgService {
 				session.update(message);
 			}
 			tx.commit();
+			this.messageDAO.closeSession();
 		} catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.messageDAO.closeSession();
 		}
 	}
 	
