@@ -79,11 +79,13 @@ public class CommentService {
 					session.save(this.comment);
 					tx.commit();
 				}
-				session.close();
+//				session.close();
+				this.commentDAO.closeSession();
 				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
-				session.close();
+//				session.close();
+				this.commentDAO.closeSession();
 				return null;
 			}
 	}
@@ -114,11 +116,13 @@ public class CommentService {
 					session.save(this.comment);
 					tx.commit();
 				}
-				session.close();
+//				session.close();
+				this.commentDAO.closeSession();
 				return RestUtil.object2json(this.comment.getCommentId());
 			}catch (Exception e){
 				e.printStackTrace();
-				session.close();
+//				session.close();
+				this.commentDAO.closeSession();
 			}
 			return null;
 	}
@@ -149,11 +153,15 @@ public class CommentService {
 			Transaction tx = session.beginTransaction();
 			session.save(this.imageComment);
 			tx.commit();
-			session.close();
+//			session.close();
+			this.commentDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			if (session.isConnected()) session.close();
+			if (session.isConnected()) {
+//				session.close();
+				this.commentDAO.closeSession();	
+			}
 		}
 		return RestUtil.string2json("false");
 	}
@@ -164,18 +172,29 @@ public class CommentService {
 	public ImageComment[] getImageComment(@PathParam("imageId") Integer imageId,
 			@HeaderParam("token") String token){
 		ImageComment[] imageComment = null;
-		this.image = this.imageDAO.findById(imageId);
-//		if (!this.image.getUser().getToken().equals(token)){
-//			return null;
-//		}
-		List imageComments = this.imageCommentDAO.findByProperty(ImageCommentDAO.IMAGE, this.image);
-		if(imageComments.size()>0){
-			imageComment = new ImageComment[imageComments.size()];
-			for (int i=0; i<imageComments.size();i++){
-				imageComment[i] = (ImageComment) imageComments.get(i);
+		try{
+			this.image = this.imageDAO.findById(imageId);
+	//		if (!this.image.getUser().getToken().equals(token)){
+	//			return null;
+	//		}
+			Session session = this.imageCommentDAO.getSession();
+			Criteria criteria = session.createCriteria(ImageComment.class);
+			
+	//		List imageComments = this.imageCommentDAO.findByProperty(ImageCommentDAO.IMAGE, this.image);
+			List imageComments = criteria.add(Restrictions.eq(ImageCommentDAO.IMAGE, image)).list();
+			if(imageComments.size()>0){
+				imageComment = new ImageComment[imageComments.size()];
+				for (int i=0; i<imageComments.size();i++){
+					imageComment[i] = (ImageComment) imageComments.get(i);
+				}
 			}
+			this.imageCommentDAO.closeSession();
+			return imageComment;
+		} catch (Exception e){
+			e.printStackTrace();
+			this.imageCommentDAO.closeSession();
+			return null;
 		}
-		return imageComment;
 	}
 	
 	@DELETE
@@ -196,7 +215,7 @@ public class CommentService {
 			Object value[] = {this.image,this.comment};
 			
 			List imageComments = this.imageCommentDAO.findByProperties(property, value, ImageCommentDAO.TABLE);
-			session = this.imageCommentDAO.getSession();
+			Session session = this.imageCommentDAO.getSession();
 			if(imageComments.size()>0){
 				Transaction tx = session.beginTransaction();
 				for(int i=0; i<imageComments.size();i++){
@@ -207,11 +226,13 @@ public class CommentService {
 				}
 				tx.commit();				
 			}
-			session.close();
+//			session.close();
+			this.imageCommentDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.imageCommentDAO.closeSession();
 		}
 	
 		return RestUtil.string2json("false");
@@ -244,10 +265,11 @@ public class CommentService {
 			for (int i=0; i<icl.size(); i++){
 				imageComment[i] = icl.get(i);
 			}
-			
+			this.imageDAO.closeSession();
 			return imageComment;
 		} catch (Exception e){
 			e.printStackTrace();
+			this.imageDAO.closeSession();
 			return null;
 		}
 		

@@ -125,11 +125,13 @@ public class ImageService {
 			
 			session.save(image);	
 			tx.commit();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 		}
 		return RestUtil.string2json("false");
 	}
@@ -177,14 +179,11 @@ public class ImageService {
 //					image_list.add(image);
 //				}
 //			}
-			
-			
-			
+	
 			Criteria criteria = session.createCriteria(Image.class);
 			List<Image> image_list = criteria
 					.add(Restrictions.eq(ImageDAO.USER, user))
 					.add(Restrictions.ne(ImageDAO.DELETED, true))
-					.add(Restrictions.eq(ImageDAO.APPROVED, true))
 					.list();
 //			
 			Object[] images = new Object[image_list.size()];
@@ -192,10 +191,14 @@ public class ImageService {
 			for (int i=0; i<image_list.size(); i++){
 				images[i] = ProduceMap((Image) image_list.get(i));
 			}
-			session.close();
+//			session.close();
+			
+			Object test = RestUtil.array2json(images);
+			this.imageDAO.closeSession();
 			return RestUtil.array2json(images);
 		} catch (Exception e){
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			e.printStackTrace();
 			return null;
 		}
@@ -255,11 +258,13 @@ public class ImageService {
 			Transaction tx = session.beginTransaction();
 			session.update(image);
 			tx.commit();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 	}
@@ -279,11 +284,13 @@ public class ImageService {
 			Transaction tx = session.beginTransaction();
 			session.update(image);
 			tx.commit();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 		
@@ -328,11 +335,13 @@ public class ImageService {
 				session.update(relat);
 			}
 			tx.commit();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 	}
@@ -360,11 +369,13 @@ public class ImageService {
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.imageDAO.closeSession();
 				return RestUtil.string2json("true");
 			}catch (Exception e){
 				e.printStackTrace();
-				session.close();
+//				session.close();
+				this.imageDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 		}	
@@ -401,11 +412,13 @@ public class ImageService {
 				}
 				
 				tx.commit();
-				session.close();
+//				session.close();
+				this.imageDAO.closeSession();
 				return RestUtil.string2json("true");
 			}catch (Exception e){
 				e.printStackTrace();
-				session.close();
+//				session.close();
+				this.imageDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 		}
@@ -431,11 +444,13 @@ public class ImageService {
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.imageDAO.closeSession();
 				return RestUtil.string2json("true");
 			}catch (Exception e){
 				e.printStackTrace();
-				session.close();
+//				session.close();
+				this.imageDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 		}

@@ -107,10 +107,12 @@ public class PortraitService {
 				}
 			}
 			tx.commit();
-			session.close();
+//			session.close();
+			this.portraitDAO.closeSession();
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.portraitDAO.closeSession();
 		}	
 	}
 	
@@ -131,10 +133,12 @@ public class PortraitService {
 				}
 			}
 			tx.commit();
-			session.close();
+//			session.close();
+			this.portraitDAO.closeSession();
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();			
+//			session.close();
+			this.portraitDAO.closeSession();
 		}	
 	}
 	
@@ -152,7 +156,7 @@ public class PortraitService {
 		}
 		
 		
-		session = this.portraitDAO.getSession();
+		Session session = this.portraitDAO.getSession();
 		try{
 			portraits = findPortrait(userId,imageId,null);
 			if (portraits.size()==0){
@@ -162,12 +166,14 @@ public class PortraitService {
 				Transaction tx = session.beginTransaction();			
 				session.save(this.portrait);	
 				tx.commit();
-				session.close();
+//				session.close();
+				this.portraitDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();			
+//			session.close();
+			this.portraitDAO.closeSession();
 		}		
 		return RestUtil.string2json("false"); 		
 	}
@@ -242,12 +248,14 @@ public class PortraitService {
 			session.saveOrUpdate(this.portrait);	
 			
 			tx.commit();
-			session.close();
+//			session.close();
+			this.portraitDAO.closeSession();
 			return RestUtil.string2json("true");
 			
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.portraitDAO.closeSession();
 		}
 		return RestUtil.string2json("false"); 		
 	}
@@ -256,7 +264,7 @@ public class PortraitService {
 	@Path("v1/portrait/{userId}/{imageId}/remove")
 	@Produces("application/json")
 	public Object removePortrait(@PathParam("userId") Integer userId,@PathParam("imageId") Integer imageId){
-		session = this.portraitDAO.getSession();
+		Session session = this.portraitDAO.getSession();
 		try{
 			List portraits = findPortrait(userId,imageId,null);
 			if (portraits.size()> 0){
@@ -267,12 +275,14 @@ public class PortraitService {
 					}
 				}
 				tx.commit();				
-				session.close();
+//				session.close();
+				this.portraitDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();			
+//			session.close();	
+			this.portraitDAO.closeSession();
 		}		
 		return RestUtil.string2json("false"); 		
 	}
