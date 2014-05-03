@@ -423,10 +423,7 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	var thisOwnerId = $("#imageId"+imageId).find(".userId_span").html();
 	var uploaderId = $("#imageId"+imageId).find(".uploaderId").html();
 	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId);
-<<<<<<< HEAD
-=======
 //	speedUpMessageListener();
->>>>>>> csq_deploy
 }
 
 function resetTextarea(thisText){

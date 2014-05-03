@@ -139,10 +139,7 @@ function approvedImageData(data,numTotalImage){
 			approvedImageData.push(data[i]);
 		} else {
 			unapprovImageData.push(data[i]);
-<<<<<<< HEAD
-=======
 			console.log('unapprove')
->>>>>>> csq_deploy
 		}
 	}
 	return [approvedImageData,unapprovImageData];

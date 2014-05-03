@@ -151,12 +151,8 @@ function getThisComment_All_onTimeline(imageId){
 
 	};
 	var onAjaxError = function(xhr,status,error){
-<<<<<<< HEAD
-		drawConfirmPopUp("获取评论请求发送失败 Error: " + error);
-=======
 		getThisComment_All_onTimeline(imageId,onAjaxSuccess);
 //		drawConfirmPopUp("获取评论请求发送失败 Error: " + error);
->>>>>>> csq_deploy
 		return false;
 	};	
 	
