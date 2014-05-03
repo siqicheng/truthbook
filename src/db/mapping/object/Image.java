@@ -28,7 +28,7 @@ public class Image implements java.io.Serializable {
 	private Boolean approved;
 	private Boolean deleted;
 	private String content;
-	private String uploaderName;
+	private String uploaderName;	
 	private Integer liked;
 	private Integer commentCnt;
 	private Set imageComments = new HashSet(0);

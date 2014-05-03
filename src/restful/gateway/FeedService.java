@@ -57,7 +57,7 @@ public class FeedService {
 				for (Relationship relat : relat_list){
 					User friend = this.userDAO.findById(relat.getFriendId());
 					Criteria criteria = session.createCriteria(Image.class);
-					criteria.add(Restrictions.gt(ImageDAO.LASTE_MODIFIED, userFetch.getLastFetchTime()))
+					criteria.add(Restrictions.gt(ImageDAO.LAST_MODIFIED, userFetch.getLastFetchTime()))
 					.add(Restrictions.eq(ImageDAO.USER, friend))
 					.add(Restrictions.eq(ImageDAO.APPROVED,true))
 					.add(Restrictions.eq(ImageDAO.DELETED, false))

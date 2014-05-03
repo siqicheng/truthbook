@@ -19,6 +19,7 @@ import javax.ws.rs.Produces;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import db.mapping.object.Image;
@@ -43,26 +44,12 @@ public class ImageService {
 		userDAO = new UserDAO();
 	}
 	
-	private static Map ProduceMap(Image image){
-		if (image==null) {
-			return null;
-		}
-		
-		Map<String,Object> map =new HashMap<String,Object>();
-		map.put("commentCnt", image.getImageComments().size());
-		map.put("imageId", image.getImageId());
-		map.put("imageUrl", image.getImageUrl());
-		map.put("approved", image.getApproved());
-		map.put("like", image.getLiked());
-		map.put("description", image.getContent());
-		map.put("createDate", image.getCreateDate().toString());
-		map.put("uploaderId", image.getUploaderId());
-		map.put("userId", image.getUserId());
-		map.put("userName", image.getUser().getFullName());
-		map.put("uploaderName", new UserDAO().findById(image.getUploaderId()).getFullName());
-		
-		
-		return map;
+	private Criteria getCriteria(){
+		return this.imageDAO.getSession().createCriteria(Image.class);
+	}
+	
+	private void closeSession(){
+		this.imageDAO.closeSession();
 	}
 	
 	@GET
@@ -70,26 +57,27 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object getLatestImage(@PathParam("userid") Integer userId,
 			@HeaderParam("token") String token){
-		User user = new UserDAO().findById(userId);
 //		if (!user.getToken().equals(token)){
 //			return null;
 //		}
-		Set set = user.getImages();
-		Image latest = null;
-		for (Object image : set){
-			if (image instanceof Image && !((Image) image).getDeleted() 
-					&& ((Image)image).getApproved()){
-				if (latest==null || ((Image)image).getLastModified().after(latest.getLastModified())){
-					latest = (Image) image;
-				}
+		try{
+			User user = new UserDAO().findById(userId);
+			List<Image> image_list = this.getCriteria().add(Restrictions.eq(ImageDAO.USER, user))
+													.addOrder(Order.desc(ImageDAO.LAST_MODIFIED))
+													.setMaxResults(1).list();
+			this.closeSession();
+			if (image_list.size()>0){
+				return null;
 			}
+			return image_list.get(0);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			this.closeSession();
+			return null;
 		}
 		
-		Object[] images = new Object[1];
 		
-		images[0] = ProduceMap(latest);
-		
-		return RestUtil.array2json(images);
 	}
 	
 	@POST
@@ -103,8 +91,7 @@ public class ImageService {
 		Session session = this.imageDAO.getSession();
 		try{
 			Transaction tx = session.beginTransaction();			
-			UserDAO userdao= new UserDAO();
-			User user= userdao.findById(userId);
+			User user= this.userDAO.findById(userId);
 			Relationship relat = this.relationshipDAO.findByUserAndFriend(user, uploaderId);
 			if (relat == null ){
 				return RestUtil.string2json("false");
@@ -125,7 +112,6 @@ public class ImageService {
 			
 			session.save(image);	
 			tx.commit();
-//			session.close();
 			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
@@ -145,6 +131,7 @@ public class ImageService {
 			Image image = this.imageDAO.findById(imageId);
 			
 			User user = image.getUser();
+			
 			//判断是否是本人，或与本人是好友
 			if (!user.getToken().equals(token)){
 				List friend = this.userDAO.findByToken(token);
@@ -156,8 +143,10 @@ public class ImageService {
 					return null;
 				}
 			}
-			return RestUtil.map2json(ProduceMap(image));
+			this.closeSession();
+			return image;
 		} catch (Exception e){
+			this.closeSession();
 			e.printStackTrace();
 			return null;
 		}
@@ -184,21 +173,20 @@ public class ImageService {
 					return null;
 				}
 			}
-			Criteria criteria = session.createCriteria(Image.class);
+			
+			Criteria criteria = this.getCriteria();
 			List<Image> image_list = criteria
 					.add(Restrictions.eq(ImageDAO.USER, user))
 					.add(Restrictions.ne(ImageDAO.DELETED, true))
 					.list();
-			Object[] images = new Object[image_list.size()];
+			Image[] images = new Image[image_list.size()];
 			
 			for (int i=0; i<image_list.size(); i++){
-				images[i] = ProduceMap((Image) image_list.get(i));
+				images[i] = image_list.get(i);
 			}
-//			session.close();
 			
-			Object test = RestUtil.array2json(images);
-			this.imageDAO.closeSession();
-			return RestUtil.array2json(images);
+			this.closeSession();
+			return images;
 		} catch (Exception e){
 //			session.close();
 			this.imageDAO.closeSession();

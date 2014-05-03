@@ -31,7 +31,7 @@ public class ImageDAO extends BaseHibernateDAO {
 	public static final String IMAGE_ID = "imageId";
 	public static final String IMAGE_URL = "imageUrl";
 	public static final String CREATE_DATE = "createDate";
-	public static final String LASTE_MODIFIED = "lastModified";
+	public static final String LAST_MODIFIED = "lastModified";
 	public static final String UPLOADER_ID = "uploaderId";
 	public static final String APPROVED = "approved";
 	public static final String DELETED = "deleted";
