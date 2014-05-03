@@ -32,6 +32,7 @@ public class UserDAO extends BaseHibernateDAO  {
 	public static final String ENTRY_TIME = "entryTime";
 	public static final String IS_ACTIVATED = "isActivated";
 	public static final String TABLE = "User";
+	public static final String TOKEN = "token";
 
 
     
@@ -141,6 +142,10 @@ public class UserDAO extends BaseHibernateDAO  {
 	) {
 		return findByProperty(EMAIL, email
 		);
+	}
+	
+	public List findByToken(Object token){
+		return findByProperty(TOKEN, token);
 	}
 	
 	public List findBySchool(Object school

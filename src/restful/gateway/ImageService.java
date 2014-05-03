@@ -98,18 +98,18 @@ public class ImageService {
 	public Object addImage(@FormParam("imageURL") String imageURL,
 			@FormParam("userId") Integer userId,
 			@FormParam("uploaderId") Integer uploaderId,
-			@FormParam("description") String content,
-			@HeaderParam("token") String token) {
+			@FormParam("description") String content) {
 		
 		Session session = this.imageDAO.getSession();
 		try{
 			Transaction tx = session.beginTransaction();			
-			
 			UserDAO userdao= new UserDAO();
 			User user= userdao.findById(userId);
-//			if (!user.getToken().equals(token)){
-//				return RestUtil.string2json("false");
-//			}
+			Relationship relat = this.relationshipDAO.findByUserAndFriend(user, uploaderId);
+			if (relat == null ){
+				return RestUtil.string2json("false");
+			}
+			
 			Image image = new Image();
 			image.setImageUrl(imageURL);
 			image.setUploaderId(uploaderId);
@@ -141,15 +141,19 @@ public class ImageService {
 			@HeaderParam("token") String token) {
 		try {
 			Image image = this.imageDAO.findById(imageId);
-//			if (image!=null && image.getDeleted()){
-//				image = null;
-//			}
-			if (!image.getUser().getToken().equals(token)){
-				return null;
+			
+			User user = image.getUser();
+			//判断是否是本人，或与本人是好友
+			if (!user.getToken().equals(token)){
+				List friend = this.userDAO.findByToken(token);
+				if (friend == null){
+					return null;
+				}
+				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
+				if (relat == null){
+					return null;
+				}
 			}
-			
-			
-			//return image;
 			return RestUtil.map2json(ProduceMap(image));
 		} catch (Exception e){
 			e.printStackTrace();
@@ -165,7 +169,20 @@ public class ImageService {
 			@HeaderParam("token") String token) {
 		Session session = this.imageDAO.getSession();
 		try{
-			User user = new UserDAO().findById(userId);
+			User user = this.userDAO.findById(userId);
+			
+			//判断是否是本人，或与本人是好友
+			if (!user.getToken().equals(token)){
+				List friend = this.userDAO.findByToken(token);
+				if (friend == null){
+					return null;
+				}
+				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
+				if (relat == null){
+					return null;
+				}
+			}
+			
 			Criteria criteria = session.createCriteria(Image.class);
 			List<Image> image_list = criteria
 					.add(Restrictions.eq(ImageDAO.USER, user))
@@ -360,8 +377,7 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object deleteImage(@PathParam("imageId") Integer imageId,
 			@HeaderParam("token") String token) {
-		Image image = new Image();
-		image = this.imageDAO.findById(imageId);
+		Image image = this.imageDAO.findById(imageId);
 		if (image==null ||!image.getUser().getToken().equals(token)){
 			return RestUtil.string2json("false");
 		}

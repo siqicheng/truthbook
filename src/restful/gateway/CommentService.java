@@ -189,10 +189,19 @@ public class CommentService {
 		
 		try{
 			this.image = this.imageDAO.findById(imageId);
-//			if (!this.image.getUser().getToken().equals(token)){
-//				return RestUtil.string2json("false");
-//			}
+			boolean flag = true;
+			if (!this.image.getUser().getToken().equals(token)){
+				flag = false;
+			}
 			this.comment = this.commentDAO.findById(commentId);
+			User repliedBy = this.userDAO.findById(this.comment.getRepliedByCommentId());
+			if (!repliedBy.getToken().equals(token)){
+				flag = false;
+			}
+			
+			if (!flag) {
+				return RestUtil.string2json("false");
+			}
 			
 			String property[] = {ImageCommentDAO.IMAGE,ImageCommentDAO.COMMENT};
 			Object value[] = {this.image,this.comment};
