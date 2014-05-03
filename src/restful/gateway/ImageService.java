@@ -167,33 +167,19 @@ public class ImageService {
 			@HeaderParam("token") String token) {
 		Session session = this.imageDAO.getSession();
 		try{
-			User user = new UserDAO().findById(userId);
-//			if (!user.getToken().equals(token)){
-//				return null;
-//			}
-//			Set set = user.getImages();
-//			
-//			List image_list = new ArrayList();
-//			for (Object image : set){
-//				if (image instanceof Image && !((Image) image).getDeleted() ){
-//					image_list.add(image);
-//				}
-//			}
-	
+			User user = new UserDAO().findById(userId);	
 			Criteria criteria = session.createCriteria(Image.class);
 			List<Image> image_list = criteria
 					.add(Restrictions.eq(ImageDAO.USER, user))
 					.add(Restrictions.ne(ImageDAO.DELETED, true))
-//					.add(Restrictions.eq(ImageDAO.APPROVED, true))
 					.list();
-//			
+			
 			Object[] images = new Object[image_list.size()];
 			
 			for (int i=0; i<image_list.size(); i++){
 				images[i] = ProduceMap((Image) image_list.get(i));
 			}
 //			session.close();
-			
 			Object test = RestUtil.array2json(images);
 			this.imageDAO.closeSession();
 			return RestUtil.array2json(images);

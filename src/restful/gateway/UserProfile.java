@@ -237,12 +237,14 @@ public class UserProfile {
 				for (int i = 0; i < friend_list.size(); i++) {
 					friends[i] = (User) friend_list.get(i);
 				}
-
+				this.userDAO.closeSession();
 				return friends;
 			}
+			this.userDAO.closeSession();
 			return null;
 		} catch (Exception e){
 			e.printStackTrace();
+			this.userDAO.closeSession();
 			return null;
 		}
 		
