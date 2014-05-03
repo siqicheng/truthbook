@@ -17,13 +17,15 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import db.mapping.object.*;
+import antySamy.AntySamyFilter;
+import db.mapping.object.Comment;
+import db.mapping.object.Image;
+import db.mapping.object.ImageComment;
+import db.mapping.object.User;
 import db.mapping.object.DAO.CommentDAO;
 import db.mapping.object.DAO.ImageCommentDAO;
 import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.UserDAO;
-
-import antySamy.AntySamyFilter;;
 
 @Path("commentService")
 public class CommentService {
