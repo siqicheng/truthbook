@@ -239,9 +239,11 @@ public class MsgService {
 					.add(Restrictions.eq(MessageDAO.USER_ID, id)).
 					add(Restrictions.eq(MessageDAO.STATUS, Message.UNSENT_STATUS)).
 					list() ;
+			this.messageDAO.closeSession();
 			return this.setSent(Messages);
 		}catch (Exception e){
 			e.printStackTrace();
+			this.messageDAO.closeSession();
 			return null;
 		}
 	}

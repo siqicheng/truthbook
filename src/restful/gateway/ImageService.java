@@ -193,8 +193,9 @@ public class ImageService {
 				images[i] = ProduceMap((Image) image_list.get(i));
 			}
 //			session.close();
-			this.imageDAO.closeSession();
+			
 			Object test = RestUtil.array2json(images);
+			this.imageDAO.closeSession();
 			return RestUtil.array2json(images);
 		} catch (Exception e){
 //			session.close();

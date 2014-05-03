@@ -290,7 +290,7 @@ return html;
  * 	The HTML part of approved image
  */
 function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike,userId){
-	
+		
 	var displayDate = dateHandle(createDate);
 	var createDateStd = createDate.substr(0,4)+"年"+createDate.substr(5,2)+"月"+createDate.substr(8,2)+"日";	
 	var urlLarge = getImageUrl(url,ImageType.Large);
@@ -313,7 +313,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    							"<i class='heart tiny icon'></i>"+
 			    						"</div>"+
 			    						"<div class='ui tiny green inverted button commentbtn commentShow'>" +
-			    							"<i class='comment icon'></i><span class='numOfComment_inline'>"+numOfComment+"</span>"+
+			    							"<i class='comment icon'></i><span class='numOfComment_inline'>"+"0"+"</span>"+
 			    						"</div>" +
 			    					"</div>"+
 		    					"</a>"+
