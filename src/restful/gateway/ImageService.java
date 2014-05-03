@@ -69,7 +69,11 @@ public class ImageService {
 			if (image_list.size()>0){
 				return null;
 			}
-			return image_list.get(0);
+			Image[] images = new Image[image_list.size()];
+			for (int i=0; i< image_list.size(); i++){
+				images[i] = image_list.get(i);
+			}
+			return images;
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -206,27 +210,22 @@ public class ImageService {
 			if (!uploader.getToken().equals(token)){
 				return null;
 			}
-			String property[] = {ImageDAO.UPLOADER_ID,ImageDAO.DELETED};
-			Object value[] = {uploaderId,false};
 			
-			List images = this.imageDAO.findByProperties(property, value, ImageDAO.TABLE);
+			Criteria criteria = this.getCriteria();
+			List<Image> image_list = criteria.add(Restrictions.eq(ImageDAO.UPLOADER_ID, uploaderId))
+											.add(Restrictions.eq(ImageDAO.DELETED, false))
+											.add(Restrictions.eq(ImageDAO.APPROVED, true))
+											.list();
 			
-			if (images.size() > 0){
-				List image_list = new ArrayList();
-				for (Object image : images){
-					if (image instanceof Image && !((Image) image).getDeleted()){
-						if (image!= null){
-							image_list.add(image);
-						}					
-					}				
-				}
-				Object[] image = new Object[image_list.size()];
+			this.closeSession();
+			if (image_list.size() > 0){
+				Image[] images = new Image[image_list.size()];
 				
 				for (int i=0; i<image_list.size(); i++){
-					image[i] = ProduceMap((Image) image_list.get(i));
+					images[i] = image_list.get(i);
 				}
 				
-				return RestUtil.array2json(image);
+				return images;
 			}
 			return null;		
 		} catch (Exception e){
@@ -249,8 +248,7 @@ public class ImageService {
 			Transaction tx = session.beginTransaction();
 			session.update(image);
 			tx.commit();
-//			session.close();
-			this.imageDAO.closeSession();
+			this.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
@@ -275,8 +273,7 @@ public class ImageService {
 			Transaction tx = session.beginTransaction();
 			session.update(image);
 			tx.commit();
-//			session.close();
-			this.imageDAO.closeSession();
+			this.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
@@ -326,12 +323,10 @@ public class ImageService {
 				session.update(relat);
 			}
 			tx.commit();
-//			session.close();
 			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
@@ -360,12 +355,10 @@ public class ImageService {
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
 				tx.commit();
-//				session.close();
 				this.imageDAO.closeSession();
 				return RestUtil.string2json("true");
 			}catch (Exception e){
 				e.printStackTrace();
-//				session.close();
 				this.imageDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
@@ -402,12 +395,10 @@ public class ImageService {
 				}
 				
 				tx.commit();
-//				session.close();
 				this.imageDAO.closeSession();
 				return RestUtil.string2json("true");
 			}catch (Exception e){
 				e.printStackTrace();
-//				session.close();
 				this.imageDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
@@ -434,12 +425,10 @@ public class ImageService {
 				image.setLastModified(RestUtil.getCurrentDate());
 				session.update(image);
 				tx.commit();
-//				session.close();
 				this.imageDAO.closeSession();
 				return RestUtil.string2json("true");
 			}catch (Exception e){
 				e.printStackTrace();
-//				session.close();
 				this.imageDAO.closeSession();
 				return RestUtil.string2json("false");
 			}

@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 public class ImageDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(ImageDAO.class);
 	// property constants
-	public static final String DETELED = "deteled";
 	public static final String IMAGE_ID = "imageId";
 	public static final String IMAGE_URL = "imageUrl";
 	public static final String CREATE_DATE = "createDate";
@@ -121,10 +120,6 @@ public class ImageDAO extends BaseHibernateDAO {
 
 	public List findByApproved(Object approved) {
 		return findByProperty(APPROVED, approved);
-	}
-
-	public List findByDeteled(Object deteled) {
-		return findByProperty(DETELED, deteled);
 	}
 
 	public List findAll() {
