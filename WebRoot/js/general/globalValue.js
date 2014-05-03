@@ -22,9 +22,11 @@ isDebug = true;
  * 	Website and RESTful AJAX URL
  */
 
-localhost = "175.186.106.35";
+localhost = "192.81.130.72";
 //localhost = "localhost";
-suffix = ":8080/truthbook";
+//suffix = ":8080/truthbook";
+
+suffix="";
 LoginPage = "http://" + localhost + suffix + "/";
 HomePage = "http://" + localhost + suffix + "/profile_test.html";
 TimeLinePage = "http://" + localhost + suffix + "/timeline.html";
@@ -83,7 +85,16 @@ NUM_SHOW_COMMENT_ON_TIMELINE = 2;
 NUM_FIRST_BATCH_ITEM_ON_TIMELINE = 5;
 NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 5;
 
-periodCheckNewMessage = 60000;  //ms
+periodCheckNewMessage = 30000;  //ms
+//releaseTimeTotal = 60;
+//releaseTime = releaseTimeTotal;
+//
+//function speedUpMessageListener(){
+//	periodCheckNewMessage = 10000;
+//}
+//function speedDownMessageListener(){
+//	periodCheckNewMessage = 30000;
+//}
 
 /*********************************************************************************
  * 	Image style

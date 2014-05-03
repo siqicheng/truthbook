@@ -1,7 +1,6 @@
 
 
 
-
 MESSAGE_REJECTIMAGE_TITLE = "真的不是故意拒绝："
 MESSAGE_ACCEPTIMAGE_TITLE = "收照感言：";
 MESSAGE_UPGRADE_TITLE = "好友升级说明<br>" +
@@ -14,3 +13,4 @@ MESSAGE_UPGRADE_CONTENT =	"对他：被升级为极·友是一种极大的荣耀
 
 
 NO_TIMELINE_ITEM = "<h1>您的好友似乎还没有活动</h1>";
+NO_REGISTER_NOW = "尚未全面开放，仅限已收到好友邀请者注册。"

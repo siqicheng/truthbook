@@ -11,7 +11,7 @@
 		<div class="zg-wrap clearfix">
 			<ul>		
 <!-- 			<li><a target="_blank" href="/question/19581624">Truthbook指南</a></li> -->
-			<li><a id="js-feedback-button" href="javascript:;">建议反馈</a></li>			
+			<li><a id="js-feedback-button" style='cursor:pointer'>建议反馈</a></li>			
 <!-- 			<li><a target="_blank" href="/app">移动应用</a></li> -->
 <!-- 			<li><a href="/jobs">加入Truthbook</a></li> -->
 <!-- 			<li><a target="_blank" href="/terms">Truthbook协议</a></li> -->
@@ -20,3 +20,12 @@
 		</div>
 	</div>
 </body>
+
+	<script src="./assets/jquery/jquery-1.7.2.js"></script>
+	<script type="text/javascript">
+		$("#js-feedback-button").click(function (){
+			window.open("http://weibo.com/truthbook");
+		});	
+	</script>
+	
+</html>

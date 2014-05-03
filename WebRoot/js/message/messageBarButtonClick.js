@@ -69,7 +69,9 @@ function recurFindTheImageAndFlip(imageId,level){
 		return;
 	}else{
 		if(level == 1){
-			flipImageByImageId(imageId);
+			$("#imageId"+imageId).find(".commentwrap").html("");
+			getThisComment_All(imageId,CONTROL.Self);
+//			flipImageByImageId(imageId);
 		}
 	}
 	return;
@@ -77,77 +79,50 @@ function recurFindTheImageAndFlip(imageId,level){
 
 
 function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem,imageOwnId){
-//	var onAjaxSuccess = function(data,textStatus){
-//		if(data != null){
-			var userId = imageOwnId;
-			if(userId == $.cookie("truthbook").userId){
-				//不用跳转，反面即可
+	var userId = imageOwnId;
+	if(userId == $.cookie("truthbook").userId){
+		//不跳转，完成背后图片载入即可
+		$.cookie("truthbook_thisImageId",thisImageId);
+//		deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+		deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+		recurFindTheImageAndFlip(thisImageId,1);
+		
+	}else{
+		var onSuccess = function(data,textStatus){
+			if(data != null ){
+				$.cookie("truthbook_PageOwner_userId", data);
 				$.cookie("truthbook_thisImageId",thisImageId);
-				recurFindTheImageAndFlip(thisImageId,1);
-				deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
-				return;
+				deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+			} else {
+				drawConfirmPopUp("获取用户失败");
 			}
-			var onSuccess = function(data,textStatus){
-				if(data != null ){
-					$.cookie("truthbook_PageOwner_userId", data);
-					$.cookie("truthbook_thisImageId",thisImageId);
-					deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
-					//test
-//					window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
-				} else {
-					drawConfirmPopUp("获取用户失败");
-				}
-			};
-			var onError = function(xhr,status,error){
-				drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
-				return false;
-			};
-			
-			getUserAPI(userId, onSuccess, onError);
-//		} else {
-//			drawConfirmPopUp("获取用户失败");
-//		}
-//	};
-//	var onAjaxError = function(xhr,status,error){
-//		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
-//		return false;
-//	};
-//	
-//	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
-
+		};
+		var onError = function(xhr,status,error){
+			drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+			return false;
+		};
+		getUserAPI(userId, onSuccess, onError);
+	}
 }
 
 function goToThatImage(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem){
-//	var onAjaxSuccess = function(data,textStatus){
-//		if(data != null){
-			var userId = thisUserId;
-			var onSuccess = function(data,textStatus){
-				if(data != null ){
-					$.cookie("truthbook_PageOwner_userId", data);
-					$.cookie("truthbook_thisImageId",thisImageId);
-					deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
+	var userId = thisUserId;
+	var onSuccess = function(data,textStatus){
+		if(data != null ){
+			$.cookie("truthbook_PageOwner_userId", data);
+			$.cookie("truthbook_thisImageId",thisImageId);
+			deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
 //					window.location.href = HomePage+"?id="+$.cookie("truthbook_PageOwner_userId").userId;
-				} else {
-					drawConfirmPopUp("获取用户失败");
-				}
-			};
-			var onError = function(xhr,status,error){
-				drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
-				return false;
-			};
-			
-			getUserAPI(userId, onSuccess, onError);
-//		} else {
-//			drawConfirmPopUp("获取用户失败");
-//		}
-//	};
-//	var onAjaxError = function(xhr,status,error){
-//		drawConfirmPopUp("获取图片请求发送失败 Error: " + error);
-//		return false;
-//	};
-//	
-//	getImageByImageIdAPI(thisImageId,onAjaxSuccess,onAjaxError);
-
+		} else {
+			drawConfirmPopUp("获取用户失败");
+		}
+	};
+	var onError = function(xhr,status,error){
+		drawConfirmPopUp("获取用户请求发送失败 Error: " + error);
+		return false;
+	};
+	
+	getUserAPI(userId, onSuccess, onError);
 }
 
 
@@ -191,14 +166,17 @@ function deleteMessageTrasition(messageTypeNumber,thisItem){
 		duration  : '0.3s',
 		complete  : function() {
 			thisItem.hide();
-	}
+			thisItem.html("");
+			deleteHeadMessageNumUpdate(thisItem);
+		}
 	});
-	deleteHeadMessageNumUpdate(thisItem);
+	
 }
 
 function deleteHeadMessageNumUpdate(thisItem){
 	var newNumOfMessage = Number(thisItem.parent().parent().find(".messageNumber").html()) - 1;
 	if (newNumOfMessage <= 0){
+		thisItem.parent().parent().find(".item").html("");
 		thisItem.parent().parent().children(".item").hide();
 	} else {
 		thisItem.parent().parent().find(".messageNumber").html(newNumOfMessage);

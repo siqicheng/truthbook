@@ -15,9 +15,11 @@ function flipCardCheck(imageId){
 }
 
 function flipImageByImageId(imageId){
-	showReply($("#imageId"+imageId).find(".likebtn"));
-	//comment hasn't loaded problem
 	$.cookie("truthbook_thisImageId", null,{expires: -1});
+	if($("#imageId"+imageId).find(".comments").parents(".side.ui.items").hasClass("active")==false){
+		showReply($("#imageId"+imageId).find(".likebtn"));		
+	}
+	moveDownScroll($("#imageId"+imageId).find(".likebtn").parents('.ui.shape').find(".commentwrap"));
 	$("#imageId"+imageId).find(".textarea").focus();
 }
 
@@ -137,6 +139,7 @@ function approvedImageData(data,numTotalImage){
 			approvedImageData.push(data[i]);
 		} else {
 			unapprovImageData.push(data[i]);
+			console.log('unapprove')
 		}
 	}
 	return [approvedImageData,unapprovImageData];

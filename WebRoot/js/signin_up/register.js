@@ -249,8 +249,8 @@ $('.ui.form.register-form')
 				} else {
 					console.log("no quote found");
 //					register_new($('.ui.form.register-form').serialize());
-					drawConfirmPopUp("快去找个用户为你创建个词条吧");
-//					alert('暂未开放注册，敬请期待');
+//					drawConfirmPopUp("快去找个用户为你创建个词条吧");
+					confirmNoSignin();
 				};
 			};
 			var onAjaxError = function(xhr,status,error){
@@ -263,7 +263,27 @@ $('.ui.form.register-form')
 	}
 	return false;
 });
-    
+   
+function confirmNoSignin(){
+	var header = "尚未全面开放注册";
+	var content = "只有被<br>&ensp;&ensp;注册用户新建的词条<br>" +
+					"&ensp;&ensp;&ensp;&ensp;才能通过认领完成注册哦";
+	var negativeBtn = "取消";
+	var negativeBtnHidden = "太坑爹了我再也不要来了";
+	var positiveBtn = "确定";
+	var positiveBtnHidden = "siqicheng.fdu@gmail.com";
+	var logo="lock";
+	approveFunction = function() {
+		return true
+	};
+	onDenyFunction = function() {
+		return true;
+	};
+	testModalPopup(header, content, negativeBtn, negativeBtnHidden, positiveBtn, 
+						positiveBtnHidden, approveFunction,onDenyFunction, logo);	
+}
+
+
 /*	Helper function
  */
 function register_new(info) {
