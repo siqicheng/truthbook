@@ -227,7 +227,7 @@ public class UserProfile {
 			if (relationships.size() > 0) {
 				List<User> friend_list = new ArrayList();
 				for (Relationship relationship : relationships) {
-					if (relationship.getRelationship() == type) {
+					if (relationship.getRelationship().equals(type)) {
 						Integer friend_id = relationship.getFriendId();
 						User friend = (new UserDAO()).findById(friend_id);
 						friend_list.add(friend);

@@ -68,9 +68,11 @@ public class ImageDAO extends BaseHibernateDAO {
 		try {
 			Image instance = (Image) getSession().get(
 					"db.mapping.object.Image", id);
+			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			this.closeSession();
 			throw re;
 		}
 	}
@@ -83,9 +85,11 @@ public class ImageDAO extends BaseHibernateDAO {
 					.list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
+			this.closeSession();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			this.closeSession();
 			throw re;
 		}
 	}
@@ -99,9 +103,11 @@ public class ImageDAO extends BaseHibernateDAO {
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setCacheable(false);
 			queryObject.setParameter(0, value);
+			this.closeSession();
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
+			this.closeSession();
 			throw re;
 		}
 	}
@@ -133,6 +139,7 @@ public class ImageDAO extends BaseHibernateDAO {
 			String queryString = "from Image";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setCacheable(false);
+			this.closeSession();
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -145,6 +152,7 @@ public class ImageDAO extends BaseHibernateDAO {
 		try {
 			Image result = (Image) getSession().merge(detachedInstance);
 			log.debug("merge successful");
+			this.closeSession();
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
