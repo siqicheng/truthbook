@@ -1,16 +1,15 @@
 package db.mapping.object.DAO;
 
-import db.mapping.baseDAO.BaseHibernateDAO;
-import db.mapping.object.Comment;
-
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import db.mapping.baseDAO.BaseHibernateDAO;
+import db.mapping.object.Comment;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -62,8 +61,10 @@ public class CommentDAO extends BaseHibernateDAO {
 		try {
 			Comment instance = (Comment) getSession().get(
 					"db.mapping.object.Comment", id);
+			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
+			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}

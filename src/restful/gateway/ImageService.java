@@ -54,11 +54,21 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object getLatestImage(@PathParam("userid") Integer userId,
 			@HeaderParam("token") String token){
-//		if (!user.getToken().equals(token)){
-//			return null;
-//		}
 		try{
 			User user = new UserDAO().findById(userId);
+			
+			//判断是否是本人，或与本人是好友
+			if (!user.getToken().equals(token)){
+				List friend = this.userDAO.findByToken(token);
+				if (friend == null || friend.size()==0){
+					return null;
+				}
+				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
+				if (relat == null){
+					return null;
+				}
+			}
+			
 			List<Image> image_list = this.getCriteria().add(Restrictions.eq(ImageDAO.USER, user))
 													.addOrder(Order.desc(ImageDAO.LAST_MODIFIED))
 													.setMaxResults(1).list();
@@ -157,23 +167,23 @@ public class ImageService {
 	@GET
 	@Path("v1/image/{userId}/user")
 	@Produces("application/json;charset=utf-8")
-	public Object getImagesByUser(@PathParam("userId") Integer userId,
+	public List<Image> getImagesByUser(@PathParam("userId") Integer userId,
 			@HeaderParam("token") String token) {
 		Session session = this.imageDAO.getSession();
 		try{
 			User user = this.userDAO.findById(userId);
 			
 			//判断是否是本人，或与本人是好友
-//			if (!user.getToken().equals(token)){
-//				List friend = this.userDAO.findByToken(token);
-//				if (friend == null || friend.size()==0){
-//					return null;
-//				}
-//				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
-//				if (relat == null){
-//					return null;
-//				}
-//			}
+			if (!user.getToken().equals(token)){
+				List friend = this.userDAO.findByToken(token);
+				if (friend == null || friend.size()==0){
+					return null;
+				}
+				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
+				if (relat == null){
+					return null;
+				}
+			}
 			
 			Criteria criteria = this.getCriteria();
 			List<Image> image_list = criteria
@@ -187,9 +197,9 @@ public class ImageService {
 			}
 			
 			this.closeSession();
-			return images;
+//			return images;
+			return image_list;
 		} catch (Exception e){
-//			session.close();
 			this.imageDAO.closeSession();
 			e.printStackTrace();
 			return null;

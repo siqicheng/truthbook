@@ -67,8 +67,10 @@ public class ImageDAO extends BaseHibernateDAO {
 		try {
 			Image instance = (Image) getSession().get(
 					"db.mapping.object.Image", id);
+			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
+			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}

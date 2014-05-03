@@ -1,7 +1,0 @@
-14.04.29;
-  加载antiSamy  policy文件时路径不正确。
-  solve 1: 改变代码结构，使能够看到FileNotExist的Exception信息
-  solve 2: 根据上述信息当中的绝对文件路径加载，成功
-  solve 3: 由根据路径字符串加载改为先根据相对路径字符串创建File,再加载File.加载成功。
-
-

@@ -64,8 +64,10 @@ public class PortraitDAO extends BaseHibernateDAO {
 		try {
 			Portrait instance = (Portrait) getSession().get(
 					"db.mapping.object.Portrait", id);
+			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
+			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}

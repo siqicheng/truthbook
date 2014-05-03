@@ -61,8 +61,10 @@ public class MessageDAO extends BaseHibernateDAO {
 		try {
 			Message instance = (Message) getSession().get(
 					"db.mapping.object.Message", id);
+			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
+			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}

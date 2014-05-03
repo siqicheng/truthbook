@@ -132,7 +132,7 @@ public class FileMeta {
 			Relationship relat = (Relationship)new RelationshipDAO()
 					.findByUserAndFriend(receiver, userId);
 			
-			if (relat.getRelationship() == Relationship.E_FRIEND_LEVEL)
+			if (relat!=null&&relat.getRelationship() == Relationship.E_FRIEND_LEVEL)
 			image.setApproved(true);
 			
 			session.save(image);
