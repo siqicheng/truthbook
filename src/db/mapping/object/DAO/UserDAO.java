@@ -124,6 +124,8 @@ public class UserDAO extends BaseHibernateDAO  {
          String queryString = "from User as model where model." 
          						+ propertyName + "= ?";
          Query queryObject = getSession().createQuery(queryString);
+         queryObject.setCacheable(false);
+         
 		 queryObject.setParameter(0, value);
 		 return queryObject.list();
       } catch (RuntimeException re) {
@@ -172,6 +174,7 @@ public class UserDAO extends BaseHibernateDAO  {
 		try {
 			String queryString = "from User";
 	         Query queryObject = getSession().createQuery(queryString);
+	         queryObject.setCacheable(false);
 			 return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);

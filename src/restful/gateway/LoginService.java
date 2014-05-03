@@ -382,10 +382,12 @@ public class LoginService {
 									
 			userDAO.save(this.user);
 			tx.commit();
+			this.userDAO.closeSession();
 			return this.user;
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}		
 	}
@@ -411,10 +413,12 @@ public class LoginService {
 			this.user.setToken(RestUtil.generateToken(fullName));
 			userDAO.save(this.user);
 			tx.commit();
+			this.userDAO.closeSession();
 			return this.user;
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}		
 	}
@@ -445,10 +449,12 @@ public class LoginService {
 			session.update(this.user);
 			session.save(this.userPassword);
 			tx.commit();
+			this.userDAO.closeSession();
 			return this.user;
 		}catch (Exception e){
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}		
 	}

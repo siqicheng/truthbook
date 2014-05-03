@@ -81,13 +81,15 @@ public class UserProfile {
 				Transaction tx = session.beginTransaction();
 				session.save(relationship);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 			return RestUtil.string2json("false");
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.relationshipDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 	}
@@ -125,12 +127,14 @@ public class UserProfile {
 				relationship.setRelationship(type);
 				session.update(relationship);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.relationshipDAO.closeSession();
 		}
 
 		return RestUtil.string2json("false");
@@ -191,12 +195,14 @@ public class UserProfile {
 				Relationship relationship = Friend;
 				session.delete(relationship);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.relationshipDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 

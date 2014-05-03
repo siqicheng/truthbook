@@ -84,6 +84,7 @@ public class UserFetchDAO extends BaseHibernateDAO {
 			String queryString = "from UserFetch as model where model."
 					+ propertyName + "= ?";
 			Query queryObject = getSession().createQuery(queryString);
+			queryObject.setCacheable(false);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -97,6 +98,7 @@ public class UserFetchDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from UserFetch";
 			Query queryObject = getSession().createQuery(queryString);
+			queryObject.setCacheable(false);
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);

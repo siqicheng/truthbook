@@ -13,7 +13,7 @@
   <many-to-one class="db.mapping.object.Image"  fetch="select" name="image">
    <column name="image_id" not-null="true"/>
   </many-to-one>
-  <many-to-one class="db.mapping.object.Comment" fetch="select" name="comment">
+  <many-to-one class="db.mapping.object.Comment" lazy="false" fetch="select" name="comment">
    <column name="comment_id" not-null="true"/>
   </many-to-one>
  </class>
