@@ -20,9 +20,10 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 		return HibernateSessionFactory.getSession();
 	}	
 	
+	public void closeSession(){
+		HibernateSessionFactory.closeSession();
+	}
 
-
-	
 	public List findByProperties(String propertyName[], Object value[],String table) {
 		try {
 			
@@ -66,7 +67,7 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 			String queryString = "select user_id,friend_id,cast(relationship as varchar),is_invitee from " + table + " as model where " + sql_frag;
 			
 			Query queryObject = getSession().createSQLQuery(queryString).setResultTransformer(Transformers.aliasToBean(Entity));
-//			queryObject.setCacheable(false);
+			queryObject.setCacheable(false);
 			
 			for (int i=0; i<value.length;i++){
 				queryObject.setParameter(i, value[i]);

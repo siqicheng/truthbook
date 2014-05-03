@@ -81,13 +81,15 @@ public class UserProfile {
 				Transaction tx = session.beginTransaction();
 				session.save(relationship);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 			return RestUtil.string2json("false");
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.relationshipDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 	}
@@ -125,12 +127,14 @@ public class UserProfile {
 				relationship.setRelationship(type);
 				session.update(relationship);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.relationshipDAO.closeSession();
 		}
 
 		return RestUtil.string2json("false");
@@ -191,12 +195,14 @@ public class UserProfile {
 				Relationship relationship = Friend;
 				session.delete(relationship);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.close();
+//			session.close();
+			this.relationshipDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 
@@ -221,7 +227,7 @@ public class UserProfile {
 			if (relationships.size() > 0) {
 				List<User> friend_list = new ArrayList();
 				for (Relationship relationship : relationships) {
-					if (relationship.getRelationship() == type) {
+					if (relationship.getRelationship().equals(type)) {
 						Integer friend_id = relationship.getFriendId();
 						User friend = (new UserDAO()).findById(friend_id);
 						friend_list.add(friend);
@@ -231,12 +237,14 @@ public class UserProfile {
 				for (int i = 0; i < friend_list.size(); i++) {
 					friends[i] = (User) friend_list.get(i);
 				}
-
+				this.userDAO.closeSession();
 				return friends;
 			}
+			this.userDAO.closeSession();
 			return null;
 		} catch (Exception e){
 			e.printStackTrace();
+			this.userDAO.closeSession();
 			return null;
 		}
 		

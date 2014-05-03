@@ -72,11 +72,13 @@ public class FeedService {
 				userFetch.setLastFetchTime(new Timestamp(System.currentTimeMillis()));
 				session.update(userFetch);
 				tx.commit();
-				session.close();
+//				session.close();
+				this.userFetchDAO.closeSession();
 				return images;
 			} catch (Exception e){
 				e.printStackTrace();
-				session.close();
+//				session.close();
+				this.userFetchDAO.closeSession();
 				return null;
 			}
 		}
@@ -109,11 +111,13 @@ public class FeedService {
 				for (int i=0 ;i < image_list.size(); ++i){
 					images[i] = image_list.get(i);
 				}
-				session.close();
+//				session.close();
+				this.userFetchDAO.closeSession();
 				return images;
 			} catch (Exception e){
 				e.printStackTrace();
-				session.close();
+//				session.close();
+				this.userFetchDAO.closeSession();
 				return null;
 			}
 		}

@@ -15,6 +15,7 @@ function getThisComment_All(imageId,Control){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data != null){
 			var numTotalComment = commentLengthJson(data);
+			$("#imageId"+imageId).find(".numOfComment_inline").html(numTotalComment);
 			if (numTotalComment == 1){
 				var commentContent = data.imageComment.comment.commentContent,
 					repliedByCommentId = data.imageComment.comment.repliedByCommentId,
