@@ -1,5 +1,4 @@
 package restful.gateway;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,7 +29,6 @@ import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.RelationshipDAO;
 import db.mapping.object.DAO.UserDAO;
 
-
 @Path("imageService")
 public class ImageService {
 	
@@ -51,7 +49,6 @@ public class ImageService {
 	private void closeSession(){
 		this.imageDAO.closeSession();
 	}
-	
 	@GET
 	@Path("v1/image/{userid}/latest")
 	@Produces("application/json;charset=utf-8")
@@ -66,7 +63,7 @@ public class ImageService {
 													.addOrder(Order.desc(ImageDAO.LAST_MODIFIED))
 													.setMaxResults(1).list();
 			this.closeSession();
-			if (image_list.size()>0){
+			if (image_list.size()==0){
 				return null;
 			}
 			Image[] images = new Image[image_list.size()];
@@ -167,16 +164,16 @@ public class ImageService {
 			User user = this.userDAO.findById(userId);
 			
 			//判断是否是本人，或与本人是好友
-			if (!user.getToken().equals(token)){
-				List friend = this.userDAO.findByToken(token);
-				if (friend == null){
-					return null;
-				}
-				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
-				if (relat == null){
-					return null;
-				}
-			}
+//			if (!user.getToken().equals(token)){
+//				List friend = this.userDAO.findByToken(token);
+//				if (friend == null || friend.size()==0){
+//					return null;
+//				}
+//				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
+//				if (relat == null){
+//					return null;
+//				}
+//			}
 			
 			Criteria criteria = this.getCriteria();
 			List<Image> image_list = criteria
