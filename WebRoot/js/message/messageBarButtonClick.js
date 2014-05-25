@@ -80,7 +80,7 @@ function recurFindTheImageAndFlip(imageId,level){
 
 function goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem,imageOwnId){
 	var userId = imageOwnId;
-	if(userId == $.cookie("truthbook").userId){
+	if(userId == $.cookie("truthbook_PageOwner_userId").userId){
 		//不跳转，完成背后图片载入即可
 		$.cookie("truthbook_thisImageId",thisImageId);
 //		deleteMessageAndJump(thisMessageId,messageTypeNumber,thisItem);
