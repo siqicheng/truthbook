@@ -320,6 +320,14 @@ function getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
 	ajax_call(ajax_obj);	
 }
 
+function getOneImageByUserIdSyncAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + userId + "/latest",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.async = false;
+	ajax_call(ajax_obj);	
+}
+
 function deleteImageByImageIdAPI(imageId,onAjaxSuccess,onAjaxError){
 	var path = "v1/image/"+imageId+"/delete",
 		url = ServerRoot + ServiceType.IMAGE + path,
