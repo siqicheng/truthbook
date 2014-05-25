@@ -1,8 +1,13 @@
 
 function setInitialPortrait(){
 	var portraitUrl = $.cookie("truthbook_PageOwner_userId").defaultPortrait;
-	portraitSmall = getImageUrl(portraitUrl,ImageType.Small);
-	portraitMedium = getImageUrl(portraitUrl,ImageType.Large);
+	if($.cookie("truthbook_PageOwner_userId").isActivated == "false"){
+		portraitSmall = DefaultQuotePortrait;
+		portraitMedium = DefaultQuotePortrait;
+	}else{
+		portraitSmall = getImageUrl(portraitUrl,ImageType.Small);
+		portraitMedium = getImageUrl(portraitUrl,ImageType.Large);
+	}
 	
 	$("#portraitImage").attr("src",portraitSmall);
 	$("#portraitLarge").attr("href",portraitMedium);

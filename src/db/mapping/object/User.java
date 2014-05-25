@@ -14,7 +14,7 @@ import db.mapping.object.UserPassword;
  */
 @XmlRootElement
 @XmlSeeAlso({UserPassword.class,Relationship.class,Message.class})
-public class User  implements java.io.Serializable {
+public class User implements java.io.Serializable {
 
 
     // Fields    
@@ -146,6 +146,7 @@ public class User  implements java.io.Serializable {
     public void setIsActivated(Boolean isActivated) {
         this.isActivated = isActivated;
     }
+    
     @XmlTransient
     public Set getComments() {
         return this.comments;
@@ -163,6 +164,7 @@ public class User  implements java.io.Serializable {
     public void setComments(Set comments) {
         this.comments = comments;
     }
+    
     @XmlTransient
     public Set getRelationships() {
         return this.relationships;

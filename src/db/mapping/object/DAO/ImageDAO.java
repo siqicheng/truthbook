@@ -1,16 +1,16 @@
 package db.mapping.object.DAO;
 
-import db.mapping.baseDAO.BaseHibernateDAO;
-import db.mapping.object.Image;
-
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
 import org.hibernate.LockMode;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import db.mapping.baseDAO.BaseHibernateDAO;
+import db.mapping.object.Image;
 
 /**
  * A data access object (DAO) providing persistence and search support for Image
@@ -27,11 +27,10 @@ import org.slf4j.LoggerFactory;
 public class ImageDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(ImageDAO.class);
 	// property constants
-	public static final String DETELED = "deteled";
 	public static final String IMAGE_ID = "imageId";
 	public static final String IMAGE_URL = "imageUrl";
 	public static final String CREATE_DATE = "createDate";
-	public static final String LASTE_MODIFIED = "lastModified";
+	public static final String LAST_MODIFIED = "lastModified";
 	public static final String UPLOADER_ID = "uploaderId";
 	public static final String APPROVED = "approved";
 	public static final String DELETED = "deleted";
@@ -66,7 +65,8 @@ public class ImageDAO extends BaseHibernateDAO {
 	public Image findById(java.lang.Integer id) {
 		log.debug("getting Image instance with id: " + id);
 		try {
-			Image instance = (Image) getSession().get(
+			Session session = getSession();
+			Image instance = (Image) session.get(
 					"db.mapping.object.Image", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -121,10 +121,6 @@ public class ImageDAO extends BaseHibernateDAO {
 
 	public List findByApproved(Object approved) {
 		return findByProperty(APPROVED, approved);
-	}
-
-	public List findByDeteled(Object deteled) {
-		return findByProperty(DETELED, deteled);
 	}
 
 	public List findAll() {

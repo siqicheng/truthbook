@@ -1,5 +1,6 @@
 package sessionFactory;
 
+import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
@@ -47,8 +48,9 @@ public class HibernateSessionFactory {
      *  @throws HibernateException
      */
     public static Session getSession() throws HibernateException {
-        Session session = (Session) threadLocal.get();
-
+    	Session session = (Session) threadLocal.get();
+//    	Session session = null;
+    	
 		if (session == null || !session.isOpen()) {
 			if (sessionFactory == null) {
 				rebuildSessionFactory();
@@ -57,7 +59,6 @@ public class HibernateSessionFactory {
 					: null;
 			threadLocal.set(session);
 		}
-//		session.clear();
         return session;
     }
 

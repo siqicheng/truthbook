@@ -28,7 +28,7 @@ public class Image implements java.io.Serializable {
 	private Boolean approved;
 	private Boolean deleted;
 	private String content;
-	private String uploaderName;
+	private String uploaderName;	
 	private Integer liked;
 	private Integer commentCnt;
 	private Set imageComments = new HashSet(0);
@@ -69,6 +69,17 @@ public class Image implements java.io.Serializable {
 	}
 
 	// Property accessors
+	@XmlTransient
+	public Set getImageComments() {
+		return this.imageComments;
+	}
+	
+	@XmlTransient
+	public Set getPortraits() {
+		return this.portraits;
+	}
+	
+	@XmlTransient
 	public Integer getCommentCnt(){
 		return this.imageComments.size();
 	}
@@ -80,31 +91,21 @@ public class Image implements java.io.Serializable {
 		else return null;
 	}
 
-	public void setUploaderName(String uploaderName) {
-		this.uploaderName = uploaderName;
-	}
-
-	public void setCommentCnt(Integer commentCnt){
-		this.commentCnt = commentCnt;
-	}
 	
 	public Integer getLiked(){
 		return this.liked;
 	}
+	
+	public User getUser(){
+		return this.user;
+	}
+	
 	
 	@XmlTransient
 	public Set getMessages() {
 		return messages;
 	}
 
-	public void setMessages(Set messages) {
-		this.messages = messages;
-	}
-
-	public void setLiked(Integer liked){
-		this.liked = liked;
-	}
-	
 	@XmlTransient
 	public Integer getUserId(){
 		return this.user.getUserId();
@@ -114,89 +115,104 @@ public class Image implements java.io.Serializable {
 		return this.content;
 	}
 	
-	public void setContent(String content){
-		this.content = content;
-	}
-	
-	public User getUser(){
-		return this.user;
-	}
-	
-	public void setUser(User user){
-		this.user = user;
-	}
-	
-	
 	public Integer getImageId() {
 		return this.imageId;
-	}
-
-	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
 	}
 
 	public String getImageUrl() {
 		return this.imageUrl;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
 	public Date getCreateDate() {
 		return this.createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
 	}
 
 	@XmlTransient
 	public Date getLastModified() {
 		return this.lastModified;
 	}
+	
+	public Integer getUploaderId() {
+		return this.uploaderId;
+	}
+	
+	public Boolean getApproved() {
+		return this.approved;
+	}
+	
+	@XmlTransient
+	public Boolean getDeleted() {
+		return this.deleted;
+	}
+	
+	public void setMessages(Set messages) {
+		this.messages = messages;
+	}
+
+	public void setLiked(Integer liked){
+		this.liked = liked;
+	}
+	
+	public void setUploaderName(String uploaderName) {
+		this.uploaderName = uploaderName;
+	}
+
+	public void setCommentCnt(Integer commentCnt){
+		this.commentCnt = commentCnt;
+	}
+	
+	
+	public void setContent(String content){
+		this.content = content;
+	}
+	
+	
+	public void setUser(User user){
+		this.user = user;
+	}
+	
+
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
+	
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	
 
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
 	}
 
-	public Integer getUploaderId() {
-		return this.uploaderId;
-	}
+	
 
 	public void setUploaderId(Integer uploaderId) {
 		this.uploaderId = uploaderId;
 	}
 
-	public Boolean getApproved() {
-		return this.approved;
-	}
+
 
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
 	}
-
-	@XmlTransient
-	public Boolean getDeleted() {
-		return this.deleted;
-	}
+	
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
-	@XmlTransient
-	public Set getImageComments() {
-		return this.imageComments;
-	}
+	
 
 	public void setImageComments(Set imageComments) {
 		this.imageComments = imageComments;
 	}
-	@XmlTransient
-	public Set getPortraits() {
-		return this.portraits;
-	}
-
+	
 	public void setPortraits(Set portraits) {
 		this.portraits = portraits;
 	}

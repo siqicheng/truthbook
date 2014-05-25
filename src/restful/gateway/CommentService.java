@@ -17,13 +17,17 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import db.mapping.object.*;
+import antySamy.AntySamyFilter;
+import db.mapping.object.Comment;
+import db.mapping.object.Image;
+import db.mapping.object.ImageComment;
+import db.mapping.object.Relationship;
+import db.mapping.object.User;
 import db.mapping.object.DAO.CommentDAO;
 import db.mapping.object.DAO.ImageCommentDAO;
 import db.mapping.object.DAO.ImageDAO;
+import db.mapping.object.DAO.RelationshipDAO;
 import db.mapping.object.DAO.UserDAO;
-
-import antySamy.AntySamyFilter;;
 
 @Path("commentService")
 public class CommentService {
@@ -37,7 +41,7 @@ public class CommentService {
 	private ImageComment imageComment;
 	private ImageCommentDAO imageCommentDAO;
 	
-	private Session session;
+//	private Session session;
 	
 	public CommentService(){
 		comment = new Comment();
@@ -59,16 +63,15 @@ public class CommentService {
 			@FormParam("repliedToId") Integer repliedToId,
 			@FormParam("repliedById") Integer repliedById,
 			@HeaderParam("token") String token) {
-		
-			session = this.commentDAO.getSession();
 			try{
-				Transaction tx = session.beginTransaction();			
-				
+				Session session = this.commentDAO.getSession();
 				this.user = this.userDAO.findById(userId);
 				User sender = this.userDAO.findById(repliedById);
 				if (sender==null || !sender.getToken().equals(token)){
+					this.commentDAO.closeSession();
 					return null;
-				}
+				}		
+				Transaction tx = session.beginTransaction();
 				if(this.user != null){
 					this.comment.setUser(this.user);
 					content = AntySamyFilter.getCleanHtml(content);
@@ -79,12 +82,11 @@ public class CommentService {
 					session.save(this.comment);
 					tx.commit();
 				}
-//				session.close();
+				String commentId = this.comment.getCommentId().toString();
 				this.commentDAO.closeSession();
-				return RestUtil.object2json(this.comment.getCommentId());
+				return RestUtil.string2json(commentId);
 			}catch (Exception e){
 				e.printStackTrace();
-//				session.close();
 				this.commentDAO.closeSession();
 				return null;
 			}
@@ -98,15 +100,16 @@ public class CommentService {
 			@FormParam("content") String content,
 			@FormParam("repliedById") Integer repliedById,
 			@HeaderParam("token") String token) {
-		
-			session = this.commentDAO.getSession();
-			try{
-				Transaction tx = session.beginTransaction();			
+			
+			try{	
+				Session session = this.commentDAO.getSession();
 				User sender = this.userDAO.findById(repliedById);
 				if (!sender.getToken().equals(token)){
+					this.commentDAO.closeSession();
 					return null;
 				}
 				this.user = this.userDAO.findById(userId);
+				Transaction tx = session.beginTransaction();
 				if(this.user != null){
 					this.comment.setUser(this.user);
 					content = AntySamyFilter.getCleanHtml(content);
@@ -116,15 +119,14 @@ public class CommentService {
 					session.save(this.comment);
 					tx.commit();
 				}
-//				session.close();
+				String commentId = this.comment.getCommentId().toString();
 				this.commentDAO.closeSession();
-				return RestUtil.object2json(this.comment.getCommentId());
+				return RestUtil.string2json(commentId);
 			}catch (Exception e){
 				e.printStackTrace();
-//				session.close();
 				this.commentDAO.closeSession();
-			}
-			return null;
+				return null;
+			}		
 	}
 	
 	
@@ -135,35 +137,27 @@ public class CommentService {
 			@FormParam("commentId") Integer commentId,
 			@HeaderParam("token") String token){
 		
-		
 		try{
+			Session session = this.imageCommentDAO.getSession();
 			this.image = this.imageDAO.findById(imageId);
 			this.comment = this.commentDAO.findById(commentId);
-			
 			User sender = this.userDAO.findById(this.comment.getRepliedByCommentId());
 			if (!sender.getToken().equals(token)){
+				this.imageCommentDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
-			
+			Transaction tx = session.beginTransaction();
 			this.imageComment.setImage(this.image);
 			this.imageComment.setComment(this.comment);
-			
-			session = this.imageCommentDAO.getSession();
-			
-			Transaction tx = session.beginTransaction();
 			session.save(this.imageComment);
 			tx.commit();
-//			session.close();
-			this.commentDAO.closeSession();
+			this.imageCommentDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-			if (session.isConnected()) {
-//				session.close();
-				this.commentDAO.closeSession();	
-			}
+			this.commentDAO.closeSession();	
+			return RestUtil.string2json("false");
 		}
-		return RestUtil.string2json("false");
 	}
 	
 	@GET
@@ -173,15 +167,29 @@ public class CommentService {
 			@HeaderParam("token") String token){
 		ImageComment[] imageComment = null;
 		try{
-			this.image = this.imageDAO.findById(imageId);
-	//		if (!this.image.getUser().getToken().equals(token)){
-	//			return null;
-	//		}
-			Session session = this.imageCommentDAO.getSession();
-			Criteria criteria = session.createCriteria(ImageComment.class);
+//			Session session = this.imageCommentDAO.getSession();
+//			this.image = this.imageDAO.findById(imageId);
+			Image image = this.imageDAO.findById(imageId);
+			User user = image.getUser();
 			
-	//		List imageComments = this.imageCommentDAO.findByProperty(ImageCommentDAO.IMAGE, this.image);
-			List imageComments = criteria.add(Restrictions.eq(ImageCommentDAO.IMAGE, image)).list();
+			//判断是否是本人，或与本人是好友
+			if (!user.getToken().equals(token)){
+				List friend = this.userDAO.findByToken(token);
+				if (friend == null){
+					this.imageDAO.closeSession();
+					return null;
+				}
+				Relationship relat = new RelationshipDAO().findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
+				if (relat == null){
+					this.imageDAO.closeSession();
+					return null;
+				}
+			}
+			
+			Criteria criteria = this.commentDAO.getSession().createCriteria(ImageComment.class);	
+			List<ImageComment> imageComments = criteria
+								.add(Restrictions.eq(ImageCommentDAO.IMAGE, image))
+								.list();
 			if(imageComments.size()>0){
 				imageComment = new ImageComment[imageComments.size()];
 				for (int i=0; i<imageComments.size();i++){
@@ -205,17 +213,25 @@ public class CommentService {
 			@HeaderParam("token") String token){
 		
 		try{
+			Session session = this.imageCommentDAO.getSession();
 			this.image = this.imageDAO.findById(imageId);
-//			if (!this.image.getUser().getToken().equals(token)){
-//				return RestUtil.string2json("false");
-//			}
 			this.comment = this.commentDAO.findById(commentId);
+			User repliedBy = this.userDAO.findById(this.comment.getRepliedByCommentId());
+			boolean flag = true;
+			if (!this.image.getUser().getToken().equals(token)){
+				if (!repliedBy.getToken().equals(token)){
+					flag = false;
+				}
+			}
+			if (!flag) {
+				this.imageCommentDAO.closeSession();
+				return RestUtil.string2json("false");
+			}
+			
 			
 			String property[] = {ImageCommentDAO.IMAGE,ImageCommentDAO.COMMENT};
 			Object value[] = {this.image,this.comment};
-			
 			List imageComments = this.imageCommentDAO.findByProperties(property, value, ImageCommentDAO.TABLE);
-			Session session = this.imageCommentDAO.getSession();
 			if(imageComments.size()>0){
 				Transaction tx = session.beginTransaction();
 				for(int i=0; i<imageComments.size();i++){
@@ -226,16 +242,13 @@ public class CommentService {
 				}
 				tx.commit();				
 			}
-//			session.close();
 			this.imageCommentDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.imageCommentDAO.closeSession();
+			return RestUtil.string2json("false");
 		}
-	
-		return RestUtil.string2json("false");
 	}
 	
 	
@@ -246,25 +259,43 @@ public class CommentService {
 			@PathParam("commentNumber") Integer commentNumber,
 			@HeaderParam("token") String token){
 		
+		ImageComment[] imageComment = null;
 		try{
-			ImageComment[] imageComment = null;
-			this.image = this.imageDAO.findById(imageId);
-//			if (!this.image.getUser().getToken().equals(token)){
-//				return null;
-//			}
 			Session session = this.imageDAO.getSession();
+			Image image = this.imageDAO.findById(imageId);
+			User user = image.getUser();
+			
+			//判断是否是本人，或与本人是好友
+//			if (!user.getToken().equals(token)){
+//				List friend = this.userDAO.findByToken(token);
+//				if (friend == null){
+//					this.imageDAO.closeSession();
+//					return null;
+//				}
+//				Relationship relat = new RelationshipDAO().findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
+//				if (relat == null){
+//					this.imageDAO.closeSession();
+//					return null;
+//				}
+//			}
+			
 			Criteria criteria = session.createCriteria(ImageComment.class);
 			criteria.addOrder(Order.desc(ImageCommentDAO.ID))
-					.add(Restrictions.eq("image",image))
-					.setMaxResults(commentNumber);
+					.add(Restrictions.eq("image",image));
+//					.setMaxResults(commentNumber);
 			
 			List<ImageComment> icl = criteria.list();
+			int numOfComment = icl.size();
+			int numReturn = returnSmaller(numOfComment,commentNumber);
+			imageComment = new ImageComment[numReturn+1];
 			
-			imageComment = new ImageComment[icl.size()];
-			
-			for (int i=0; i<icl.size(); i++){
+			for (int i=0; i<numReturn; i++){
 				imageComment[i] = icl.get(i);
 			}
+			
+			imageComment[numReturn] = new ImageComment();
+			imageComment[numReturn].setId(numOfComment);
+					
 			this.imageDAO.closeSession();
 			return imageComment;
 		} catch (Exception e){
@@ -273,6 +304,13 @@ public class CommentService {
 			return null;
 		}
 		
+	}
+	private int returnSmaller(int one, int two){
+		if (one > two){
+			return two;
+		} else {
+			return one;
+		}
 	}
 	
 /*	

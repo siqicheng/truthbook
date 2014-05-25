@@ -36,25 +36,6 @@
         <property name="content" type="java.lang.String">
         	<column name="content" length="255" />
         </property>
-        <set name="imageComments" lazy="false" inverse="true">
-            <key>
-                <column name="image_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.ImageComment" />
-        </set>
-        <set name="portraits" inverse="true">
-            <key>
-                <column name="image_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.Portrait" />
-        </set>
-        
-        <set name="messages" inverse="true">
-            <key>
-                <column name="image_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.Message" />
-        </set>
         
         <many-to-one name="user" class="db.mapping.object.User" lazy="false" fetch="select">
             <column name="user_id" not-null="true" />

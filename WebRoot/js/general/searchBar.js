@@ -40,8 +40,8 @@ function searchUsers(){
 					school = data.user.school;
 					entryTime = data.user.entryTime;
 					email = data.user.email;
-					if(data.defaultPortrait != undefined){
-						portrait = getImageUrl(data.defaultPortrait, ImageType.Small);
+					if(data.user.defaultPortrait != undefined){
+						portrait = getImageUrl(data.user.defaultPortrait, ImageType.Small);
 					} else {
 						portrait = DefaultPortrait;
 					}

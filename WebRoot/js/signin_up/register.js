@@ -193,7 +193,9 @@ $('.ui.form.register-form')
 						$("#rechooseerror").hide();
 						
 						var onSuccess = function(data, textStatus) {
-							$("#imgPrev").attr("src", getImageUrl(data[0].imageUrl, ImageType.Medium));
+							if(data != undefined){
+								$("#imgPrev").attr("src", getImageUrl(data.image.imageUrl, ImageType.Medium));
+							}
 						},
 							onError = function(xhr,status,error){
 								console.log("获取照片请求发送失败 Error: " + error);
@@ -320,8 +322,7 @@ function take_quote(id, register_info) {
 		if(data == false){
 			alert("take quote failed");
 		} else {
-			setUserInfoCookie(data);
-			var onSuccess = function(data, textStatus) {	
+			var onSuccess = function(data, textStatus) {
 				var num = userLengthJson(data);
 				for(var i=0; i<num-1; i++) {
 					var id = data.user[i].userId;
@@ -345,7 +346,8 @@ function take_quote(id, register_info) {
 				console.log("Get uploader name failed with error: " + error);
 			};
 			getFriendsSync(data.userId, 1, onSuccess, onError);
-		
+			
+			setUserInfoCookie(data);
 			console.log("take quote success");
 			
 		}

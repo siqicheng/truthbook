@@ -26,7 +26,7 @@ function rejectImage(thisElem,imageId){
 	var onAjaxSuccess = function(data, textStatus) {
 		if (data == true){
 			thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("改进意见");
-			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned").html("关注你的人：<br>你不喜欢哪点我改还不行嘛");
+			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned").html("关注你的人说：<br>“你不喜欢哪点我改还不行嘛”");
 			thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","（不填对方将不会收到任何通知）");
 			flipTheImageCard(thisElem);
 			deleteThisImageFromUnapprovedList(imageId);
@@ -47,7 +47,6 @@ function acceptImage(thisElem,imageId){
 		if (data != null){
 			thisElem.parents('.ui.shape').find(".acceptHead .center.aligned.header").html("谜底揭晓");
 			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned .uploaderName").html(data.uploaderName);
-//			thisElem.parents('.ui.shape').find(".comments .tiny.center.aligned .uploaderId").html(data.uploaderId);
 			thisElem.parents('.ui.shape').find(".comments .reply.form .textarea").attr("placeholder","感谢一下吧，或者。。。让他等着");
 			addThisImageToHomePage(imageId);
 			flipTheImageCard(thisElem);//flip only change #eventsegment
@@ -62,8 +61,14 @@ function acceptImage(thisElem,imageId){
 	};
 	
 	var onAjaxSuccess = function(data, textStatus) {
-		if (data == true){
-			modifiedImageNum(1);			
+		if (data != false){
+			modifiedImageNum(1);
+			if(data == type_eFriends.toString()){
+				drawConfirmPopUp("好友升级了！！！<br>（详细规则请查看系统消息）");
+				getMessage();
+				refreshTopbarFriendsLists($.cookie("truthbook").userId);
+				refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
+			}
 			getImageByImageIdAPI(imageId,onGetNameAjaxSuccess,onGetNameAjaxError);
 			
 		}else{

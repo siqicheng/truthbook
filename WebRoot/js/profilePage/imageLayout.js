@@ -96,9 +96,16 @@ function getAllImage(userId,Control){
 	var onAjaxSuccess = function(data,textStatus){
 		//separate unapproved image and approved image
 		
-		if(data==undefined||data == null) return;
-		var allImageData = approvedImageData(data,data.length);
-		
+		if(data==undefined||data == null) {
+			disableShowMoreButton();	
+			return;
+		}
+		var dataLength =  data.image.length;
+		if (dataLength == undefined) {
+			var allImageData = approvedImageDataOne(data.image,1);
+		}else{
+			var allImageData = approvedImageData(data.image,dataLength);
+		}
 		numApprovedImage = allImageData[0].length;
 		numUnapprovImage = allImageData[1].length;
 		
@@ -139,8 +146,18 @@ function approvedImageData(data,numTotalImage){
 			approvedImageData.push(data[i]);
 		} else {
 			unapprovImageData.push(data[i]);
-			console.log('unapprove')
 		}
+	}
+	return [approvedImageData,unapprovImageData];
+}
+
+function approvedImageDataOne(data,numTotalImage){
+	var approvedImageData = new Array();
+	var unapprovImageData = new Array();
+	if (data.approved == "true"){
+		approvedImageData.push(data);
+	} else {
+		unapprovImageData.push(data);
 	}
 	return [approvedImageData,unapprovImageData];
 }
@@ -152,15 +169,17 @@ function approvedImageData(data,numTotalImage){
 function getGuestImage(userId){
 	var onAjaxSuccess = function(data,textStatus){
 		disableShowMoreButton();
-		if (data[0].imageUrl != undefined ){
+		if (data.image.imageUrl != undefined ){
 			numApprovedImage = 1;
-			drawGuestOneImage(data);
+			drawGuestOneImage(data.image);
 		}
 		else{
 			numApprovedImage = 0;		
 			disableShowMoreButton();
 		}
-		modifiedImageNum(numApprovedImage);
+		if(data.image.approved == "true"){
+			modifiedImageNum(numApprovedImage);
+		}
 	};
 	var onAjaxError = function(xhr,status,error){
 		if(isDebug) drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
@@ -174,7 +193,9 @@ function getGuestImage(userId){
  */
 function drawGuestOneImage(imageData){
 	$.cookie("truthbook_Page_Image_Pointer", 1);
-	prepareElement(imageData[0],true,CONTROL.No,COMMENT.No);
+	if(imageData.approved == "true"){
+		prepareElement(imageData,true,CONTROL.No,COMMENT.No);
+	}
 	itemInitialize("#eventsegment");
 }
 
@@ -204,6 +225,7 @@ function drawNextBatchImage(numOfImage,numToShow,imageData,Control){
 function drawUnapproveImage(numOfImage,imageData){
 	for(var i = 0 ; i < numOfImage ; i++){
 		prepareUnapprovedElement(imageData[i],true);
+
 	}
 	newitemInitialize("#neweventsegment");
 }
@@ -292,7 +314,8 @@ return html;
 function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderId,createDate,numOfComment,display,imageId,numLike,userId){
 		
 	var displayDate = dateHandle(createDate);
-	var createDateStd = createDate.substr(0,4)+"年"+createDate.substr(5,2)+"月"+createDate.substr(8,2)+"日";	
+	
+	var createDateStd =dateHandle(createDate,true);// createDate.substr(0,4)+"年"+createDate.substr(5,2)+"月"+createDate.substr(8,2)+"日";	
 	var urlLarge = getImageUrl(url,ImageType.Large);
 	var	urlMedium = getImageUrl(url,ImageType.Medium);
 	

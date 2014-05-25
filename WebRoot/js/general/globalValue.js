@@ -22,16 +22,19 @@ isDebug = true;
  * 	Website and RESTful AJAX URL
  */
 
-//localhost = "192.81.130.72";
+
+//localhost = "175.186.106.75";
 localhost = "localhost";
 suffix = ":8080/truthbook";
 
+//localhost = "truthbook.cc";
 //suffix="";
 
 LoginPage = "http://" + localhost + suffix + "/";
-HomePage = "http://" + localhost + suffix + "/profile_test.html";
+HomePage = "http://" + localhost + suffix + "/home.html";
 TimeLinePage = "http://" + localhost + suffix + "/timeline.html";
 ServerRoot = "http://" + localhost + suffix + "/services/";
+
 
 ServiceType = {
     	   LOGIN:"loginService/",
@@ -67,7 +70,7 @@ DefaultPreviewImg="./img/picPreview.png";
 
 maxItemNum = 8;//dropdown最多item数
 
-NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =12;
+NUM_FIRST_BATCH_IMAGE_ON_OWNPAGE =9;
 NUM_NEXT_BATCH_IMAGE_ON_OWNPAGE = 6;
 
 CONTROL = {
@@ -86,7 +89,7 @@ NUM_SHOW_COMMENT_ON_TIMELINE = 2;
 NUM_FIRST_BATCH_ITEM_ON_TIMELINE = 5;
 NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 5;
 
-periodCheckNewMessage = 30000;  //ms
+periodCheckNewMessage = 20000;  //ms
 //releaseTimeTotal = 60;
 //releaseTime = releaseTimeTotal;
 //

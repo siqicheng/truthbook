@@ -34,7 +34,8 @@ function prepareFeed(data,isAppend,Comment){
 		uploaderName =  data.uploaderName,
 		uploaderId = data.uploaderId,
 		createDate = data.createDate,
-		numOfComment = data.commentCnt,
+//		numOfComment = data.commentCnt,
+		numOfComment = 0,
 		imageId = data.imageId,
 		numLike = data.liked,
 		imageOwnerId = data.user.userId,
@@ -44,7 +45,6 @@ function prepareFeed(data,isAppend,Comment){
 		display = "inline";	
 	var	commentContent = "";
 	imageOwnerPortrait = getImageUrl(imageOwnerPortrait,ImageType.Small);
-	console.log(numOfComment);
 //	if (numLike=="") numLike = "0";
 	description=="" ? descriptionDisplay = "none": descriptionDisplay ="block";
 	
@@ -59,7 +59,7 @@ function prepareFeed(data,isAppend,Comment){
 	
 	timelineButtonHandler(imageId,Comment,imageOwnerId);
 	if(Comment == COMMENT.Yes){
-		getThisComment_Part_onTimeline(imageId,NUM_SHOW_COMMENT_ON_TIMELINE,numOfComment);
+		getThisComment_Part_onTimeline(imageId,NUM_SHOW_COMMENT_ON_TIMELINE);//,numOfComment);
 	} else {
 //		strangerHandler(imageId);
 	}

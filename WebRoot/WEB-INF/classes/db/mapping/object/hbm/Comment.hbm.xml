@@ -25,11 +25,5 @@
         <property name="createDate" type="java.util.Date">
             <column name="create_date" length="10" not-null="true" />
         </property>
-        <set name="imageComments" inverse="true">
-            <key>
-                <column name="comment_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.ImageComment" />
-        </set>
     </class>
 </hibernate-mapping>

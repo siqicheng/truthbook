@@ -285,6 +285,7 @@ public class LoginService {
 	@Produces("application/json;charset=utf-8")
 	public User getUser(@PathParam("id") Integer id) {
 		this.user = this.userDAO.findById(id);
+		this.userDAO.closeSession();
 		return this.user;
 	}
 		
@@ -294,6 +295,7 @@ public class LoginService {
 	public String emailExist(@PathParam("email") String email) {
 		List email_list = this.userDAO.findByEmail(email);
 		String retValue = email_list.isEmpty()?"false":"true";
+		this.userDAO.closeSession();
 		return RestUtil.string2json(retValue);
 	}
 	
@@ -302,6 +304,7 @@ public class LoginService {
 	@Produces("application/json;charset=utf-8")
 	public List<User> findUserByFullName(@PathParam("fullName") String fullName) {
 		List<User> fullName_list = this.userDAO.findByFullName(fullName);
+		this.userDAO.closeSession();
 		return fullName_list;
 	}
 	
@@ -329,7 +332,7 @@ public class LoginService {
 		entryTime = AntySamyFilter.getCleanHtml(entryTime);
 		this.user.setEntryTime(entryTime);
 		List<User> users = this.userDAO.findByExample(this.user);
-		
+		this.userDAO.closeSession();
 		return users;		
 	}
 	
@@ -349,6 +352,7 @@ public class LoginService {
 				return this.user;
 			}
 		}
+		this.userDAO.closeSession();
 		return RestUtil.string2json("false");
 	}
 		
@@ -361,8 +365,9 @@ public class LoginService {
 			@FormParam("entryTime") String entryTime,
 			@FormParam("email") String email,
 			@FormParam("password") String password){
-		Session session = userDAO.getSession();
+		
 		try{
+			Session session = userDAO.getSession();
 			Transaction tx = session.beginTransaction();
 			
 			fullName = AntySamyFilter.getCleanHtml(fullName);
@@ -386,7 +391,6 @@ public class LoginService {
 			return this.user;
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}		
@@ -399,8 +403,9 @@ public class LoginService {
 			@FormParam("fullName") String fullName,			
 			@FormParam("school") String school,			
 			@FormParam("entryTime") String entryTime){
-		Session session = userDAO.getSession();
+		
 		try{
+			Session session = userDAO.getSession();
 			Transaction tx = session.beginTransaction();
 			
 			fullName = AntySamyFilter.getCleanHtml(fullName);
@@ -417,7 +422,6 @@ public class LoginService {
 			return this.user;
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}		
@@ -430,19 +434,16 @@ public class LoginService {
 			@FormParam("user_id") Integer id,
 			@FormParam("email") String email,
 			@FormParam("password") String password){
-		
-		this.user = this.userDAO.findById(id);
-		if(this.user==null){
-			return RestUtil.string2json("false");
-		}
-		
-		Session session = userDAO.getSession();
 		try{
-			Transaction tx = session.beginTransaction();
+			Session session = this.userDAO.getSession();
 			this.user = this.userDAO.findById(id);
+			if(this.user==null){
+				this.userDAO.closeSession();
+				return RestUtil.string2json("false");
+			}
+			Transaction tx = session.beginTransaction();
 			email = AntySamyFilter.getCleanHtml(email);
 			this.user.setEmail(email);
-			
 			this.userPassword = new UserPassword(new UserPasswordId(email,password),this.user);
 			this.user.setUserPassword(userPassword);
 			this.user.setIsActivated(true);						
@@ -453,7 +454,6 @@ public class LoginService {
 			return this.user;
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}		

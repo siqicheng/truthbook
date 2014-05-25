@@ -32,34 +32,5 @@
             <column name="is_activated" not-null="true" />
         </property>
         
-        
-        <set name="relationships"  inverse="true">
-            <key>
-                <column name="user_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.Relationship" />
-        </set>
-        
-        <set name="messages" inverse="true">
-            <key>
-                <column name="user_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.Message" />
-        </set>
-        
-         <set name="images" lazy="false" inverse="true">
-            <key>
-                <column name="user_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.Image" />
-        </set>
-        
-         <set name="portraits" inverse="true">
-            <key>
-                <column name="user_id" not-null="true" />
-            </key>
-            <one-to-many class="db.mapping.object.Portrait" />
-        </set>
-        
     </class>
 </hibernate-mapping>

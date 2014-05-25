@@ -44,12 +44,14 @@ public class FeedService {
 		@Produces("application/json;charset=utf-8")
 		public Image[] getFeed(@PathParam("userId") Integer userId,
 				@HeaderParam("token") String token){
-			Session session = this.userFetchDAO.getSession();
-			Transaction tx = session.beginTransaction();
+
 			try{
+				Session session = this.userFetchDAO.getSession();
+				Transaction tx = session.beginTransaction();
 				UserFetch userFetch = this.userFetchDAO.findById(userId) ;
 				User user = this.userDAO.findById(userId);
 				if (!user.getToken().equals(token)){
+					this.userFetchDAO.closeSession();
 					return null;
 				}
 				List<Image> image_list =new ArrayList();
@@ -57,7 +59,7 @@ public class FeedService {
 				for (Relationship relat : relat_list){
 					User friend = this.userDAO.findById(relat.getFriendId());
 					Criteria criteria = session.createCriteria(Image.class);
-					criteria.add(Restrictions.gt(ImageDAO.LASTE_MODIFIED, userFetch.getLastFetchTime()))
+					criteria.add(Restrictions.gt(ImageDAO.LAST_MODIFIED, userFetch.getLastFetchTime()))
 					.add(Restrictions.eq(ImageDAO.USER, friend))
 					.add(Restrictions.eq(ImageDAO.APPROVED,true))
 					.add(Restrictions.eq(ImageDAO.DELETED, false))
@@ -72,12 +74,10 @@ public class FeedService {
 				userFetch.setLastFetchTime(new Timestamp(System.currentTimeMillis()));
 				session.update(userFetch);
 				tx.commit();
-//				session.close();
 				this.userFetchDAO.closeSession();
 				return images;
 			} catch (Exception e){
 				e.printStackTrace();
-//				session.close();
 				this.userFetchDAO.closeSession();
 				return null;
 			}
@@ -88,11 +88,13 @@ public class FeedService {
 		@Produces("application/json;charset=utf-8")
 		public Image[] getAllFeed(@PathParam("userId") Integer userId,
 				@HeaderParam("token") String token){
-			Session session = this.userFetchDAO.getSession();
+			
 			try{
+				Session session = this.userFetchDAO.getSession();
 				UserFetch userFetch = this.userFetchDAO.findById(userId) ;
 				User user = this.userDAO.findById(userId);
 				if (!user.getToken().equals(token)){
+					this.userFetchDAO.closeSession();
 					return null;
 				}
 				List<Image> image_list =new ArrayList();
@@ -111,12 +113,10 @@ public class FeedService {
 				for (int i=0 ;i < image_list.size(); ++i){
 					images[i] = image_list.get(i);
 				}
-//				session.close();
 				this.userFetchDAO.closeSession();
 				return images;
 			} catch (Exception e){
 				e.printStackTrace();
-//				session.close();
 				this.userFetchDAO.closeSession();
 				return null;
 			}

@@ -161,14 +161,20 @@ function getThisComment_All_onTimeline(imageId){
 }
 
 
-function getThisComment_Part_onTimeline(imageId,showCommentNumber,totalCommentNumber){
+function getThisComment_Part_onTimeline(imageId,showCommentNumber){//,totalCommentNumber){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data != null){
-			var numTotalComment = commentLengthJson(data);
-			console.log(numTotalComment);
-			if ((totalCommentNumber-numTotalComment)<=0)
+			var numTotalComment = commentLengthJson(data)-1;
+			if(numTotalComment == 0){
+				var totalCommentNumber = data.imageComment.id;
+			}else{
+				var totalCommentNumber = data.imageComment[numTotalComment].id;
+			}
+			$("#itemId"+imageId).find(".loadAllComments .numToShow").html(totalCommentNumber- NUM_SHOW_COMMENT_ON_TIMELINE);
+			if ((totalCommentNumber-numTotalComment)<=0){
 				$("#itemId"+imageId).find(".loadAllComments").hide();
-			if (numTotalComment == 1){
+			}
+			if (numTotalComment == -1){
 				var commentContent = data.imageComment.comment.commentContent,
 					repliedByCommentId = data.imageComment.comment.repliedByCommentId,
 					repliedByName = data.imageComment.comment.repliedByCommentName,
@@ -297,47 +303,57 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 }
 
 function commentDateHandle(createDate){
-	if(createDate == "just now") return "just now";
-	date = new Date();
-	day = date.getDate();
-	month = Number(date.getMonth()+1);if (month < 10) month="0"+Number(date.getMonth()+1);
-	year = date.getFullYear();
 	
-	thisMonth = year+"-"+month; 
-	uploadDate = createDate.substring(0,createDate.indexOf("T")-3);
-	defaultUploadDate = createDate.substring(0,createDate.indexOf("T"));
-	defaultDisplayDate = defaultUploadDate.substr(0,4)+"年"+defaultUploadDate.substr(5,2)+"月"+defaultUploadDate.substr(8,2)+"日";	
-	if(uploadDate != thisMonth){	
+//	Only valid for server side using UTC	
+//	alert(translate_timezone("Fri May 23 20:37:39 +0000 2014",8,1));//2014年5月24日 04:37:39 星期六 当前时区：+0800	
+//	createDate = "2014-05-24T00:20:36+08:00";
+//	t=	["2014年5月24日", "8:20:36", "周六", "当前时区：+0800"]
+//	h=  ["8", "20", "36"]
+	
+	if(createDate == "just now") return "just now";
+	
+	var date = new Date();
+	var day_now = date.getDate();
+	var month_now = Number(date.getMonth()+1);//if (month_now < 10) month_now="0"+Number(date.getMonth()+1);
+	var year_now = date.getFullYear();
+	
+	var modifiedTime = translate_timezone(formatTheServerDate(createDate),parseInt(date.toTimeString().substr(12,5))/100,1);
+	var t = modifiedTime.split(" ");
+	var h = t[1].split(":");
+	
+	var year_upload = t[0].substr(0,4);
+	var month_upload = t[0].substring(t[0].indexOf("年")+1,t[0].indexOf("月"));
+	var day_upload = t[0].substring(t[0].indexOf("月")+1,t[0].indexOf("日"));
+	var hour_upload = h[0];
+	var min_upload = h[1];
+	var second_upload = h[2];
+	
+	var defaultDisplayDate = month_upload+"月"+day_upload+"日 "+t[2] + " " + hour_upload+":"+min_upload;
+	
+	if(year_upload != year_now || month_upload != month_now){
 		return defaultDisplayDate;
 	} else {
-		hour = date.getHours();
-		minute = date.getMinutes();
-		second = date.getSeconds();
-		
-		upload_day = createDate.substr(createDate.indexOf("T")-2,2);
-		upload_hour = createDate.substr(createDate.indexOf("T")+1,2);
-		upload_minute = createDate.substr(createDate.indexOf("T")+4,2);
-		upload_second = createDate.substr(createDate.indexOf("T")+7,2);
+		var hour_now = date.getHours();
+		var min_now = date.getMinutes();
+		var second_now = date.getSeconds();
 
-		if (day>upload_day){
-			if(day-upload_day==1){
-				return ("昨天 "+upload_hour+":"+upload_minute);
+		if (day_now>day_upload){
+			if(day_now-day_upload==1){
+				return ("昨天 "+hour_upload+":"+min_upload);
+			} else if(day_now-day_upload==2){
+				return ("前天 "+hour_upload+":"+min_upload);
 			} else {
-				var month_display = defaultUploadDate.substr(5,2);
-				if (Number(month_display)<10){
-					month_display = defaultUploadDate.substr(6,1);
-				}
-				return (month_display+"月"+defaultUploadDate.substr(8,2)+"日 "+upload_hour+":"+upload_minute);
+				return (month_upload+"月"+day_upload+"日 "+hour_upload+":"+min_upload);
 			}
 		}
-		if (hour>upload_hour){
-			return ("今天 "+upload_hour+":"+upload_minute);
+		if (hour_now>hour_upload){
+			return ("今天 "+hour_upload+":"+min_upload);
 		}
-		if (minute>upload_minute){
-			return (minute - upload_minute)+"分钟前";
+		if (min_now>min_upload){
+			return (min_now - min_upload)+"分钟前";
 		}
-		if (second>upload_second){
-			return (second - upload_second)+"秒钟前";
+		if (second_now>second_upload){
+			return (second_now - second_upload)+"秒钟前";
 		}
 		return defaultDisplayDate;
 	}
