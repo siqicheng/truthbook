@@ -23,11 +23,11 @@ isDebug = true;
  */
 
 
-localhost = "localhost";
-suffix = ":8080/truthbook";
+//localhost = "175.186.106.75";
+//suffix = ":8080/truthbook";
 
-//localhost = "truthbook.cc";
-//suffix="";
+localhost = "truthbook.cc";
+suffix="";
 
 LoginPage = "http://" + localhost + suffix + "/";
 HomePage = "http://" + localhost + suffix + "/home.html";
