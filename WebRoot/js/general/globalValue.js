@@ -23,7 +23,6 @@ isDebug = true;
  */
 
 
-//localhost = "175.186.106.75";
 localhost = "localhost";
 suffix = ":8080/truthbook";
 
