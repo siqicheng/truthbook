@@ -61,10 +61,8 @@ public class CommentDAO extends BaseHibernateDAO {
 		try {
 			Comment instance = (Comment) getSession().get(
 					"db.mapping.object.Comment", id);
-			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
-			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}

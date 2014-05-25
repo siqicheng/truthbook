@@ -37,6 +37,6 @@
   </servlet-mapping>
   
   <welcome-file-list>
-    <welcome-file>signin_up.html</welcome-file>
+    <welcome-file>signin.html</welcome-file>
   </welcome-file-list>
 </web-app>

@@ -67,10 +67,8 @@ public class RelationshipDAO extends BaseHibernateDAO {
 		try {
 			Relationship instance = (Relationship) getSession().get(
 					"db.mapping.object.Relationship", id);
-			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
-			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}

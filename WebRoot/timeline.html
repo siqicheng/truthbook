@@ -44,11 +44,10 @@
 			
 		</div>			      
 		<a class="green item" onclick = "goHomePage();">
-
-			<i class="home  large icon"></i>
+			<i class="home large icon" style="margin-bottom: 3px;"></i><span id = 'user_name_top_timeline'></span>
 		</a>
 		<a class="active blue item" id="gotimelineBtn" onclick="goTimeLine();">
-	    	<i class="grid layout large icon"></i>
+	    	<i class="grid layout large icon" style="margin-bottom: 3px;"></i><span> 新鲜事</span>
 		</a>
 <!-- 		<a class="orange item"> -->
 <!-- 	    	<i class="setting large icon"></i> -->
@@ -307,8 +306,8 @@
 	<script type="text/javascript">
 	$(function() {
 		handleLogoutPopUp();
-		testFunction_Cookie();
 		addFriendButtonCheck();
+		$("#user_name_top_timeline").html($.cookie("truthbook").fullName);
 	});
 	
 

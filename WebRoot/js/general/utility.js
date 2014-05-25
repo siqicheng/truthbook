@@ -461,9 +461,131 @@ function getPartOfCommentAPI(imageId,commentNumber,onAjaxSuccess,onAjaxError){
 		ajax_obj = getAjaxObj(url,"GET","json",onAjaxSuccess,onAjaxError);
 	ajax_call(ajax_obj);
 }
+/*********************************************************************************
+ * TimeZoneHandler
+ */
+function translate_timezone(time,timezone,type){
+	var t=time.split(" ");
+	var t2=t[3].split(":");
+	var d,m;
+	var day=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+	var cday=["周日","周一","周二","周三","周四","周五","周六"];
+	var month=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+	var monthday=[["1","3","5","7","8","10","12"],["4","6","9","11"],["2"]];
 
 
+	function getyear(year){
+		if(year%100==0){
+			if(year%400==0){
+				return true;
+			}else{
+				return false;
+			}
+		}else if(year%4==0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	function getNum(array,n){
+		for(var i=0;i<array.length;i++){
+			if(array[i]==n){
+				return i;break;
+			}
+		}
+	}
+	
+	function getm(n){
+		for(var i=0;i<monthday.length;i++){
+			for(var j=0;j<monthday[i].length;j++){
+				if(monthday[i][j]==(n+1)){
+					return i;
+					break;
+				}
+			}
+		}
+	}
 
+d=getNum(day,t[0]);
+m=getNum(month,t[1]);
+t2[0]=Number(t2[0]);
+t[5]=Number(t[5]);
+t[2]=Number(t[2]);
+
+if(t2[0]<(24-timezone)){
+	t2[0]+=timezone;
+}else{
+	t2[0]-=(24-timezone);
+	if(t2[0]<10){
+	t2[0]="0"+String(t2[0]);
+}
+	if(d<6){
+		t[0]=day[d+1]
+	}else{
+		t[0]=day[0]
+	}
+	if(t[2]>27){
+switch(getm(m)){
+	case 0:
+  		if(t[2]>30){
+  			t[2]=1;
+  			if(t[1]!="Dec"){
+  				t[1]=month[m+1];
+  			}else{
+  				t[1]=month[0];
+  				t[5]=t[5]+1;
+  			}
+  		}else{
+  			t[2]=t[2]+1;
+  		}
+		break;
+	case 1:
+  		if(t[2]>29){
+  			t[2]=1;
+  			t[1]=month[m+1];
+  		}else{
+  		t[2]=t[2]+1;}
+   		break;
+    case 2:
+      if(getyear(t[5])){if(t[2]>28){t[2]=1;t[1]=month[m+1];}else{t[2]=t[2]+1;}}else{t[2]=1;t[1]=month[m+1];}
+    	break; 
+  	}
+  }else{
+   t[2]=t[2]+1;
+  }
+}
+if(t[2]<10){t[2]="0"+String(t[2]);}
+	t[4]="+0"+String(timezone*100);t[3]=t2.join(":");
+switch(type){
+  case 0:
+  return t.join(" ");
+  break;
+  case 1:
+  return t[5]+"年"+(getNum(month,t[1])+1)+"月"+t[2]+"日 "+t[3]+" "+cday[getNum(day,t[0])]+" 当前时区："+t[4];
+  break;
+ }
+}
+
+function formatTheServerDate(createDate){
+	var dayInEng=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+	var monthInEng=["Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+	
+	var numMonthOfUTC = createDate.substr(createDate.indexOf("T")-5,2);
+	if (numMonthOfUTC<10){
+		numMonthOfUTC = createDate.substr(createDate.indexOf("T")-4,1);
+	}
+	var Month = monthInEng[numMonthOfUTC];
+	var Day = createDate.substr(createDate.indexOf("T")-2,2);
+	var Time = createDate.substr(createDate.indexOf("T")+1,8);
+	var TimeZone = createDate.substr(createDate.indexOf("T")+9,3)+"00";
+	var year = createDate.substring(0,4);
+	
+	var numDayOfUTC;
+	numDayOfUTC = new Date(year+'/'+numMonthOfUTC+'/'+Day).getDay();
+	var WeekDate = dayInEng[numDayOfUTC];
+	return WeekDate+" "+Month+" "+Day+" "+Time+" "+TimeZone+" "+year;
+
+}
 
 
 

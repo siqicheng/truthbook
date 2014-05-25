@@ -64,10 +64,8 @@ public class ImageCommentDAO extends BaseHibernateDAO {
 		try {
 			ImageComment instance = (ImageComment) getSession().get(
 					"db.mapping.object.ImageComment", id);
-			this.closeSession();
 			return instance;
 		} catch (RuntimeException re) {
-			this.closeSession();
 			log.error("get failed", re);
 			throw re;
 		}

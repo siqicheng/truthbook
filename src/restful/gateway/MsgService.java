@@ -41,17 +41,16 @@ public class MsgService {
 	}
 	
 	private  void saveMessage(Message message){
-		Session session = this.messageDAO.getSession();
 		try{
+			Session session = this.messageDAO.getSession();
 			Transaction tx = session.beginTransaction();
 			session.save(message);
 			tx.commit();
+			this.messageDAO.closeSession();
 		} catch (Exception e){
 			e.printStackTrace();
-		}  finally {
-//			session.close();
 			this.messageDAO.closeSession();
-		}
+		} 
 	}
 	
 	private boolean existDuplicated(Integer userId, String type, Image image){
@@ -67,8 +66,8 @@ public class MsgService {
 		if (messages.size()==0){
 			return null;
 		}
-		Session session = this.messageDAO.getSession();
 		try{
+			Session session = this.messageDAO.getSession();
 			Message[] ret_messages =  new Message[messages.size()];
 			Transaction tx = session.beginTransaction();
 			for (int i=0; i<messages.size(); ++i){
@@ -82,7 +81,6 @@ public class MsgService {
 			return ret_messages;
 		} catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.messageDAO.closeSession();
 			return null;
 		}
@@ -96,8 +94,9 @@ public class MsgService {
 		if (messages.size()==0){
 			return ;
 		}
-		Session session = this.messageDAO.getSession();
+		
 		try{
+			Session session = this.messageDAO.getSession();
 			Transaction tx = session.beginTransaction();
 			for (int i=0; i<messages.size(); ++i){
 				Message message = messages.get(i);
@@ -109,11 +108,9 @@ public class MsgService {
 			this.messageDAO.closeSession();
 		} catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.messageDAO.closeSession();
 		}
 	}
-	
 	
 	@PUT
 	@Path("v1/message/{id}/{srcid}/{type}/send")
@@ -128,12 +125,15 @@ public class MsgService {
 		try{
 			User user = this.userDAO.findById(srcid);
 			if (!user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid), RestUtil.getCurrentTime()));
+			this.userDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}	
 	}
@@ -153,17 +153,21 @@ public class MsgService {
 		try{
 			User user = this.userDAO.findById(srcid);
 			if (!user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			Image image= this.imageDAO.findById(imageid);
 			if (type.equals(Message.REPLY_TYPE) && this.existDuplicated(id, Message.REPLY_TYPE, image) ) {
+				this.userDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid),  RestUtil.getCurrentTime(), image));
+			this.userDAO.closeSession();
 			return RestUtil.string2json("true");
 			
 		}catch (Exception e){
 			e.printStackTrace();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}	
 	}
@@ -186,16 +190,20 @@ public class MsgService {
 		try{
 			User user = this.userDAO.findById(srcid);
 			if (!user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			Image image= this.imageDAO.findById(imageId);
 			if (type.equals(Message.REPLY_TYPE) && this.existDuplicated(id, Message.REPLY_TYPE, image)){
+				this.userDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
 			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid),  RestUtil.getCurrentTime(), image, content));
+			this.userDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}	
 	}
@@ -215,12 +223,15 @@ public class MsgService {
 		try{
 			User user = this.userDAO.findById(srcid);
 			if (!user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			this.saveMessage(new Message(type, id, this.userDAO.findById(srcid),  RestUtil.getCurrentTime(), content) );
+			this.userDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}	
 	}
@@ -233,6 +244,7 @@ public class MsgService {
 		try{
 			User user = this.userDAO.findById(id);
 			if (user == null || !user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return null;
 			}
 			List<Message> Messages= this.getCriteria()
@@ -256,16 +268,16 @@ public class MsgService {
 			@HeaderParam("token") String token) throws Exception {
 		try{
 			User user = this.userDAO.findById(id);
-			if (!user.getToken().equals(token)){
-				return null;
-			}
+
 			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
 					.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
 					.add(Restrictions.ne(MessageDAO.STATUS, Message.READ_STATUS))
 					.list();
+			this.messageDAO.closeSession();
 			return this.setSent(Messages);
 		}catch (Exception e){
 			e.printStackTrace();
+			this.messageDAO.closeSession();
 			return null;
 		}
 	}
@@ -279,14 +291,17 @@ public class MsgService {
 		try{
 			User user = this.userDAO.findById(id);
 			if (!user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return null;
 			}
 			List<Message> Messages=this.getCriteria().add(Restrictions.eq(MessageDAO.USER_ID, id))
 					.add(Restrictions.ne(MessageDAO.STATUS, Message.READ_STATUS))
 					.list();
+			this.messageDAO.closeSession();
 			return this.setSent(Messages);
 		}catch (Exception e){
 			e.printStackTrace();
+			this.messageDAO.closeSession();
 			return null;
 		}
 	}
@@ -300,6 +315,7 @@ public class MsgService {
 			Message message = this.messageDAO.findById(id);
 			User user = this.userDAO.findById(message.getUserId());
 			if (!user.getToken().equals(token)){
+				this.messageDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			if (message.getStatus().equals(Message.SENT_STATUS)){
@@ -307,10 +323,11 @@ public class MsgService {
 				msg.add(message);
 				this.setRead(msg);
 			}
-			
+			this.messageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
+			this.messageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 	}
@@ -324,6 +341,7 @@ public class MsgService {
 		try{
 			User user = this.userDAO.findById(id);
 			if (!user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			
@@ -332,9 +350,11 @@ public class MsgService {
 					.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, type))
 					.list();
 			this.setRead(Messages);
+			this.messageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
+			this.messageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 	}

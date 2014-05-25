@@ -16,10 +16,10 @@ function messageLengthJson(data){
 }
 
 function getMessage(){
-	if ($.cookie("truthbook").userId != $.cookie("truthbook_PageOwner_userId").userId ){
-		$("#notifiBtn").html("<i class=\"qr code icon\"></i>");
-		return;
-	}
+//	if ($.cookie("truthbook").userId != $.cookie("truthbook_PageOwner_userId").userId ){
+//		$("#notifiBtn").html("<i class=\"qr code icon\"></i>");
+//		return;
+//	}
 	$("#unreadMessageNum").attr("class", "floating ui circular green label transition hidden");
 	$("#unreadMessageNum").html("00");
 	

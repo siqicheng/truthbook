@@ -94,10 +94,8 @@ public class UserDAO extends BaseHibernateDAO  {
         try {
             User instance = (User) getSession()
                     .get("db.mapping.object.User", id);
-            this.closeSession();
             return instance;
         } catch (RuntimeException re) {
-        	this.closeSession();
             log.error("get failed", re);
             throw re;
         }
@@ -127,7 +125,7 @@ public class UserDAO extends BaseHibernateDAO  {
          						+ propertyName + "= ?";
          Query queryObject = getSession().createQuery(queryString);
          queryObject.setCacheable(false);
-         
+
 		 queryObject.setParameter(0, value);
 		 return queryObject.list();
       } catch (RuntimeException re) {

@@ -193,7 +193,9 @@ $('.ui.form.register-form')
 						$("#rechooseerror").hide();
 						
 						var onSuccess = function(data, textStatus) {
-							$("#imgPrev").attr("src", getImageUrl(data[0].imageUrl, ImageType.Medium));
+							if(data != undefined){
+								$("#imgPrev").attr("src", getImageUrl(data.image.imageUrl, ImageType.Medium));
+							}
 						},
 							onError = function(xhr,status,error){
 								console.log("获取照片请求发送失败 Error: " + error);

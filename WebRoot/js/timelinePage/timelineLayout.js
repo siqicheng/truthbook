@@ -50,10 +50,9 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 	
 	var displayDate = commentDateHandle(createDate);
 //	var userId = $.cookie("truthbook").userId;
-	var numOfCommentShow = numOfComment - NUM_SHOW_COMMENT_ON_TIMELINE;
+	var numOfCommentShow = numOfComment;// - NUM_SHOW_COMMENT_ON_TIMELINE;
 	var urlLarge = getImageUrl(url,ImageType.Large);
 	var urlMedium = getImageUrl(url,ImageType.Medium);
-	console.log(imageOwnerName);
 	html = 	"<div class='timelineItem' id = 'itemId"+imageId+"'>\n" +
 			"\t<span class = 'imageId_span' style='display:none;'>"+imageId+"</span>\n"+
 			"\t<span class = 'url_span' style='display:none;'>"+url+"</span>\n"+
@@ -89,7 +88,7 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 			"\t\t\t\t\t<div class='commentwrap'>\n"+
 			"\t\t\t\t\t\t<div class='comment loadAllComments'>\n"+
 			"\t\t\t\t\t\t\t<div class='content'>\n"+
-			"\t\t\t\t\t\t\t\t<div class='text'>显示剩余"+numOfCommentShow+"条评论</div>\n"+
+			"\t\t\t\t\t\t\t\t<div class='text'>显示剩余<span class='numToShow'>"+numOfCommentShow+"</span>条评论</div>\n"+
 			"\t\t\t\t\t\t\t</div>\n"+
 			"\t\t\t\t\t\t</div>\n"+
 			    	// 			<div class="comment" id="commentId1">

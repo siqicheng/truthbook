@@ -1,10 +1,6 @@
 package restful.gateway;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -43,36 +39,30 @@ public class ImageService {
 	}
 	
 	private Criteria getCriteria(){
-		return this.imageDAO.getSession().createCriteria(Image.class);
+		ImageDAO imageDAO = new ImageDAO();
+		return imageDAO.getSession().createCriteria(Image.class);
 	}
 	
-	private void closeSession(){
-		this.imageDAO.closeSession();
-	}
+//	private void closeSession(){
+//		this.imageDAO.closeSession();
+//	}
 	@GET
 	@Path("v1/image/{userid}/latest")
 	@Produces("application/json;charset=utf-8")
 	public Object getLatestImage(@PathParam("userid") Integer userId,
 			@HeaderParam("token") String token){
 		try{
-			User user = new UserDAO().findById(userId);
 			
-			//判断是否是本人，或与本人是好友
-			if (!user.getToken().equals(token)){
-				List friend = this.userDAO.findByToken(token);
-				if (friend == null || friend.size()==0){
-					return null;
-				}
-				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
-				if (relat == null){
-					return null;
-				}
-			}
+//			Session session = this.imageDAO.getSession();
+//			User user = this.userDAO.findById(userId);
+			ImageDAO imageDAO = new ImageDAO();
+			UserDAO userDAO = new UserDAO();
+			Session session = imageDAO.getSession();
+			User user = userDAO.findById(userId);
 			
 			List<Image> image_list = this.getCriteria().add(Restrictions.eq(ImageDAO.USER, user))
 													.addOrder(Order.desc(ImageDAO.LAST_MODIFIED))
 													.setMaxResults(1).list();
-			this.closeSession();
 			if (image_list.size()==0){
 				return null;
 			}
@@ -80,11 +70,12 @@ public class ImageService {
 			for (int i=0; i< image_list.size(); i++){
 				images[i] = image_list.get(i);
 			}
+			this.imageDAO.closeSession();
 			return images;
 			
 		} catch (Exception e){
 			e.printStackTrace();
-			this.closeSession();
+			this.imageDAO.closeSession();
 			return null;
 		}
 		
@@ -98,39 +89,35 @@ public class ImageService {
 			@FormParam("userId") Integer userId,
 			@FormParam("uploaderId") Integer uploaderId,
 			@FormParam("description") String content) {
-		
-		Session session = this.imageDAO.getSession();
+
 		try{
-			Transaction tx = session.beginTransaction();			
+			Session session = this.imageDAO.getSession();
 			User user= this.userDAO.findById(userId);
 			Relationship relat = this.relationshipDAO.findByUserAndFriend(user, uploaderId);
 			if (relat == null ){
+				this.imageDAO.closeSession();
 				return RestUtil.string2json("false");
-			}
-			
+			}			
+			Transaction tx = session.beginTransaction();
 			Image image = new Image();
 			image.setImageUrl(imageURL);
 			image.setUploaderId(uploaderId);
 			image.setUser(user);
 			image.setContent(content);
-			
 			Date date = RestUtil.getCurrentDate();
-			
 			image.setCreateDate(date);
 			image.setLastModified(date);
 			image.setApproved(false);
 			image.setDeleted(false);
-			
 			session.save(image);	
 			tx.commit();
 			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.imageDAO.closeSession();
+			return RestUtil.string2json("false");
 		}
-		return RestUtil.string2json("false");
 	}
 	
 	@GET
@@ -139,25 +126,27 @@ public class ImageService {
 	public Object getImageById(@PathParam("imageId") Integer imageId,
 			@HeaderParam("token") String token) {
 		try {
+			Session session = this.imageDAO.getSession();
 			Image image = this.imageDAO.findById(imageId);
-			
 			User user = image.getUser();
 			
 			//判断是否是本人，或与本人是好友
 			if (!user.getToken().equals(token)){
 				List friend = this.userDAO.findByToken(token);
 				if (friend == null){
+					this.imageDAO.closeSession();
 					return null;
 				}
 				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
 				if (relat == null){
+					this.imageDAO.closeSession();
 					return null;
 				}
 			}
-			this.closeSession();
+			this.imageDAO.closeSession();
 			return image;
 		} catch (Exception e){
-			this.closeSession();
+			this.imageDAO.closeSession();
 			e.printStackTrace();
 			return null;
 		}
@@ -169,41 +158,30 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public List<Image> getImagesByUser(@PathParam("userId") Integer userId,
 			@HeaderParam("token") String token) {
-		Session session = this.imageDAO.getSession();
+		
 		try{
+			
 			User user = this.userDAO.findById(userId);
 			
-			//判断是否是本人，或与本人是好友
-			if (!user.getToken().equals(token)){
-				List friend = this.userDAO.findByToken(token);
-				if (friend == null || friend.size()==0){
-					return null;
-				}
-				Relationship relat = this.relationshipDAO.findByUserAndFriend(user, ((User)friend.get(0)).getUserId());
-				if (relat == null){
-					return null;
-				}
-			}
-			
-			Criteria criteria = this.getCriteria();
+			ImageDAO imageDAO = new ImageDAO();
+			Session session = imageDAO.getSession();
+			Criteria criteria =  session.createCriteria(Image.class);
 
 			List<Image> image_list = criteria
 					.add(Restrictions.eq(ImageDAO.USER, user))
 					.add(Restrictions.ne(ImageDAO.DELETED, true))
 					.list();
-
+			
+			imageDAO.closeSession();
+			
 			Image[] images = new Image[image_list.size()];
 			
 			for (int i=0; i<image_list.size(); i++){
 				images[i] = image_list.get(i);
-			}
-			
-			this.closeSession();
-//			return images;
+			}	
 			return image_list;
-
 		} catch (Exception e){
-			this.imageDAO.closeSession();
+			imageDAO.closeSession();
 			e.printStackTrace();
 			return null;
 		}
@@ -227,18 +205,19 @@ public class ImageService {
 											.add(Restrictions.eq(ImageDAO.APPROVED, true))
 											.list();
 			
-			this.closeSession();
+			
 			if (image_list.size() > 0){
 				Image[] images = new Image[image_list.size()];
 				
 				for (int i=0; i<image_list.size(); i++){
 					images[i] = image_list.get(i);
 				}
-				
+				this.imageDAO.closeSession();
 				return images;
 			}
 			return null;		
 		} catch (Exception e){
+			this.imageDAO.closeSession();
 			e.printStackTrace();
 			return null;
 		}
@@ -248,21 +227,26 @@ public class ImageService {
 	@Path("v1/image/{imageId}/like")
 	@Produces("application/json;charset=utf-8")
 	public Object likeImage(@PathParam("imageId") Integer imageId){
-		Image image =(Image) this.imageDAO.findById(imageId);
-		Session session = this.imageDAO.getSession();
+
 		try{
+			ImageDAO imageDAO = new ImageDAO();
+			
+			Image image =(Image) imageDAO.findById(imageId);
+			imageDAO.closeSession();
+			
 			if (image.getDeleted()){
 				return RestUtil.string2json("false");
 			}
-			image.setLiked(image.getLiked()+1);
+			
+			Session session = this.imageDAO.getSession();
 			Transaction tx = session.beginTransaction();
+			image.setLiked(image.getLiked()+1);
 			session.update(image);
 			tx.commit();
-			this.closeSession();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
@@ -272,27 +256,27 @@ public class ImageService {
 	@Path("v1/image/{imageId}/dislike")
 	@Produces("application/json;charset=utf-8")
 	public Object dislikeImage(@PathParam("imageId") Integer imageId){
-		Image image =(Image) this.imageDAO.findById(imageId);
-		
-		if (image.getDeleted()){
-			return RestUtil.string2json("false");
-		}
-		Session session = this.imageDAO.getSession();
+	
 		try{
-			image.setLiked(image.getLiked()-1);
+			ImageDAO imageDAO = new ImageDAO();
+			Image image = imageDAO.findById(imageId);
+			imageDAO.closeSession();
+			
+			if (image.getDeleted()){
+				return RestUtil.string2json("false");
+			}
+			Session session = this.imageDAO.getSession();
 			Transaction tx = session.beginTransaction();
+			image.setLiked(image.getLiked()-1);
 			session.update(image);
 			tx.commit();
-			this.closeSession();
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
-		
-		
 	}
 	
 	@GET
@@ -300,41 +284,46 @@ public class ImageService {
 	@Produces("application/json;charset=utf-8")
 	public Object approveImage(@PathParam("imageId") Integer imageId,
 			@HeaderParam("token") String token) {
-		Image image = new Image();
-		image = this.imageDAO.findById(imageId);
+		
+		Session session = this.imageDAO.getSession();
+		Image image = this.imageDAO.findById(imageId);
+		
 		if (image==null ||!image.getUser().getToken().equals(token)){
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 		if (image.getDeleted()){
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 		if (image.getApproved()){
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
 		}
-		Session session = this.imageDAO.getSession();
 		try{
+			
 			Transaction tx = session.beginTransaction();
 			image.setApproved(true);
 			image.setLastModified(RestUtil.getCurrentDate());
 			session.update(image);
 			User user = image.getUser();
 			Integer friendId = image.getUploaderId();
-			
+	
+			//这里出现了session后findByxxx:relationshipDAO 
 			Relationship relat = (Relationship) this.relationshipDAO
 								.findByUserAndFriend(user,friendId);
-			
+			//这里出现了session后findById:userDAO
 			if (relat != null){
 				if (relat.levelUp()){
 				Message message = new Message(Message.UPGRADE_TYPE, 
 												user.getUserId(), this.userDAO.findById(friendId), RestUtil.getCurrentTime() );
 					session.save(message);
 				}
-			
 				session.update(relat);
 			}
 			tx.commit();
 			this.imageDAO.closeSession();
-			return RestUtil.string2json("true");
+			return RestUtil.object2json(relat.getRelationship());
 		}catch (Exception e){
 			e.printStackTrace();
 			this.imageDAO.closeSession();
@@ -342,52 +331,59 @@ public class ImageService {
 		}
 	}
 	
-	@PUT
-	@Path("v1/image/{imageId}/unapprove")
-	@Produces("application/json;charset=utf-8")
-	public Object unapproveImage(@PathParam("imageId") Integer imageId,
-			@HeaderParam("token") String token) {
-		Image image = new Image();
-		image = this.imageDAO.findById(imageId);
-		if (image==null ||!image.getUser().getToken().equals(token)){
-			return RestUtil.string2json("false");
-		}
-		if (image.getDeleted()){
-			return RestUtil.string2json("false");
-		}
-		if (!image.getApproved()){
-			return RestUtil.string2json("true");
-		}else{
-			Session session = this.imageDAO.getSession();
-			try{
-				Transaction tx = session.beginTransaction();
-				image.setApproved(false);
-				image.setLastModified(RestUtil.getCurrentDate());
-				session.update(image);
-				tx.commit();
-				this.imageDAO.closeSession();
-				return RestUtil.string2json("true");
-			}catch (Exception e){
-				e.printStackTrace();
-				this.imageDAO.closeSession();
-				return RestUtil.string2json("false");
-			}
-		}	
-	}
+//	@PUT
+//	@Path("v1/image/{imageId}/unapprove")
+//	@Produces("application/json;charset=utf-8")
+//	public Object unapproveImage(@PathParam("imageId") Integer imageId,
+//			@HeaderParam("token") String token) {
+////		Image image = new Image();
+//		
+//		Session session = this.imageDAO.getSession();
+//		Image image = this.imageDAO.findById(imageId);
+//		if (image==null ||!image.getUser().getToken().equals(token)){
+////			this.imageDAO.closeSession();
+//			return RestUtil.string2json("false");
+//		}
+//		if (image.getDeleted()){
+////			this.imageDAO.closeSession();
+//			return RestUtil.string2json("false");
+//		}
+//		if (!image.getApproved()){
+////			this.imageDAO.closeSession();
+//			return RestUtil.string2json("true");
+//		}else{
+//			try{
+//				Transaction tx = session.beginTransaction();
+//				image.setApproved(false);
+//				image.setLastModified(RestUtil.getCurrentDate());
+//				session.update(image);
+//				tx.commit();
+////				this.imageDAO.closeSession();
+//				return RestUtil.string2json("true");
+//			}catch (Exception e){
+//				e.printStackTrace();
+////				this.imageDAO.closeSession();
+//				return RestUtil.string2json("false");
+//			}
+//		}	
+//	}
 	
 	@PUT
 	@Path("v1/image/{imageId}/delete")
 	@Produces("application/json;charset=utf-8")
 	public Object deleteImage(@PathParam("imageId") Integer imageId,
 			@HeaderParam("token") String token) {
+		
+		Session session = this.imageDAO.getSession();
 		Image image = this.imageDAO.findById(imageId);
 		if (image==null ||!image.getUser().getToken().equals(token)){
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
 		if (image.getDeleted()){
+			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
-		}else{
-			Session session = this.imageDAO.getSession();
+		}else{		
 			try{
 				Transaction tx = session.beginTransaction();
 				image.setDeleted(true);
@@ -396,7 +392,8 @@ public class ImageService {
 				
 				User user = image.getUser();
 				Integer friendId = image.getUploaderId();
-				
+
+				//这里出现了session后findByxxx:relationshipDAO 
 				Relationship relat = (Relationship) this.relationshipDAO
 									.findByUserAndFriend(user,friendId);
 				if (relat != null ){
@@ -415,34 +412,36 @@ public class ImageService {
 		}
 	}
 	
-	@PUT
-	@Path("v1/image/{imageId}/restore")
-	@Produces("application/json;charset=utf-8")
-	public Object restoreImage(@PathParam("imageId") Integer imageId,
-			@HeaderParam("token") String token) {
-		Image image = new Image();
-		image = this.imageDAO.findById(imageId);
-		if (image==null || !image.getUser().getToken().equals(token)){
-			return RestUtil.string2json("false");
-		}
-		if (!image.getDeleted()){
-			return RestUtil.string2json("true");
-		}else{
-			Session session = this.imageDAO.getSession();
-			try{
-				Transaction tx = session.beginTransaction();
-				image.setDeleted(false);
-				image.setLastModified(RestUtil.getCurrentDate());
-				session.update(image);
-				tx.commit();
-				this.imageDAO.closeSession();
-				return RestUtil.string2json("true");
-			}catch (Exception e){
-				e.printStackTrace();
-				this.imageDAO.closeSession();
-				return RestUtil.string2json("false");
-			}
-		}
-	}
+//	@PUT
+//	@Path("v1/image/{imageId}/restore")
+//	@Produces("application/json;charset=utf-8")
+//	public Object restoreImage(@PathParam("imageId") Integer imageId,
+//			@HeaderParam("token") String token) {
+////		Image image = new Image();
+//		Session session = this.imageDAO.getSession();
+//		Image image = this.imageDAO.findById(imageId);
+//		if (image==null || !image.getUser().getToken().equals(token)){
+////			this.imageDAO.closeSession();
+//			return RestUtil.string2json("false");
+//		}
+//		if (!image.getDeleted()){
+////			this.imageDAO.closeSession();
+//			return RestUtil.string2json("true");
+//		}else{
+//			try{
+//				Transaction tx = session.beginTransaction();
+//				image.setDeleted(false);
+//				image.setLastModified(RestUtil.getCurrentDate());
+//				session.update(image);
+//				tx.commit();
+////				this.imageDAO.closeSession();
+//				return RestUtil.string2json("true");
+//			}catch (Exception e){
+//				e.printStackTrace();
+////				this.imageDAO.closeSession();
+//				return RestUtil.string2json("false");
+//			}
+//		}
+//	}
 	
 }

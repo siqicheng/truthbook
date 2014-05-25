@@ -7,14 +7,14 @@ function modifiedImageNum(num){
 
 function prepareElement(data,isAppend,Control,Comment){
 	var url = data.imageUrl,
-		userId = data.userId,
-		description = data.description,
+		userId = data.user.userId,//this is different from the former version output
+		description = data.content,
 		uploaderName =  data.uploaderName,
 		uploaderId = data.uploaderId,
 		createDate = data.createDate,
 		numOfComment = data.commentCnt,
 		imageId = data.imageId,
-		numLike = data.like,
+		numLike = data.liked,
 		descriptionDisplay = "",
 		display = "inline";	
 	
@@ -42,7 +42,7 @@ function prepareElement(data,isAppend,Control,Comment){
 
 function prepareUnapprovedElement(data,isAppend){
 	var url = data.imageUrl;
-		description = data.description,
+		description = data.content,
 		createDate = data.createDate,
 		uploaderId = data.uploaderId,
 		imageId = data.imageId,
@@ -179,43 +179,64 @@ function addGallery(id){
 }); 
 }
 
-function dateHandle(createDate){
-	date = new Date();
-	day = date.getDate();
-	month = Number(date.getMonth()+1);if (month < 10) month="0"+Number(date.getMonth()+1);
-	year = date.getFullYear();
+function dateHandle(createDate,defaultFlag){
+//	Only valid for server side using UTC	
+//	alert(translate_timezone("Fri May 23 20:37:39 +0000 2014",8,1));//2014年5月24日 04:37:39 星期六 当前时区：+0800	
+//	createDate = "2014-05-24T00:20:36+08:00";
+//	t=	["2014年5月24日", "8:20:36", "星期六", "当前时区：+0800"]
+//	h=  ["8", "20", "36"]
+
+	var date = new Date();
+	var day_now = date.getDate();
+	var month_now = Number(date.getMonth()+1);//if (month_now < 10) month_now="0"+Number(date.getMonth()+1);
+	var year_now = date.getFullYear();
+		
+	var modifiedTime = translate_timezone(formatTheServerDate(createDate),parseInt(date.toTimeString().substr(12,5))/100,1);
+	var t = modifiedTime.split(" ");
+	var h = t[1].split(":");
 	
-	today = year+"-"+month; 
-	uploadDate = createDate.substr(0,createDate.indexOf(" ")-3);
-	defaultUploadDate = createDate.substr(0,createDate.indexOf(" "));
-	defaultDisplayDate = defaultUploadDate.substr(0,4)+"年"+defaultUploadDate.substr(5,2)+"月"+defaultUploadDate.substr(8,2)+"日";
-	if(uploadDate != today){	
+	var year_upload = t[0].substr(0,4);
+	var month_upload = t[0].substring(t[0].indexOf("年")+1,t[0].indexOf("月"));
+	var day_upload = t[0].substring(t[0].indexOf("月")+1,t[0].indexOf("日"));
+	var hour_upload = h[0];
+	var min_upload = h[1];
+	var second_upload = h[2];
+		 
+//	var defaultUploadDate = createDate.substring(0,createDate.indexOf("T"));
+	var defaultDisplayDate = t[0]+" "+t[2];
+	
+	if(defaultFlag==true){
+		return defaultDisplayDate;
+	}
+	
+	if(year_upload != year_now || month_upload != month_now){
 		return defaultDisplayDate;
 	} else {
-		hour = date.getHours();
-		minute = date.getMinutes();
-		second = date.getSeconds();
+		var hour_now = date.getHours();
+		var min_now = date.getMinutes();
+		var second_now = date.getSeconds();
 		
-		upload_day = createDate.substr(createDate.indexOf(" ")-2,2);
-		upload_hour = createDate.substr(createDate.indexOf(" ")+1,2);
-		upload_minute = createDate.substr(createDate.indexOf(" ")+4,2);
-		upload_second = createDate.substr(createDate.indexOf(" ")+7,2);
-
-		if (day>upload_day){
-//			return defaultDisplayDate;
-			return (day - upload_day)+"天前";
+//		upload_day = createDate.substr(createDate.indexOf("T")-2,2);
+//		upload_hour = createDate.substr(createDate.indexOf("T")+1,2);
+//		upload_minute = createDate.substr(createDate.indexOf("T")+4,2);
+//		upload_second = createDate.substr(createDate.indexOf("T")+7,2);
+		
+		if (day_now>day_upload){
+			return (day_now - day_upload)+"天前";
 		}
-		if (hour>upload_hour){
-			return (hour - upload_hour)+"小时前";
+		if (hour_now>hour_upload){
+			return (hour_now - hour_upload)+"小时前";
 		}
-		if (minute>upload_minute){
-			return (minute - upload_minute)+"分钟前";
+		if (min_now>min_upload){
+			return (min_now - min_upload)+"分钟前";
 		}
-		if (second>upload_second){
-			return (second - upload_second)+"秒钟前";
+		if (second_now>second_upload){
+			return (second_now - second_upload)+"秒钟前";
 		}
 		return defaultDisplayDate;
 	}
 }
+
+
 
 

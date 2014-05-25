@@ -96,7 +96,6 @@ public class PortraitService {
 	public void removeDuplicatePortrait(Integer userId, Integer imageId){
 		Session session = this.portraitDAO.getSession();
 		Transaction tx = session.beginTransaction();	
-		
 		try{
 			List portraits = this.findPortrait(userId, imageId, null);
 			if (portraits.size()>1){
@@ -107,11 +106,9 @@ public class PortraitService {
 				}
 			}
 			tx.commit();
-//			session.close();
 			this.portraitDAO.closeSession();
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.portraitDAO.closeSession();
 		}	
 	}
@@ -133,11 +130,9 @@ public class PortraitService {
 				}
 			}
 			tx.commit();
-//			session.close();
 			this.portraitDAO.closeSession();
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.portraitDAO.closeSession();
 		}	
 	}
@@ -148,16 +143,13 @@ public class PortraitService {
 	public Object addPortrait(@FormParam("userId") Integer userId,@FormParam("imageId") Integer imageId){
 		
 		boolean setDefault = false;
-		
-		//if no default portraits, set one.
-		List portraits = this.findAllPortrait(userId,true);
-		if(portraits.size()==0){
-			setDefault = true;
-		}
-		
-		
-		Session session = this.portraitDAO.getSession();
 		try{
+			Session session = this.portraitDAO.getSession();
+			//if no default portraits, set one.
+			List portraits = this.findAllPortrait(userId,true);
+			if(portraits.size()==0){
+				setDefault = true;
+			}
 			portraits = findPortrait(userId,imageId,null);
 			if (portraits.size()==0){
 				this.portrait.setUser(this.user);
@@ -166,16 +158,15 @@ public class PortraitService {
 				Transaction tx = session.beginTransaction();			
 				session.save(this.portrait);	
 				tx.commit();
-//				session.close();
-				this.portraitDAO.closeSession();
-				return RestUtil.string2json("true");
 			}
+			this.portraitDAO.closeSession();
+			return RestUtil.string2json("true");
+			
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.portraitDAO.closeSession();
-		}		
-		return RestUtil.string2json("false"); 		
+			return RestUtil.string2json("false"); 
+		}	
 	}
 	
 		
@@ -185,7 +176,7 @@ public class PortraitService {
 	@Produces("application/json")
 	public void refinePortrait(@FormParam("userId") Integer userId,@FormParam("imageId") Integer imageId){
 		this.removeDuplicatePortrait(userId, imageId);
-		this.unsetAllPortrait(userId);	
+		this.unsetAllPortrait(userId);
 	}
 	
 	@GET
@@ -208,20 +199,26 @@ public class PortraitService {
 	@Path("v1/portrait/{userId}/default")
 	@Produces("application/json")
 	public Portrait getDefaultPortrait(@PathParam("userId") Integer userId){
+		
+		
 		List portraits = this.findAllPortrait(userId, true);
 		if(portraits.size()==0){
 			portraits = this.findAllPortrait(userId, null);
 			if(portraits.size()>0){
 				this.portrait = (Portrait)portraits.get(0);
+				this.portraitDAO.closeSession();
 				return this.portrait;
 			}
 			else{
+				this.portraitDAO.closeSession();
 				return null;
 			}
 		}else{
 			this.portrait = (Portrait)portraits.get(0);
+			this.portraitDAO.closeSession();
 			return this.portrait;
 		}
+		
 	}
 	
 		
@@ -232,10 +229,12 @@ public class PortraitService {
 			@FormParam("imageId") Integer imageId,
 			@HeaderParam("token") String token){
 		this.refinePortrait(userId, imageId);	
-		Session session = this.portraitDAO.getSession();
+		
 		try{
+			Session session = this.portraitDAO.getSession();
 			User user = this.userDAO.findById(userId);
 			if (!user.getToken().equals(token)){
+				this.portraitDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 				
@@ -246,18 +245,15 @@ public class PortraitService {
 			this.portrait.setDefaultImage(true);
 			session.update(user);
 			session.saveOrUpdate(this.portrait);	
-			
 			tx.commit();
-//			session.close();
 			this.portraitDAO.closeSession();
 			return RestUtil.string2json("true");
 			
 		}catch (Exception e){
 			e.printStackTrace();
-//			session.close();
 			this.portraitDAO.closeSession();
+			return RestUtil.string2json("false");
 		}
-		return RestUtil.string2json("false"); 		
 	}
 	
 	@DELETE

@@ -82,7 +82,8 @@ public class FileMeta {
 	public void setFileName(String fileName) {
 		String ext = fileName.substring(fileName.lastIndexOf('.'));
 		try{
-	    	this.fileName = new SHA1().digest(fileName)+ ext;
+			String timestamp = Integer.toString((int) System.currentTimeMillis());
+	    	this.fileName = new SHA1().digest(fileName+timestamp)+ ext;
 		}  catch (Exception e){
 			e.printStackTrace();
 			this.fileName = "defautFileName" + ext;

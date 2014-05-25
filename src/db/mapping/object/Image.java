@@ -79,6 +79,7 @@ public class Image implements java.io.Serializable {
 		return this.portraits;
 	}
 	
+	@XmlTransient
 	public Integer getCommentCnt(){
 		return this.imageComments.size();
 	}

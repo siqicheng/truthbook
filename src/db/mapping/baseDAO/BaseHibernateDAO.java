@@ -45,7 +45,7 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 				queryObject.setParameter(i, value[i]);
 			}
 			
-			
+//			session.close();
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			throw re;
@@ -66,13 +66,15 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 			
 			String queryString = "select user_id,friend_id,cast(relationship as varchar),is_invitee from " + table + " as model where " + sql_frag;
 			
-			Query queryObject = getSession().createSQLQuery(queryString).setResultTransformer(Transformers.aliasToBean(Entity));
+			Session session = getSession();
+			Query queryObject = session.createSQLQuery(queryString).setResultTransformer(Transformers.aliasToBean(Entity));
 			queryObject.setCacheable(false);
 			
 			for (int i=0; i<value.length;i++){
 				queryObject.setParameter(i, value[i]);
 			}
 			
+//			session.close();
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			throw re;

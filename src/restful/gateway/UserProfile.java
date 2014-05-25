@@ -54,12 +54,13 @@ public class UserProfile {
 			@FormParam("type") Integer type,
 			@FormParam("is_invitee") Boolean is_invitee,
 			@HeaderParam("token") String token) {
-		Session session = this.relationshipDAO.getSession();
+		
 		try {
+			Session session = this.relationshipDAO.getSession();
 			User user = this.userDAO.findById(id);		
 			User friend = this.userDAO.findById(friend_id);
-			
-			if (!user.getIsActivated() || !friend.getIsActivated()){
+		
+			if (!user.getIsActivated() && !friend.getIsActivated()){
 				if (!user.getToken().equals(token)){
 					List<Message> messages = session.createCriteria(Message.class)
 							.add(Restrictions.eq(MessageDAO.MESSAGE_TYPE, Message.ADDFRIEND_TYPE))
@@ -68,31 +69,28 @@ public class UserProfile {
 							.setMaxResults(1)
 							.list();
 					if (messages.size()==0){
+						this.relationshipDAO.closeSession();
 						return RestUtil.string2json("false");
 					}
 				}
-			}
-			
-			
-			
+			}			
 			List<Relationship> Friends = this.getCriteria()
 															.add(Restrictions.eq(RelationshipDAO.USER, user))
 															.add(Restrictions.eq(RelationshipDAO.FRIEND_ID, friend_id))
 															.list();
+			
 			if (Friends.size() == 0) {
 				Relationship relationship = new Relationship(user, friend_id, type, is_invitee);
-				
 				Transaction tx = session.beginTransaction();
 				session.save(relationship);
 				tx.commit();
-//				session.close();
 				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
+			this.relationshipDAO.closeSession();
 			return RestUtil.string2json("false");
 		} catch (Exception e) {
 			e.printStackTrace();
-//			session.close();
 			this.relationshipDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
@@ -107,10 +105,12 @@ public class UserProfile {
 			@FormParam("type") Integer type,
 			@FormParam("is_invitee") Boolean is_invitee,
 			@HeaderParam("token") String token) {
-		Session session = this.relationshipDAO.getSession();
+		
 		try {
+			Session session = this.relationshipDAO.getSession();
 			User user = this.userDAO.findById(id);
 			if (!user.getToken().equals(token)){
+				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			List<Relationship> Friends = this.getCriteria()
@@ -124,6 +124,7 @@ public class UserProfile {
 				
 				//由于现在此函数只用于降级，过作此判定,防止误用
 				if (relationship.getRelationship()<type){
+					this.relationshipDAO.closeSession();
 					return RestUtil.string2json("false");
 				}
 				
@@ -131,18 +132,17 @@ public class UserProfile {
 				relationship.setRelationship(type);
 				session.update(relationship);
 				tx.commit();
-//				session.close();
 				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");	
 			}
+			this.relationshipDAO.closeSession();
+			//true?false?
+			return RestUtil.string2json("false");
 		} catch (Exception e) {
 			e.printStackTrace();
-//			session.close();
 			this.relationshipDAO.closeSession();
+			return RestUtil.string2json("false");
 		}
-
-		return RestUtil.string2json("false");
-
 	}
 
 	
@@ -155,6 +155,7 @@ public class UserProfile {
 		try{
 			User user = this.userDAO.findById(id);
 			if (!user.getToken().equals(token)){
+				this.userDAO.closeSession();
 				return RestUtil.string2json("false");
 			}
 			List<Relationship> Friends = this.getCriteria()
@@ -164,14 +165,16 @@ public class UserProfile {
 			
 			if (Friends.size() == 1) {
 				Relationship Friend = Friends.get(0);
-					return RestUtil.object2json(Friend.getRelationship());
+				this.userDAO.closeSession();
+				return RestUtil.object2json(Friend.getRelationship());
 			}
+			this.userDAO.closeSession();
+			return RestUtil.string2json("-1");
 		} catch (Exception e){
 			e.printStackTrace();
+			this.userDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
-		
-		return RestUtil.string2json("-1");
 	}
 
 	
@@ -180,10 +183,9 @@ public class UserProfile {
 	@Produces("application/json;charset=utf-8")
 	public Object deleteFriend(@PathParam("id") Integer id,@PathParam("friend_id") Integer friend_id,
 			@HeaderParam("token") String token) {
-
-		
-		Session session = this.relationshipDAO.getSession();
+	
 		try {
+			Session session = this.relationshipDAO.getSession();
 			User user = this.userDAO.findById(id);
 //			if (!user.getToken().equals(token)){
 //				return RestUtil.string2json("false");
@@ -199,19 +201,16 @@ public class UserProfile {
 				Relationship relationship = Friend;
 				session.delete(relationship);
 				tx.commit();
-//				session.close();
 				this.relationshipDAO.closeSession();
 				return RestUtil.string2json("true");
 			}
+			this.relationshipDAO.closeSession();
+			return RestUtil.string2json("false");
 		} catch (Exception e) {
 			e.printStackTrace();
-//			session.close();
 			this.relationshipDAO.closeSession();
 			return RestUtil.string2json("false");
 		}
-
-		return RestUtil.string2json("false");
-
 	}
 
 	@GET
@@ -219,8 +218,8 @@ public class UserProfile {
 	@Produces("application/json;charset=utf-8")
 	public User[] getFriends(@PathParam("id") Integer id,@PathParam("type") Integer type,
 			@HeaderParam("token") String token) {
-
 		try {
+			
 			User user = this.userDAO.findById(id);
 //			if (!user.getToken().equals(token)){
 //				return null;
