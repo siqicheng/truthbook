@@ -204,11 +204,11 @@ $('.ui.form.register-form')
 						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
 						
 						if(uploadCandidates[selected_num].ans.length==2) {
-							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？（两个字）");
+							$("#checkinput").attr("placeholder", "请输入上传者的姓（两个字）");
 							$("#tipMessage").text("请输入照片上传者的姓（两个字）完成注册：");
 							$("#tipMessage").fadeIn(300);
 						} else {
-							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？");
+							$("#checkinput").attr("placeholder", "请输入上传者的姓");
 							$("#tipMessage").text("请输入照片上传者的姓完成注册：");
 							$("#tipMessage").fadeIn(300);
 						};

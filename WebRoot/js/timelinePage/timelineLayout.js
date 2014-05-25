@@ -9,6 +9,7 @@ function getAllTimeline(userId) {
 			var allTimelineData = timelineToArray(data);
 			numTimelineItem = allTimelineData.length;
 			allTimelineItem = timelineInOrder(numTimelineItem, allTimelineData);
+//			allTimelineItem = allTimelineData;
 			// Get ordered timeline item Array
 			if(numTimelineItem != 0){
 				drawNextBatchFeed(numTimelineItem, NUM_FIRST_BATCH_ITEM_ON_TIMELINE, allTimelineItem);
@@ -91,24 +92,6 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 			"\t\t\t\t\t\t\t\t<div class='text'>显示剩余<span class='numToShow'>"+numOfCommentShow+"</span>条评论</div>\n"+
 			"\t\t\t\t\t\t\t</div>\n"+
 			"\t\t\t\t\t\t</div>\n"+
-			    	// 			<div class="comment" id="commentId1">
-								// 	<a class="avatar tiny" href="">
-								// 		<img src="img/logo.ico">
-								// 	</a>
-								// 	<div class="content">
-								// 		<a class="author">repliedByName</a>
-								// 		<div class='metadata' style='display:inline;'><span>to</span></div>
-								// 		<a class='to author' style='display:inline;'>repliedToName</a>
-								// 		<div class="text">
-								// 			我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。我卖的是一百字的心灵鸡汤。。我卖的是一百字的心灵鸡汤。我卖的是一百字
-								// 		</div>
-								// 		<div class="actions" style='display:inline;'>
-								//         	<a class="reply" style='display:inline;'>回复</a>
-								//         	<a class="delete" id='delete1' style='display:inline;'>删除</a>
-							 //         </div>
-							 //            <span class="date">1天前</span>
-								// 	</div>
-							// </div>
 			"\t\t\t\t\t</div>\n" +
 			"\t\t\t\t</div>\n" +
 			"\t\t\t\t<div class='ui reply form'>\n"+
@@ -140,7 +123,7 @@ function thistimelineCommentHTML(commentId,commentContent,repliedByCommentId,rep
 			"\t\t<img src='"+repliedByProtrait+"'>\n"+
 			"\t</a>\n"+
 			"\t<div class='content'>\n"+
-			"\t\t<a class='author'>" + repliedByName + "</a>\n"+					
+			"\t\t<a class='author firstAuthor'>" + repliedByName + "</a>\n"+					
 			"\t\t<div class='metadata' style='display:"+replyToDisplay+"'><span>to</span></div>\n"+
 			"\t\t<a class='to author' style='display:"+replyToDisplay+"'>"+repliedToName+"</a>\n"+
 			"\t\t<div class='text'>\n"+
