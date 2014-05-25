@@ -150,28 +150,8 @@ $('.ui.form.register-form')
 					html = "";
 					for(i=0;i<=num;i++){
 						var content = "uploaded by: ";
-//						onSuccess = function(data, textStatus) {
-//							var num = userLengthJson(data);
-//							if(num>1) {
-//								var name = data.user[i].fullName;
-//							} else {
-//								var name = data.user.fullName;
-//							}
-//							if(name.length > 3) {
-//								content += name.slice(2);
-//								uploadCandidates[i].ans = name.slice(0,2);
-//							} else {
-//								content += name.slice(1);
-//								uploadCandidates[i].ans = name.charAt(0);
-//							}
-//						};
-//						onError = function(xhr, error, status) {
-//							console.log("Get uploader name failed with error: " + error);
-//						};
-//						getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
 						var onSuccess = function(data, textStatus) {
 							if(data != undefined){
-//								$("#imgPrev").attr("src", getImageUrl(data.image.imageUrl, ImageType.Medium));
 								uploadCandidates[i].imageUrl = getImageUrl(data.image.imageUrl, ImageType.Medium);
 								var name = data.image.uploaderName;
 								if(name.length > 3) {
@@ -209,21 +189,8 @@ $('.ui.form.register-form')
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
 						selected_num=$(this).next().index()-1;
-//						console.log(selected_num);
 						$("#rechooseerror").hide();
 						$("#imgPrev").attr("src", uploadCandidates[selected_num].imageUrl);
-						
-//						var onSuccess = function(data, textStatus) {
-//							if(data != undefined){
-//								$("#imgPrev").attr("src", getImageUrl(data.image.imageUrl, ImageType.Medium));
-//							}
-//						},
-//							onError = function(xhr,status,error){
-//								console.log("获取照片请求发送失败 Error: " + error);
-//								return false;
-//						};
-//						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
-						
 						if(uploadCandidates[selected_num].ans.length==2) {
 							$("#checkinput").attr("placeholder", "你觉得上面那个上传者的姓是？（两个字）");
 							$("#tipMessage").text("请输入照片上传者的姓（两个字）完成注册：");
