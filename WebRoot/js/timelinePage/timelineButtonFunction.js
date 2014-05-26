@@ -1,4 +1,21 @@
 /*********************************************************************************
+
+ *	Scroll to top button function 	 
+ */
+function scrollToTopButtonHandler() {
+	var topMain = 2000;
+	$(window).scroll(function(){
+		if ($(window).scrollTop()>topMain) $(".base_scrollToTop").fadeIn(1000);
+		if ($(window).scrollTop()<topMain) $(".base_scrollToTop").fadeOut(1000);
+		});
+	$("#back_top").click(function(){
+		$('body,html').animate({scrollTop:0},200);
+		return false;
+	});
+}
+
+/*********************************************************************************
+
  *	Load more item button function 	
  * 	show next batch feed  
  */

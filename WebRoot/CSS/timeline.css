@@ -219,3 +219,18 @@
 	border-top-right-radius: 0.33em;
 	cursor:zoom-in;
 }
+
+.base_scrollToTop {
+	display:none;
+	position: fixed;
+	left: 50%;
+	bottom: 60px;
+}
+#back_top {
+	margin-left:550px;
+	padding:10px;
+	opacity: 0.3;
+}
+#back_top .icon {
+	margin:0px;
+}

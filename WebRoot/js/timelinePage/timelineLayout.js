@@ -1,6 +1,7 @@
 $(function(){
 	getAllTimeline($.cookie("truthbook").userId);
 	loadMoreButtonHandler();
+	scrollToTopButtonHandler();
 });
 
 function getAllTimeline(userId) {
