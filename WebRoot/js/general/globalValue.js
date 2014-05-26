@@ -23,11 +23,11 @@ isDebug = true;
  */
 
 
-//localhost = "175.186.106.75";
-//suffix = ":8080/truthbook";
+localhost = "localhost";
+suffix = ":8080/truthbook";
 
-localhost = "truthbook.cc";
-suffix="";
+//localhost = "truthbook.cc";
+//suffix="";
 
 LoginPage = "http://" + localhost + suffix + "/";
 HomePage = "http://" + localhost + suffix + "/home.html";
@@ -98,6 +98,10 @@ periodCheckNewMessage = 20000;  //ms
 //function speedDownMessageListener(){
 //	periodCheckNewMessage = 30000;
 //}
+
+
+atNotationFlag=0;
+MAX_FULLNAME_LENGTH = 5;
 
 /*********************************************************************************
  * 	Image style

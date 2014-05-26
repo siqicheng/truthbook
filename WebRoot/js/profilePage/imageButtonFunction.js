@@ -9,7 +9,8 @@
  *	7.	Reply someone
  *	8.	delete message
  *	9.	add message
- *
+ *	10.	check @ function 
+ * 	 
  *	Stranger handler
  *
  */
@@ -390,9 +391,9 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	var	repliedByProtrait = $.cookie("truthbook").defaultPortrait;
 	var	repliedToCommentId = thisReplyForm.children(".replyToId").html();
 	var	repliedToName = thisReplyForm.children(".replyToName").html();
-	var	createDate = new Date();
+//	var	createDate = new Date();
 //	var	createDate = createDate.toLocaleDateString();
-		createDate = "just now";
+	var	createDate = "just now";
 	if(repliedToCommentId!=""){
 		var replyToDisplay = "inline";
 		commentContent = commentContent.substring(commentContent.indexOf("：")+1);
@@ -423,7 +424,6 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	var thisOwnerId = $("#imageId"+imageId).find(".userId_span").html();
 	var uploaderId = $("#imageId"+imageId).find(".uploaderId").html();
 	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId);
-//	speedUpMessageListener();
 }
 
 function resetTextarea(thisText){
@@ -476,6 +476,116 @@ function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 	}
 	
 	
+}
+
+/*********************************************************************************
+ *	10.	check @ function 
+ * 	check @ function and its help function 
+ */
+function checkAtSomeone(textarea){
+	var textInput = textarea.value;
+	console.log(textInput.replace(/(\r)*\n/g,"<br/>"));
+	
+	
+	if(textInput.indexOf("@")==-1){
+		hideEnterHintMessage(textarea);
+		atNotationFlag=0;
+		return;
+	}else{
+		atNotationFlag = 1;
+		enableEnterHintMessage(textarea);
+	}
+	
+	var textInputfull = textInput.replace(/(\r)*\n/g,"<br/>");
+	
+	if(textInputfull.substr(textInput.length-1)=="<br/>"){
+		textarea.value=textInput.substr(0,textInput.lastIndexOf("@"));
+		hideEnterHintMessage(textarea);
+		addAtzoneController(textarea);
+		atNotationFlag=0;
+		return;
+	}
+	
+	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML = "";
+	var name = textInput.substr(textInput.lastIndexOf("@")+1,MAX_FULLNAME_LENGTH);
+	if (name.length == 0) return;
+
+	
+	for(var i=0;i<userFriendsLists.nFriends.length;i++){
+		if(userFriendsLists.nFriends[i].fullName.substr(0,name.length) != name){
+			continue;
+		}
+		addThisUserToAtzone(textarea,userFriendsLists.nFriends[i]);
+	}
+}
+
+
+function enableEnterHintMessage(textarea){
+	textarea.parentNode.parentNode.childNodes[1].style.display="block";
+	$("#eventsegment").masonry();
+}
+
+function hideEnterHintMessage(textarea){
+	textarea.parentNode.parentNode.childNodes[1].style.display="none";
+	$("#eventsegment").masonry();
+}
+
+function addAtzoneController(textarea){
+	textarea.parentElement.parentElement.childNodes[0].childNodes[2].innerHTML += textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
+	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML = "";
+	var imageId = textarea.classList[1];
+	deleteNode = $("#imageId"+imageId).find(".confirmed .atusername");
+	for(var i=0;i<deleteNode.length;i++){
+		if(!$("#imageId"+imageId).find(".confirmed .atusername."+deleteNode[i].classList[3]+" .icon").hasClass("red")){
+			addDeleteNodeHander(deleteNode,deleteNode[i].classList[3]);
+		}			
+	}
+}
+
+function addThisUserToAtzone(textarea,thisUser){
+	if(existThisUserInAtzone(textarea,thisUser)) return;
+	var html = 
+	"<div class=\"column "+thisUser.userId+"\" style='height: 30px;margin-top: 0px;margin-bottom: 2px;'>"+
+		"<div class=\"ui basic segment\" style='display:inline;padding-top: 0px;padding-left: 1px;padding-right: 1px;padding-bottom: 0px;'>"+
+			"<a class=\"ui label atusername "+thisUser.userId+"\">"+
+				"<span style='display:inline'>"+thisUser.fullName+"</span>"+
+				"<i class=\"delete icon "+thisUser.userId+"\" style='display:inline'></i>"+
+			"</a>"+
+			"<span class='thisUserId_span' style='display:none'></span>"+
+		"</div>"+
+	"</div>";
+	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML += html;
+}
+
+function existThisUserInAtzone(textarea,thisUser){
+	try{
+		var className = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[0].className;
+		if(className.split(" ")[1]==thisUser.userId){
+			return true;
+		}
+	}
+	catch(e){
+	}
+	try{
+		var classNameConfirmed = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[0].className;
+		if(classNameConfirmed.split(" ")[1]==thisUser.userId){
+			return true;
+		}
+	}
+	catch(e){
+	}
+	return false;
+}
+
+function addDeleteNodeHander(deleteNode,userId){
+//	deleteNode.find(".icon."+userId).attr("style","inline");
+	deleteNode.find(".icon."+userId).parents(".basic.segment").transition({
+		animation : 'scale in', 
+		duration  : '0.3s',
+		complete  : function() {
+			deleteNode.find(".icon."+userId).parent().addClass("red");
+		}
+	});
 }
 
 /*********************************************************************************
