@@ -29,3 +29,7 @@
 #topbar .right.menu .item .off.icon {
 	margin: 0px;
 }
+
+#topbar .item .description {
+	font-size: 12px;
+}
