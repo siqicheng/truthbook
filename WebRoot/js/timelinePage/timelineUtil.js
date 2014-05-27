@@ -15,8 +15,14 @@ function timelineToArray(data, numTotalFeed){
 function timelineInOrder(numTotalFeed,data){
 	var timelineIdinorder = [];
 	for (var i = 0 ; i < numTotalFeed;i++){
+		var fulltime = data[i].lastModified;
+		var time = fulltime.substring(fulltime.indexOf("T")+1,fulltime.indexOf("Z"));
+		var s = time.split(":");
+		var date = fulltime.substring(0,fulltime.indexOf("T"));
+		var d = date.split("-");
+		var orderNumber =d[0]*31536000+d[1]*2592000+d[2]*86400+s[0]*3600+s[1]*60+s[2];	
 		timelineIdinorder [i] = [];
-		timelineIdinorder [i][0] = data[i].imageId;
+		timelineIdinorder [i][0] = orderNumber;
 		timelineIdinorder [i][1] = i;
 	}
 	timelineIdinorder.sort(function(x,y){return (y[0]-x[0]);});
@@ -33,7 +39,7 @@ function prepareFeed(data,isAppend,Comment){
 		description = data.content,
 		uploaderName =  data.uploaderName,
 		uploaderId = data.uploaderId,
-		createDate = data.createDate,
+		createDate = data.lastModified,
 //		numOfComment = data.commentCnt,
 		numOfComment = 0,
 		imageId = data.imageId,

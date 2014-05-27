@@ -252,8 +252,15 @@ function addCommentButtonHandlerOnTimeline(imageId){
 	
 	$("#itemId"+imageId).find(".commentwrap .comment .avatar.tiny").click(function(){
 		var thisCommentByUserId = $(this).parent().find(".repliedByCommentId_span").html();
-		console.log(thisCommentByUserId);
 		goOthersPage(thisCommentByUserId);
+	});
+	$("#itemId"+imageId).find(".commentwrap .comment .content .firstAuthor").click(function(){
+		var thisCommentByUserId = $(this).parent().parent().find(".repliedByCommentId_span").html();
+		goOthersPage(thisCommentByUserId);
+	});
+	$("#itemId"+imageId).find(".commentwrap .comment .content .to.author").click(function(){
+		var thisCommentToUserId = $(this).parent().parent().find(".repliedToCommentId_span").html();
+		goOthersPage(thisCommentToUserId);
 	});
 }
 
@@ -267,7 +274,18 @@ function addCommentButtonHandler(imageId){
 		removeComment(imageId,$(this).parent().parent().parent().find(".commentId_span").html());
 	});
 	
-	
+	$("#imageId"+imageId).find(" .comment .avatar.tiny").click(function(){
+		var thisCommentByUserId = $(this).parent().find(".repliedByCommentId_span").html();
+		goOthersPage(thisCommentByUserId);
+	});
+	$("#imageId"+imageId).find(" .comment .content .firstAuthor").click(function(){
+		var thisCommentByUserId = $(this).parent().parent().find(".repliedByCommentId_span").html();
+		goOthersPage(thisCommentByUserId);
+	});
+	$("#imageId"+imageId).find(" .comment .content .to.author").click(function(){
+		var thisCommentToUserId = $(this).parent().parent().find(".repliedToCommentId_span").html();
+		goOthersPage(thisCommentToUserId);
+	});
 	
 }
 
@@ -285,7 +303,7 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 					"<img src=\""+repliedByProtrait+"\" style='width:35px;height:35px;'>"+
 				"</a>"+
 				"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
-					"<a class=\"author\" style='font-weight:bold;color:#4C7A9F;font-size:12px;'>" + repliedByName + "</a>"+
+					"<a class=\"author firstAuthor\" style='font-weight:bold;color:#4C7A9F;font-size:12px;'>" + repliedByName + "</a>"+
 					
 					"<div class='metadata' style='display:"+replyToDisplay+";margin-left: 4px;font-size:12px;'><span class='date'>to</span></div>"+
 						"<a class='to author' style='display:"+replyToDisplay+";font-weight:bold;color:#4C7A9F;font-size:12px;'>"+repliedToName+"</a><span style='font-size:12px;'> :</span>"+

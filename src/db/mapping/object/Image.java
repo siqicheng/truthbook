@@ -127,7 +127,6 @@ public class Image implements java.io.Serializable {
 		return this.createDate;
 	}
 
-	@XmlTransient
 	public Date getLastModified() {
 		return this.lastModified;
 	}

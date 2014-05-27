@@ -9,7 +9,8 @@
  *	7.	Reply someone
  *	8.	delete message
  *	9.	add message
- *
+ *	10.	check @ function 
+ * 	 
  *	Stranger handler
  *
  */
@@ -234,7 +235,7 @@ function removeImageStart(thisElem) {
 				$('#eventsegment').masonry();
 				deleteThisImageFromApprovedList(imageId);
 				itemInitialize("#eventsegment");
-			} )
+			} );
 		}else{
 			drawConfirmPopUp("删除失败");
 		}
@@ -390,9 +391,9 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	var	repliedByProtrait = $.cookie("truthbook").defaultPortrait;
 	var	repliedToCommentId = thisReplyForm.children(".replyToId").html();
 	var	repliedToName = thisReplyForm.children(".replyToName").html();
-	var	createDate = new Date();
+//	var	createDate = new Date();
 //	var	createDate = createDate.toLocaleDateString();
-		createDate = "just now";
+	var	createDate = "just now";
 	if(repliedToCommentId!=""){
 		var replyToDisplay = "inline";
 		commentContent = commentContent.substring(commentContent.indexOf("：")+1);
@@ -423,7 +424,6 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm){
 	var thisOwnerId = $("#imageId"+imageId).find(".userId_span").html();
 	var uploaderId = $("#imageId"+imageId).find(".uploaderId").html();
 	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId);
-//	speedUpMessageListener();
 }
 
 function resetTextarea(thisText){
@@ -476,6 +476,156 @@ function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 	}
 	
 	
+}
+
+/*********************************************************************************
+ *	10.	check @ function 
+ * 	check @ function and its help function 
+ */
+function checkAtSomeone(textarea){
+	var textInput = textarea.value;
+	console.log(textInput.replace(/(\r)*\n/g,"<br/>"));
+	
+	
+	if(textInput.indexOf("@")==-1){
+		hideEnterHintMessage(textarea);
+		atNotationFlag=0;
+		return;
+	}else{
+		atNotationFlag = 1;
+		enableEnterHintMessage(textarea);
+	}
+	
+	var textInputfull = textInput.replace(/(\r)*\n/g,"<br/>");
+	
+	if(textInputfull.substr(textInput.length-1)=="<br/>"){
+		textarea.value=textInput.substr(0,textInput.lastIndexOf("@"));
+		hideEnterHintMessage(textarea);
+		addAtzoneController(textarea);
+		atNotationFlag=0;
+		return;
+	}
+	
+	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML = "";
+	var name = textInput.substr(textInput.lastIndexOf("@")+1,MAX_FULLNAME_LENGTH);
+	if (name.length == 0) return;
+
+	
+	for(var i=0;i<userFriendsLists.nFriends.length;i++){
+		if(userFriendsLists.nFriends[i].fullName.substr(0,name.length) != name){
+			continue;
+		}
+		addThisUserToAtzone(textarea,userFriendsLists.nFriends[i]);
+	}
+}
+
+
+function enableEnterHintMessage(textarea){
+	textarea.parentNode.parentNode.childNodes[1].style.display="block";
+	textarea.parentNode.parentNode.childNodes[0].childNodes[0].style.display="block";
+	$("#eventsegment").masonry();
+}
+
+function hideEnterHintMessage(textarea){
+	textarea.parentNode.parentNode.childNodes[1].style.display="none";
+	$("#eventsegment").masonry();
+	if(textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes.length==0){
+		hideAtzoneTitle(textarea);
+	}
+}
+
+function hideAtzoneTitle(textarea){
+	textarea.parentNode.parentNode.childNodes[0].childNodes[0].style.display="none";
+	$("#eventsegment").masonry();
+}
+
+function addAtzoneController(textarea){
+	var existAtFlag = 0;
+	if(textarea.parentElement.parentElement.childNodes[0].childNodes[2].innerHTML !=""){
+		existAtFlag=1;
+	}
+	var elementLength = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes.length;
+	textarea.parentElement.parentElement.childNodes[0].childNodes[2].innerHTML += textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
+	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML = "";
+	var allElementLength = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes.length;
+	var imageId = textarea.classList[1];
+	deleteNode = $("#imageId"+imageId).find(".confirmed .atusername");
+	for(var i=0;i<allElementLength;i++){
+		if(textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[i].classList[4]=="red")continue;
+		var userId = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[i].classList[3];
+		addDeleteNodeHander(deleteNode,userId,imageId,existAtFlag,elementLength);
+	}
+}
+
+function addThisUserToAtzone(textarea,thisUser){
+	if(existThisUserInAtzone(textarea,thisUser)) return;
+	var html = 
+		"<a class=\"ui label atusername "+thisUser.userId+"\" style='margin: 4px;'>"+
+			"<span style='display:inline'>"+thisUser.fullName+"</span>"+
+			"<i class=\"delete icon "+thisUser.userId+"\" style='display:inline'></i>"+
+		"</a>";
+	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML += html;
+}
+
+function existThisUserInAtzone(textarea,thisUser){
+	try{	
+		var newUserLength = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes.length;
+		for(var i=0;i<newUserLength;i++){
+			var userId = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[i].classList[3];
+			if(userId==thisUser.userId){
+				return true;
+			}
+		}
+	}
+	catch(e){
+		console.log("newUserError");
+	}
+	try{
+		var addedUserLength = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes.length;
+		for(var i=0;i<addedUserLength;i++){
+			var userId = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[i].classList[3];
+			if(userId==thisUser.userId){
+				return true;
+			}
+		}
+	}
+	catch(e){
+		console.log("addedUserError");
+	}
+	return false;
+}
+
+function addDeleteNodeHander(deleteNode,userId,imageId,existAtFlag,elementLength){
+//	deleteNode.find(".icon."+userId).attr("style","inline");
+//	deleteNode.find(".icon."+userId).parents(".atusername").transition({
+//		animation : 'scale in', 
+//		duration  : '0.3s',
+//		complete  : function() {
+//			deleteNode.find(".icon."+userId).parents(".atusername").addClass("red");
+//		}
+//	});
+	if(existAtFlag == 1){
+//		for(var i=0;i<elementLength;i++){
+			var element = $("#imageId"+imageId).find(".atNotationRegion .ui.label.atusername."+userId);
+			$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'appended', element );
+			deleteNode.find(".icon."+userId).parents(".atusername").addClass("red");
+//			$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+//		}
+		return;
+	}
+
+	$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry({		
+		itemSelector: '.ui.label',
+        columnWidth: 5,
+		gutter: 4});
+	
+//	$("#imageId"+imageId).find(".atNotationRegion .confirmed").masonry('on', 'layoutComplete', function( msnryInstance, laidOutItems ) {
+		$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+		deleteNode.find(".icon."+userId).parents(".atusername").addClass("red");
+//	} );
+	
+
+
 }
 
 /*********************************************************************************

@@ -99,6 +99,10 @@ periodCheckNewMessage = 20000;  //ms
 //	periodCheckNewMessage = 30000;
 //}
 
+
+atNotationFlag=0;
+MAX_FULLNAME_LENGTH = 5;
+
 /*********************************************************************************
  * 	Image style
  */
