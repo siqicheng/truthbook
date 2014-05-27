@@ -131,8 +131,8 @@ $(function() {
 			    console.log('Uploads finished');
 			},
 			submit: function(e, data) {
-				$("#choosePic .two.buttons").hide();
-				$("#uploadProgress").show();
+//				$("#choosePic .two.buttons").hide();
+//				$("#uploadProgress").show();
 			},
 			fail: function(e, data) {
 				console.log(data.textStatus);
@@ -176,7 +176,7 @@ $(function() {
 				drawConfirmPopUp("不能为自己传照片哦");
 				return;
 			}
-			var userId = $.cookie("truthbook").userId,
+//			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
 					if(data>0) {
 						gotoChoosePic();
@@ -216,6 +216,8 @@ $(function() {
 			drawConfirmPopUp("图片描述超出字数限制");
 			return;
 		};
+		$("#choosePic .two.buttons").hide();
+		$("#uploadProgress").show();
 		if(picReceiver == NEW_QUOTE) {
 			var data = $("#choosePeople").serialize(),
 				onSuccess = function(data, textStatus) {
