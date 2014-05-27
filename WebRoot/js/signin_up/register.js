@@ -310,34 +310,7 @@ function take_quote(id, register_info) {
 		if(data == false){
 			alert("take quote failed");
 		} else {
-			var onSuccess = function(data, textStatus) {
-				var num = userLengthJson(data);
-				for(var i=0; i<num-1; i++) {
-					var id = data.user[i].userId;
-					sendMessageAPI(id, uploadCandidates[selected_num].userId, MessageType.TAKEQUOTE.typeName);
-				}
-				var onSuccess = function(data, textStatus) {
-					console.log("send messages success");
-					goHomePage();
-				};
-				var onError = function(xhr, error, status) {
-					alert(error);
-				};
-				if(num>1) {
-					var id = data.user[num-1].userId;
-				} else {
-					var id = data.user.userId;
-				};
-				sendMessageAPI(id, uploadCandidates[selected_num].userId, MessageType.TAKEQUOTE.typeName, onSuccess, onError);
-			};
-			onError = function(xhr, error, status) {
-				console.log("Get uploader name failed with error: " + error);
-			};
-			getFriendsSync(data.userId, 1, onSuccess, onError);
-			
 			setUserInfoCookie(data);
-			console.log("take quote success");
-			
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
