@@ -49,7 +49,7 @@ function ajax_call(ajax_obj){
 	});
 }
 
-function Redirect (url) {
+function Redirect(url) {
 	var ua        = navigator.userAgent.toLowerCase(),
 		isIE      = ua.indexOf('msie') !== -1,
 		version   = parseInt(ua.substr(4, 2), 10);

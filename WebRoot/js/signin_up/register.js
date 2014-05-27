@@ -333,8 +333,7 @@ function checkInviterName(choosenQuote, inviterName) {
 		$("#checkinput").attr("placeholder","好像不是这个哦");
 	}
 }
- 
- 
+
 function  showCheckmarklabel() {
 	$("#cornerlabel").show();
 	$("#correctCheckmark").show();
