@@ -4,23 +4,7 @@ $(function() {
 
 	/*照片预览旋转bug */
 	$("#picInput").change(function(e) {
-		var file = e.target.files[0],
-			options = {
-				canvas: true,
-				minWidth: 287
-			};
-		loadImage.parseMetaData(file, function(data) {
-			if(data.exif) {
-				options.orientation = data.exif.get('Orientation');
-			}
-		});
-		loadImage(file,
-			function(img) {
-				$("#imgPrev").html(img);
-				$("#imgPrev canvas").addClass('ui image');
-			},
-			options
-		);
+		imgPrev(e.target.files[0]);
 	});
 	
 	/*upload sidebar效果初始化*/
@@ -124,15 +108,12 @@ $(function() {
 					progress + "%"
 				);
 			},
-			start: function (e) {
-			    console.log('Uploads started');
-			},
-			stop: function (e) {
-			    console.log('Uploads finished');
-			},
-			submit: function(e, data) {
-//				$("#choosePic .two.buttons").hide();
-//				$("#uploadProgress").show();
+			dropzone: $("#imgPrev"),
+			drop: function (e, data) {
+			    $.each(data.files, function (index, file) {
+			        console.log('Dropped file: ' + file.name);
+			        imgPrev(file);
+			    });
 			},
 			fail: function(e, data) {
 				console.log(data.textStatus);
@@ -143,7 +124,6 @@ $(function() {
 			previewOrientation: 0
 		}
 	);
-
 //	/*完成按钮初始化*/
 //	$("#complete .black.button").click(function() {
 //		$.magnificPopup.close();
@@ -428,6 +408,25 @@ function uploadPic() {
 
 /*Help functions*/
 
+function imgPrev(file) {
+	var options = {
+			canvas: true,
+			minWidth: 287
+		};
+	loadImage.parseMetaData(file, function(data) {
+		if(data.exif) {
+			options.orientation = data.exif.get('Orientation');
+		}
+	});
+	loadImage(file,
+		function(img) {
+			$("#imgPrev").html(img);
+			$("#imgPrev canvas").addClass('ui image');
+		},
+		options
+	);
+}
+
 /*重置upload*/
 function resetUpload() {
 	picReceiver = null;
@@ -468,6 +467,7 @@ function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
+	picData = null;
 	$("#uploadProgress .bar").css("width", "0%");
 	$('#picDescription').val("");
 	$("#choosePic .two.buttons").show();
