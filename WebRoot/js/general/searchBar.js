@@ -46,7 +46,7 @@ function searchUsers(){
 						portrait = DefaultPortrait;
 					}
 					html = html + "<div tabindex='2' class='item' onclick = 'goOthersPage(" + userId + ")'><img class='ui avatar image' src='" +
-											 portrait + "'>  <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "\t" + entryTime + "</div></div></div>";
+											 portrait + "'>  <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "\n" + entryTime + "</div></div></div>";
 
 				} else if (length < 6){
 					for(var i = 0;i<length;++i){
@@ -61,7 +61,7 @@ function searchUsers(){
 							portrait = DefaultPortrait;
 						}
 						html = html + "<div tabindex='"+ (i+2) +"' class='item' onclick = 'goOthersPage("+userId + ")'><img class='ui avatar image' src='" +
-												 portrait + "'> <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "\t" + entryTime + "</div></div></div>";
+												 portrait + "'> <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "\n" + entryTime + "</div></div></div>";
 					}
 				} else {
 					for(var i = 0;i<3;i++){
@@ -76,7 +76,7 @@ function searchUsers(){
 							portrait = DefaultPortrait;
 						}
 						html = html + "<div tabindex='"+ (i+2) +"' class='item' onclick = 'goOthersPage("+userId + ")'><img class='ui avatar image' src='" +
-												 portrait + "'> <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "\t" + entryTime + "</div></div></div>";
+												 portrait + "'> <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "\n" + entryTime + "</div></div></div>";
 					}
 					html = html + "<div tabindex='"+ (i+2) +"' class='item' id = 'getMoreSearchResult'> <div class='content'>加载更多<div class='description'>搜索更多结果</div></div></div>";
 				}

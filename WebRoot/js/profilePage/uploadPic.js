@@ -144,11 +144,11 @@ $(function() {
 		}
 	);
 
-	/*完成按钮初始化*/
-	$("#complete .black.button").click(function() {
-		$.magnificPopup.close();
-		$(".sidebar").sidebar("hide");
-	});
+//	/*完成按钮初始化*/
+//	$("#complete .black.button").click(function() {
+//		$.magnificPopup.close();
+//		$(".sidebar").sidebar("hide");
+//	});
 //initializations END
 
 
