@@ -399,19 +399,17 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
 				    						
 			    							"<div class='atNotationRegion' style='margin-bottom: 3px;'>"+
-				    							"<span>@</span>"+
+				    							"<span style='display:none'>@</span>"+
 				    							"<div class='atzone'>"+
-		    										"<a class=\"ui label\" style='margin: 4px;'>"+
-		    											"中的"+
-		    											"<i class=\"delete icon\"></i>"+
-		    										"</a>"+
-
-//				    							"<div class=\"ui three column grid confirmed\" style='padding-top: 0px;padding-left: 1px;padding-right: 1px;padding-bottom: 0px;margin-bottom: 10px;'>"+
-//				    							
-//				    							"</div>"+
+//		    										"<a class=\"ui label\" style='margin: 4px;'>"+
+//		    											"中的"+
+//		    											"<i class=\"delete icon\"></i>"+
+//		    										"</a>"+
 												"</div>"+
+												"<div class='atzone confirmed'>"+
+	    										"</div>"+
 			    							"</div>"+
-			    							"<div class='ui small blue message enterHint' style='display:none'>回车确定@对象</div>"+
+			    							"<div class='ui small blue message enterHint' style='display:none'>猛击回车自动补全@对象</div>"+
 			    							"<div class='field' >"+
 			    								"<textarea class='textarea "+imageId+"' placeholder='你想说…' rows='5' style='resize:none;' onkeyup='checkAtSomeone(this)'></textarea>"+
 			    							"</div>"+

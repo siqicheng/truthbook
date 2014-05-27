@@ -235,7 +235,7 @@ function removeImageStart(thisElem) {
 				$('#eventsegment').masonry();
 				deleteThisImageFromApprovedList(imageId);
 				itemInitialize("#eventsegment");
-			} )
+			} );
 		}else{
 			drawConfirmPopUp("删除失败");
 		}
@@ -522,70 +522,110 @@ function checkAtSomeone(textarea){
 
 function enableEnterHintMessage(textarea){
 	textarea.parentNode.parentNode.childNodes[1].style.display="block";
+	textarea.parentNode.parentNode.childNodes[0].childNodes[0].style.display="block";
 	$("#eventsegment").masonry();
 }
 
 function hideEnterHintMessage(textarea){
 	textarea.parentNode.parentNode.childNodes[1].style.display="none";
 	$("#eventsegment").masonry();
+	if(textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes.length==0){
+		hideAtzoneTitle(textarea);
+	}
+}
+
+function hideAtzoneTitle(textarea){
+	textarea.parentNode.parentNode.childNodes[0].childNodes[0].style.display="none";
+	$("#eventsegment").masonry();
 }
 
 function addAtzoneController(textarea){
+	var existAtFlag = 0;
+	if(textarea.parentElement.parentElement.childNodes[0].childNodes[2].innerHTML !=""){
+		existAtFlag=1;
+	}
+	var elementLength = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes.length;
 	textarea.parentElement.parentElement.childNodes[0].childNodes[2].innerHTML += textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
 	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML = "";
+	var allElementLength = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes.length;
 	var imageId = textarea.classList[1];
 	deleteNode = $("#imageId"+imageId).find(".confirmed .atusername");
-	for(var i=0;i<deleteNode.length;i++){
-		if(!$("#imageId"+imageId).find(".confirmed .atusername."+deleteNode[i].classList[3]+" .icon").hasClass("red")){
-			addDeleteNodeHander(deleteNode,deleteNode[i].classList[3]);
-		}			
+	for(var i=0;i<allElementLength;i++){
+		if(textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[i].classList[4]=="red")continue;
+		var userId = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[i].classList[3];
+		addDeleteNodeHander(deleteNode,userId,imageId,existAtFlag,elementLength);
 	}
 }
 
 function addThisUserToAtzone(textarea,thisUser){
 	if(existThisUserInAtzone(textarea,thisUser)) return;
 	var html = 
-	"<div class=\"column "+thisUser.userId+"\" style='height: 30px;margin-top: 0px;margin-bottom: 2px;'>"+
-		"<div class=\"ui basic segment\" style='display:inline;padding-top: 0px;padding-left: 1px;padding-right: 1px;padding-bottom: 0px;'>"+
-			"<a class=\"ui label atusername "+thisUser.userId+"\">"+
-				"<span style='display:inline'>"+thisUser.fullName+"</span>"+
-				"<i class=\"delete icon "+thisUser.userId+"\" style='display:inline'></i>"+
-			"</a>"+
-			"<span class='thisUserId_span' style='display:none'></span>"+
-		"</div>"+
-	"</div>";
+		"<a class=\"ui label atusername "+thisUser.userId+"\" style='margin: 4px;'>"+
+			"<span style='display:inline'>"+thisUser.fullName+"</span>"+
+			"<i class=\"delete icon "+thisUser.userId+"\" style='display:inline'></i>"+
+		"</a>";
 	textarea.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML += html;
 }
 
 function existThisUserInAtzone(textarea,thisUser){
-	try{
-		var className = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[0].className;
-		if(className.split(" ")[1]==thisUser.userId){
-			return true;
+	try{	
+		var newUserLength = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes.length;
+		for(var i=0;i<newUserLength;i++){
+			var userId = textarea.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[i].classList[3];
+			if(userId==thisUser.userId){
+				return true;
+			}
 		}
 	}
 	catch(e){
+		console.log("newUserError");
 	}
 	try{
-		var classNameConfirmed = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[0].className;
-		if(classNameConfirmed.split(" ")[1]==thisUser.userId){
-			return true;
+		var addedUserLength = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes.length;
+		for(var i=0;i<addedUserLength;i++){
+			var userId = textarea.parentElement.parentElement.childNodes[0].childNodes[2].childNodes[i].classList[3];
+			if(userId==thisUser.userId){
+				return true;
+			}
 		}
 	}
 	catch(e){
+		console.log("addedUserError");
 	}
 	return false;
 }
 
-function addDeleteNodeHander(deleteNode,userId){
+function addDeleteNodeHander(deleteNode,userId,imageId,existAtFlag,elementLength){
 //	deleteNode.find(".icon."+userId).attr("style","inline");
-	deleteNode.find(".icon."+userId).parents(".basic.segment").transition({
-		animation : 'scale in', 
-		duration  : '0.3s',
-		complete  : function() {
-			deleteNode.find(".icon."+userId).parent().addClass("red");
-		}
-	});
+//	deleteNode.find(".icon."+userId).parents(".atusername").transition({
+//		animation : 'scale in', 
+//		duration  : '0.3s',
+//		complete  : function() {
+//			deleteNode.find(".icon."+userId).parents(".atusername").addClass("red");
+//		}
+//	});
+	if(existAtFlag == 1){
+//		for(var i=0;i<elementLength;i++){
+			var element = $("#imageId"+imageId).find(".atNotationRegion .ui.label.atusername."+userId);
+			$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'appended', element );
+			deleteNode.find(".icon."+userId).parents(".atusername").addClass("red");
+//			$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+//		}
+		return;
+	}
+
+	$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry({		
+		itemSelector: '.ui.label',
+        columnWidth: 5,
+		gutter: 4});
+	
+//	$("#imageId"+imageId).find(".atNotationRegion .confirmed").masonry('on', 'layoutComplete', function( msnryInstance, laidOutItems ) {
+		$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+		deleteNode.find(".icon."+userId).parents(".atusername").addClass("red");
+//	} );
+	
+
+
 }
 
 /*********************************************************************************
