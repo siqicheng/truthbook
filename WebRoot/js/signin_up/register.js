@@ -190,6 +190,7 @@ $('.ui.form.register-form')
 						$(this).children(".label").show();
 						selected_num=$(this).next().index()-1;
 						$("#rechooseerror").hide();
+						$("#imgPrev").parent().addClass("loading");
 						$("#imgPrev").attr("src", uploadCandidates[selected_num].imageUrl);
 						if(uploadCandidates[selected_num].ans.length==2) {
 							$("#checkinput").attr("placeholder", "请输入上传者的姓（两个字）");

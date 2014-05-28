@@ -27,23 +27,28 @@ function searchUsers(){
 	var input = $("#searchInput").val();
 	if (input != ""){
 		var html = "<div class='ui fluid menu list' id='searchbarDropdown'>";
+		var userId, fullName, school, entryTime, email, portrait,isActivated;
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
 				return false;
 			}
 			else{
 				length = userLengthJson(data);
-				var userId, fullName, school, entryTime, email, portrait;
 				if (length == 1){
 					userId = data.user.userId;
 					fullName = data.user.fullName;
 					school = data.user.school;
 					entryTime = data.user.entryTime;
 					email = data.user.email;
+					isActivated = data.user.isActivated;
 					if(data.user.defaultPortrait != undefined){
 						portrait = getImageUrl(data.user.defaultPortrait, ImageType.Small);
 					} else {
-						portrait = DefaultPortrait;
+						if(isActivated == 'false') {
+							portrait = DefaultQuotePortrait;
+						} else {
+							portrait = DefaultPortrait;
+						}
 					}
 					html = html + "<div tabindex='2' class='item' onclick = 'goOthersPage(" + userId + ")'><img class='ui avatar image' src='" +
 											 portrait + "'>  <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "</div></div></div>";
@@ -55,10 +60,15 @@ function searchUsers(){
 						school = data.user[i].school;
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
+						isActivated = data.user[i].isActivated;
 						if(data.user[i].defaultPortrait != undefined){
 							portrait = getImageUrl(data.user[i].defaultPortrait, ImageType.Small);
 						} else {
-							portrait = DefaultPortrait;
+							if(isActivated == 'false') {
+								portrait = DefaultQuotePortrait;
+							} else {
+								portrait = DefaultPortrait;
+							}
 						}
 						html = html + "<div tabindex='"+ (i+2) +"' class='item' onclick = 'goOthersPage("+userId + ")'><img class='ui avatar image' src='" +
 												 portrait + "'> <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "</div></div></div>";
@@ -70,10 +80,15 @@ function searchUsers(){
 						school = data.user[i].school;
 						entryTime = data.user[i].entryTime;
 						email = data.user[i].email;
+						isActivated = data.user[i].isActivated;
 						if(data.user[i].defaultPortrait != undefined){
 							portrait = getImageUrl(data.user[i].defaultPortrait, ImageType.Small);
 						} else {
-							portrait = DefaultPortrait;
+							if(isActivated == 'false') {
+								portrait = DefaultQuotePortrait;
+							} else {
+								portrait = DefaultPortrait;
+							}
 						}
 						html = html + "<div tabindex='"+ (i+2) +"' class='item' onclick = 'goOthersPage("+userId + ")'><img class='ui avatar image' src='" +
 												 portrait + "'> <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "</div></div></div>";
@@ -129,10 +144,15 @@ function getMoreSearchResult(data, length) {
 		school = data.user[i].school;
 		entryTime = data.user[i].entryTime;
 		email = data.user[i].email;
+		isActivated = data.user[i].isActivated;
 		if(data.user[i].defaultPortrait != undefined){
 			portrait = getImageUrl(data.user[i].defaultPortrait, ImageType.Small);
 		} else {
-			portrait = DefaultPortrait;
+			if(isActivated == 'false') {
+				portrait = DefaultQuotePortrait;
+			} else {
+				portrait = DefaultPortrait;
+			}
 		}
 		html = html + "<div tabindex='"+ (i+2) +"' class='item' onclick = 'goOthersPage("+userId + ")'><img class='ui avatar image' src='" +
 		 portrait + "'> <div class='content'>"+ fullName + "</a> <div class='description'>" + school + "\t" + entryTime + "</div></div></div>";
