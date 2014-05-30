@@ -183,7 +183,7 @@ $('.ui.form.register-form')
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
 						selected_num=$(this).index();
-						$("#rechooseerror").hide();
+						$("#tipMessage").hide();
 						if($("#imgPrev").attr("src") != uploadCandidates[selected_num].imageUrl) {
 							$("#imgPrev").attr("src", uploadCandidates[selected_num].imageUrl);
 							$("#imgPrev").siblings().addClass("active");
@@ -200,15 +200,15 @@ $('.ui.form.register-form')
 						$("#checkinput").val("");
 						$("#checkinput").attr("disabled", "true");
 //						register_new($('.ui.form.register-form').serialize());
-						$("#checkinput").val("");
-						$("#checkinput").attr("placeholder", "暂未开放注册，敬请期待");
+//						$("#checkinput").val("");
+//						$("#checkinput").attr("placeholder", "暂未开放注册，敬请期待");
+						$("#tipMessage").text("暂未开放注册，敬请期待");
+						$("#tipMessage").fadeIn(300);
 					});
 					$("#rechooseform").submit(function() {
 						if(selected_num == -1) {
 							$("#tipMessage").text("请选择");
 							$("#tipMessage").fadeIn(300);
-						} else if(selected_num == -2) {
-							register_new($('.ui.form.register-form').serialize());
 						} else {
 							var choosenQuote = uploadCandidates[selected_num];
 							checkInviterName(choosenQuote, $("#checkinput").val());
