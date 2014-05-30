@@ -30,6 +30,15 @@ function searchUsers(){
 		var userId, fullName, school, entryTime, email, portrait,isActivated;
 		var onAjaxSuccess = function(data,textStatus){
 			if (data == null){
+				html = html + "<div class='item'>" +
+						"<div class='content'>我们找不到这个用户TAT</div>"+
+						"</div></div>";
+				$("#searchbar").append(html);
+				if(! existedBool) {
+					$("#searchbar").dropdown("show");
+				} else {
+					$("#searchbar").dropdown();
+				};
 				return false;
 			}
 			else{
