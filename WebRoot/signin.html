@@ -127,28 +127,39 @@
   </div>
 
   <div class="ui dimmer page">
-  <div class="ui test modal hidden white-popup" id="rechooseform">        <!-- 重名选人 -->
-    <form class="ui form" id="rechooseform">
-      <h3 class="ui header">发现重名</h3>
-      <div class="ui two column divided grid">
-          <div class="column">
-            <div class="ui attached message" id="rechoosemessage"></div>
-            <div class="ui selection list" id="rechooselist"></div>
-            <div class="ui green bottom attached message" id="tipMessage" style="display:none;">请输入照片上传者的姓完成注册：</div>
-            <div class="ui action input">
-                <input type="text"  id="checkinput" disabled placeholder="请选择">
-                <div class="ui blue button" id="confirmbtn" >确认</div>
-            </div>
-          </div>
-          <div class="middle aligned column">
-              <div style="text-align:center;">
-                <img style="max-height:300px; max-width:300px;" id="imgPrev"  src="img/Truthbook_red.png">
-              </div>
-        </div>
-      <div class="ui divider"></div>
-    </form>
+	  <div class="ui test modal hidden white-popup" id="rechooseform">        <!-- 重名选人 -->
+		    <form class="ui form" id="rechooseform">
+<!-- 		      <h3 class="ui header">认领词条</h3> -->
+		      <div class="ui two column divided grid">
+		          <div class="column">
+		            <div class="ui attached message">
+		            	<div class="header">
+		            		恭喜你被邀请加入趣事簿！
+						</div>
+						<div class="content">
+							输入词条创建人的<b>"姓"</b>来完成词条认领。
+						</div>
+		            </div>
+		            <div class="ui selection list" id="rechooselist"></div>
+		            <a class="ui right floated tiny red header" id="newQuote" href="javascript:void(0)" style="text-font:12px"><u>以上都不是</u></a>
+		            <div class="ui green bottom attached message" id="tipMessage" style="display:none;">请输入照片上传者的姓完成注册：</div>
+		            <div class="ui action input">
+		                <input type="text"  id="checkinput" disabled placeholder="请选择">
+		                <div class="ui blue button" id="confirmbtn" >确认</div>
+		            </div>
+		          </div>
+		          <div class="middle aligned column">
+		              <div style="text-align:center;" class="ui basic segment">
+		              	<div class="ui inverted dimmer"> 
+		              		<div class="ui loader"></div>
+		              	</div>
+		                <img style="max-height:300px; max-width:300px;" id="imgPrev"  src="img/Truthbook_red.png">
+		              </div>
+		        </div>
+		      </div>
+		    </form>
+	  </div>
   </div>
-    </div>
 
     <div class="ui item dimmable">
       <div class="ui dimmer page hidden">

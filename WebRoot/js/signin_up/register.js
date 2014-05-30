@@ -149,7 +149,7 @@ $('.ui.form.register-form')
 					}
 					html = "";
 					for(i=0;i<=num;i++){
-						var content = "uploaded by: ";
+						var content = "该词条创建人: ";
 						var onSuccess = function(data, textStatus) {
 							if(data != undefined){
 								uploadCandidates[i].imageUrl = getImageUrl(data.image.imageUrl, ImageType.Medium);
@@ -177,44 +177,50 @@ $('.ui.form.register-form')
 		  							"<div class='header'>" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
 					}
-					html = html + "<div class='ui item segment'  id='newQuote'>" +
-					"<a class='ui corner green label' style='display:none'>" +
-					"<i class='checkmark small icon'></i> </a>" +
-						"<img class='ui avatar image' src=" +  DefaultImg +">" + 
-						"<div class='content'>" +
-						"<div class='header'>继续注册</div>以上都不是？</div></div>";
+//					html = html + "<div class='ui item segment'  id='newQuote'>" +
+//					"<a class='ui corner green label' style='display:none'>" +
+//					"<i class='checkmark small icon'></i> </a>" +
+//						"<img class='ui avatar image' src=" +  DefaultImg +">" + 
+//						"<div class='content'>" +
+//						"<div class='header'>继续注册</div>以上都不是？</div></div>";
 					$("#rechoosemessage").html(rechoosemessage);
 					$("#rechooselist").html(html);
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
-						selected_num=$(this).next().index()-1;
+						selected_num=$(this).index();
 						$("#rechooseerror").hide();
-						$("#imgPrev").parent().addClass("loading");
-						$("#imgPrev").attr("src", uploadCandidates[selected_num].imageUrl);
-						if(uploadCandidates[selected_num].ans.length==2) {
-							$("#checkinput").attr("placeholder", "请输入上传者的姓（两个字）");
-							$("#tipMessage").text("请输入照片上传者的姓（两个字）完成注册：");
-							$("#tipMessage").fadeIn(300);
-						} else {
-							$("#checkinput").attr("placeholder", "请输入上传者的姓");
-							$("#tipMessage").text("请输入照片上传者的姓完成注册：");
-							$("#tipMessage").fadeIn(300);
+						if($("#imgPrev").attr("src") != uploadCandidates[selected_num].imageUrl) {
+							$("#imgPrev").attr("src", uploadCandidates[selected_num].imageUrl);
+							$("#imgPrev").siblings().addClass("active");
 						};
+//						if(uploadCandidates[selected_num].ans.length==2) {
+//							$("#checkinput").attr("placeholder", "请输入上传者的姓（两个字）");
+////							$("#tipMessage").text("请输入照片上传者的姓（两个字）完成注册：");
+////							$("#tipMessage").fadeIn(300);
+//						} else {
+//							$("#checkinput").attr("placeholder", "请输入上传者的姓");
+////							$("#tipMessage").text("请输入照片上传者的姓完成注册：");
+////							$("#tipMessage").fadeIn(300);
+//						};
 						$("#checkinput").val("");
 						$("#checkinput").removeAttr("disabled");
 					});
+					$("#imgPrev").load(function() {
+						$(this).siblings().removeClass("active");
+					});
 					$("#newQuote").click(function() {
-						$(this).siblings().children(".label").hide();
-						$(this).children(".label").show();
-						selected_num=$(this).next().index()-1;
+						$(this).siblings().children().find(".label").hide();
+//						$(this).children(".label").show();
+//						selected_num=$(this).next().index()-1;
 //						console.log(selected_num);
 						$("#rechooseerror").hide();
 						$("#checkinput").val("");
-						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
+//						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
 						$("#checkinput").attr("disabled", "true");
-						$("#tipMessage").fadeOut(300);
-						$("#imgPrev").attr("src", DefaultPortrait);//TODO： 新建词条专用图片
+//						$("#tipMessage").fadeOut(300);
+//						$("#imgPrev").attr("src", DefaultPortrait);//TODO： 新建词条专用图片
+						register_new($('.ui.form.register-form').serialize());
 					});
 					$("#rechooseform").submit(function() {
 						if(selected_num == -1) {
