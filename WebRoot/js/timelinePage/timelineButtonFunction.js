@@ -416,30 +416,44 @@ return html;
  */
 function checkAtSomeone_timeline(textarea){
 	var textInput = textarea.value;
-	console.log(textInput.replace(/(\r)*\n/g,"<br/>"));
+//	console.log(textInput.replace(/(\r)*\n/g,"<br/>"));
 	
-	
+	var imageId = textarea.classList[1];
+
 	if(textInput.indexOf("@")==-1){
-		hideEnterHintMessage(textarea);
+		hideEnterHintMessage(textarea,imageId);
 		atNotationFlag_timeline=0;
 		return;
 	}else{
 		atNotationFlag_timeline = 1;
-		enableAtzoneTitle(textarea);
+		enableAtzoneTitle(textarea,imageId);
 		if(textInput[textInput.indexOf("@")+1]==undefined){
-			textarea.parentNode.parentNode.children[1].style.display="none";
-//			$("#eventsegment").masonry();
+			$("#itemId"+imageId).find(".confirmInput.enterHint").hide();
 		}
-
 	}
 	
 	var textInputfull = textInput.replace(/(\r)*\n/g,"<br/>");
+	var lastChar = textInputfull.substr(textInput.length-1);
+	var numOfChoices = $("#itemId"+imageId).find(".atNotationRegion .atzone.candidate .atUserIcon").length;
+	var maxChoiceNumber = returnSmaller(numOfChoices,9);
 	
-	if(textInputfull.substr(textInput.length-1)=="<br/>"){
+	if(lastChar=="<br/>"){
 		textarea.value=textInput.substr(0,textInput.lastIndexOf("@"));
-		hideEnterHintMessage(textarea);
-		addAtzoneController(textarea);
+		hideEnterHintMessage(textarea,imageId);
+		addAtzoneController(textarea,imageId);
 		atNotationFlag_timeline=0;
+		return;
+	}
+	
+	if(lastChar<=maxChoiceNumber && lastChar>0){
+		textarea.value=textInput.substr(0,textInput.lastIndexOf("@"));
+		//cleanothercandidate
+		elem = $("#itemId"+imageId).find(".atNotationRegion .atzone.candidate .atNameOrder."+lastChar).parents(".atUserIcon");		
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.candidate").html("");
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.candidate").html(elem);
+		addAtzoneController(textarea,imageId);
+		atNotationFlag_timeline=0;
+		hideEnterHintMessage(textarea,imageId);
 		return;
 	}
 	
@@ -452,55 +466,54 @@ function checkAtSomeone_timeline(textarea){
 		bonusForAll = 1;
 	}
 	
+	var orderNumber = 1;
 	for(var i=0;i<userFriendsLists.nFriends.length;i++){
 		if(userFriendsLists.nFriends[i].fullName.substr(0,name.length) != name && bonusForAll == 0){
 			continue;
 		}
-		addThisUserToAtzone(textarea,userFriendsLists.nFriends[i]);
+		orderNumber += addThisUserToAtzone(textarea,userFriendsLists.nFriends[i],orderNumber);
 	}
 	for(var i=0;i<userFriendsLists.eFriends.length;i++){
 		if(userFriendsLists.eFriends[i].fullName.substr(0,name.length) != name && bonusForAll == 0){
 			continue;
 		}
-		addThisUserToAtzone(textarea,userFriendsLists.eFriends[i]);
+		orderNumber += addThisUserToAtzone(textarea,userFriendsLists.eFriends[i],orderNumber);
 	}
 }
 
 
-function enableEnterHintMessage(textarea){
-	textarea.parentNode.parentNode.children[1].style.display="block";
-//	$("#eventsegment").masonry();
+function enableEnterHintMessage(textarea,imageId){
+	$("#itemId"+imageId).find(".confirmInput.enterHint").show();
 }
 
-function hideEnterHintMessage(textarea){
-	textarea.parentNode.parentNode.children[1].style.display="none";
-//	$("#eventsegment").masonry();
+function hideEnterHintMessage(textarea,imageId){
+	$("#itemId"+imageId).find(".confirmInput.enterHint").hide();
 	if(textarea.parentElement.parentElement.children[0].children[2].children.length==0 &&
 			textarea.parentElement.parentElement.children[0].children[1].children.length==0	){
-		hideAtzoneTitle(textarea);
+		hideAtzoneTitle(textarea,imageId);
 	}
 }
 
-function enableAtzoneTitle(textarea){	
-	textarea.parentNode.parentNode.children[0].children[0].style.display="block";
-//	$("#eventsegment").masonry();
+function enableAtzoneTitle(textarea,imageId){
+	$("#itemId"+imageId).find(".atZoneTitle.enterHint").show();
 }
 
-function hideAtzoneTitle(textarea){
-	textarea.parentNode.parentNode.children[0].children[0].style.display="none";
-//	$("#eventsegment").masonry();
+function hideAtzoneTitle(textarea,imageId){
+	$("#itemId"+imageId).find(".atZoneTitle.enterHint").hide();
 }
 
-function addAtzoneController(textarea){
+function addAtzoneController(textarea,imageId){
 	var existAtFlag = 0;
 	if(textarea.parentElement.parentElement.children[0].children[2].innerHTML !=""){
 		existAtFlag=1;
 	}
-	var elementLength = textarea.parentElement.parentElement.children[0].children[1].children.length;
-	textarea.parentElement.parentElement.children[0].children[2].innerHTML += textarea.parentElement.parentElement.children[0].children[1].innerHTML;
-	textarea.parentElement.parentElement.children[0].children[1].innerHTML = "";
-	var allElementLength = textarea.parentElement.parentElement.children[0].children[2].children.length;
-	var imageId = textarea.classList[1];
+	
+	var elementLength = $("#itemId"+imageId).find(".atNotationRegion .atzone.candidate .atUserIcon").length;
+	$("#itemId"+imageId).find(".atNotationRegion .atzone.candidate .atUserIcon .atNameOrder").attr("style","display:none");
+	var elem = $("#itemId"+imageId).find(".atNotationRegion .atzone.candidate").html();
+	$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").append(elem);
+	$("#itemId"+imageId).find(".atNotationRegion .atzone.candidate").html("");
+	var allElementLength = $("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed .atUserIcon").length;
 	deleteNode = $("#itemId"+imageId).find(".confirmed .atusername");
 	
 	if (existAtFlag == 1){
@@ -509,10 +522,7 @@ function addAtzoneController(textarea){
 	
 	for(var i=0;i<allElementLength;i++){
 		var atUserId = textarea.parentElement.parentElement.children[0].children[2].children[i].children[0].classList[3];
-//		if(textarea.parentElement.parentElement.children[0].children[2].children[i].children[0].classList[4]!="red"){
-//			continue;
-			addDeleteNodeHander(textarea,deleteNode,atUserId,imageId,i,elementLength);
-//		}
+		addDeleteNodeHander(textarea,deleteNode,atUserId,imageId,i,elementLength);
 		handAtDelete(textarea,imageId,atUserId);
 	}
 }
@@ -523,7 +533,6 @@ function handAtDelete(textarea,imageId,atUserId){
 		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'remove', rmelement);
 		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('on', 'removeComplete', function( msnryInstance, rmelement ) {
 			$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
-//
 //			atzoneInitialize(imageId);
 			if(textarea.parentElement.parentElement.children[0].children[2].innerHTML ==""){
 				$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('destroy');
@@ -538,7 +547,6 @@ function addDeleteNodeHander(textarea,deleteNode,atUserId,imageId,i,elementLengt
 		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
 	}else{
 		var element = $("#itemId"+imageId).find(".atNotationRegion .ui.label.atusername."+atUserId).parent();
-//		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'appended', element );
 		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
 	}
 	deleteNode.find(".icon."+atUserId).parents(".atusername").addClass("red");
@@ -546,16 +554,19 @@ function addDeleteNodeHander(textarea,deleteNode,atUserId,imageId,i,elementLengt
 
 }
 
-function addThisUserToAtzone(textarea,thisUser){
-	if(existThisUserInAtzone(textarea,thisUser)) return;
+function addThisUserToAtzone(textarea,thisUser,order){
+	if(existThisUserInAtzone(textarea,thisUser)) return 0;
+	var orderDisplay = order>9 ? "none": "inline";
 	var html = 
 		"<div class='atUserIcon "+thisUser.userId+"' style='display:inline'>"+
 			"<a class=\"ui label atusername "+thisUser.userId+"\" style='margin: 4px;'>"+
-				"<span class='atName' style='display:inline'>"+thisUser.fullName+"</span>"+
+			"<span class='atNameOrder "+order+"' style='display:"+orderDisplay+"'>"+order+" </span>" +
+			"<span class='atName' style='display:inline'>"+thisUser.fullName+"</span>"+
 				"<i class=\"delete icon "+thisUser.userId+"\" style='display:inline'></i>"+
 			"</a>"+
 		"</div>";
 	textarea.parentElement.parentElement.children[0].children[1].innerHTML += html;
+	return 1;
 }
 
 function existThisUserInAtzone(textarea,thisUser){
@@ -569,7 +580,6 @@ function existThisUserInAtzone(textarea,thisUser){
 		}
 	}
 	catch(e){
-//		console.log("newUserError");
 	}
 	try{
 		var addedUserLength = textarea.parentElement.parentElement.children[0].children[2].children.length;
@@ -581,10 +591,11 @@ function existThisUserInAtzone(textarea,thisUser){
 		}
 	}
 	catch(e){
-//		console.log("addedUserError");
 	}
-	enableEnterHintMessage(textarea);
+	var imageId = textarea.classList[1];
+	enableEnterHintMessage(textarea,imageId);
 	return false;
+
 }
 
 

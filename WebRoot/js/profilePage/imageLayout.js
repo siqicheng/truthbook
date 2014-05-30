@@ -401,18 +401,14 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 				    						
 			    							"<div class='atNotationRegion' style='margin-bottom: 3px;'>"+
 			    								"<div class='atZoneTitle ui small yellow message enterHint' style='display:none'><div class=\"\">来人呐</div></div>"+
-				    							"<div class='atzone'>"+
-//		    										"<a class=\"ui label\" style='margin: 4px;'>"+
-//		    											"中的"+
-//		    											"<i class=\"delete icon\"></i>"+
-//		    										"</a>"+
+				    							"<div class='atzone candidate'>"+
 												"</div>"+
 												"<div class='atzone confirmed'>"+
 	    										"</div>"+
 			    							"</div>"+
-			    							"<div class='ui small blue message enterHint' style='display:none'>猛击回车自动补全@对象</div>"+
+			    							"<div class='confirmInput ui small blue message enterHint' style='display:none'>数字选人 or 猛击回车@所有对象</div>"+
 			    							"<div class='field' >"+
-				    								"<textarea class='textarea "+imageId+"' placeholder='你想说…' rows='5' style='resize:none;' onkeyup='checkAtSomeone(this)'></textarea>"+
+				    							"<textarea class='textarea "+imageId+"' placeholder='你想说…' rows='5' style='resize:none;' onkeyup='checkAtSomeone(this)'></textarea>"+
 			    							"</div>"+
 			    							"<span class = 'replyToId' style='display:none;'></span>"+
 			    							"<span class = 'replyToName' style='display:none;'></span>"+
@@ -421,8 +417,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    							"</button>"+
 			    						"</div>"+
 			    				"</div>"+
-//		    					"</div>"+
-			    					
+			    				
 		    				"</div>" +
 		    			"</div>" +
 		    			
