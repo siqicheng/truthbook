@@ -344,14 +344,15 @@ function submitComment(imageId){
 	var thisText = $("#imageId"+imageId).find(".textarea");
 	var thisReplyForm = thisText.parent().parent();
 	var atListLength = $("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed .atName").length;
-
-	if (thisText.val() != "" || atListLength != 0){
+    var faceImage = $("#imageId"+imageId).find(".faceDisplay").html(); 
+	
+	if (thisText.val() != "" || atListLength != 0 || faceImage !=0){
 		var userId = $.cookie("truthbook_PageOwner_userId").userId,
 			content = thisText.val(),
 			repliedToId	= thisReplyForm.children(".replyToId").html(),
 			repliedById = $.cookie("truthbook").userId;
 		var atList = [];
-		var preAtContent="",preAtContentToDisplay="";
+		var preAtContent="",preAtContentToDisplay="",preFaceContentToDisplay="",preFaceContent="";
 		for(var i=0;i<atListLength;i++){
 			atList[i]=[];
 			atList[i][0]=$("#imageId"+imageId).find(".atNotationRegion .atzone.confirmed .atName")[i].innerHTML;
@@ -363,12 +364,19 @@ function submitComment(imageId){
 		}
 		content = preAtContent+content.substring(content.indexOf("：")+1);
 		
+		if(faceImage!=""){
+			preFaceContent = $("#imageId"+imageId).find(".faceDisplay").children().attr("id");
+			preFaceContentToDisplay = "<img src=\""+face[preFaceContent.split("_")[1]].image+"\" style='display:block;padding-left:20px;padding-bottom:5px;'>";
+			preFaceContent +=" ";
+			content = preFaceContent + content;
+		}
+		
 		var onAjaxSuccess = function(data, textStatus) {
 			if (data != null){
 				var commentId = data;
 				var onAddCommitToImageAjaxSuccess = function(data, textStatus) {
 					if (data == true){
-						submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtContentToDisplay,atList);				
+						submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtContentToDisplay,atList,preFaceContentToDisplay);				
 					}else{
 						drawConfirmPopUp("回复失败");
 					}
@@ -397,7 +405,7 @@ function submitComment(imageId){
 	}
 }
 
-function submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtContentToDisplay,atList){	
+function submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtContentToDisplay,atList,preFaceContentToDisplay){	
 	var	commentContent = thisText.val();
 	var	repliedByCommentId = $.cookie("truthbook").userId;
 	var	repliedByName = $.cookie("truthbook").fullName;
@@ -416,7 +424,7 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtConten
 	var	replyDisplay = "none",
 		deleteDisplay = "inline";
 	
-	commentContent = preAtContentToDisplay + commentContent;
+	commentContent = preFaceContentToDisplay + preAtContentToDisplay + commentContent;
 	repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
 
 	recurCleanAtZone(imageId,atList);
@@ -431,7 +439,6 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtConten
 	});
 	
 	resetTextarea(thisText);
-	$('#eventsegment').masonry();
 	changeTheTotalCommentNumber($("#imageId"+imageId).find(".numOfComment_inline"),1);
 	cleanTheTempVar(thisReplyForm);
 	moveDownScroll($("#imageId"+imageId).find(".commentwrap"));
@@ -441,6 +448,8 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtConten
 	$("#eventsegment").masonry();
 	atNotationFlag = 0;
 
+	$("#imageId"+imageId).find(".faceDisplay").html("");
+	
 	var thisOwnerId = $("#imageId"+imageId).find(".userId_span").html();
 	var uploaderId = $("#imageId"+imageId).find(".uploaderId").html();
 	sendMessageToAboveAll($("#imageId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId,atList);
@@ -553,6 +562,7 @@ function checkAtSomeone(textarea){
 	
 	if(textInput.indexOf("@")==-1){
 		hideEnterHintMessage(textarea,imageId);
+		$("#imageId"+imageId).find(".atNotationRegion .atzone.candidate").html("");
 		atNotationFlag=0;
 		return;
 	}else{
@@ -742,6 +752,27 @@ function atzoneInitialize(imageId){
 		itemSelector: '.atUserIcon',
         columnWidth: 5,
 		gutter: 4});
+}
+
+/*********************************************************************************
+ * 	face handler.
+ */
+
+function addFace(code,imageId){
+	var elem = "<img id='"+face[code].code+"' class=\"ui image\" src=\""+face[code].image+"\" style=\"margin:0 auto;width:70px; height: 70px;cursor:pointer;\">";
+	$("#imageId"+imageId).find(".functionList .face.icon").popup('toggle');
+	$("#imageId"+imageId).find(".faceDisplay").html(elem);
+	$("#eventsegment").masonry();
+	$("#imageId"+imageId).find(".faceDisplay .image").popup({
+	    on: 'hover',
+	    position : 'left center',
+	    content	:	"关闭",
+	    transition: 'fade down'
+	});
+}
+function cleanFace(thisDiv){
+	$(".faceDisplay .image").popup('toggle');
+	thisDiv.innerHTML="";
 }
 
 /*********************************************************************************

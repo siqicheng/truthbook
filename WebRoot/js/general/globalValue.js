@@ -23,11 +23,11 @@ isDebug = false;
  */
 
 
-//localhost = "localhost";
-//suffix = ":8080/truthbook";
+localhost = "localhost";
+suffix = ":8080/truthbook";
 
-localhost = "truthbook.cc";
-suffix="";
+//localhost = "truthbook.cc";
+//suffix="";
 
 LoginPage = "http://" + localhost + suffix + "/";
 HomePage = "http://" + localhost + suffix + "/home.html";
@@ -99,11 +99,46 @@ periodCheckNewMessage = 20000;  //ms
 //	periodCheckNewMessage = 30000;
 //}
 
-
+/*********************************************************************************
+ * 	@ function global value
+ */
 atNotationFlag=0;
 atNotationFlag_timeline=0;
 MAX_FULLNAME_LENGTH = 8;
 INS_FOR_ALL="all";
+
+/*********************************************************************************
+ * 	face
+ */
+
+FACE_1_Len = 15;
+
+faceimagecode=["#1_0","#1_1","#1_2",
+               "#1_3","#1_4","#1_5",
+               "#1_6","#1_7","#1_8",
+               "#1_9","#1_10","#1_11",
+               "#1_12","#1_13","#1_14"];
+
+faceimagecontent=["卖萌","吐血","呕吐",
+         "头晕","得意","惊讶",
+         "暴走","流泪","滴汗",
+         "石化","碎觉","红心",
+         "贱笑","雷劈","黑线"];
+GUOJIA = "img/JiaGuo_face/";
+faceimagename=[GUOJIA+"卖萌.jpg",GUOJIA+"吐血.jpg",GUOJIA+"呕吐.jpg",
+               GUOJIA+"头晕.jpg",GUOJIA+"得意.jpg",GUOJIA+"惊讶.jpg",
+               GUOJIA+"暴走.jpg",GUOJIA+"流泪.jpg",GUOJIA+"滴汗.jpg",
+               GUOJIA+"石化.jpg",GUOJIA+"碎觉.jpg",GUOJIA+"红心.jpg",
+               GUOJIA+"贱笑.jpg",GUOJIA+"雷劈.jpg",GUOJIA+"黑线.jpg",];
+
+face = new Array();
+
+for(var i=0;i<FACE_1_Len;i++){
+	face[i] = new Object();
+	face[i].code=faceimagecode[i];
+	face[i].image=faceimagename[i];
+	face[i].content=faceimagecontent[i];
+}
 
 
 /*********************************************************************************

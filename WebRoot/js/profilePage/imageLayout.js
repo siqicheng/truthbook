@@ -397,7 +397,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    						"<div class='commentwrap' style='max-height:450px;overflow-y:auto;width:102%;overflow-x:hidden;'>"+
 			    						
 			    						"</div>"+
-			    						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
+			    						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 6px;'>"+
 				    						
 			    							"<div class='atNotationRegion' style='margin-bottom: 3px;'>"+
 			    								"<div class='atZoneTitle ui small yellow message enterHint' style='display:none'><div class=\"\">来人呐</div></div>"+
@@ -407,6 +407,14 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 	    										"</div>"+
 			    							"</div>"+
 			    							"<div class='confirmInput ui small blue message enterHint' style='display:none'>数字选人 or 猛击回车@所有对象</div>"+
+			    							
+			    							"<div class='faceDisplay' onclick='cleanFace(this)'></div>"+
+			    							
+			    							"<div class='functionList' style=\"padding-bottom: 0px;margin-bottom: 6px;\">" +
+			    									"<i class=\"email basic large at icon ui right floated\"></i>" +
+			    									"<i class=\"meh large face icon ui right floated\" data-offset=\"74\" ></i>" +
+			    							"</div>"+
+			    							
 			    							"<div class='field' >"+
 				    							"<textarea class='textarea "+imageId+"' placeholder='你想说…' rows='5' style='resize:none;' onkeyup='checkAtSomeone(this)'></textarea>"+
 			    							"</div>"+

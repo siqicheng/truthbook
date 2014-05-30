@@ -178,8 +178,9 @@ function submitComment(imageId,imageOwnerId){
 	var thisText = $("#itemId"+imageId).find(".textarea");
 	var thisReplyForm = thisText.parent().parent();
 	var atListLength = $("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed .atName").length;
+    var faceImage = $("#itemId"+imageId).find(".faceDisplay").html(); 
 
-	if (thisText.val() != "" || atListLength != 0){
+	if (thisText.val() != "" || atListLength != 0 || faceImage !=0){
 		var userId = imageOwnerId,
 			content = thisText.val(),
 			repliedToId	= thisReplyForm.children(".replyToId").html(),
@@ -195,15 +196,21 @@ function submitComment(imageId,imageOwnerId){
 					"style='font-weight:bold;color:#4C7A9F;cursor:pointer;' " +
 					"onClick='goOthersPage("+atList[i][1]+")'>@"+atList[i][0]+" </span>";
 		}
-		 
 		content = preAtContent+content.substring(content.indexOf("：")+1);
+		
+		if(faceImage!=""){
+			preFaceContent = $("#itemId"+imageId).find(".faceDisplay").children().attr("id");
+			preFaceContentToDisplay = "<img src=\""+face[preFaceContent.split("_")[1]].image+"\" style='display:block;padding-bottom:5px;padding-left:20px;'>";
+			preFaceContent +=" ";
+			content = preFaceContent + content;
+		}
 		
 		var onAjaxSuccess = function(data, textStatus) {
 			if (data != null){
 				var commentId = data;
 				var onAddCommitToImageAjaxSuccess = function(data, textStatus) {
 					if (data == true){
-						submitCommentStart(commentId,imageId,thisText,thisReplyForm,userId,preAtContentToDisplay,atList);				
+						submitCommentStart(commentId,imageId,thisText,thisReplyForm,userId,preAtContentToDisplay,atList,preFaceContentToDisplay);				
 					}else{
 						drawConfirmPopUp("回复失败");
 					}
@@ -223,7 +230,6 @@ function submitComment(imageId,imageOwnerId){
 		if (repliedToId==""){
 			simpleCommentAPI(userId,content,repliedById,onAjaxSuccess,onAjaxError);
 		} else{
-//			content = content.substring(content.indexOf("：")+1);
 			fullCommentAPI(userId,content,repliedToId,repliedById,onAjaxSuccess,onAjaxError);
 		}
 	} else {
@@ -233,7 +239,7 @@ function submitComment(imageId,imageOwnerId){
 	}
 }
 
-function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerId,preAtContentToDisplay,atList){	
+function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerId,preAtContentToDisplay,atList,preFaceContentToDisplay){	
 	var	commentContent = thisText.val();
 	var	repliedByCommentId = $.cookie("truthbook").userId;
 	var	repliedByName = $.cookie("truthbook").fullName;
@@ -252,7 +258,7 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerI
 	var	replyDisplay = "none",
 		deleteDisplay = "inline";
 	
-	commentContent = preAtContentToDisplay + commentContent;
+	commentContent = preFaceContentToDisplay + preAtContentToDisplay + commentContent;
 	repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
 
 	recurCleanAtZone(imageId,atList);
@@ -275,6 +281,8 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerI
 	$("#itemId"+imageId).find(".atNotationRegion .atZoneTitle").hide("slow");
 	$("#itemId"+imageId).find(".enterHint").hide("slow");
 	atNotationFlag_timeline = 0;
+	
+	$("#itemId"+imageId).find(".faceDisplay").html("");
 	
 //	cleanTheAtZone(imageId,atList);
 	var thisOwnerId = imageOwnerId;
@@ -422,6 +430,7 @@ function checkAtSomeone_timeline(textarea){
 
 	if(textInput.indexOf("@")==-1){
 		hideEnterHintMessage(textarea,imageId);
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.candidate").html("");
 		atNotationFlag_timeline=0;
 		return;
 	}else{
@@ -605,4 +614,24 @@ function atzoneInitialize(imageId){
 		itemSelector: '.atUserIcon',
         columnWidth: 5,
 		gutter: 4});
+}
+
+/*********************************************************************************
+ * 	face handler.
+ */
+
+function addFace(code,imageId){
+	var elem = "<img id='"+face[code].code+"' class=\"ui image\" src=\""+face[code].image+"\" style=\"margin:0 auto;width:70px; height: 70px;cursor:pointer;\">";
+	$("#itemId"+imageId).find(".functionList .face.icon").popup('toggle');
+	$("#itemId"+imageId).find(".faceDisplay").html(elem);
+	$("#itemId"+imageId).find(".faceDisplay .image").popup({
+	    on: 'hover',
+	    position : 'left center',
+	    content	:	"关闭",
+	    transition: 'fade down'
+	});
+}
+function cleanFace(thisDiv){
+	$(".faceDisplay .image").popup('toggle');
+	thisDiv.innerHTML="";
 }

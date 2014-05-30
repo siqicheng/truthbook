@@ -105,6 +105,13 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 			"</div>"+
 			"<div class='confirmInput ui small blue message enterHint' style='display:none'>数字选人 or 猛击回车@所有对象</div>"+
 			
+			"<div class='faceDisplay' onclick='cleanFace(this)'></div>"+
+			
+			"<div class='functionList' style=\"padding-bottom: 0px;margin-bottom: 6px;\">" +
+					"<i class=\"email basic large at icon ui right floated\"></i>" +
+					"<i class=\"meh large face icon ui right floated\" data-offset=\"150\" ></i>" +
+			"</div>"+
+			
 			"<div class='field' >"+
 				"<textarea class='textarea "+imageId+"' placeholder='你想说…' wrap='off' rows='1' onkeyup='checkAtSomeone_timeline(this)'></textarea>"+
 			"</div>"+

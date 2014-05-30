@@ -328,6 +328,12 @@ function addAtDisplay(commentContent){
 	var spaceFilter = commentContent.split(" ");
 	var spaceFilterLength = spaceFilter.length;
 	for(var i = 0 ; i < spaceFilterLength ; i++){
+		if(spaceFilter[i].indexOf("#")==0 && spaceFilter[i].split("_")[1]!= ""){
+			try{
+				spaceFilter[i] = "<img src=\""+face[spaceFilter[i].split("_")[1]].image+"\" style='display:block;padding-bottom:5px;padding-left:20px;'>";
+			}catch(e){
+			}
+		}
 		if(spaceFilter[i].indexOf("@")==0 && spaceFilter[i].indexOf("#") != -1){
 			var fullName = spaceFilter[i].substring(spaceFilter[i].indexOf("@")+1,spaceFilter[i].indexOf("("));
 			var atUserId = spaceFilter[i].substring(spaceFilter[i].indexOf("#")+1,spaceFilter[i].indexOf(")"));
