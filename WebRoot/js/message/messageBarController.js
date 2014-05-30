@@ -52,7 +52,7 @@ function getNewMessage(messageType){
 		
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		drawConfirmPopUp("获取新系统通知 Error: "+error);
+//		drawConfirmPopUp("获取新系统通知 Error: "+error);
 	};
 	
 	getMessageAPI($.cookie("truthbook").userId,messageType.typeName,onAjaxSuccess, onAjaxError)

@@ -1,5 +1,6 @@
 package restful.gateway;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,11 @@ import org.hibernate.criterion.Restrictions;
 import db.mapping.object.Image;
 import db.mapping.object.Message;
 import db.mapping.object.User;
+import db.mapping.object.UserFetch;
 import db.mapping.object.DAO.ImageDAO;
 import db.mapping.object.DAO.MessageDAO;
 import db.mapping.object.DAO.UserDAO;
+import db.mapping.object.DAO.UserFetchDAO;
 
 @Path("notification")
 public class MsgService {
@@ -250,7 +253,15 @@ public class MsgService {
 			List<Message> Messages= this.getCriteria()
 					.add(Restrictions.eq(MessageDAO.USER_ID, id)).
 					add(Restrictions.eq(MessageDAO.STATUS, Message.UNSENT_STATUS)).
-					list() ;
+					list();
+			
+			UserFetchDAO userFetchDAO =new UserFetchDAO();
+			UserFetch userFetch = userFetchDAO.findById(id);
+			Session session = userFetchDAO.getSession();
+			Transaction tx = session.beginTransaction();
+			userFetch.setLastFetchTime(new Timestamp(System.currentTimeMillis()));
+			session.update(userFetch);
+			tx.commit();
 			this.messageDAO.closeSession();
 			return this.setSent(Messages);
 		}catch (Exception e){

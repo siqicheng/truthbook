@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>新鲜事 | Truthbook</title>
+    <title>新鲜事|趣事簿</title>
 
     <link href="./assets/semantic/css/semantic.css" rel="stylesheet">
     <link href="./assets/magnific-popup/magnific-popup.css" rel="stylesheet">
@@ -22,6 +22,7 @@
       ga('create', 'UA-49027267-2', 'truthbook.cc');
       ga('send', 'pageview');
     </script>
+
 </head>
 
 <body id="body">
@@ -282,6 +283,11 @@
 
   <script src="./assets/jquery/jquery-1.7.2.js"></script>
   <script src="./assets/jquery/jquery.cookie.js"></script>
+  <script>
+	if($.cookie("truthbook")==undefined){
+		window.location.href = "http://truthbook.cc";
+	}
+  </script>
   <script src="./assets/semantic/javascript/semantic.js"></script>
   <script src="./assets/masonry.pkgd.min.js"></script>
   <script src="./assets/imagesloaded.pkgd.min.js"></script>
@@ -289,20 +295,14 @@
   <script src="./js/general/globalValue.js"></script>
   <script src="./js/general/language_zh_cn.js"></script>
   <script src="./js/general/utility.js"></script>
-
   <script src="js/load-image/load-image.min.js"></script>
   <script src="js/load-image/load-image-orientation.js"></script>
   <script src="js/load-image/load-image-exif.js"></script>
-
   <script src="./assets/jquery/jquery.iframe-transport.js"></script>
   <script src="./assets/jquery/jquery.ui.widget.js"></script>
   <script src="./assets/jquery/jquery.fileupload.js"></script>
-<!-- <script src="./assets/jquery/jquery.fileupload-image.js"></script> -->
-
   <script src="./js/profilePage/uploadPic.js"></script>
   <script src="./js/profilePage/refreshFriendsLists.js"></script>
-<!-- <script src="./js/uploadpopup.js"></script> -->
-<!-- <script src="./js/sidebar_toggle.js"></script> -->
   <script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>
   <script src="./js/friendRelationButtonHandler.js"></script>
   <script src="./js/userAndPageInfo.js"></script>

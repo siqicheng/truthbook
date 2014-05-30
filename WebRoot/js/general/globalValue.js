@@ -16,7 +16,7 @@ $(function (){
  * 	Debug mode
  */
 
-isDebug = true;
+isDebug = false;
 
 /*********************************************************************************
  * 	Website and RESTful AJAX URL
@@ -101,7 +101,10 @@ periodCheckNewMessage = 20000;  //ms
 
 
 atNotationFlag=0;
-MAX_FULLNAME_LENGTH = 5;
+atNotationFlag_timeline=0;
+MAX_FULLNAME_LENGTH = 8;
+INS_FOR_ALL="all";
+
 
 /*********************************************************************************
  * 	Image style

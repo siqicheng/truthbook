@@ -39,6 +39,11 @@ public class FeedService {
 			this.imageDAO = new ImageDAO();
 		}
 		
+		private int returnSmaller(int one, int two){
+			if(one>two)return two;
+			else return one;
+		}
+		
 		@GET
 		@Path("v1/feed/{userId}")
 		@Produces("application/json;charset=utf-8")
@@ -106,13 +111,21 @@ public class FeedService {
 					.add(Restrictions.eq(ImageDAO.USER, friend))
 					.add(Restrictions.eq(ImageDAO.APPROVED,true))
 					.add(Restrictions.eq(ImageDAO.DELETED, false));
-					List<Image> friend_image = criteria.list();
+					
+					List<Image> friend_image = criteria.list();;
 					image_list.addAll(friend_image);
 				}
-				Image[] images = new Image[image_list.size()];
-				for (int i=0 ;i < image_list.size(); ++i){
+//				int imageSize = 200;
+				int imageSize = image_list.size();
+				int forNumber = returnSmaller(imageSize, image_list.size());
+				Image[] images = new Image[forNumber];
+				for (int i=0 ;i < images.length; ++i){
 					images[i] = image_list.get(i);
 				}
+				Transaction tx = session.beginTransaction();
+				userFetch.setLastFetchTime(new Timestamp(System.currentTimeMillis()));
+				session.update(userFetch);
+				tx.commit();
 				this.userFetchDAO.closeSession();
 				return images;
 			} catch (Exception e){

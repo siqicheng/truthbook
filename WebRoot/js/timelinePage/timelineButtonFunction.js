@@ -170,25 +170,40 @@ function setNumOfLike(thisElem,num){
 }
 
 /*********************************************************************************
- *	9.	add comment 	
+ *	9.	add message 	
  * 	submit comment click function and its help function 
  */
 
 function submitComment(imageId,imageOwnerId){
 	var thisText = $("#itemId"+imageId).find(".textarea");
 	var thisReplyForm = thisText.parent().parent();
-	if (thisText.val() != ""){
+	var atListLength = $("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed .atName").length;
+
+	if (thisText.val() != "" || atListLength != 0){
 		var userId = imageOwnerId,
 			content = thisText.val(),
 			repliedToId	= thisReplyForm.children(".replyToId").html(),
 			repliedById = $.cookie("truthbook").userId;
-
+		var atList = [];
+		var preAtContent="",preAtContentToDisplay="";
+		for(var i=0;i<atListLength;i++){
+			atList[i]=[];
+			atList[i][0]=$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed .atName")[i].innerHTML;
+			atList[i][1]=$("#itemId"+imageId).find(".atNotationRegion .atUserIcon")[i].classList[1];
+			preAtContent += "@"+atList[i][0]+"(#"+atList[i][1]+") ";
+			preAtContentToDisplay += "<span class='nameOnAtList_span' " +
+					"style='font-weight:bold;color:#4C7A9F;cursor:pointer;' " +
+					"onClick='goOthersPage("+atList[i][1]+")'>@"+atList[i][0]+" </span>";
+		}
+		 
+		content = preAtContent+content.substring(content.indexOf("：")+1);
+		
 		var onAjaxSuccess = function(data, textStatus) {
 			if (data != null){
 				var commentId = data;
 				var onAddCommitToImageAjaxSuccess = function(data, textStatus) {
 					if (data == true){
-						submitCommentStart(commentId,imageId,thisText,thisReplyForm,userId);				
+						submitCommentStart(commentId,imageId,thisText,thisReplyForm,userId,preAtContentToDisplay,atList);				
 					}else{
 						drawConfirmPopUp("回复失败");
 					}
@@ -199,7 +214,7 @@ function submitComment(imageId,imageOwnerId){
 				addCommentToImageByImageIdAPI(imageId,data,onAddCommitToImageAjaxSuccess,onAddCommitToImageAjaxError);
 				
 			}else{
-				drawConfirmPopUp("回复失败");
+				drawConfirmPopUp("回复失败<br>(可能字数太多咯)");
 			}
 		};
 		var onAjaxError = function(xhr, textStatus, error) {
@@ -208,7 +223,7 @@ function submitComment(imageId,imageOwnerId){
 		if (repliedToId==""){
 			simpleCommentAPI(userId,content,repliedById,onAjaxSuccess,onAjaxError);
 		} else{
-			content = content.substring(content.indexOf("：")+1);
+//			content = content.substring(content.indexOf("：")+1);
 			fullCommentAPI(userId,content,repliedToId,repliedById,onAjaxSuccess,onAjaxError);
 		}
 	} else {
@@ -218,16 +233,16 @@ function submitComment(imageId,imageOwnerId){
 	}
 }
 
-function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerId){	
+function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerId,preAtContentToDisplay,atList){	
 	var	commentContent = thisText.val();
 	var	repliedByCommentId = $.cookie("truthbook").userId;
 	var	repliedByName = $.cookie("truthbook").fullName;
 	var	repliedByProtrait = $.cookie("truthbook").defaultPortrait;
 	var	repliedToCommentId = thisReplyForm.children(".replyToId").html();
 	var	repliedToName = thisReplyForm.children(".replyToName").html();
-	var	createDate = new Date();
+//	var	createDate = new Date();
 //	var	createDate = createDate.toLocaleDateString();
-		createDate = "just now";
+	var	createDate = "just now";
 	if(repliedToCommentId!=""){
 		var replyToDisplay = "inline";
 		commentContent = commentContent.substring(commentContent.indexOf("：")+1);
@@ -237,11 +252,13 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerI
 	var	replyDisplay = "none",
 		deleteDisplay = "inline";
 	
-	
+	commentContent = preAtContentToDisplay + commentContent;
 	repliedByProtrait = getImageUrl(repliedByProtrait,ImageType.Small);
 
+	recurCleanAtZone(imageId,atList);
 	
-	$("#itemId"+imageId).find(".commentwrap").append(thistimelineCommentHTML(commentId,commentContent,
+	
+	$("#itemId"+imageId).find(".commentwrap").append(thisCommentHTML_timeline(commentId,commentContent,
 			repliedByCommentId,repliedByName,repliedByProtrait,
 			repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay));
 	
@@ -250,17 +267,71 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,imageOwnerI
 		removeComment(imageId,commentId);
 	});
 	
+	
 	resetTextarea(thisText);
 	cleanTheTempVar(thisReplyForm);
 	moveDownScroll($("#itemId"+imageId).find(".commentwrap"));
+	
+	$("#itemId"+imageId).find(".atNotationRegion .atZoneTitle").hide("slow");
+	$("#itemId"+imageId).find(".enterHint").hide("slow");
+	atNotationFlag_timeline = 0;
+	
+//	cleanTheAtZone(imageId,atList);
 	var thisOwnerId = imageOwnerId;
 	var uploaderId = $("#itemId"+imageId).find(".uploaderId").html();
-	sendMessageToAboveAll($("#itemId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId);
+	sendMessageToAboveAll($("#itemId"+imageId).find(".commentwrap").find(".repliedByCommentId_span"),imageId,thisOwnerId,uploaderId,atList);
+}
+
+function cleanTheAtZone(imageId,atList){
+	for(var i=0;i<atList.length;i++){
+		try{
+			var rmelement = $("#itemId"+imageId).find(".atUserIcon."+atList[i][1]);
+			$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'remove', rmelement);
+			$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('on', 'removeComplete', function( msnryInstance, rmelement ) {
+				$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+			});	
+		}catch(e){
+		}
+	}
+	$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('destroy');
+}
+
+function recurCleanAtZone(imageId,atList){
+	if(atList.length == 0) {
+		var atList = [];
+		var atListLength = $("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed .atName").length;
+		for(var i=0;i<atListLength;i++){
+			atList[i]=[];
+			atList[i][0]=$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed .atName")[i].innerHTML;
+			atList[i][1]=$("#itemId"+imageId).find(".atNotationRegion .atUserIcon")[i].classList[1];
+		}
+		cleanTheAtZone(imageId,atList);
+		$("#itemId"+imageId).find(".atNotationRegion .atzone").html("");
+		return;
+	}
+	var pickANumber = Math.floor(Math.random()*10)%(atList.length);
+	var rmelement = $("#itemId"+imageId).find(".atUserIcon."+atList[pickANumber][1]);
+	
+	$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'remove', rmelement);
+	$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('on', 'removeComplete', function( msnryInstance, rmelement ) {
+		atList.splice(pickANumber,1);
+		recurCleanAtZone(imageId,atList);
+	});	
 }
 
 function resetTextarea(thisText){
 	thisText.val("");
 	thisText.attr("placeholder","你想说...");
+}
+
+function changeTheTotalCommentNumber(thisElem,num){
+	currComment = Number(thisElem.html());
+	currComment = currComment +num;
+	if (currComment >= 0){
+		thisElem.html(currComment);
+	} else {
+		thisElem.html(0);
+	}
 }
 
 function cleanTheTempVar(thisReplyForm){
@@ -272,7 +343,7 @@ function moveDownScroll(thisElem){
 	thisElem.scrollTop(thisElem[0].scrollHeight);
 }
 
-function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
+function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId,atList){
 	var numReply = thiscomment.length;
 	var numMessageToSend = returnSmaller(numReply,MAX_MesssageToSend);
 	var end =thiscomment.length-1;
@@ -284,7 +355,8 @@ function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 		sendMessageWithImageIdAPI(ownId,selfId,imageId, MessageType.REPLY.typeName);
 		nameList.push(ownId);
 	}
-	if(uploaderId != selfId) {
+
+	if(uploaderId != selfId){
 		sendMessageWithImageIdAPI(uploaderId,selfId,imageId, MessageType.REPLY.typeName);
 		nameList.push(uploaderId);
 	}
@@ -296,5 +368,230 @@ function sendMessageToAboveAll(thiscomment,imageId,ownId,uploaderId){
 		nameList.push(thiscomment[end-i].innerHTML);
 	}
 	
+	for(var i=0;i<atList.length;i++){
+		if($.inArray(atList[i][1], nameList)!=-1) continue;
+		//send message
+		sendMessageWithImageIdAPI(atList[i][1], selfId,imageId, MessageType.REPLY.typeName);
+		nameList.push(atList[i][1]);
+	}	
+}
+
+function thisCommentHTML_timeline(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,
+		repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){
+
+var displayDate = commentDateHandle(createDate);
+
+commentContent = addAtDisplay(commentContent);
+
+
+html = 	"<div class=\"comment newcomment\" id=\"commentId" + commentId + "\">"+
+"<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>"+
+"<span class = 'repliedByName_span' style='display:none;'>"+repliedByName+"</span>"+
+"<span class = 'repliedToCommentId_span' style='display:none;'>"+repliedToCommentId+"</span>"+
+"<span class = 'commentId_span' style='display:none;'>"+commentId+"</span>"+
+"<a class=\"avatar tiny\" style=\"padding-top: 6px;\">"+
+"<img src=\""+repliedByProtrait+"\" style='width:35px;height:35px;'>"+
+"</a>"+
+"<div class=\"content\" style='margin-left: 40px; padding-left: 4px; padding-top: 2px; padding-right: 8px;'>"+
+"<a class=\"author firstAuthor\" style='font-weight:bold;color:#4C7A9F;font-size:12px;'>" + repliedByName + "</a>"+
+
+"<div class='metadata' style='display:"+replyToDisplay+";margin-left: 4px;font-size:12px;'><span class='date_timeline'>to</span></div>"+
+	"<a class='to author' style='display:"+replyToDisplay+";font-weight:bold;color:#4C7A9F;font-size:12px;'>"+repliedToName+"</a><span style='font-size:12px;'> :</span>"+
+"<div class=\"text\" style='margin-bottom: 0px; margin-top: 0px;font-size:14px;'>"+
+	commentContent+
+"</div>"+
+"<div class=\"actions\" style='display:inline;'>"+
+      "<a class=\"reply \" style='display:"+replyDisplay+";font-size:12px;'>回复</a>"+
+      "<a class=\"delete \" id='delete"+commentId+"' style='display:"+deleteDisplay+";font-size:12px;'>删除</a>"+  
+"</div>"+
+"<span class=\"date\" style='font-size:12px;padding-top: 2px;float:right;text-align:right;color:#999999;'>" + displayDate + "</span>"+
+"</div>"+
+"</div>";
+return html;
+}
+
+/*********************************************************************************
+ *	10.	check @ function 
+ * 	check @ function and its help function 
+ */
+function checkAtSomeone_timeline(textarea){
+	var textInput = textarea.value;
+	console.log(textInput.replace(/(\r)*\n/g,"<br/>"));
 	
+	
+	if(textInput.indexOf("@")==-1){
+		hideEnterHintMessage(textarea);
+		atNotationFlag_timeline=0;
+		return;
+	}else{
+		atNotationFlag_timeline = 1;
+		enableAtzoneTitle(textarea);
+		if(textInput[textInput.indexOf("@")+1]==undefined){
+			textarea.parentNode.parentNode.children[1].style.display="none";
+//			$("#eventsegment").masonry();
+		}
+
+	}
+	
+	var textInputfull = textInput.replace(/(\r)*\n/g,"<br/>");
+	
+	if(textInputfull.substr(textInput.length-1)=="<br/>"){
+		textarea.value=textInput.substr(0,textInput.lastIndexOf("@"));
+		hideEnterHintMessage(textarea);
+		addAtzoneController(textarea);
+		atNotationFlag_timeline=0;
+		return;
+	}
+	
+	textarea.parentElement.parentElement.children[0].children[1].innerHTML = "";
+	var name = textInput.substr(textInput.lastIndexOf("@")+1,MAX_FULLNAME_LENGTH);
+	if (name.length == 0) return;
+
+	var bonusForAll = 0;
+	if(name == INS_FOR_ALL){
+		bonusForAll = 1;
+	}
+	
+	for(var i=0;i<userFriendsLists.nFriends.length;i++){
+		if(userFriendsLists.nFriends[i].fullName.substr(0,name.length) != name && bonusForAll == 0){
+			continue;
+		}
+		addThisUserToAtzone(textarea,userFriendsLists.nFriends[i]);
+	}
+	for(var i=0;i<userFriendsLists.eFriends.length;i++){
+		if(userFriendsLists.eFriends[i].fullName.substr(0,name.length) != name && bonusForAll == 0){
+			continue;
+		}
+		addThisUserToAtzone(textarea,userFriendsLists.eFriends[i]);
+	}
+}
+
+
+function enableEnterHintMessage(textarea){
+	textarea.parentNode.parentNode.children[1].style.display="block";
+//	$("#eventsegment").masonry();
+}
+
+function hideEnterHintMessage(textarea){
+	textarea.parentNode.parentNode.children[1].style.display="none";
+//	$("#eventsegment").masonry();
+	if(textarea.parentElement.parentElement.children[0].children[2].children.length==0 &&
+			textarea.parentElement.parentElement.children[0].children[1].children.length==0	){
+		hideAtzoneTitle(textarea);
+	}
+}
+
+function enableAtzoneTitle(textarea){	
+	textarea.parentNode.parentNode.children[0].children[0].style.display="block";
+//	$("#eventsegment").masonry();
+}
+
+function hideAtzoneTitle(textarea){
+	textarea.parentNode.parentNode.children[0].children[0].style.display="none";
+//	$("#eventsegment").masonry();
+}
+
+function addAtzoneController(textarea){
+	var existAtFlag = 0;
+	if(textarea.parentElement.parentElement.children[0].children[2].innerHTML !=""){
+		existAtFlag=1;
+	}
+	var elementLength = textarea.parentElement.parentElement.children[0].children[1].children.length;
+	textarea.parentElement.parentElement.children[0].children[2].innerHTML += textarea.parentElement.parentElement.children[0].children[1].innerHTML;
+	textarea.parentElement.parentElement.children[0].children[1].innerHTML = "";
+	var allElementLength = textarea.parentElement.parentElement.children[0].children[2].children.length;
+	var imageId = textarea.classList[1];
+	deleteNode = $("#itemId"+imageId).find(".confirmed .atusername");
+	
+	if (existAtFlag == 1){
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('destroy');
+	}
+	
+	for(var i=0;i<allElementLength;i++){
+		var atUserId = textarea.parentElement.parentElement.children[0].children[2].children[i].children[0].classList[3];
+//		if(textarea.parentElement.parentElement.children[0].children[2].children[i].children[0].classList[4]!="red"){
+//			continue;
+			addDeleteNodeHander(textarea,deleteNode,atUserId,imageId,i,elementLength);
+//		}
+		handAtDelete(textarea,imageId,atUserId);
+	}
+}
+
+function handAtDelete(textarea,imageId,atUserId){
+	$("#itemId"+imageId).find(".atUserIcon."+atUserId).click(function(){
+		var rmelement = $("#itemId"+imageId).find(".atUserIcon."+atUserId);
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'remove', rmelement);
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('on', 'removeComplete', function( msnryInstance, rmelement ) {
+			$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+//
+//			atzoneInitialize(imageId);
+			if(textarea.parentElement.parentElement.children[0].children[2].innerHTML ==""){
+				$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry('destroy');
+			}
+		});
+	});
+}
+
+function addDeleteNodeHander(textarea,deleteNode,atUserId,imageId,i,elementLength){
+	if(i==0){
+		atzoneInitialize(imageId);
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+	}else{
+		var element = $("#itemId"+imageId).find(".atNotationRegion .ui.label.atusername."+atUserId).parent();
+//		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry( 'appended', element );
+		$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry();
+	}
+	deleteNode.find(".icon."+atUserId).parents(".atusername").addClass("red");
+
+
+}
+
+function addThisUserToAtzone(textarea,thisUser){
+	if(existThisUserInAtzone(textarea,thisUser)) return;
+	var html = 
+		"<div class='atUserIcon "+thisUser.userId+"' style='display:inline'>"+
+			"<a class=\"ui label atusername "+thisUser.userId+"\" style='margin: 4px;'>"+
+				"<span class='atName' style='display:inline'>"+thisUser.fullName+"</span>"+
+				"<i class=\"delete icon "+thisUser.userId+"\" style='display:inline'></i>"+
+			"</a>"+
+		"</div>";
+	textarea.parentElement.parentElement.children[0].children[1].innerHTML += html;
+}
+
+function existThisUserInAtzone(textarea,thisUser){
+	try{	
+		var newUserLength = textarea.parentElement.parentElement.children[0].children[1].children.length;
+		for(var i=0;i<newUserLength;i++){
+			var userId = textarea.parentElement.parentElement.children[0].children[2].children[i].children[0].classList[3];
+			if(userId==thisUser.userId){
+				return true;
+			}
+		}
+	}
+	catch(e){
+//		console.log("newUserError");
+	}
+	try{
+		var addedUserLength = textarea.parentElement.parentElement.children[0].children[2].children.length;
+		for(var i=0;i<addedUserLength;i++){
+			var userId = textarea.parentElement.parentElement.children[0].children[2].children[i].children[0].classList[3];
+			if(userId==thisUser.userId){
+				return true;
+			}
+		}
+	}
+	catch(e){
+//		console.log("addedUserError");
+	}
+	enableEnterHintMessage(textarea);
+	return false;
+}
+
+
+
+function atzoneInitialize(imageId){
+	$("#itemId"+imageId).find(".atNotationRegion .atzone.confirmed").masonry({		
+		itemSelector: '.atUserIcon',
+        columnWidth: 5,
+		gutter: 4});
 }

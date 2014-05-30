@@ -77,9 +77,42 @@ public class ImageService {
 			e.printStackTrace();
 			this.imageDAO.closeSession();
 			return null;
-		}
-		
-		
+		}	
+	}
+	
+	@GET
+	@Path("v1/image/{userid}/guest")
+	@Produces("application/json;charset=utf-8")
+	public Object getGuestImage(@PathParam("userid") Integer userId,
+			@HeaderParam("token") String token){
+		try{
+			
+//			Session session = this.imageDAO.getSession();
+//			User user = this.userDAO.findById(userId);
+			ImageDAO imageDAO = new ImageDAO();
+			UserDAO userDAO = new UserDAO();
+			Session session = imageDAO.getSession();
+			User user = userDAO.findById(userId);
+			
+			List<Image> image_list = this.getCriteria().add(Restrictions.eq(ImageDAO.USER, user))
+													.add(Restrictions.eq(ImageDAO.APPROVED, true))
+													.addOrder(Order.desc(ImageDAO.LAST_MODIFIED))
+													.setMaxResults(1).list();
+			if (image_list.size()==0){
+				return null;
+			}
+			Image[] images = new Image[image_list.size()];
+			for (int i=0; i< image_list.size(); i++){
+				images[i] = image_list.get(i);
+			}
+			this.imageDAO.closeSession();
+			return images;
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			this.imageDAO.closeSession();
+			return null;
+		}	
 	}
 	
 	@POST
@@ -109,7 +142,9 @@ public class ImageService {
 			image.setLastModified(date);
 			image.setApproved(false);
 			image.setDeleted(false);
-			session.save(image);	
+			session.save(image);
+			if (relat!=null&&relat.getRelationship() == Relationship.E_FRIEND_LEVEL)
+				image.setApproved(true);
 			tx.commit();
 			this.imageDAO.closeSession();
 			return RestUtil.string2json("true");
@@ -396,11 +431,13 @@ public class ImageService {
 				//这里出现了session后findByxxx:relationshipDAO 
 				Relationship relat = (Relationship) this.relationshipDAO
 									.findByUserAndFriend(user,friendId);
-				if (relat != null ){
-					relat.levelDown();
-					session.update(relat);
+				int relations = relat.getRelationship();
+				if(relat.getRelationship() != 2){
+					if (relat != null ){
+						relat.levelDown();
+						session.update(relat);
+					}	
 				}
-				
 				tx.commit();
 				this.imageDAO.closeSession();
 				return RestUtil.string2json("true");

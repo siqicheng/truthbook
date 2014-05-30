@@ -71,6 +71,7 @@ function friendRelationCheck(){
 			return true;
 		}
 		else{
+			drawConfirmPopUp("你们还不是好友<br>陌生人最多只能查看一张照片");
 			getGuestImage($.cookie("truthbook_PageOwner_userId").userId);
 			return true;
 		}
@@ -185,7 +186,7 @@ function getGuestImage(userId){
 		if(isDebug) drawConfirmPopUp("获取照片请求发送失败 Error: " + error);
 		return false;
 	};
-	getOneImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError);
+	getGuestImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError);
 }
 
 /*********************************************************************************
@@ -342,13 +343,13 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 		    					"</a>"+
 		    					
 		    					"<div class = 'discript content'>"+
-		    						"<p class='description' style = 'display:"+descriptionDisplay+";word-break:break-all;margin-bottom: 10px;'>"+description+"</p>"+
-		    						"<div class='meta' style = 'display:block;margin-top: 18px;' >"+
+		    						"<p class='description' style = 'display:"+descriptionDisplay+";word-break:break-all;margin-bottom: 0px;'>"+description+"</p>"+
+		    						"<div class='meta' style = 'display:block;margin-top: 25px;' >"+
 		    							"<span style='font-size:14px;'>By </span><a class='uploaderName' style='display:inline;font-size:14px;margin-bottom:4px;'>"+uploaderName+"</a>"+
 		    							"<span class='uploaderId' style='display:none;'>" + uploaderId + "</span> "+
 		    						"</div>"+
 		    						"<div class='ui editBtn icon' style='display:none; margin:0 auto;cursor:pointer;width:10%'>" +
-		    							"<i class='double angle down large icon'></i>"+
+		    							"<i class='double angle down big icon'></i>"+
 		    						"</div>" +
 		    					"</div>"+
 
@@ -399,7 +400,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    						"<div class='ui reply form' style='padding-left: 8px; width: 95%; padding-right: 10px; margin-top: 20px;'>"+
 				    						
 			    							"<div class='atNotationRegion' style='margin-bottom: 3px;'>"+
-				    							"<span style='display:none'>@</span>"+
+			    								"<div class='atZoneTitle ui small yellow message enterHint' style='display:none'><div class=\"\">来人呐</div></div>"+
 				    							"<div class='atzone'>"+
 //		    										"<a class=\"ui label\" style='margin: 4px;'>"+
 //		    											"中的"+
@@ -411,7 +412,7 @@ function thisImageHTML(url,description,descriptionDisplay,uploaderName,uploaderI
 			    							"</div>"+
 			    							"<div class='ui small blue message enterHint' style='display:none'>猛击回车自动补全@对象</div>"+
 			    							"<div class='field' >"+
-			    								"<textarea class='textarea "+imageId+"' placeholder='你想说…' rows='5' style='resize:none;' onkeyup='checkAtSomeone(this)'></textarea>"+
+				    								"<textarea class='textarea "+imageId+"' placeholder='你想说…' rows='5' style='resize:none;' onkeyup='checkAtSomeone(this)'></textarea>"+
 			    							"</div>"+
 			    							"<span class = 'replyToId' style='display:none;'></span>"+
 			    							"<span class = 'replyToName' style='display:none;'></span>"+

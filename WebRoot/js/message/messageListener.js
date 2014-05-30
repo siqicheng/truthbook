@@ -13,7 +13,7 @@ function updateMessage(){
 		}		
 	};
 	var onAjaxError = function(xhr, textStatus, error) {
-		drawConfirmPopUp("获取更新系统通知 Error: "+error);
+//		drawConfirmPopUp("获取更新系统通知 Error: "+error);
 	};
 	
 	getUpdateMessageAPI(userId,onAjaxSuccess,onAjaxError);

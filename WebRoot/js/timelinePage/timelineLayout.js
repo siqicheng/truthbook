@@ -95,9 +95,20 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 			"\t\t\t\t\t</div>\n" +
 			"\t\t\t\t</div>\n" +
 			"\t\t\t\t<div class='ui reply form'>\n"+
-		    "\t\t\t\t\t<div class='field' >\n"+
-		    "\t\t\t\t\t\t<textarea class='textarea' placeholder='你想说…' wrap='off' rows='1'></textarea>\n"+
-		    "\t\t\t\t\t</div>\n"+
+			
+			"<div class='atNotationRegion' style='margin-bottom: 3px;'>"+
+				"<div class='atZoneTitle ui small yellow message enterHint' style='display:none'><div class=\"\">来人呐</div></div>"+
+				"<div class='atzone'>"+
+				"</div>"+
+				"<div class='atzone confirmed'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='ui small blue message enterHint' style='display:none'>猛击回车自动补全@对象</div>"+
+			
+			"<div class='field' >"+
+				"<textarea class='textarea "+imageId+"' placeholder='你想说…' wrap='off' rows='1' onkeyup='checkAtSomeone_timeline(this)'></textarea>"+
+			"</div>"+
+		    
 		    "\t\t\t\t\t<span class = 'replyToId' style='display:none;'></span>\n"+
 		    "\t\t\t\t\t<span class = 'replyToName' style='display:none;'></span>\n"+
 		    "\t\t\t\t\t<button class='ui fluid labeled icon teal commentSubmit button'><i class='icon edit'></i>添加评论</button>\n"+
@@ -114,6 +125,7 @@ function thistimelineItemHTML(url,description,uploaderName,uploaderId,createDate
 
 function thistimelineCommentHTML(commentId,commentContent,repliedByCommentId,repliedByName,repliedByProtrait,repliedToCommentId,repliedToName,createDate,replyToDisplay,replyDisplay,deleteDisplay){	
 	var displayDate = commentDateHandle(createDate);
+	commentContent = addAtDisplay(commentContent);
 	html = 	"<div class='comment newcomment' id='commentId"+commentId+"'>\n"+
 			"\t<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>\n"+
 			"\t<span class = 'repliedByName_span' style='display:none;'>"+repliedByName+"</span>\n"+

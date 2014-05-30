@@ -198,7 +198,7 @@ function dateHandle(createDate,defaultFlag){
 	var year_upload = t[0].substr(0,4);
 	var month_upload = t[0].substring(t[0].indexOf("年")+1,t[0].indexOf("月"));
 	var day_upload = t[0].substring(t[0].indexOf("月")+1,t[0].indexOf("日"));
-	var hour_upload = h[0];
+	var hour_upload = h[0];if(hour_upload<0)hour_upload+=24;
 	var min_upload = h[1];
 	var second_upload = h[2];
 		 

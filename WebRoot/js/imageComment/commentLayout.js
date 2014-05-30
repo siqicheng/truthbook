@@ -294,6 +294,9 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 	
 	var displayDate = commentDateHandle(createDate);
 	
+	commentContent = addAtDisplay(commentContent);
+	
+	
 	html = 	"<div class=\"comment\" id=\"commentId" + commentId + "\">"+
 				"<span class = 'repliedByCommentId_span' style='display:none;'>"+repliedByCommentId+"</span>"+
 				"<span class = 'repliedByName_span' style='display:none;'>"+repliedByName+"</span>"+
@@ -320,6 +323,23 @@ function thisCommentHTML(commentId,commentContent,repliedByCommentId,repliedByNa
 	return html;
 }
 
+function addAtDisplay(commentContent){
+	var modifiedContent = "";
+	var spaceFilter = commentContent.split(" ");
+	var spaceFilterLength = spaceFilter.length;
+	for(var i = 0 ; i < spaceFilterLength ; i++){
+		if(spaceFilter[i].indexOf("@")==0 && spaceFilter[i].indexOf("#") != -1){
+			var fullName = spaceFilter[i].substring(spaceFilter[i].indexOf("@")+1,spaceFilter[i].indexOf("("));
+			var atUserId = spaceFilter[i].substring(spaceFilter[i].indexOf("#")+1,spaceFilter[i].indexOf(")"));
+			spaceFilter[i] = "<span class='nameAtList_span' style='font-weight:bold;color:#4C7A9F;cursor:pointer;' onClick='goOthersPage("+atUserId+")'>@"+fullName+" </span>";
+		}
+		modifiedContent += spaceFilter[i] + " ";
+	}
+	return modifiedContent;
+}
+
+
+
 function commentDateHandle(createDate){
 	
 //	Only valid for server side using UTC	
@@ -342,7 +362,7 @@ function commentDateHandle(createDate){
 	var year_upload = t[0].substr(0,4);
 	var month_upload = t[0].substring(t[0].indexOf("年")+1,t[0].indexOf("月"));
 	var day_upload = t[0].substring(t[0].indexOf("月")+1,t[0].indexOf("日"));
-	var hour_upload = h[0];
+	var hour_upload = h[0];if(hour_upload<0)hour_upload+=24;
 	var min_upload = h[1];
 	var second_upload = h[2];
 	
