@@ -111,35 +111,82 @@ INS_FOR_ALL="all";
  * 	face
  */
 
+FACE_SET = 3;
+FACE_0_Len = 15;
 FACE_1_Len = 15;
+FACE_2_Len = 15;
 
-faceimagecode=["#1_0","#1_1","#1_2",
-               "#1_3","#1_4","#1_5",
-               "#1_6","#1_7","#1_8",
-               "#1_9","#1_10","#1_11",
-               "#1_12","#1_13","#1_14"];
+FACE_LEN = [FACE_0_Len,FACE_1_Len,FACE_2_Len];
 
-faceimagecontent=["卖萌","吐血","呕吐",
-         "头晕","得意","惊讶",
-         "暴走","流泪","滴汗",
-         "石化","碎觉","红心",
-         "贱笑","雷劈","黑线"];
+//郭嘉
 GUOJIA = "img/JiaGuo_face/";
-faceimagename=[GUOJIA+"卖萌.jpg",GUOJIA+"吐血.jpg",GUOJIA+"呕吐.jpg",
-               GUOJIA+"头晕.jpg",GUOJIA+"得意.jpg",GUOJIA+"惊讶.jpg",
-               GUOJIA+"暴走.jpg",GUOJIA+"流泪.jpg",GUOJIA+"滴汗.jpg",
-               GUOJIA+"石化.jpg",GUOJIA+"碎觉.jpg",GUOJIA+"红心.jpg",
-               GUOJIA+"贱笑.jpg",GUOJIA+"雷劈.jpg",GUOJIA+"黑线.jpg",];
+faceimagecode_set1=["#1_0","#1_1","#1_2",
+                    "#1_3","#1_4","#1_5",
+                    "#1_6","#1_7","#1_8",
+                    "#1_9","#1_10","#1_11",
+                    "#1_12","#1_13","#1_14"];
+faceimagecontent_set1=["卖萌","吐血","呕吐",
+                       "头晕","得意","惊讶",
+                       "暴走","流泪","滴汗",
+                       "石化","碎觉","红心",
+                       "贱笑","雷劈","黑线"];
+faceimagename_set1=[GUOJIA+"卖萌.jpg",GUOJIA+"吐血.jpg",GUOJIA+"呕吐.jpg",
+                    GUOJIA+"头晕.jpg",GUOJIA+"得意.jpg",GUOJIA+"惊讶.jpg",
+                    GUOJIA+"暴走.jpg",GUOJIA+"流泪.jpg",GUOJIA+"滴汗.jpg",
+                    GUOJIA+"石化.jpg",GUOJIA+"碎觉.jpg",GUOJIA+"红心.jpg",
+                    GUOJIA+"贱笑.jpg",GUOJIA+"雷劈.jpg",GUOJIA+"黑线.jpg",];
+//衰女同学
+SHUAINV = "img/shuainv/";
+faceimagecode_set2=["#2_0","#2_1","#2_2",
+                    "#2_3","#2_4","#2_5",
+                    "#2_6","#2_7","#2_8",
+                    "#2_9","#2_10","#2_11",
+                    "#2_12","#2_13","#2_14"];
+faceimagecontent_set2=["卖萌","不屑","咒骂",
+                       "哦哦","哼哼","嘚瑟",
+                       "好哒","尼玛","拽拽",
+                       "楼上","楼下","流汗",
+                       "说话","跪谢","鬼脸"];
+faceimagename_set2=[SHUAINV+"卖萌.jpg",SHUAINV+"不屑.jpg",SHUAINV+"咒骂.jpg",
+                    SHUAINV+"哦哦.jpg",SHUAINV+"哼.jpg",SHUAINV+"嘚瑟.jpg",
+                    SHUAINV+"好哒.jpg",SHUAINV+"尼玛.jpg",SHUAINV+"拽.jpg",
+                    SHUAINV+"楼上.jpg",SHUAINV+"楼下.jpg",SHUAINV+"流汗.jpg",
+                    SHUAINV+"说话呀.jpg",SHUAINV+"跪谢.jpg",SHUAINV+"鬼脸.jpg",];
+
+//唐僧
+TANGSENG = "img/tangseng/";
+faceimagecode_set3=["#3_0","#3_1","#3_2",
+                    "#3_3","#3_4","#3_5",
+                    "#3_6","#3_7","#3_8",
+                    "#3_9","#3_10","#3_11",
+                    "#3_12","#3_13","#3_14"];
+faceimagecontent_set3=["什么","凌乱","哈哈",
+                       "喝茶","开心","感动",
+                       "抠鼻","法号","梳头",
+                       "流汗","流泪","罪过",
+                       "腹黑","飙泪","白马"];
+faceimagename_set3=[TANGSENG+"什么.jpg",TANGSENG+"凌乱.jpg",TANGSENG+"哈哈.jpg",
+                    TANGSENG+"喝茶.jpg",TANGSENG+"开心.jpg",TANGSENG+"感动.jpg",
+                    TANGSENG+"抠鼻.jpg",TANGSENG+"无能.jpg",TANGSENG+"梳头.jpg",
+                    TANGSENG+"流汗.jpg",TANGSENG+"流泪.jpg",TANGSENG+"罪过.jpg",
+                    TANGSENG+"腹黑.jpg",TANGSENG+"飙泪.jpg",TANGSENG+"骑马.jpg",];
+
+
+faceimagecode = [faceimagecode_set1,faceimagecode_set2,faceimagecode_set3];
+faceimagecontent = [faceimagecontent_set1,faceimagecontent_set2,faceimagecontent_set3];
+faceimagename=[faceimagename_set1,faceimagename_set2,faceimagename_set3];
 
 face = new Array();
 
-for(var i=0;i<FACE_1_Len;i++){
-	face[i] = new Object();
-	face[i].code=faceimagecode[i];
-	face[i].image=faceimagename[i];
-	face[i].content=faceimagecontent[i];
+for(var set=0;set<FACE_SET;set++){
+	face[set] = new Array();
+	for(var i=0;i<FACE_LEN[set];i++){
+		face[set][i] = new Object();
+		face[set][i].code=faceimagecode[set][i];
+		face[set][i].content=faceimagecontent[set][i];
+		face[set][i].image=faceimagename[set][i];
+	}
 }
-
 
 /*********************************************************************************
  * 	Image style

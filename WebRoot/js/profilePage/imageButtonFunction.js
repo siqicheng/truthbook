@@ -366,7 +366,10 @@ function submitComment(imageId){
 		
 		if(faceImage!=""){
 			preFaceContent = $("#imageId"+imageId).find(".faceDisplay").children().attr("id");
-			preFaceContentToDisplay = "<img src=\""+face[preFaceContent.split("_")[1]].image+"\" style='display:block;padding-left:20px;padding-bottom:5px;'>";
+			var setnum = preFaceContent.split("_")[0].split("#")[1]-1;
+			var facenum = preFaceContent.split("_")[1];
+			preFaceContentToDisplay = "<img src=\""+face[setnum][facenum].image+"\" " +
+									"style='display:block;padding:5px;height:90px;'>";
 			preFaceContent +=" ";
 			content = preFaceContent + content;
 		}
@@ -445,10 +448,10 @@ function submitCommentStart(commentId,imageId,thisText,thisReplyForm,preAtConten
 	
 	$("#imageId"+imageId).find(".atNotationRegion .atZoneTitle").hide("slow");
 	$("#imageId"+imageId).find(".enterHint").hide("slow");
-	$("#eventsegment").masonry();
 	atNotationFlag = 0;
 
 	$("#imageId"+imageId).find(".faceDisplay").html("");
+	$("#eventsegment").masonry();
 	
 	var thisOwnerId = $("#imageId"+imageId).find(".userId_span").html();
 	var uploaderId = $("#imageId"+imageId).find(".uploaderId").html();
@@ -758,8 +761,10 @@ function atzoneInitialize(imageId){
  * 	face handler.
  */
 
-function addFace(code,imageId){
-	var elem = "<img id='"+face[code].code+"' class=\"ui image\" src=\""+face[code].image+"\" style=\"margin:0 auto;width:70px; height: 70px;cursor:pointer;\">";
+function addFace(set,code,imageId){
+	var elem = "<img id='"+face[set][code].code+"' class=\"ui image\" " +
+				"src=\""+face[set][code].image+"\" " +
+				"style=\"margin:0 auto;width:70px; height:70px;cursor:pointer;\">";
 	$("#imageId"+imageId).find(".functionList .face.icon").popup('toggle');
 	$("#imageId"+imageId).find(".faceDisplay").html(elem);
 	$("#eventsegment").masonry();

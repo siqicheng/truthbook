@@ -330,7 +330,7 @@ function addAtDisplay(commentContent){
 	for(var i = 0 ; i < spaceFilterLength ; i++){
 		if(spaceFilter[i].indexOf("#")==0 && spaceFilter[i].split("_")[1]!= ""){
 			try{
-				spaceFilter[i] = "<img src=\""+face[spaceFilter[i].split("_")[1]].image+"\" style='display:block;padding-bottom:5px;padding-left:20px;'>";
+				spaceFilter[i] = "<img src=\""+face[spaceFilter[i].split("_")[0].split("#")[1]-1][spaceFilter[i].split("_")[1]].image+"\" style='display:block;padding:5px;height:90px;'>";
 			}catch(e){
 			}
 		}

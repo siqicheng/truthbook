@@ -72,22 +72,76 @@ function timelineButtonHandler(imageId, comment, imageOwnerId){
 	});
 	
 	
-	var lengthImage = face.length;
-
-	var faceHTML = "<div class=\"ui four column grid\" style=\"width: 254px;margin-left: -3;margin-right: 0px;margin-left: -5;margin-left: 0px;margin-bottom:5px;padding-left: -3;\">";
-	for(var i=0;i<lengthImage;i++){
-		var code = face[i].code.split("_")[1];
-		faceHTML+="<div class=\"column\" style=\"width: 60px;margin-top: 0px;margin-bottom: 8px;cursor:pointer;\" onClick='addFace("+code+","+imageId+")'>" +
-						"<img id='' class=\"ui medium image\" src=\""+face[i].image+"\" style=\"display:block;width:55px; height: 55px;\">" +
-						"<span style='font-size:10px;padding-top:2px;text-align:center; display:block;'>"+face[i].content+"</span>" +
-				  "</div>";
+	var faceHTML = "<div class=\"ui three column grid\" style=\"width: 254px;margin-left: -3;margin-right: 0px;margin-left: -5;margin-left: 0px;padding-left: -3;\">";
+	for(var set = 0;set<FACE_SET;set++){
+		var lengthImage = face[set].length;
+		var isFaceHide = set == 0? "":"none"; 
+		for(var i=0;i<lengthImage;i++){
+			var code = face[set][i].code.split("_")[1];
+			faceHTML+="<div class=\"column set"+set+"\" style=\"display:"+isFaceHide+";width: 60px;margin-top: 0px;margin-bottom: 8px;cursor:pointer;\" onClick='addFace("+set+","+code+","+imageId+")'>" +
+							"<img id='' class=\"ui medium image\" src=\""+face[set][i].image+"\" style=\"display:block;width:55px; height: 55px;\">" +
+							"<span style='font-size:10px;padding-top:2px;text-align:center; display:block;'>"+face[set][i].content+"</span>" +
+					  "</div>";
+		}
 	}
+	
 	faceHTML+="</div>";
+	faceHTML+="<div class='facemenu' style='text-align:center'>"+
+				"<i class='set0 circle small icon actived red' style='cursor:pointer'></i>"+
+				"<i class='set1 circle blank small icon disabled' style='cursor:pointer'></i>"+
+				"<i class='set2 circle blank small icon disabled' style='cursor:pointer'></i>"+
+			  "</div>";
 	
 	$("#itemId"+imageId).find(".functionList .face.icon").popup({
 	    on: 'click',
-	    position : 'top center',
+	    position : 'right center',
 	    transition: 'fade down',
-	    html : faceHTML
+	    html : faceHTML,
+	    onShow:addFacemenuHandler
 	});
 }
+
+function addFacemenuHandler(){
+	$(".facemenu .icon").hover(
+		function(){
+			if(!$(this).hasClass("actived")){
+				$(this).removeClass("disabled");
+				$(this).addClass("red");
+			}
+		},
+		function(){
+			if(!$(this).hasClass("actived")){
+				$(this).removeClass("red");
+				$(this).addClass("disabled");
+			}
+		}
+	);
+	$(".facemenu .icon").click(
+		function(){
+			if($(".facemenu .icon").hasClass("actived")){
+				$(".facemenu .icon").removeClass("actived");
+				$(".facemenu .icon").removeClass("red");
+				$(".facemenu .icon").addClass("blank");
+				$(".facemenu .icon").addClass("disabled");
+			}
+			$(this).addClass("actived");
+			$(this).addClass("red");
+			$(this).removeClass("blank");
+			$(this).removeClass("disabled");
+			
+			$(".popup .three.column.grid .column").hide();
+			var set = $(this).attr("class").split(" ")[0];
+			$(".popup .three.column.grid ."+set).show();
+			
+		}
+	);
+}
+
+
+
+
+
+
+
+
+
