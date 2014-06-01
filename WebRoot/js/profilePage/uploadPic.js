@@ -102,7 +102,13 @@ $(function() {
 	        fileInput: $("#picInput"),
 	        submit: function(e, data) {
 	        	if($("#uploadProgress").css("display") == "none") {
-		        	var userId=$.cookie("truthbook").userId;
+//		    		console.log(data);
+		    		uploadPic = function() {
+		    			data.submit();
+		    		};
+		    		return false;
+	        	} else {
+	        		var userId=$.cookie("truthbook").userId;
 		    		data.formData = [
 		    		                  {
 		    		                      name: 'userid',
@@ -117,12 +123,6 @@ $(function() {
 		    		                	  value: $("#picDescription").val()
 		    		                  }
 		    		              ];
-		    		console.log(data);
-		    		uploadPic = function() {
-		    			data.submit();
-		    		};
-		    		return false;
-	        	} else {
 	        		return true;
 	        	}
 	        },
