@@ -111,34 +111,34 @@
       <div class="field" id="fullNameTest">
               <label>真实姓名</label>
                 <div class="ui left labeled icon input">
-                  <input type="text" id="fullName" placeholder="王大锤" name="fullName" >
+                  <input type="text" id="fullName" placeholder="王大锤" name="fullName" tabindex="1">
                   <i class="user icon"></i>
                 </div>
           </div>
       <div class="field" id="schoolTest">
         <label>学校全称</label>
                 <div class="ui left labeled icon input">
-                  <input type="text" id="school" placeholder="复旦大学/上海外国语大学" name="school" >
+                  <input type="text" id="school" placeholder="复旦大学/上海外国语大学" name="school" tabindex="2">
                     <i class="book icon"></i>
                 </div>
           </div>
       <div class="field" id="entryTimeTest">
         <label>入学年份</label>
               	<div class="ui left labeled icon input">
-            	<input type="text" id="entryTime" placeholder="2008/2012/..." name="entryTime" >
+            	<input type="text" id="entryTime" placeholder="2008/2012/..." name="entryTime" tabindex="3">
           			<i class="align justify icon"></i>
             	</div>
       </div>
       <div class="ui error message"></div>
-      <div class="ui black fluid button" id="nextstep1" >下一步</div>
+      <button class="ui black fluid button" id="nextstep1" tabindex="4">下一步</button>
 <!--      <div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
     </form>
 
       <form class="ui form uploadForm" id="choosePic" style="display:none">
         <div class="ui items">
-          <div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;margin-bottom: 10px;margin-right: 0px;">
-            <span id="imgPrev" class="preview">
-            </span>
+          <div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;margin-bottom: 10px;margin-right: 8px;">
+            <div id="imgPrev">
+            </div>
             <div class="content">
               <textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（最多200字）"></textarea>
             </div>
@@ -301,7 +301,7 @@
   <script src="./js/general/globalValue.js"></script>
   <script src="./js/general/language_zh_cn.js"></script>
   <script src="./js/general/utility.js"></script>
-  
+
   <script src="assets/jquery/jquery.ui.widget.js"></script>
   <script src="js/load-image/load-image.min.js"></script>
   <script src="js/load-image/load-image-orientation.js"></script>
@@ -311,7 +311,7 @@
   <script src="assets/jQuery-File-Upload/jquery.fileupload.js"></script>
   <script src="assets/jQuery-File-Upload/jquery.fileupload-process.js"></script>
   <script src="assets/jQuery-File-Upload/jquery.fileupload-image.js"></script>
-  
+
   <script src="./js/profilePage/uploadPic.js"></script>
   <script src="./js/profilePage/refreshFriendsLists.js"></script>
   <script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>
