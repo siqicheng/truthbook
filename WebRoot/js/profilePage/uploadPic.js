@@ -468,6 +468,7 @@ function gotoChoosePeople() {
 	$("#step1").attr("class", "ui active step");
 	$("#step1").css("cursor", "pointer");
 	$(".ui.form.uploadForm").hide();
+	$("#choosePeople .message").html("");
 	$("#choosePeople .message").hide();
 	$("#choosePeople .field").removeClass("error");
 	$("#choosePeople").show();
