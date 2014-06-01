@@ -111,34 +111,34 @@
       <div class="field" id="fullNameTest">
               <label>真实姓名</label>
                 <div class="ui left labeled icon input">
-                  <input tabindex="1" type="text" id="fullName" placeholder="王大锤" name="fullName" >
+                  <input type="text" id="fullName" placeholder="王大锤" name="fullName" >
                   <i class="user icon"></i>
                 </div>
           </div>
       <div class="field" id="schoolTest">
         <label>学校全称</label>
                 <div class="ui left labeled icon input">
-                  <input tabindex="2" type="text" id="school" placeholder="复旦大学/上海外国语大学" name="school" >
+                  <input type="text" id="school" placeholder="复旦大学/上海外国语大学" name="school" >
                     <i class="book icon"></i>
                 </div>
           </div>
       <div class="field" id="entryTimeTest">
         <label>入学年份</label>
-              <div class="ui left labeled icon input">
-            <input tabindex="3" type="text" id="entryTime" placeholder="2008/2012/..." name="entryTime" >
-          <i class="align justify icon"></i>
-            </div>
-        </div>
-            <div class="ui error message"></div>
-      <input class="ui black fluid button" id="nextstep1"  value="下一步" autocomplete="off" readonly></input>
+              	<div class="ui left labeled icon input">
+            	<input type="text" id="entryTime" placeholder="2008/2012/..." name="entryTime" >
+          			<i class="align justify icon"></i>
+            	</div>
+      </div>
+      <div class="ui error message"></div>
+      <div class="ui black fluid button" id="nextstep1" >下一步</div>
 <!--      <div class="ui red button" id="resetbtn" onclick="resetUpload()">重置</div> -->
     </form>
 
-      <div class="ui form uploadForm" id="choosePic" style="display:none">
+      <form class="ui form uploadForm" id="choosePic" style="display:none">
         <div class="ui items">
-          <div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;">
-            <div id="imgPrev">
-            </div>
+          <div class="item" style="width:100%;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;margin-bottom: 10px;margin-right: 0px;">
+            <span id="imgPrev" class="preview">
+            </span>
             <div class="content">
               <textarea id="picDescription" class="description" style="height:100px; " placeholder="请输入图片描述（最多200字）"></textarea>
             </div>
@@ -146,16 +146,18 @@
             </div>
           </div>
         </div>
-        <div class="ui fluid two buttons">
-          <div class="addpic button">
-            <input type ="file" id="picInput"  multiple>选择图片
-          </div>
-          <div class="ui black button" id="submitBtn"  >确定上传</div>
+        <div class="ui error message" style="display:none">
+        </div>
+        <div class="ui fluid two buttons fileupload-buttonbar">
+          <span class="addpic button fileinput-button">
+            <input type ="file" id="picInput"  accept="image/*" multiple>选择图片
+          </span>
+          <div class="ui black button start" id="submitBtn"  >确定上传</div>
         </div>
         <div class="ui successful progress" id="uploadProgress" style="display:none">
           <div class="bar"></div>
         </div>
-      </div>
+      </form>
 
       <div class="ui form uploadForm" id="complete" style="display:none">
         <div class="ui success message">
@@ -166,8 +168,8 @@
           </div>
         </div>
         <div class="ui fluid two buttons">
-          <div class="ui white button" onclick="resetUpload()")>继续上传</div>
-          <div class="ui black button">完成</div>
+          <div class="ui white fluid button" onclick="gotoChoosePic()">继续为他传</div>
+          <div class="ui black fluid button" onclick="resetUpload()">换个人上传</div>
         </div>
       </div>
 
@@ -195,6 +197,7 @@
         </div>
       </div>
   </div>
+
 
   <div class="ui dimmer page hidden">
     <div class="ui basic modal logout transition hidden" style="margin-top: -159px;">
@@ -298,12 +301,17 @@
   <script src="./js/general/globalValue.js"></script>
   <script src="./js/general/language_zh_cn.js"></script>
   <script src="./js/general/utility.js"></script>
+  
+  <script src="assets/jquery/jquery.ui.widget.js"></script>
   <script src="js/load-image/load-image.min.js"></script>
   <script src="js/load-image/load-image-orientation.js"></script>
   <script src="js/load-image/load-image-exif.js"></script>
-  <script src="./assets/jquery/jquery.iframe-transport.js"></script>
-  <script src="./assets/jquery/jquery.ui.widget.js"></script>
-  <script src="./assets/jquery/jquery.fileupload.js"></script>
+  <script src="assets/canvas-to-blob.min.js"></script>
+  <script src="assets/jquery/jquery.iframe-transport.js"></script>
+  <script src="assets/jQuery-File-Upload/jquery.fileupload.js"></script>
+  <script src="assets/jQuery-File-Upload/jquery.fileupload-process.js"></script>
+  <script src="assets/jQuery-File-Upload/jquery.fileupload-image.js"></script>
+  
   <script src="./js/profilePage/uploadPic.js"></script>
   <script src="./js/profilePage/refreshFriendsLists.js"></script>
   <script src="./js/profilePage/dimmer_modal_popup_Handler.js"></script>
