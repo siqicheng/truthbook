@@ -412,8 +412,8 @@ function completeMessage(header, content) {
 /*Help functions*/
 
 function imgPrev(file) {
-	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
 	if(!file.type.match("image/*")) {
+		$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
 		picError("请选择正确的图片格式");
 		return false;
 	};
