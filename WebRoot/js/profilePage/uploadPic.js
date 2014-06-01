@@ -4,35 +4,17 @@ $(function() {
 
 	/*照片预览旋转bug */
 	$("#picInput").change(function(e) {
-		var file = e.target.files[0],
-			options = {
-				canvas: true,
-				minWidth: 287
-			};
-		loadImage.parseMetaData(file, function(data) {
-			if(data.exif) {
-				options.orientation = data.exif.get('Orientation');
-			}
-		});
-		loadImage(file,
-			function(img) {
-				$("#imgPrev").html(img);
-				$("#imgPrev canvas").addClass('ui image');
-			},
-			options
-		);
+		imgPrev(e.target.files[0]);
 	});
 	
 	/*upload sidebar效果初始化*/
 	$('#upload')
 		.sidebar({
 			onShow: function(){
-	//			selected_num=-1;
 				$("#upload_menu").toggle();
 				$("#close_sidebar_btn").slideDown();
 				},
 			onHide: function(){
-	//			selected_bool = false;
 				resetUpload();
 				$("#upload_menu").slideDown();
 				$("#close_sidebar_btn").toggle();
@@ -107,13 +89,43 @@ $(function() {
 	});
 
 	/*选择图片fileupload插件初始化*/
-	$("#picInput").fileupload(
-		{
-			url: "upload",
+	$("#choosePic").fileupload({
+			url: "upload"
+	});
+	$("#choosePic").fileupload(
+			'option',
+			{
+//			autoUpload: false,
 			dataType: "json",
-			add: function(e, data) {
-				picData = data;
-			},
+			disableImageResize: /Android(?!.*Chrome)|Opera/
+	            .test(window.navigator.userAgent),
+	        fileInput: $("#picInput"),
+	        submit: function(e, data) {
+	        	if($("#uploadProgress").css("display") == "none") {
+		        	var userId=$.cookie("truthbook").userId;
+		    		data.formData = [
+		    		                  {
+		    		                      name: 'userid',
+		    		                      value: userId
+		    		                  },
+		    		                  {
+		    		                      name: 'receiverid',
+		    		                      value: picReceiver.userId
+		    		                  },
+		    		                  {
+		    		                	  name: 'description',
+		    		                	  value: $("#picDescription").val()
+		    		                  }
+		    		              ];
+		    		console.log(data);
+		    		uploadPic = function() {
+		    			data.submit();
+		    		};
+		    		return false;
+	        	} else {
+	        		return true;
+	        	}
+	        },
 			done: function(e, data) {
 				gotoComplete();
 			},
@@ -124,31 +136,26 @@ $(function() {
 					progress + "%"
 				);
 			},
-			start: function (e) {
-			    console.log('Uploads started');
-			},
-			stop: function (e) {
-			    console.log('Uploads finished');
-			},
-			submit: function(e, data) {
-				$("#choosePic .two.buttons").hide();
-				$("#uploadProgress").show();
+			dropzone: $("#imgPrev"),
+			drop: function (e, data) {
+			    $.each(data.files, function (index, file) {
+			        console.log('Dropped file: ' + file.name);
+			        imgPrev(file);
+			    });
 			},
 			fail: function(e, data) {
+				alert("fail!!!");
 				console.log(data.textStatus);
 				console.log(data.errorThrown);
 			},
 			disableImageMetaDataSave: true,
 			imageOrientation: true,
-			previewOrientation: 0
+			previewOrientation: 0,
+			imageMaxWidth: 2400,
+//			imageMaxHeight: 600,
 		}
 	);
-
-	/*完成按钮初始化*/
-	$("#complete .black.button").click(function() {
-		$.magnificPopup.close();
-		$(".sidebar").sidebar("hide");
-	});
+	
 //initializations END
 
 
@@ -209,13 +216,15 @@ $(function() {
 	/*确认上传按钮*/
 	$("#submitBtn").click(function() {
 		if($("#imgPrev img").attr("src") == DefaultPreviewImg) {
-			drawConfirmPopUp("请选择要上传的图片");
+			picError("请选择要上传的图片");
 			return;
 		};
 		if($("#picDescription").val().length>200) {
-			drawConfirmPopUp("图片描述超出字数限制");
+			picError("图片描述超出字数限制");
 			return;
 		};
+		$("#choosePic .two.buttons").hide();
+		$("#uploadProgress").show();
 		if(picReceiver == NEW_QUOTE) {
 			var data = $("#choosePeople").serialize(),
 				onSuccess = function(data, textStatus) {
@@ -237,7 +246,6 @@ $(function() {
 				};
 			registerNewQuote(data, onSuccess, onError);
 		} else if(picReceiver.isActivated == "false") {
-			console.log("Upload pic for " + picReceiver);
 			var userId = $.cookie("truthbook").userId,
 				onSuccess = function(data, textStatus) {
 					completeMessage("为已有词条上传照片完成！", "这个人太懒了，赶快去叫他/她来玩！");
@@ -259,7 +267,6 @@ $(function() {
 				};
 			checkFriendRelationship(picReceiver.userId, userId, onSuccess, onError);
 		} else {
-			console.log("upload pic for " + picReceiver);
 			completeMessage("为好友上传完成！", "赶快去通知好友来看吧！");
 			var userId = $.cookie("truthbook").userId;
 			uploadPic();
@@ -278,7 +285,6 @@ $(function() {
 		};
 		if(isValidForm == true) {
 			var user = $("#fullName").val();
-//			$("#previewMessage").html("你将传给<b>"+user+"</b>的照片如下：");
 			var data = $("#choosePeople").serialize();
 			console.log("choose people form data : " + data);
 	//		Verify user quote: (fullName,school,entryTime) exist
@@ -308,7 +314,7 @@ $(function() {
 						var content = "uploaded by: ";
 						var portrait = DefaultPortrait;
 						if(uploadCandidates[i].isActivated == "false"){
-							portrait = DefaultQuotePortrait; //TODO: 改成词条专用头像src
+							portrait = DefaultQuotePortrait; 
 							
 							onSuccess = function(data, textStatus) {
 								var num = userLengthJson(data);
@@ -401,30 +407,42 @@ function upload_choosepic(people) {
 function completeMessage(header, content) {
 	$("#complete .header").html(header);
 	$("#complete p").html(content);
-	
-}
-
-/*图片上传*/
-function uploadPic() {
-	var userId=$.cookie("truthbook").userId;
-	picData.formData = [
-	                  {
-	                      name: 'userid',
-	                      value: userId
-	                  },
-	                  {
-	                      name: 'receiverid',
-	                      value: picReceiver.userId
-	                  },
-	                  {
-	                	  name: 'description',
-	                	  value: $("#picDescription").val()
-	                  }
-	              ];
-	picData.submit();
 }
 
 /*Help functions*/
+
+function imgPrev(file) {
+	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
+	if(!file.type.match("image/*")) {
+		picError("请选择正确的图片格式");
+		return false;
+	};
+	if(file.size > 20971520) {
+		picError("暂不支持大于20M的图片上传");
+		return false;
+	}
+	$("#choosePic .error.message").hide();
+	var options = {
+			canvas: true,
+			minWidth: 287
+		};
+	loadImage.parseMetaData(file, function(data) {
+		if(data.exif) {
+			options.orientation = data.exif.get('Orientation');
+		}
+	});
+	loadImage(file,
+		function(img) {
+			$("#imgPrev").html(img);
+			$("#imgPrev canvas").addClass('ui image');
+		},
+		options
+	);
+}
+
+function picError(errorMessage) {
+	$("#choosePic .error.message").text(errorMessage).show();
+}
 
 /*重置upload*/
 function resetUpload() {
@@ -466,10 +484,12 @@ function gotoChoosePic() {
 	$(".ui.form.uploadForm").hide();
 	$("#choosePic").show();
 	$("#imgPrev").html('<img class="ui image" src="' + DefaultPreviewImg +'"/>');
+	picData = null;
 	$("#uploadProgress .bar").css("width", "0%");
 	$('#picDescription').val("");
 	$("#choosePic .two.buttons").show();
 	$("#uploadProgress").hide();
+	$("#choosePic .error.message").hide();
 	$("#step1").attr("class", "ui step");
 	$("#step2").attr("class", "ui active step");
 	$("#step3").attr("class", "ui disabled step");

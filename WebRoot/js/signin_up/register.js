@@ -86,7 +86,7 @@ $(function() {
 				$("#tipMessage").text("请选择");
 				$("#tipMessage").fadeIn(300);
 			} else if(selected_num == -2) {
-//				register_new($('.ui.form.register-form').serialize());
+				register_new($('.ui.form.register-form').serialize());
 				$("#checkinput").val("");
 				$("#checkinput").attr("placeholder", "暂未开放注册，敬请期待");
 			} else {
@@ -149,26 +149,26 @@ $('.ui.form.register-form')
 					}
 					html = "";
 					for(i=0;i<=num;i++){
-						var content = "uploaded by: ";
-						onSuccess = function(data, textStatus) {
-							var num = userLengthJson(data);
-							if(num>1) {
-								var name = data.user[i].fullName;
-							} else {
-								var name = data.user.fullName;
+						var content = "该词条创建人: ";
+						var onSuccess = function(data, textStatus) {
+							if(data != undefined){
+								uploadCandidates[i].imageUrl = getImageUrl(data.image.imageUrl, ImageType.Medium);
+								var name = data.image.uploaderName;
+								if(name.length > 3) {
+									content += name.slice(2);
+									uploadCandidates[i].ans = name.slice(0,2);
+								} else {
+									content += name.slice(1);
+									uploadCandidates[i].ans = name.charAt(0);
+								};
 							}
-							if(name.length > 3) {
-								content += name.slice(2);
-								uploadCandidates[i].ans = name.slice(0,2);
-							} else {
-								content += name.slice(1);
-								uploadCandidates[i].ans = name.charAt(0);
-							}
+						},
+							onError = function(xhr,status,error){
+								console.log("获取照片请求发送失败 Error: " + error);
+								return false;
 						};
-						onError = function(xhr, error, status) {
-							console.log("Get uploader name failed with error: " + error);
-						};
-						getFriendsSync(uploadCandidates[i].userId, 1, onSuccess, onError);
+						getOneImageByUserIdSyncAPI(uploadCandidates[i].userId, onSuccess, onError);
+						
 						html = html + "<div class='ui item segment rechooseitem'>" +
 									"<a class='ui corner green label' style='display:none'>" +
 									"<i class='checkmark small icon'></i> </a>" +
@@ -176,63 +176,39 @@ $('.ui.form.register-form')
 		 							"<div class='content'>" +
 		  							"<div class='header'>" + uploadCandidates[i]["fullName"] + "</div>" + content +
 		  							"</div></div>";
-					}
-					html = html + "<div class='ui item segment'  id='newQuote'>" +
-					"<a class='ui corner green label' style='display:none'>" +
-					"<i class='checkmark small icon'></i> </a>" +
-						"<img class='ui avatar image' src=" +  DefaultImg +">" + 
-						"<div class='content'>" +
-						"<div class='header'>继续注册</div>以上都不是？</div></div>";
+					};
 					$("#rechoosemessage").html(rechoosemessage);
 					$("#rechooselist").html(html);
 					$(".ui.item.rechooseitem").click(function(){
 						$(this).siblings().children(".label").hide();
 						$(this).children(".label").show();
-						selected_num=$(this).next().index()-1;
-//						console.log(selected_num);
-						$("#rechooseerror").hide();
-						
-						var onSuccess = function(data, textStatus) {
-							if(data != undefined){
-								$("#imgPrev").attr("src", getImageUrl(data.image.imageUrl, ImageType.Medium));
-							}
-						},
-							onError = function(xhr,status,error){
-								console.log("获取照片请求发送失败 Error: " + error);
-								return false;
-						};
-						getOneImageByUserIdAPI(uploadCandidates[selected_num].userId, onSuccess, onError);
-						
-						if(uploadCandidates[selected_num].ans.length==2) {
-							$("#checkinput").attr("placeholder", "请输入上传者的姓（两个字）");
-							$("#tipMessage").text("请输入照片上传者的姓（两个字）完成注册：");
-							$("#tipMessage").fadeIn(300);
-						} else {
-							$("#checkinput").attr("placeholder", "请输入上传者的姓");
-							$("#tipMessage").text("请输入照片上传者的姓完成注册：");
-							$("#tipMessage").fadeIn(300);
+						selected_num=$(this).index();
+						$("#tipMessage").hide();
+						if($("#imgPrev").attr("src") != uploadCandidates[selected_num].imageUrl) {
+							$("#imgPrev").attr("src", uploadCandidates[selected_num].imageUrl);
+							$("#imgPrev").siblings().addClass("active");
 						};
 						$("#checkinput").val("");
 						$("#checkinput").removeAttr("disabled");
 					});
+					$("#imgPrev").load(function() {
+						$(this).siblings().removeClass("active");
+					});
 					$("#newQuote").click(function() {
-						$(this).siblings().children(".label").hide();
-						$(this).children(".label").show();
-						selected_num=$(this).next().index()-1;
-//						console.log(selected_num);
+						$(this).siblings().children().find(".label").hide();
 						$("#rechooseerror").hide();
 						$("#checkinput").val("");
-						$("#checkinput").attr("placeholder", "确定以上都不是就点击确认吧！");
 						$("#checkinput").attr("disabled", "true");
-						$("#tipMessage").fadeOut(300);
-						$("#imgPrev").attr("src", DefaultPortrait);//TODO： 新建词条专用图片
+//						register_new($('.ui.form.register-form').serialize());
+//						$("#checkinput").val("");
+//						$("#checkinput").attr("placeholder", "暂未开放注册，敬请期待");
+						$("#tipMessage").text("暂未开放注册，敬请期待");
+						$("#tipMessage").fadeIn(300);
 					});
 					$("#rechooseform").submit(function() {
 						if(selected_num == -1) {
 							$("#tipMessage").text("请选择");
 							$("#tipMessage").fadeIn(300);
-						} else if(selected_num == -2) {
-							register_new($('.ui.form.register-form').serialize());
 						} else {
 							var choosenQuote = uploadCandidates[selected_num];
 							checkInviterName(choosenQuote, $("#checkinput").val());
@@ -250,9 +226,8 @@ $('.ui.form.register-form')
 					});
 				} else {
 					console.log("no quote found");
-//					register_new($('.ui.form.register-form').serialize());
+					register_new($('.ui.form.register-form').serialize());
 //					drawConfirmPopUp("快去找个用户为你创建个词条吧");
-					confirmNoSignin();
 				};
 			};
 			var onAjaxError = function(xhr,status,error){
@@ -267,6 +242,7 @@ $('.ui.form.register-form')
 });
    
 function confirmNoSignin(){
+	$('#rechooseform').modal("hide");
 	var header = "尚未全面开放注册";
 	var content = "只有被<br>&ensp;&ensp;注册用户新建的词条<br>" +
 					"&ensp;&ensp;&ensp;&ensp;才能通过认领完成注册哦";
@@ -276,7 +252,7 @@ function confirmNoSignin(){
 	var positiveBtnHidden = "siqicheng.fdu@gmail.com";
 	var logo="lock";
 	approveFunction = function() {
-		return true
+		return true;
 	};
 	onDenyFunction = function() {
 		return true;
@@ -289,27 +265,28 @@ function confirmNoSignin(){
 /*	Helper function
  */
 function register_new(info) {
-	var path = "v1/full/register";
-	var url=ServerRoot+ServiceType.LOGIN+path;		
-	var data= info;
-	var onAjaxSuccess = function(data,textStatus){
-		if (data == false){
-
-		} else {
-			setUserInfoCookie(data);
-			goHomePage();
-			return true;
-		}
-	};
-	var onAjaxError = function(xhr,status,error){
-		$("#errorMessageMail").show();
-		$("#errorMessageMail").text("注册失败:" + error);
-		console.log("Register failed with error:" + error);
-		return false;
-	};
-	var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
-	ajax_obj.data = data;
-	ajax_call(ajax_obj);
+	confirmNoSignin();
+//	var path = "v1/full/register";
+//	var url=ServerRoot+ServiceType.LOGIN+path;		
+//	var data= info;
+//	var onAjaxSuccess = function(data,textStatus){
+//		if (data == false){
+//
+//		} else {
+//			setUserInfoCookie(data);
+//			goHomePage();
+//			return true;
+//		}
+//	};
+//	var onAjaxError = function(xhr,status,error){
+//		$("#errorMessageMail").show();
+//		$("#errorMessageMail").text("注册失败:" + error);
+//		console.log("Register failed with error:" + error);
+//		return false;
+//	};
+//	var ajax_obj = getAjaxObj(url,"POST","json",onAjaxSuccess,onAjaxError);
+//	ajax_obj.data = data;
+//	ajax_call(ajax_obj);
 }
 
 function take_quote(id, register_info) {
@@ -322,34 +299,7 @@ function take_quote(id, register_info) {
 		if(data == false){
 			alert("take quote failed");
 		} else {
-			var onSuccess = function(data, textStatus) {
-				var num = userLengthJson(data);
-				for(var i=0; i<num-1; i++) {
-					var id = data.user[i].userId;
-					sendMessageAPI(id, uploadCandidates[selected_num].userId, MessageType.TAKEQUOTE.typeName);
-				}
-				var onSuccess = function(data, textStatus) {
-					console.log("send messages success");
-					goHomePage();
-				};
-				var onError = function(xhr, error, status) {
-					alert(error);
-				};
-				if(num>1) {
-					var id = data.user[num-1].userId;
-				} else {
-					var id = data.user.userId;
-				};
-				sendMessageAPI(id, uploadCandidates[selected_num].userId, MessageType.TAKEQUOTE.typeName, onSuccess, onError);
-			};
-			onError = function(xhr, error, status) {
-				console.log("Get uploader name failed with error: " + error);
-			};
-			getFriendsSync(data.userId, 1, onSuccess, onError);
-			
 			setUserInfoCookie(data);
-			console.log("take quote success");
-			
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
@@ -372,8 +322,7 @@ function checkInviterName(choosenQuote, inviterName) {
 		$("#checkinput").attr("placeholder","好像不是这个哦");
 	}
 }
- 
- 
+
 function  showCheckmarklabel() {
 	$("#cornerlabel").show();
 	$("#correctCheckmark").show();

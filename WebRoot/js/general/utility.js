@@ -49,7 +49,7 @@ function ajax_call(ajax_obj){
 	});
 }
 
-function Redirect (url) {
+function Redirect(url) {
 	var ua        = navigator.userAgent.toLowerCase(),
 		isIE      = ua.indexOf('msie') !== -1,
 		version   = parseInt(ua.substr(4, 2), 10);
@@ -324,6 +324,14 @@ function getGuestImageByUserIdAPI(userId,onAjaxSuccess,onAjaxError){
 	var path = "v1/image/" + userId + "/guest",
 		url = ServerRoot + ServiceType.IMAGE + path,
 		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_call(ajax_obj);	
+}
+
+function getOneImageByUserIdSyncAPI(userId,onAjaxSuccess,onAjaxError){
+	var path = "v1/image/" + userId + "/latest",
+		url = ServerRoot + ServiceType.IMAGE + path,
+		ajax_obj = getAjaxObj(url, "GET", "json", onAjaxSuccess, onAjaxError);
+	ajax_obj.async = false;
 	ajax_call(ajax_obj);	
 }
 

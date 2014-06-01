@@ -1,4 +1,7 @@
 $(function() {
+	if($.cookie("truthbook") == undefined) {
+		Redirect(LoginPage);
+	}
 	var pageOwnerId = parseInt(getUrlParam());
 	if(pageOwnerId == undefined) {
 		$.cookie("truthbook_PageOwner_userId", $.cookie("truthbook"));
