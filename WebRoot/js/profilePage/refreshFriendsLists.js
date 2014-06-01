@@ -242,15 +242,19 @@ function drawFriendsList(id, barType, friendsType) {
 		$("#"+friendsType+"_num").html(num);
 	}
 	
+	var friendRules = "";
 	if(friendsType == "nFriends") {
 		var friendsTypeInChinese = "真·友";
 	} else {
 		var friendsTypeInChinese = "极·友";
+		friendRules = "极·友上传不需要审核";
 	}
 	var html = "<div class=\"item\">" +
-					"<div class=\"content\">" +
-					"你现在还没有"+friendsTypeInChinese+"哦 " +
-					"</div>" +
+					"<i class=\"info icon\" style='display:inline;'></i>"+
+					"<span class=\"content\" style='width:auto;display:inline;margin-left:5px;'>" +
+//					"你现在还没有"+friendsTypeInChinese+"哦 <br>" +
+					friendRules+
+					"</span>" +
 					"</div>";
 	if(num > 0) {
 		html ="<div class='ui thin item pagination'  id='pageNum' style='text-align:center;' >" +
@@ -282,10 +286,11 @@ function drawFriendsList(id, barType, friendsType) {
 		};
 	} else if(id != $.cookie("truthbook").userId) {
 		html = "<div class=\"item\">" +
-			"<div class=\"content\">" +
-			"他现在还没有"+friendsTypeInChinese+"哦 " +
-			"</div>" +
-			"</div>";
+				"<i class=\"info icon\" style='display:inline;'></i>"+
+				"<span class=\"content\" style='width:auto;display:inline;margin-left:5px;'>" +
+				"他现在还没有"+friendsTypeInChinese+"哦 " +
+				"</div>" +
+				"</div>";
 	};
 	$("#"+barType + " ."+friendsType+"List").html(html);
 	showPage(barType, friendsType, 0, num);

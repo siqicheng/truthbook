@@ -20,14 +20,15 @@ function inviteToUploadButtonOneOnclick(id){
 function friendRequestButtonOneOnclick(id,thisMessageId,messageTypeNumber,thisItem){
 	var onAjaxSuccess = function(data,textStatus){
 		if (data == true ){
-			drawConfirmPopUp("成功加为好友");
 			deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+			drawConfirmPopUp("成功加为好友");
 			refreshTopbarFriendsLists($.cookie("truthbook").userId);
 			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 			friendRequestAccept(id);
 			return true;
 		} else {
-			drawConfirmPopUp("添加好友失败");
+			deleteMessageButtonOnclick(thisMessageId,messageTypeNumber,thisItem);
+			drawConfirmPopUp("添加好友失败<br>(可能是你们已经是好友咯)");
 			return true;
 		}
 	};

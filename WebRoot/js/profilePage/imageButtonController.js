@@ -92,7 +92,9 @@ function addImageButtonHandler(imageId,control,comment){
 	}
 	if(comment == COMMENT.Yes){
 		$("#imageId"+imageId).find(".commentSubmit").click(function(){
+			$("#imageId"+imageId).find(".commentSubmit").attr("disabled","disabled");
 			submitComment(imageId);
+			$("#imageId"+imageId).find(".commentSubmit").removeAttr("disabled");
 		});
 	} else {
 		$("#imageId"+imageId).find(".commentSubmit").click(function(){
@@ -140,7 +142,7 @@ function addImageButtonHandler(imageId,control,comment){
 	var faceHTML = "<div class=\"ui three column grid\" style=\"width: 254px;margin-left: -3;margin-right: 0px;margin-left: -5;margin-left: 0px;padding-left: -3;\">";
 	for(var set = 0;set<FACE_SET;set++){
 		var lengthImage = face[set].length;
-		var isFaceHide = set == 0? "":"none"; 
+		var isFaceHide = set == DEFAULT_SET_NUMBER? "":"none"; 
 		for(var i=0;i<lengthImage;i++){
 			var code = face[set][i].code.split("_")[1];
 			faceHTML+="<div class=\"column set"+set+"\" style=\"display:"+isFaceHide+";width: 60px;margin-top: 0px;margin-bottom: 8px;cursor:pointer;\" onClick='addFace("+set+","+code+","+imageId+")'>" +
@@ -149,13 +151,19 @@ function addImageButtonHandler(imageId,control,comment){
 					  "</div>";
 		}
 	}
-	
 	faceHTML+="</div>";
-	faceHTML+="<div class='facemenu' style='text-align:center'>"+
-				"<i class='set0 circle small icon actived red' style='cursor:pointer'></i>"+
-				"<i class='set1 circle blank small icon disabled' style='cursor:pointer'></i>"+
-				"<i class='set2 circle blank small icon disabled' style='cursor:pointer'></i>"+
-			  "</div>";
+	
+	faceHTML+="<div class='facemenu' style='text-align:center'>";
+	var defaultSet = "actived red";
+	var otherSet = "blank disabled";
+	for(var set = 0;set<FACE_SET;set++){
+		if(set == DEFAULT_SET_NUMBER){
+			faceHTML+="<i class='set"+set+" circle small icon "+defaultSet+"' style='cursor:pointer'></i>";
+		}else{
+			faceHTML+="<i class='set"+set+" circle small icon "+otherSet+"' style='cursor:pointer'></i>";
+		}
+	}
+	faceHTML+="</div>";
 	
 	$("#imageId"+imageId).find(".functionList .face.icon").popup({
 	    on: 'click',

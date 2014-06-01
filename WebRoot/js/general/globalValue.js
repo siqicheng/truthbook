@@ -86,18 +86,9 @@ DefaultThankYou="谢谢你为我传照片";
 
 NUM_SHOW_COMMENT_ON_TIMELINE = 2;
 NUM_FIRST_BATCH_ITEM_ON_TIMELINE = 5;
-NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 5;
+NUM_NEXT_BATCH_ITEM_ON_TIMELINE = 8;
 
 periodCheckNewMessage = 20000;  //ms
-//releaseTimeTotal = 60;
-//releaseTime = releaseTimeTotal;
-//
-//function speedUpMessageListener(){
-//	periodCheckNewMessage = 10000;
-//}
-//function speedDownMessageListener(){
-//	periodCheckNewMessage = 30000;
-//}
 
 /*********************************************************************************
  * 	@ function global value
@@ -117,6 +108,8 @@ FACE_1_Len = 15;
 FACE_2_Len = 15;
 
 FACE_LEN = [FACE_0_Len,FACE_1_Len,FACE_2_Len];
+
+DEFAULT_SET_NUMBER = 2-1;
 
 //郭嘉
 GUOJIA = "img/JiaGuo_face/";

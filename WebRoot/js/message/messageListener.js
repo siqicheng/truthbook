@@ -26,11 +26,12 @@ function oneMessageHandler(message){
 	var sourceName = message.friend.fullName;
 	var imageId = message.imageId;
 	var imageOwnId = message.imageOwnerid;
+	var createTime = message.createTime;
 	var content = message.content;
 	if (imageId == undefined ) imageId ="";
 	if (imageOwnId == undefined ) imageOwnId ="";
 	if (content == undefined ) content ="";
-	insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content);
+	insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content,createTime);
 	updateNewMessageNum(1);
 }
 
@@ -43,6 +44,7 @@ function multiMessageHandler(message){
 		var sourceName = message[i].friend.fullName;
 		var imageId = message[i].imageId;
 		var imageOwnId = message[i].imageOwnerid;
+		var createTime = message[i].createTime;
 		var content = message[i].content;
 		if (imageId == undefined ) imageId ="";
 		if (imageOwnId == undefined ) imageOwnId ="";
@@ -52,13 +54,13 @@ function multiMessageHandler(message){
 			refreshMenubarFriendsLists($.cookie("truthbook_PageOwner_userId").userId);
 		}
 		
-		insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content);
+		insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content,createTime);
 	}
 	updateNewMessageNum(messagelength);
 }
 
 
-function insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content){
+function insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId,imageOwnId,content,createTime){
 	var messageType = findMessageTypeByTypeName(messageTypeName);
 	if ($("#"+messageTypeName+"HeaderMenu").html() == undefined||$("#"+messageTypeName+"HeaderMenu").html()==""){
 		//no this type message exists
@@ -69,7 +71,7 @@ function insertThisMessage(messageTypeName,messageId,sourceId,sourceName,imageId
 	}
 	var iconName = pickIconName(messageType.typeName);
 	$("#"+messageTypeName+"MessageContent").append(thisMessageContentHTML(sourceId,messageId,imageId,sourceName,iconName,messageType));
-	singleMessageButtonHandler(messageType,sourceId,messageId,imageId,imageOwnId,content);
+	singleMessageButtonHandler(messageType,sourceId,messageId,imageId,imageOwnId,content,createTime);
 }
 
 function modifyHeaderMenuNumber(num,messageTypeName){

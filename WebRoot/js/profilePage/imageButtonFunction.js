@@ -764,7 +764,7 @@ function atzoneInitialize(imageId){
 function addFace(set,code,imageId){
 	var elem = "<img id='"+face[set][code].code+"' class=\"ui image\" " +
 				"src=\""+face[set][code].image+"\" " +
-				"style=\"margin:0 auto;width:70px; height:70px;cursor:pointer;\">";
+					"style=\"margin:0 auto;width:70px; height:70px;cursor:pointer;\">";
 	$("#imageId"+imageId).find(".functionList .face.icon").popup('toggle');
 	$("#imageId"+imageId).find(".faceDisplay").html(elem);
 	$("#eventsegment").masonry();

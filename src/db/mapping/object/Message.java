@@ -1,14 +1,11 @@
 package db.mapping.object;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
-
-import db.mapping.object.User;
 
 /**
  * Message entity. @author MyEclipse Persistence Tools
@@ -25,10 +22,10 @@ public class Message implements java.io.Serializable {
 	private Integer userId;
 	private User friend;
 	private String content;
-	private Timestamp createTime;
+	private Date createTime;
 	private Integer ImageId;
 	private String status;
-	private Timestamp readTime;
+	private Date readTime;
 	private Image image;
 	private Integer ImageOwnerid;
 	
@@ -59,7 +56,7 @@ public class Message implements java.io.Serializable {
 
 	/** full constructor */
 	public Message(String messageType, Integer userId, User friend
-			, Timestamp createTime, Image image, String content) {
+			, Date createTime, Image image, String content) {
 		this();	
 		this.messageType = messageType;
 		this.userId = userId;
@@ -70,17 +67,17 @@ public class Message implements java.io.Serializable {
 	}
 	
 	public Message(String messageType, Integer userId, User friend
-			, Timestamp createTime){
+			, Date createTime){
 		this(messageType, userId, friend, createTime, null, null);
 	}
 	
 	public Message(String messageType, Integer userId, User friend
-			, Timestamp createTime, Image image){
+			, Date createTime, Image image){
 		this(messageType, userId, friend, createTime, image, null);
 	}
 	
 	public Message(String messageType, Integer userId, User friend
-			, Timestamp createTime, String content){
+			, Date createTime, String content){
 		this(messageType, userId, friend, createTime, null, content);
 	}
 	
@@ -97,8 +94,8 @@ public class Message implements java.io.Serializable {
 	}
 
 	
-	@XmlTransient
-	public Timestamp getCreateTime() {
+//	@XmlTransient
+	public Date getCreateTime() {
 		return this.createTime;
 	}
 
@@ -128,7 +125,7 @@ public class Message implements java.io.Serializable {
 	}
 	
 	@XmlTransient
-	public Timestamp getReadTime(){
+	public Date getReadTime(){
 		return this.readTime;
 	}
 	
@@ -163,7 +160,7 @@ public class Message implements java.io.Serializable {
 	}
 
 	
-	public void setReadTime(Timestamp readTime){
+	public void setReadTime(Date readTime){
 		this.readTime=readTime;
 	}
 	
@@ -194,7 +191,7 @@ public class Message implements java.io.Serializable {
 		this.friend=friend;
 	}
 	
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 

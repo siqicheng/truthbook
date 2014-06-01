@@ -200,7 +200,7 @@ function thisMessageContentHTML(sourceId,messageId,imageId,fullName,iconName,mes
 						"<a class=\""+messageType.typeButtonOneName+"\"><i class=\"" + iconName[0]  + " large icon\"></i></a>" +
 						"<a class=\""+messageType.typeButtonTwoName+"\"><i class=\"" + iconName[1]  + " large icon\"></i></a>" +
 					"</div>" +
-					"<div class=\"content message messageId"+ messageId+"\" style=\"width: 150px;word-break:break-all;\">" +
+					"<div class=\"content message messageId"+ messageId+"\" style=\"width: 150px;word-break:break-all;padding-bottom: 5px; padding-top: 5px;\">" +
 						fullName +
 					"</div>" +
 				"</div>";
@@ -218,6 +218,7 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 				sourceName = data.message.friend.fullName,
 				imageId = data.message.imageId,
 				imageOwnId = data.message.imageOwnerid,
+				createTime = data.message.createTime,
 				content = data.message.content;
 		}else {
 			var messageId = data.message[i].messageId,
@@ -225,25 +226,79 @@ function updateNewMessageMenuList(numOfMessage,data,messageType){
 				sourceName = data.message[i].friend.fullName,
 				imageId = data.message[i].imageId,
 				imageOwnId = data.message[i].imageOwnerid,
+				createTime = data.message[i].createTime,
 				content = data.message[i].content;
 		}
 		if (imageId == undefined ) imageId ="";
 		var iconName = pickIconName(messageType.typeName);
 		
 		$("#"+messageType.typeName+"MessageContent").append(thisMessageContentHTML(sourceId,messageId,imageId,sourceName,iconName,messageType));
-		singleMessageButtonHandler(messageType,sourceId,messageId,imageId,imageOwnId,content);
+		singleMessageButtonHandler(messageType,sourceId,messageId,imageId,imageOwnId,content,createTime);
 	
 	}
 
 }
 
-function singleMessageButtonHandler(messageType,sourceId,messageId,imageId,imageOwnId,content){
-	if(messageType.typeName == MessageType.REJECTIMAGE.typeName){
+function singleMessageButtonHandler(messageType,sourceId,messageId,imageId,imageOwnId,content,createTime){
+	var time = commentDateHandle(createTime);
+	if(messageType.typeName == MessageType.INVITETOUPLOAD.typeName){
+		$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message.messageId"+messageId)
+		.popup({
+			    on: 'click',
+			    position : 'left center',
+			    title	:	MESSAGE_INVITETOUPLOAD_TITLE,
+			    content	:	MESSAGE_INVITETOUPLOAD_CONTENT,
+			    transition: 'fade down'
+		});
+	}
+	
+	if(messageType.typeName == MessageType.ADDFRIEND.typeName){
+		$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message.messageId"+messageId)
+		.popup({
+			    on: 'click',
+			    position : 'left center',
+			    title	:	MESSAGE_ADDFRIEND_TITLE,
+			    content	:	MESSAGE_ADDFRIEND_CONTENT,
+			    transition: 'fade down'
+		});
+	}
+	
+	if(messageType.typeName == MessageType.ACCEPTFRIEND.typeName){
 		$("#"+messageType.typeName+"MessageContent")
 		.children(".item.message")
 		.children(".content.message.messageId"+messageId)
 		.popup({
 			    on: 'hover',
+			    position : 'left center',
+			    title	:	MESSAGE_ACCEPTFRIEND_TITLE,
+			    content	:	time,
+			    transition: 'fade down'
+		});
+	}
+	
+	if(messageType.typeName == MessageType.TAKEQUOTE.typeName){
+		$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message.messageId"+messageId)
+		.popup({
+			    on: 'hover',
+			    position : 'left center',
+			    title	:	MESSAGE_TAKEQUOTE_TITLE,
+			    content	:	time,
+			    transition: 'fade down'
+		});
+	}
+	
+	if(messageType.typeName == MessageType.REJECTIMAGE.typeName){
+		$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message.messageId"+messageId)
+		.popup({
+			    on: 'click',
 			    position : 'left center',
 			    title	:	MESSAGE_REJECTIMAGE_TITLE,
 			    content	:	content,
@@ -256,10 +311,23 @@ function singleMessageButtonHandler(messageType,sourceId,messageId,imageId,image
 		.children(".item.message")
 		.children(".content.message.messageId"+messageId)
 		.popup({
-			    on: 'hover',
+			    on: 'click',
 			    position : 'left center',
 			    title	:	MESSAGE_ACCEPTIMAGE_TITLE,
 			    content	:	content,
+			    transition: 'fade down'
+		});
+	}
+	
+	if(messageType.typeName == MessageType.REPLY.typeName){
+		$("#"+messageType.typeName+"MessageContent")
+		.children(".item.message")
+		.children(".content.message.messageId"+messageId)
+		.popup({
+			    on: 'hover',
+			    position : 'left center',
+			    title	:	MESSAGE_REPLY_TITLE,
+			    content	:	time,
 			    transition: 'fade down'
 		});
 	}
@@ -269,7 +337,7 @@ function singleMessageButtonHandler(messageType,sourceId,messageId,imageId,image
 		.children(".item.message")
 		.children(".content.message.messageId"+messageId)
 		.popup({
-			    on: 'hover',
+			    on: 'click',
 			    position : 'left center',
 			    title	:	MESSAGE_UPGRADE_TITLE,
 			    content	:	MESSAGE_UPGRADE_CONTENT,
@@ -292,7 +360,8 @@ function singleMessageButtonHandler(messageType,sourceId,messageId,imageId,image
 	$("#"+messageType.typeName+"MessageContent")
 	.find(".content.message.messageId"+messageId)
 	.click(function() {
-			itemOnClickSwitch(messageType.number,thisUserId,thisMessageId,$(this).parent());
+			itemOnClickSwitch(messageType.number,sourceId,messageId,
+					$("#messageId"+messageId),imageId,imageOwnId);
 		}
 	);
 	
@@ -307,7 +376,8 @@ function singleMessageButtonHandler(messageType,sourceId,messageId,imageId,image
 	.find("."+messageType.typeButtonOneName)
 	.children(".icon")
 	.click(function() {
-		buttonOneOnClickSwitch(messageType.number,sourceId,messageId,$("#messageId"+messageId),imageId,imageOwnId);	
+		buttonOneOnClickSwitch(messageType.number,sourceId,messageId,
+				$("#messageId"+messageId),imageId,imageOwnId);	
 	});
 	
 	$("#messageId"+messageId)
@@ -325,19 +395,19 @@ function singleMessageButtonHandler(messageType,sourceId,messageId,imageId,image
 	});	
 }
 
-function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
+function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem,thisImageId,imageOwnId){
 	switch (messageTypeNumber){
 	case "0"://inviteToUpload
-		
+
 		break;
 	case "1"://friendRequest
 		
 		break;
 	case "2"://acceptFriendRequest
-		
+		goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "3"://takeQuote
-		
+		goToFriendPageButtonOnlick(thisUserId,thisMessageId,messageTypeNumber,thisItem);
 		break;
 	case "4"://rejectImage
 
@@ -346,7 +416,7 @@ function itemOnClickSwitch(messageTypeNumber,thisUserId,thisMessageId,thisItem){
 
 		break;
 	case "6"://reply
-
+		goToThatImageComment(thisImageId,thisUserId,thisMessageId,messageTypeNumber,thisItem,imageOwnId);
 		break;
 	case "7"://upgrade
 
