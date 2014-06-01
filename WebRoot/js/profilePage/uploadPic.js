@@ -102,7 +102,6 @@ $(function() {
 	        fileInput: $("#picInput"),
 	        submit: function(e, data) {
 	        	if($("#uploadProgress").css("display") == "none") {
-//		    		console.log(data);
 		    		uploadPic = function() {
 		    			data.submit();
 		    		};
@@ -144,7 +143,7 @@ $(function() {
 			    });
 			},
 			fail: function(e, data) {
-				alert("fail!!!");
+//				alert("fail!!!");
 				console.log(data.textStatus);
 				console.log(data.errorThrown);
 			},
