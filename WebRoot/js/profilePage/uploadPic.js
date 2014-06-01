@@ -102,7 +102,12 @@ $(function() {
 	        fileInput: $("#picInput"),
 	        submit: function(e, data) {
 	        	if($("#uploadProgress").css("display") == "none") {
-		        	var userId=$.cookie("truthbook").userId;
+		    		uploadPic = function() {
+		    			data.submit();
+		    		};
+		    		return false;
+	        	} else {
+	        		var userId=$.cookie("truthbook").userId;
 		    		data.formData = [
 		    		                  {
 		    		                      name: 'userid',
@@ -117,12 +122,6 @@ $(function() {
 		    		                	  value: $("#picDescription").val()
 		    		                  }
 		    		              ];
-		    		console.log(data);
-		    		uploadPic = function() {
-		    			data.submit();
-		    		};
-		    		return false;
-	        	} else {
 	        		return true;
 	        	}
 	        },
@@ -144,7 +143,7 @@ $(function() {
 			    });
 			},
 			fail: function(e, data) {
-				alert("fail!!!");
+//				alert("fail!!!");
 				console.log(data.textStatus);
 				console.log(data.errorThrown);
 			},

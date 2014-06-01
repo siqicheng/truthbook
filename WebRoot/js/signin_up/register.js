@@ -300,6 +300,7 @@ function take_quote(id, register_info) {
 			alert("take quote failed");
 		} else {
 			setUserInfoCookie(data);
+			goHomePage();
 		}
 	};
 	var onAjaxError = function(xhr,status,error){
