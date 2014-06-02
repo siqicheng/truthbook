@@ -189,6 +189,7 @@ $('.ui.form.register-form')
 							$("#imgPrev").siblings().addClass("active");
 						};
 						$("#checkinput").val("");
+						$("#checkinput").attr("placeholder", "请输入词条创建人的姓");
 						$("#checkinput").removeAttr("disabled");
 					});
 					$("#imgPrev").load(function() {
@@ -300,6 +301,7 @@ function take_quote(id, register_info) {
 			alert("take quote failed");
 		} else {
 			setUserInfoCookie(data);
+			$.cookie('isFirstLogin', 'true');
 			goHomePage();
 		}
 	};

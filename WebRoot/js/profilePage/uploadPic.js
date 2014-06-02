@@ -126,7 +126,7 @@ $(function() {
 	        	}
 	        },
 			done: function(e, data) {
-				gotoComplete();
+//				gotoComplete();
 			},
 			progressall: function(e, data) {
 				var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -134,16 +134,20 @@ $(function() {
 					"width",
 					progress + "%"
 				);
+				if(progress == 100) {
+					gotoComplete();
+				}
 			},
 			dropzone: $("#imgPrev"),
 			drop: function (e, data) {
 			    $.each(data.files, function (index, file) {
-			        console.log('Dropped file: ' + file.name);
 			        imgPrev(file);
 			    });
 			},
 			fail: function(e, data) {
-//				alert("fail!!!");
+				picError("上传照片失败，请重试");
+				$("uploadProgress").hide;
+				$("#choosePic .two.buttons").show();
 				console.log(data.textStatus);
 				console.log(data.errorThrown);
 			},

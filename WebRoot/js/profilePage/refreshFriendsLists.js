@@ -38,6 +38,14 @@ function refreshTopbarFriendsLists(id) {
 				};
 			};
 		};
+		if($.cookie('isFirstLogin') == 'true') {
+			for(var i=0; i<userFriendsLists.nFriends.length; i++) {
+				var id = userFriendsLists.nFriends[i].userId,
+					userId = $.cookie('truthbook').userId;
+				sendMessageAPI(id, userId, MessageType.TAKEQUOTE.typeName);
+			};
+			$.cookie('isFirstLogin', null);
+		};
 		console.log("Get nFriends List success");
 		console.log(userFriendsLists.nFriends);
 		getUserEFriendsLists($.cookie("truthbook").userId);
